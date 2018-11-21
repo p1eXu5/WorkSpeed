@@ -1,0 +1,61 @@
+SELECT 
+	Viborka.Period,
+                Viborka.Registrator,
+                Viborka.StringNumber,
+                Viborka.Active,
+                Firms.Firm,
+	Workers.Name,
+	Operations.Operation
+FROM
+                Viborka, Firms, Workers, Operations
+WHERE 
+                Viborka.Firm_kod = Firms.kod AND
+	Viborka.Worker_id = Workers.id AND
+	Viborka.Operation_id = Operations.id;
+
+
+SELECT
+Viborka.Period,
+Viborka.Registrator,
+Viborka.StringNumber,
+Viborka.Active,
+FO.Firm AS Firm,
+Workers.Name,
+Operations.Operation,
+R1.rateName AS Rate,
+R2.rateName AS Rate_,
+Viborka.Shtuk,
+Viborka.Strok,
+Viborka.Scan,
+Viborka.Mest,
+Viborka.Pallet,
+Viborka.Volume,
+Viborka.Seconds,
+Viborka.Trudoemkost,
+FR.Firm AS FirmReceiver
+FROM
+Viborka LEFT JOIN( Firms FO, Workers, Operations, Rates R1, Rates R2, Firms FR)
+ON
+(Viborka.Firm_kod = FO.kod
+AND
+Viborka.Worker_id = Workers.id
+AND
+Viborka.Operation_id = Operations.id
+AND
+Viborka.Rate_kod = R1.kod
+AND
+Viborka.Rate__kod = R2.kod
+AND
+Viborka.FirmReceiver_kod = FR.kod)
+ORDER BY Period ASC
+//--------------------------------------------------------------------------
+SELECT
+Viborka.Period,
+FO.Firm AS Firm,
+FR.Firm AS FirmReceiver
+FROM
+Viborka, Firms FO, Firms FR
+WHERE
+Viborka.Firm_kod = FO.kod
+AND
+(Viborka.FirmReceiver_kod = FR.kod OR Viborka.FirmReceiver_kod = null)
