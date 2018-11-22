@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 /Code/_build
+/Code/_builds

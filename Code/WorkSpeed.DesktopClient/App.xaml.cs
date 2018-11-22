@@ -18,8 +18,7 @@ namespace WorkSpeed.DesktopClient
         protected override void OnStartup(StartupEventArgs e)
         {
             Window mainWindow = new MainWindow();
-            ContentControl control = new UserControl1();
-            mainWindow.Content = control;
+
             mainWindow.Show();
         }
     }
