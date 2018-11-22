@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace WorkSpeed.MvvmBaseLibrary.Tests.UnitTests
@@ -30,8 +26,17 @@ namespace WorkSpeed.MvvmBaseLibrary.Tests.UnitTests
         {
             var viewModel = GetViewModel();
 
-            Assert.That(viewModel, Is.InstanceOf<IDataErrorInfo>());
+            Assert.That(viewModel, Is.InstanceOf<IDataErrorInfo>().With.Message);
         }
+
+        [Test]
+        public void Error_InvokingGetter_Throws()
+        {
+            var viewModel = GetViewModel();
+
+            Assert.That(() => viewModel.Error, Throws.TypeOf<NotImplementedException>());
+        }
+
 
         #region Factory
 

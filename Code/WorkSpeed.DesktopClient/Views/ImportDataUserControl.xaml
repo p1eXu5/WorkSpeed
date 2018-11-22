@@ -13,6 +13,7 @@
         </Grid.ColumnDefinitions>
 
         <ListBox ItemsSource="{Binding Stages}" />
+
         <ContentControl Grid.Column="1">
             <Grid Margin="10">
                 <Grid.RowDefinitions>
@@ -42,12 +43,20 @@
                     </Button>
                 </StackPanel>
 
-                <DataGrid Grid.Row="1"
-                          Margin="0,10,0,0"
-                          HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch"
-                          ItemsSource="{Binding Operations}"
-                          />
+                <StackPanel Grid.Row="1">
+                    <Expander ExpandDirection="Down" Header="Table" IsExpanded="True">
+                        <ScrollViewer Height="300" 
+                                      VerticalScrollBarVisibility="Auto"
+                                      HorizontalScrollBarVisibility="Auto"
+                                      >
+                            <DataGrid Margin="0,10,0,0"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch"
+                              ItemsSource="{Binding Operations}"
+                              />
+                        </ScrollViewer>
+                    </Expander>
+                </StackPanel>
             </Grid>
         </ContentControl>
     </Grid>

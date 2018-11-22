@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WorkSpeed.Data")]
+[assembly: AssemblyTitle("WorkSpeed.Import")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("HP Inc.")]
-[assembly: AssemblyProduct("WorkSpeed.Data")]
+[assembly: AssemblyProduct("WorkSpeed.Import")]
 [assembly: AssemblyCopyright("Copyright © HP Inc. 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("72e065c5-8769-4008-9529-11194be488e0")]
+[assembly: Guid("004e87b0-adce-4552-9265-f49968ddf334")]
 
 // Version information for an assembly consists of the following four values:
 //

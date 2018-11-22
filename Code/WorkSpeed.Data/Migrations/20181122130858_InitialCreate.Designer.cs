@@ -9,8 +9,8 @@ using WorkSpeed.Data.Context;
 namespace WorkSpeed.Data.Migrations
 {
     [DbContext(typeof(WorkSpeedDbContext))]
-    [Migration("20181121133955_initialcreate")]
-    partial class initialcreate
+    [Migration("20181122130858_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

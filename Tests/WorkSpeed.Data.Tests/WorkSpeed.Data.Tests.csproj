@@ -133,7 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\WorkSpeed.Data\WorkSpeed.Data.csproj">
-      <Project>{c152069d-3c13-4b0b-9634-7b64a75e2791}</Project>
+      <Project>{72e065c5-8769-4008-9529-11194be488e0}</Project>
       <Name>WorkSpeed.Data</Name>
     </ProjectReference>
   </ItemGroup>

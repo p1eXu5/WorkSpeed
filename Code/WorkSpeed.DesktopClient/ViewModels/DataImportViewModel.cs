@@ -7,8 +7,8 @@ using WorkSpeed.MvvmBaseLibrary;
 
 namespace WorkSpeed.DesktopClient.ViewModels
 {
-    public class MainViewModel : ViewModel
+    public class DataImportViewModel : ViewModel
     {
-        public DataImportViewModel DataImportViewModel { get; set; } = new DataImportViewModel();
+        public DataImportViewModel() { }
     }
 }
