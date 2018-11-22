@@ -26,7 +26,7 @@ namespace WorkSpeed.MvvmBaseLibrary.Tests.UnitTests
         {
             var viewModel = GetViewModel();
 
-            Assert.That(viewModel, Is.InstanceOf<IDataErrorInfo>().With.Message);
+            Assert.That(viewModel, Is.InstanceOf<IDataErrorInfo>());
         }
 
         [Test]
