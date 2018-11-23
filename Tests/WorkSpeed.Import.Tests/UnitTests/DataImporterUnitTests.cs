@@ -15,10 +15,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
         {
             var importer = GetDataImporter();
 
-            var ex = Assert.Catch<TypeAccessException>(() => importer.ImportData<FakeModelClassWithNoPublicProperties>
-                                                       (
-                                                           Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\TestFiles\test.xlsx")
-                                                       );
+            var ex = Assert.Catch<TypeAccessException>( () => importer.ImportData<FakeModelClassWithNoPublicProperties> ( GetFullPath("test.xlsx")) );
 
             StringAssert.Contains("Passed type does not have public properties", ex.Message);
         }
@@ -28,21 +25,36 @@ namespace WorkSpeed.Import.Tests.UnitTests
         {
             var importer = GetDataImporter();
 
-            var ex = Assert.Catch<ArgumentException>(() => importer.ImportData<FakeModelClass>
-                                                           (
-                                                            Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\TestFiles\test")
-                                                      );
+            var ex = Assert.Catch<ArgumentException>( () => importer.ImportData<FakeModelClass> ( GetFullPath("test")) );
 
             StringAssert.Contains("The source does not handled", ex.Message);
+        }
+
+        [Test]
+        public void ImportData_XlsxFileDoesntContainData_ReturnsEmptyCollection()
+        {
+            // Arrange:
+            var importer = GetDataImporter();
+
+            // Action:
+            var resColl = importer.ImportData<FakeModelClass>(GetFullPath ("empty.xlsx"));
+
+            // Assert:
+            Assert.That (0 == resColl.Count);
         }
 
 
         #region Factory
 
-            private IDataImporter GetDataImporter()
+        private IDataImporter GetDataImporter()
         {
             return new DataImporter();
         }
+
+        private string GetFullPath(string fileName) => new StringBuilder()
+                                                            .Append ( Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly().Location) )
+                                                            .Append (@"\TestFiles\")
+                                                            .Append (fileName).ToString();
 
         class FakeModelClassWithNoPublicProperties
         { }
