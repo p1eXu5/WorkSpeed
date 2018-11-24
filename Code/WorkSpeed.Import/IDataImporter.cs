@@ -8,6 +8,7 @@ namespace WorkSpeed.Import
 {
     public interface IDataImporter
     {
-        ICollection<T> ImportData<T>(string fileName)  where T : new();
+        IEnumerable<T> ImportData<T>(string fileName)  where T : new();
+        IEnumerable<T> ImportDataAsync<T> (string fileName) where T : new ();
     }
 }

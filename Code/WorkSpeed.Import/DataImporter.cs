@@ -14,15 +14,20 @@ namespace WorkSpeed.Import
 {
     public sealed class DataImporter : IDataImporter
     {
-        private readonly Dictionary<string,Func<string,object>> _strategies = new Dictionary<string, Func<string,object>>();
+        private readonly Dictionary<string,Func<string,Type,object>> _strategies = new Dictionary<string, Func<string,Type,object>>();
 
         public DataImporter()
         {
             _strategies[".xlsx"] = ImportDataFromExcel;
         }
 
+        public IEnumerable<T> ImportDataAsync<T> (string fileName) where T : new()
+        {
+            throw new NotImplementedException();
+        }
+
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public ICollection<T> ImportData<T>(string fileName) where T : new()
+        public IEnumerable<T> ImportData<T>(string fileName) where T : new()
         {
             if (!File.Exists(fileName)) { throw new FileNotFoundException(); }
             
@@ -33,23 +38,30 @@ namespace WorkSpeed.Import
             var typeProperties = typeof(T).GetProperties();
             if (0 == typeProperties.Length) { throw new TypeAccessException(@"Passed type does not have public properties"); }
 
-            return (ICollection<T>)_strategies[Path.GetExtension(fileName)].Invoke(fileName);
+            return (IEnumerable<T>)_strategies[Path.GetExtension(fileName)].Invoke(fileName, typeof(T));
         }
 
-        private object ImportDataFromExcel(string fileName)
+        private object ImportDataFromExcel(string fileName, Type type)
         {
             using (Stream stream = new FileStream (fileName, FileMode.Open, FileAccess.Read)) {
 
                 IWorkbook book = new XSSFWorkbook(stream);
                 ISheet sheet = book.GetSheetAt (0);
 
-                GetStartCell();
+                var firstCell = GetFirstCell(sheet);
+                
+                if (-1 == firstCell) {
+
+                    Type t = typeof(List<>);
+                    var constr = t.MakeGenericType (type);
+                    return Activator.CreateInstance (constr);
+                }
             }
 
             return null;
         }
 
-        private int GetStartCell()
+        private int GetFirstCell(ISheet sheet)
         {
             return -1;
         }

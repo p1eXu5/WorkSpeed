@@ -40,7 +40,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             var resColl = importer.ImportData<FakeModelClass>(GetFullPath ("empty.xlsx"));
 
             // Assert:
-            Assert.That (0 == resColl.Count);
+            Assert.That (!resColl.Any());
         }
 
 
