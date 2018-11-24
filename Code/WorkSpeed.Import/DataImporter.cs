@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -14,20 +15,60 @@ namespace WorkSpeed.Import
 {
     public sealed class DataImporter : IDataImporter
     {
-        private readonly Dictionary<string,Func<string,Type,object>> _strategies = new Dictionary<string, Func<string,Type,object>>();
+        private readonly Dictionary<string,Func<string,Type,ICollection>> _strategies = new Dictionary<string, Func<string,Type,ICollection>>();
 
         public DataImporter()
         {
-            _strategies[".xlsx"] = ImportDataFromExcel;
+            RegisterImporter (ExcelImporter.ExcelImporterInstance);
         }
 
-        public IEnumerable<T> ImportDataAsync<T> (string fileName) where T : new()
+
+        #region Methods
+
+        /// <summary>
+        /// Register a custom data importer.
+        /// </summary>
+        /// <typeparam name="TConcreteImporter"><see cref="IConcreteImporter"/></typeparam>
+        /// <param name="importer">Instance of concrete importer.</param>
+        /// 
+        public void RegisterImporter<TConcreteImporter>(TConcreteImporter importer) where TConcreteImporter : IConcreteImporter
+        {
+            if (importer == null) {
+                throw new NullReferenceException($"{nameof(importer)} can't be null");
+            }
+
+            _strategies[importer.FileExtension] = importer.ImportData;
+        }
+
+
+        /// <summary>
+        /// Imports data from file in asynchronous manner.
+        /// </summary>
+        /// <typeparam name="TModelType">
+        ///     Model type with annotated or not annotated public properties
+        ///     that corresponds data table in specified file.
+        /// </typeparam>
+        /// <param name="fileName">File name.</param>
+        /// <returns><see cref="IEnumerable{T}"/></returns>
+        /// 
+        public IEnumerable<TModelType> ImportDataAsync<TModelType> (string fileName) where TModelType : new()
         {
             throw new NotImplementedException();
         }
 
+
+        /// <summary>
+        /// Imports data from file.
+        /// </summary>
+        /// <typeparam name="TModelType">
+        ///     Model type with annotated or not annotated public properties
+        ///     that corresponds data table in specified file.
+        /// </typeparam>
+        /// <param name="fileName">File name.</param>
+        /// <returns><see cref="IEnumerable{T}"/></returns>
+        /// 
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public IEnumerable<T> ImportData<T>(string fileName) where T : new()
+        public IEnumerable<TModelType> ImportData<TModelType>(string fileName) where TModelType : new()
         {
             if (!File.Exists(fileName)) { throw new FileNotFoundException(); }
             
@@ -35,35 +76,13 @@ namespace WorkSpeed.Import
                 throw new ArgumentException("The source does not handled");
             }
 
-            var typeProperties = typeof(T).GetProperties();
+            var typeProperties = typeof(TModelType).GetProperties();
             if (0 == typeProperties.Length) { throw new TypeAccessException(@"Passed type does not have public properties"); }
 
-            return (IEnumerable<T>)_strategies[Path.GetExtension(fileName)].Invoke(fileName, typeof(T));
+            return (IEnumerable<TModelType>)_strategies[Path.GetExtension(fileName)].Invoke(fileName, typeof(TModelType));
         }
 
-        private object ImportDataFromExcel(string fileName, Type type)
-        {
-            using (Stream stream = new FileStream (fileName, FileMode.Open, FileAccess.Read)) {
-
-                IWorkbook book = new XSSFWorkbook(stream);
-                ISheet sheet = book.GetSheetAt (0);
-
-                var firstCell = GetFirstCell(sheet);
-                
-                if (-1 == firstCell) {
-
-                    Type t = typeof(List<>);
-                    var constr = t.MakeGenericType (type);
-                    return Activator.CreateInstance (constr);
-                }
-            }
-
-            return null;
-        }
-
-        private int GetFirstCell(ISheet sheet)
-        {
-            return -1;
-        }
+        #endregion
+        
     }
 }

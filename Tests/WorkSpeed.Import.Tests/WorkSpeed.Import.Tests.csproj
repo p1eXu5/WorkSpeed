@@ -53,7 +53,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TestHelper.cs" />
     <Compile Include="UnitTests\DataImporterUnitTests.cs" />
+    <Compile Include="UnitTests\ExcelImporterUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

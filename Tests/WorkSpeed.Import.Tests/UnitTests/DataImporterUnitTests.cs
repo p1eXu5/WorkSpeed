@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using static WorkSpeed.Import.Tests.TestHelper;
 
 namespace WorkSpeed.Import.Tests.UnitTests
 {
@@ -30,18 +31,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             StringAssert.Contains("The source does not handled", ex.Message);
         }
 
-        [Test]
-        public void ImportData_XlsxFileDoesntContainData_ReturnsEmptyCollection()
-        {
-            // Arrange:
-            var importer = GetDataImporter();
 
-            // Action:
-            var resColl = importer.ImportData<FakeModelClass>(GetFullPath ("empty.xlsx"));
-
-            // Assert:
-            Assert.That (!resColl.Any());
-        }
 
 
         #region Factory
@@ -51,10 +41,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             return new DataImporter();
         }
 
-        private string GetFullPath(string fileName) => new StringBuilder()
-                                                            .Append ( Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly().Location) )
-                                                            .Append (@"\TestFiles\")
-                                                            .Append (fileName).ToString();
+        
 
         class FakeModelClassWithNoPublicProperties
         { }
