@@ -4,12 +4,15 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace WorkSpeed.Import
 {
-    public class DataImporter : IDataImporter
+    public sealed class DataImporter : IDataImporter
     {
         private readonly Dictionary<string,Func<string,object>> _strategies = new Dictionary<string, Func<string,object>>();
 
@@ -28,14 +31,27 @@ namespace WorkSpeed.Import
             }
 
             var typeProperties = typeof(T).GetProperties();
-            if (typeProperties.Length == 0) { throw new TypeAccessException(@"Passed type does not have public properties"); }
+            if (0 == typeProperties.Length) { throw new TypeAccessException(@"Passed type does not have public properties"); }
 
             return (ICollection<T>)_strategies[Path.GetExtension(fileName)].Invoke(fileName);
         }
 
         private object ImportDataFromExcel(string fileName)
         {
+            using (Stream stream = new FileStream (fileName, FileMode.Open, FileAccess.Read)) {
+
+                IWorkbook book = new XSSFWorkbook(stream);
+                ISheet sheet = book.GetSheetAt (0);
+
+                GetStartCell();
+            }
+
             return null;
+        }
+
+        private int GetStartCell()
+        {
+            return -1;
         }
     }
 }
