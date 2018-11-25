@@ -126,8 +126,6 @@ namespace WorkSpeed.Import
                 rect.Left = sheet.GetRow (rect.Top).FirstCellNum;
                 rect.Right = sheet.GetRow (rect.Bottom).LastCellNum;
 
-                if (rect.Left > rect.Right) throw new ArgumentException();
-
                 return rect;
             }
 
