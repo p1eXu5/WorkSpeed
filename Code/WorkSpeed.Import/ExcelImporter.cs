@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -43,7 +45,7 @@ namespace WorkSpeed.Import
                         return GetEmptyCollection (type);
                     }
 
-                    return TryFillCollection (sheet, (TableRect)tableRect, type);
+                    return TryFillCollection (sheet, (TableRect)tableRect, type) ?? GetEmptyCollection (type);
                 }
                 catch (ZipException) {
 
@@ -73,7 +75,8 @@ namespace WorkSpeed.Import
 
                 return tableRect;
             }
-            else if (tableRect.Left == tableRect.Right - 1) {
+
+            if (tableRect.Left == tableRect.Right - 1) {
 
                 while (sheet.GetRow (j)?.GetCell (i) == null || sheet.GetRow (j).GetCell (i).CellType == CellType.Blank) {
                     if (j == tableRect.Bottom) {
@@ -90,10 +93,11 @@ namespace WorkSpeed.Import
                 tableRect.Top = j;
                 return tableRect;
             }
-            else {
-                do {
-                    IRow row = sheet.GetRow (j);
+            
+            do {
+                IRow row = sheet.GetRow (j);
 
+                if (row != null) {
                     if (tableRect.Left > 0) {
                         if (tableRect.Left > row.FirstCellNum) {
                             tableRect.Left = row.FirstCellNum;
@@ -103,12 +107,13 @@ namespace WorkSpeed.Import
                     if (tableRect.Right < row.LastCellNum) {
                         tableRect.Right = row.LastCellNum;
                     }
+                }
 
-                    ++j;
-                } while (j <= tableRect.Bottom);
+                ++j;
+            } while (j <= tableRect.Bottom);
 
-                return tableRect;
-            }
+            return tableRect;
+            
 
             // var forTest = sheet.GetRow (2)?.GetCell (2) ?? null;
 
@@ -132,6 +137,7 @@ namespace WorkSpeed.Import
             #endregion
         }
 
+        [SuppressMessage ("ReSharper", "PossibleNullReferenceException")]
         private static ICollection TryFillCollection (ISheet sheet, TableRect rect, Type type)
         {
             if (!type.GetCustomAttributes (false).Any() || (type.GetCustomAttributes (false)[0] is HeadlessAttribute attr && !attr.IsHeadless)) {
@@ -144,31 +150,65 @@ namespace WorkSpeed.Import
 
             return FillModelCollection();
 
+
             #region Functions
 
             ArrayList FillModelCollection()
             {
-                object obj = Activator.CreateInstance (type);
                 ArrayList list = new ArrayList(rect.Bottom - rect.Top + 1);
 
                 for (var j = rect.Top; j <= rect.Bottom; ++j) {
 
+                    object obj = Activator.CreateInstance (type);
                     var i = rect.Left;
+
+                    var row = sheet.GetRow (j);
+                    if (null == row) continue;
 
                     foreach (var propertyInfo in type.GetProperties()) {
 
                         if (propertyInfo.SetMethod == null) continue;
 
+                        bool isSet = false;
+                        ICell cell = row.GetCell (i);
+
                         if (propertyInfo.PropertyType.FullName == typeof(string).FullName) {
 
-                            // ReSharper disable once PossibleNullReferenceException
-                            obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, sheet.GetRow (j)?.GetCell (i)?.StringCellValue ?? String.Empty);
-                            list.Add (obj);
+                            obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, cell?.StringCellValue);
+                            isSet = true;
+                        }
+                        else if (propertyInfo.PropertyType.FullName == typeof(int).FullName) {
 
-                            obj = Activator.CreateInstance (type);
-                            ++i;
+                            int intValue = default(int);
+                            SetIntValue(cell, ref intValue);
+
+                            obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, intValue);
+                            isSet = true;
+                        }
+                        else if (propertyInfo.PropertyType.FullName == typeof(double).FullName) {
+
+                            double doubleValue = default(double);
+                            SetDoubleValue(cell, ref doubleValue);
+
+                            obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, doubleValue);
+                            isSet = true;
+                        }
+                        else if (propertyInfo.PropertyType.FullName == typeof(bool).FullName) {
+
+                            bool boolValue = default(bool);
+                            SetBoolValue(cell, ref boolValue);
+
+                            obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, boolValue);
+                            isSet = true;
+                        }
+
+                        if (!isSet) {
+                            return null;
                         }
                     }
+
+                    list.Add (obj);
+                    ++i;
                 }
 
                 return list;
@@ -194,6 +234,104 @@ namespace WorkSpeed.Import
             }
 
             #endregion
+        }
+
+        private static void SetIntValue (ICell cell, ref int intValue)
+        {
+            if (cell == null) return;
+
+            if (CellType.Numeric == cell.CellType) {
+                intValue = Convert.ToInt32 (cell.NumericCellValue);
+            }
+            else if (CellType.Boolean == cell.CellType) {
+                if (cell.BooleanCellValue) {
+                    intValue = 1;
+                }
+            }
+            else if (CellType.String == cell.CellType) {
+                var cellValue = cell.StringCellValue;
+
+                if (!String.IsNullOrWhiteSpace (cellValue)) {
+                    if (cellValue.ToUpperInvariant() == "Да".ToUpperInvariant()
+                        || cellValue.ToUpperInvariant() == "Yes".ToUpperInvariant()) {
+                        intValue = 1;
+                    }
+                    else {
+                        cellValue = cellValue.Replace (',', '.');
+
+                        try {
+                            intValue = Convert.ToInt32 (Double.Parse (cellValue));
+                        }
+                        catch {
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void SetDoubleValue (ICell cell, ref double doubleValue)
+        {
+            if (cell == null) return;
+
+            if (CellType.Numeric == cell.CellType) {
+                
+                doubleValue = cell.NumericCellValue;
+            }
+            else if (CellType.Boolean == cell.CellType) {
+
+                if (cell.BooleanCellValue) {
+                    doubleValue = 1.0;
+                }
+            }
+            else if (CellType.String == cell.CellType) {
+
+                var cellValue = cell.StringCellValue;
+
+                if (!String.IsNullOrWhiteSpace (cellValue)) {
+
+                    if (cellValue.ToUpperInvariant() == "Да".ToUpperInvariant()
+                        || cellValue.ToUpperInvariant() == "Yes".ToUpperInvariant()) {
+
+                        doubleValue = 1.0;
+                    }
+                    else {
+                        cellValue = cellValue.Replace (',', '.');
+
+                        try {
+                            doubleValue = Double.Parse (cellValue);
+                        }
+                        catch {
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void SetBoolValue (ICell cell, ref bool boolValue)
+        {
+            if (cell == null) return;
+
+            if (CellType.Numeric == cell.CellType) {
+                
+                boolValue = !cell.NumericCellValue.Equals(0.0);
+            }
+            else if (CellType.Boolean == cell.CellType) {
+
+                boolValue = cell.BooleanCellValue;
+            }
+            else if (CellType.String == cell.CellType) {
+
+                var cellValue = cell.StringCellValue;
+
+                if (!String.IsNullOrWhiteSpace (cellValue)) {
+
+                    if (cellValue.ToUpperInvariant() == "Да".ToUpperInvariant()
+                        || cellValue.ToUpperInvariant() == "Yes".ToUpperInvariant()) {
+
+                        boolValue = true;
+                    }
+                }
+            }
         }
 
         private static ICollection GetEmptyCollection(Type type)

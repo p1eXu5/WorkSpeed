@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -16,6 +17,7 @@ using static WorkSpeed.Import.Tests.TestHelper;
 namespace WorkSpeed.Import.Tests.UnitTests
 {
     [TestFixture]
+    [SuppressMessage ("ReSharper", "PossibleNullReferenceException")]
     public class ExcelImporterUnitTests
     {
         #region GetFirstCell
@@ -73,7 +75,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
         [TestCase ("1.02", "string")]
         [TestCase (",#2-", "string")]
         [TestCase ("Да", "string")]
-        public void ImportDataFromExcel_StringProperty_CanReadStringCell(string cellValue, string propertyType)
+        public void ImportDataFromExcel_StringPropertyStringCell_CanReadStringCell(string cellValue, string propertyType)
         {
             // Arrange:
             Type modelType = GetModelType(propertyType);
@@ -100,23 +102,28 @@ namespace WorkSpeed.Import.Tests.UnitTests
         [TestCase ("Yes", "int", 1)]
         [TestCase ("Нет", "int", 0)]
         [TestCase ("No", "int", 0)]
-        public void ImportDataFromExcel_IntProperty_CanReadIntAndBoolCell()
+        [TestCase ("1a", "int", 0)]
+        [TestCase ("d1.02", "int", 0)]
+        [TestCase ("_-1", "int", 0)]
+        [TestCase ("-1-", "int", 0)]
+        [TestCase ("-1.,00123", "int", 0)]
+        [TestCase ("Даc", "int", 0)]
+        [TestCase ("Нетc", "int", 0)]
+        [TestCase ("Yesc", "int", 0)]
+        [TestCase ("Noc", "int", 0)]
+        public void ImportDataFromExcel_IntPropertyStringCell_CanReadIntAndBoolCell(string cellValue, string propertyType, int propertyValue)
         {
+            // Arrange:
+            Type modelType = GetModelType(propertyType);
 
-        }
+            // Action:
+            var resColl = ExcelImporter.ImportDataFromExcel (CreateTestHeadedFile (cellValue), modelType);
 
-        [TestCase ("1a", "int")]
-        [TestCase ("d1.02", "int")]
-        [TestCase ("_-1", "int")]
-        [TestCase ("-1-", "int")]
-        [TestCase ("-1.,00123", "int")]
-        [TestCase ("Даc", "int")]
-        [TestCase ("Нетc", "int")]
-        [TestCase ("Yesc", "int")]
-        [TestCase ("Noc", "int")]
-        public void ImportDataFromExcel_IntProperty_CanNotReadStringCell()
-        {
+            // Assert:
+            var enumerator = resColl.GetEnumerator();
+            var element = enumerator.MoveNext() ? enumerator.Current : null;
 
+            Assert.That (propertyValue == (int)(element.GetType().GetProperties()[0].GetValue (element)));
         }
 
         [TestCase ("", "double", 0.0)]
@@ -131,23 +138,28 @@ namespace WorkSpeed.Import.Tests.UnitTests
         [TestCase ("Yes", "double", 1.0)]
         [TestCase ("Нет", "double", 0.0)]
         [TestCase ("No", "double", 0.0)]
-        public void ImportDataFromExcel_DoubleProperty_CanReadDoubleAndBoolCell()
+        [TestCase ("1a", "double", 0.0)]
+        [TestCase ("d1.02", "double", 0.0)]
+        [TestCase ("_-1", "double", 0.0)]
+        [TestCase ("-1-", "double", 0.0)]
+        [TestCase ("-1.,00123", "double", 0.0)]
+        [TestCase ("Даc", "double", 0.0)]
+        [TestCase ("Нетc", "double", 0.0)]
+        [TestCase ("Yesc", "double", 0.0)]
+        [TestCase ("Noc", "double", 0.0)]
+        public void ImportDataFromExcel_DoublePropertyStringCell_CanReadDoubleAndBoolCell(string cellValue, string propertyType, double propertyValue)
         {
+            // Arrange:
+            Type modelType = GetModelType(propertyType);
 
-        }
+            // Action:
+            var resColl = ExcelImporter.ImportDataFromExcel (CreateTestHeadedFile (cellValue), modelType);
 
-        [TestCase ("1a", "double")]
-        [TestCase ("d1.02", "double")]
-        [TestCase ("_-1", "double")]
-        [TestCase ("-1-", "double")]
-        [TestCase ("-1.,00123", "double")]
-        [TestCase ("Даc", "double")]
-        [TestCase ("Нетc", "double")]
-        [TestCase ("Yesc", "double")]
-        [TestCase ("Noc", "double")]
-        public void ImportDataFromExcel_DoubleProperty_CanNotReadStringCell()
-        {
-
+            // Assert:
+            var enumerator = resColl.GetEnumerator();
+            var element = enumerator.MoveNext() ? enumerator.Current : null;
+            
+            Assert.That (propertyValue, Is.EqualTo ((double)(element.GetType().GetProperties()[0].GetValue (element))));
         }
 
         [TestCase ("", "bool", false)]
@@ -159,29 +171,34 @@ namespace WorkSpeed.Import.Tests.UnitTests
         [TestCase ("Нет", "bool", false)]
         [TestCase ("НеТ", "bool", false)]
         [TestCase ("NO", "bool", false)]
-        public void ImportDataFromExcel_BoolProperty_CanReadBoolCell()
+        [TestCase ("1", "bool", false)]
+        [TestCase ("-1", "bool", false)]
+        [TestCase ("1a", "bool", false)]
+        [TestCase ("d1.02", "bool", false)]
+        [TestCase ("_-1", "bool", false)]
+        [TestCase ("-1-", "bool", false)]
+        [TestCase ("-1.,00123", "bool", false)]
+        [TestCase ("0.00123", "bool", false)]
+        [TestCase ("1,00123", "bool", false)]
+        [TestCase ("-1.00123", "bool", false)]
+        [TestCase ("-0,00123", "bool", false)]
+        [TestCase ("Даc", "bool", false)]
+        [TestCase ("Нетc", "bool", false)]
+        [TestCase ("Yesc", "bool", false)]
+        [TestCase ("Noc", "bool", false)]
+        public void ImportDataFromExcel_BoolPropertyStringCell_CanReadBoolCell(string cellValue, string propertyType, bool propertyValue)
         {
+            // Arrange:
+            Type modelType = GetModelType(propertyType);
 
-        }
+            // Action:
+            var resColl = ExcelImporter.ImportDataFromExcel (CreateTestHeadedFile (cellValue), modelType);
 
-        [TestCase ("1", "bool")]
-        [TestCase ("-1", "bool")]
-        [TestCase ("1a", "bool")]
-        [TestCase ("d1.02", "bool")]
-        [TestCase ("_-1", "bool")]
-        [TestCase ("-1-", "bool")]
-        [TestCase ("-1.,00123", "bool")]
-        [TestCase ("0.00123", "bool")]
-        [TestCase ("1,00123", "bool")]
-        [TestCase ("-1.00123", "bool")]
-        [TestCase ("-0,00123", "bool")]
-        [TestCase ("Даc", "bool")]
-        [TestCase ("Нетc", "bool")]
-        [TestCase ("Yesc", "bool")]
-        [TestCase ("Noc", "bool")]
-        public void ImportDataFromExcel_BoolProperty_CanNotReadStringIntAndDoubleCell()
-        {
-
+            // Assert:
+            var enumerator = resColl.GetEnumerator();
+            var element = enumerator.MoveNext() ? enumerator.Current : null;
+            
+            Assert.That (propertyValue, Is.EqualTo ((bool)(element.GetType().GetProperties()[0].GetValue (element))));
         }
 
         [TearDown]
@@ -218,7 +235,6 @@ namespace WorkSpeed.Import.Tests.UnitTests
                         
                     case "string" :
 
-                            // field:
                         FieldBuilder fieldBuilder = typeBuilder.DefineField ($"_testProperty{i}", typeof(string), FieldAttributes.Private);
                         PropertyBuilder propertyBuilder = typeBuilder.DefineProperty ($"TestProperty{i}", PropertyAttributes.HasDefault, typeof(string), null);
 
@@ -232,6 +248,63 @@ namespace WorkSpeed.Import.Tests.UnitTests
                         propertyBuilder.SetSetMethod (setterBuilder);
 
                         var attrBuilder = GetHeaderAttributeBuilder(_testHeaderName);
+                        propertyBuilder.SetCustomAttribute (attrBuilder);
+
+                        break;
+
+                    case "int" :
+
+                        fieldBuilder = typeBuilder.DefineField ($"_testProperty{i}", typeof(int), FieldAttributes.Private);
+                        propertyBuilder = typeBuilder.DefineProperty ($"TestProperty{i}", PropertyAttributes.HasDefault, typeof(int), null);
+
+                        getterBuilder = typeBuilder.DefineMethod ($"get_TestProperty{i}", getSetAttr, typeof(int), Type.EmptyTypes);
+                        LoadIlToGetter (getterBuilder, fieldBuilder);
+
+                        setterBuilder = typeBuilder.DefineMethod ($"set_TestProperty{i}", getSetAttr, null, new Type[] {typeof(int)});
+                        LoadIlToSetter (setterBuilder, fieldBuilder);
+
+                        propertyBuilder.SetGetMethod (getterBuilder);
+                        propertyBuilder.SetSetMethod (setterBuilder);
+
+                        attrBuilder = GetHeaderAttributeBuilder(_testHeaderName);
+                        propertyBuilder.SetCustomAttribute (attrBuilder);
+
+                        break;
+
+                    case "double" :
+
+                        fieldBuilder = typeBuilder.DefineField ($"_testProperty{i}", typeof(double), FieldAttributes.Private);
+                        propertyBuilder = typeBuilder.DefineProperty ($"TestProperty{i}", PropertyAttributes.HasDefault, typeof(double), null);
+
+                        getterBuilder = typeBuilder.DefineMethod ($"get_TestProperty{i}", getSetAttr, typeof(double), Type.EmptyTypes);
+                        LoadIlToGetter (getterBuilder, fieldBuilder);
+
+                        setterBuilder = typeBuilder.DefineMethod ($"set_TestProperty{i}", getSetAttr, null, new Type[] {typeof(double)});
+                        LoadIlToSetter (setterBuilder, fieldBuilder);
+
+                        propertyBuilder.SetGetMethod (getterBuilder);
+                        propertyBuilder.SetSetMethod (setterBuilder);
+
+                        attrBuilder = GetHeaderAttributeBuilder(_testHeaderName);
+                        propertyBuilder.SetCustomAttribute (attrBuilder);
+
+                        break;
+
+                    case "bool" :
+
+                        fieldBuilder = typeBuilder.DefineField ($"_testProperty{i}", typeof(bool), FieldAttributes.Private);
+                        propertyBuilder = typeBuilder.DefineProperty ($"TestProperty{i}", PropertyAttributes.HasDefault, typeof(bool), null);
+
+                        getterBuilder = typeBuilder.DefineMethod ($"get_TestProperty{i}", getSetAttr, typeof(bool), Type.EmptyTypes);
+                        LoadIlToGetter (getterBuilder, fieldBuilder);
+
+                        setterBuilder = typeBuilder.DefineMethod ($"set_TestProperty{i}", getSetAttr, null, new Type[] {typeof(bool)});
+                        LoadIlToSetter (setterBuilder, fieldBuilder);
+
+                        propertyBuilder.SetGetMethod (getterBuilder);
+                        propertyBuilder.SetSetMethod (setterBuilder);
+
+                        attrBuilder = GetHeaderAttributeBuilder(_testHeaderName);
                         propertyBuilder.SetCustomAttribute (attrBuilder);
 
                         break;
