@@ -82,7 +82,9 @@ namespace WorkSpeed.Import.Tests.UnitTests
             var resColl = ExcelImporter.ImportDataFromExcel (CreateTestHeadedFile (cellValue), modelType);
 
             // Assert:
-            var element = resColl.GetEnumerator().Current;
+            var enumerator = resColl.GetEnumerator();
+            var element = enumerator.MoveNext() ? enumerator.Current : null;
+
             Assert.That (cellValue == element?.GetType().GetProperties()[0].GetValue (element).ToString());
         }
 

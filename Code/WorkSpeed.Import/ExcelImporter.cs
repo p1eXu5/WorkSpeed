@@ -17,11 +17,17 @@ namespace WorkSpeed.Import
         private static ExcelImporter _excelImporter;
 
         private ExcelImporter() {}
+
+        #region Properties
+
         public static ExcelImporter ExcelImporterInstance => _excelImporter ?? (_excelImporter = new ExcelImporter());
 
         public string FileExtension { get; } = ".xlsx";
         public Func<string, Type, ICollection> ImportData { get; } = ImportDataFromExcel;
 
+        #endregion
+
+        #region Methods
 
         public static ICollection ImportDataFromExcel(string fileName, Type type)
         {
@@ -46,133 +52,101 @@ namespace WorkSpeed.Import
             }
         }
 
+        /// <summary>
+        /// Returns data area in Excel table.
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <param name="propertyCount"></param>
+        /// <returns></returns>
         private static TableRect? GetFirstCell(ISheet sheet, int propertyCount)
         {
-            TableRect rect;
-            rect.Top = sheet.FirstRowNum;
-            rect.Bottom = sheet.LastRowNum;
+            TableRect tableRect = GetRect();
 
-            if (rect.Bottom < rect.Top) throw new ArgumentException();
+            var j = tableRect.Top;
+            var i = tableRect.Left;
 
+            if (tableRect.Top == tableRect.Bottom && tableRect.Left == tableRect.Right - 1) {
 
-            rect.Left = sheet.GetRow (rect.Top)?.FirstCellNum ?? -1;
-            if (rect.Left < 0) return null;
-
-            rect.Right = sheet.GetRow (rect.Bottom).LastCellNum;
-
-            if (rect.Left > rect.Right) throw new ArgumentException();
-
-            if (sheet.GetRow (rect.Top).GetCell (rect.Left).CellType == CellType.Blank) {
-
-                if (!FindLeftCell()) return null;
-            } 
-
-            if (sheet.GetRow (rect.Bottom).GetCell (rect.Right - 1).CellType == CellType.Blank) {
-                FindRightCell();
-            }
-            
-            if (propertyCount != (rect.Right - rect.Left)) {
-                return null;
-            }
-
-            for (var i = rect.Top + 1; i <= rect.Bottom; ++i) {
-
-                var row = sheet.GetRow (i);
-                if (null == row) continue;
-
-                if (rect.Left > row.FirstCellNum) {
-                    rect.Left = row.FirstCellNum;
+                if (sheet.GetRow (tableRect.Top).GetCell (tableRect.Left).CellType == CellType.Blank) {
+                    return null;
                 }
 
-                if (rect.Right < row.LastCellNum) {
-                    rect.Right = row.LastCellNum;
+                return tableRect;
+            }
+            else if (tableRect.Left == tableRect.Right - 1) {
+
+                while (sheet.GetRow (j)?.GetCell (i) == null || sheet.GetRow (j).GetCell (i).CellType == CellType.Blank) {
+                    if (j == tableRect.Bottom) {
+                        break;
+                    }
+                    ++j;
                 }
+
+
+                if (j == tableRect.Bottom && sheet.GetRow (j).GetCell (i).CellType == CellType.Blank) {
+                    return null;
+                }
+
+                tableRect.Top = j;
+                return tableRect;
+            }
+            else {
+                do {
+                    IRow row = sheet.GetRow (j);
+
+                    if (tableRect.Left > 0) {
+                        if (tableRect.Left > row.FirstCellNum) {
+                            tableRect.Left = row.FirstCellNum;
+                        }
+                    }
+
+                    if (tableRect.Right < row.LastCellNum) {
+                        tableRect.Right = row.LastCellNum;
+                    }
+
+                    ++j;
+                } while (j <= tableRect.Bottom);
+
+                return tableRect;
             }
 
             // var forTest = sheet.GetRow (2)?.GetCell (2) ?? null;
 
-            return rect;
+            #region Functions
 
-            bool FindLeftCell()
+            TableRect GetRect()
             {
-                int j = rect.Top;
+                TableRect rect;
 
-                int i = rect.Left + 1;
-                int iend = sheet.GetRow (rect.Top).LastCellNum;
+                rect.Top = sheet.FirstRowNum;
+                rect.Bottom = sheet.LastRowNum;
 
-                while (sheet.GetRow (j)?.GetCell (i) == null || sheet.GetRow (j).GetCell (i).CellType == CellType.Blank) {
+                if (rect.Bottom < rect.Top) throw new ArgumentException();
 
-                    if (i >= iend) {
-                        do {
-                            ++j;
-                            if (j > rect.Bottom) {
-                                break;
-                            }
-                        } while (sheet.GetRow (j) == null && j <= rect.Bottom);
+                rect.Left = sheet.GetRow (rect.Top).FirstCellNum;
+                rect.Right = sheet.GetRow (rect.Bottom).LastCellNum;
 
-                        if (null == sheet.GetRow (j)) {
-                            return false;
-                        }
+                if (rect.Left > rect.Right) throw new ArgumentException();
 
-                        i = sheet.GetRow (j).FirstCellNum;
-                        iend = sheet.GetRow (j).LastCellNum;
-                    }
-                    else {
-                        ++i;
-                    }
-                }
-
-                rect.Left = i;
-                rect.Top = j;
-
-                return true;
+                return rect;
             }
 
-            void FindRightCell()
-            {
-                int j = rect.Bottom;
-
-                int i = rect.Right - 2;
-                int iend = sheet.GetRow (rect.Bottom).FirstCellNum;
-
-                while (sheet.GetRow (j)?.GetCell (i) == null || sheet.GetRow (j).GetCell (i).CellType == CellType.Blank) {
-
-                    if (i == iend) {
-                        do {
-                            --j;
-                        } while (sheet.GetRow (j) == null);
-
-                        i = sheet.GetRow (j).LastCellNum;
-                        iend = sheet.GetRow (j).FirstCellNum;
-                    }
-                    else {
-                        --i;
-                    }
-                }
-
-                rect.Right = i;
-                rect.Bottom = j;
-            }
-        }
-
-        private static ICollection GetEmptyCollection(Type type)
-        {
-            Type t = typeof(List<>);
-            var constr = t.MakeGenericType (type);
-            return (ICollection)Activator.CreateInstance (constr);
+            #endregion
         }
 
         private static ICollection TryFillCollection (ISheet sheet, TableRect rect, Type type)
         {
-            if (type.GetCustomAttributes (false)[0] is HeadlessAttribute attr && !attr.IsHeadless) {
-
+            if (!type.GetCustomAttributes (false).Any() || (type.GetCustomAttributes (false)[0] is HeadlessAttribute attr && !attr.IsHeadless)) {
                 if (!CheckHeaders()) {
                     return GetEmptyCollection (type);
                 }
+
+                ++rect.Top;
             }
 
             return FillModelCollection();
-            
+
+            #region Functions
 
             ArrayList FillModelCollection()
             {
@@ -220,6 +194,17 @@ namespace WorkSpeed.Import
 
                 return true;
             }
+
+            #endregion
         }
+
+        private static ICollection GetEmptyCollection(Type type)
+
+        {
+            Type t = typeof(List<>);
+            var constr = t.MakeGenericType (type);
+            return (ICollection)Activator.CreateInstance (constr);
+        }
+        #endregion
     }
 }
