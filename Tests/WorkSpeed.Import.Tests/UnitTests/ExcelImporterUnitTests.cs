@@ -87,7 +87,27 @@ namespace WorkSpeed.Import.Tests.UnitTests
             var enumerator = resColl.GetEnumerator();
             var element = enumerator.MoveNext() ? enumerator.Current : null;
 
-            Assert.That (cellValue == element?.GetType().GetProperties()[0].GetValue (element).ToString());
+            Assert.That (cellValue == (element?.GetType().GetProperties()[0].GetValue (element)?.ToString() ?? ""));
+        }
+
+        [TestCase (0, "string", "0")]
+        [TestCase (1, "string", "1")]
+        [TestCase (-1, "string", "-1")]
+        [TestCase (1.00123, "string", "1.00123")]
+        [TestCase (-1.00123, "string", "-1.00123")]
+        public void ImportDataFromExcel_StringPropertyNumericCell_CanReadStringCell(double cellValue, string propertyType, string propertyValue)
+        {
+            // Arrange:
+            Type modelType = GetModelType(propertyType);
+
+            // Action:
+            var resColl = ExcelImporter.ImportDataFromExcel (CreateTestHeadedFile (cellValue), modelType);
+
+            // Assert:
+            var enumerator = resColl.GetEnumerator();
+            var element = enumerator.MoveNext() ? enumerator.Current : null;
+
+            Assert.That (propertyValue == element.GetType().GetProperties()[0].GetValue (element).ToString());
         }
 
         [TestCase ("", "int", 0)]
@@ -410,7 +430,6 @@ namespace WorkSpeed.Import.Tests.UnitTests
                 IWorkbook book = new XSSFWorkbook();
                 ISheet sheet = book.CreateSheet();
 
-                sheet.CreateRow (0).CreateCell (0).SetCellValue ("");
                 sheet.CreateRow (10).CreateCell (10).SetCellValue (_mainCellText);
 
                 using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
@@ -432,6 +451,48 @@ namespace WorkSpeed.Import.Tests.UnitTests
 
                 sheet.CreateRow (9).CreateCell (10).SetCellValue (_testHeaderName);
                 sheet.CreateRow (10).CreateCell (10).SetCellValue (testValue);
+
+                using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
+                    
+                    book.Write (stream);
+                    return stream.Name;
+                }
+            }
+            catch {
+                throw;
+            }
+        }
+
+        private string CreateTestHeadedFile (double testValue)
+        {
+            try {
+                IWorkbook book = new XSSFWorkbook();
+                ISheet sheet = book.CreateSheet();
+
+                sheet.CreateRow (9).CreateCell (10).SetCellValue (_testHeaderName);
+                sheet.CreateRow (10).CreateCell (10).SetCellValue (testValue);
+
+
+                using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
+                    
+                    book.Write (stream);
+                    return stream.Name;
+                }
+            }
+            catch {
+                throw;
+            }
+        }
+
+        private string CreateTestHeadedFile (bool testValue)
+        {
+            try {
+                IWorkbook book = new XSSFWorkbook();
+                ISheet sheet = book.CreateSheet();
+
+                sheet.CreateRow (9).CreateCell (10).SetCellValue (_testHeaderName);
+                sheet.CreateRow (10).CreateCell (10).SetCellValue (testValue);
+
 
                 using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
                     

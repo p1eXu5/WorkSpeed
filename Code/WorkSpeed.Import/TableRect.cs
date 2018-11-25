@@ -24,5 +24,13 @@ namespace WorkSpeed.Import
             Bottom = Top + count - 1;
             Right = Left + count;
         }
+
+        public TableRect (int value)
+        {
+            Top = value;
+            Left = value;
+            Bottom = Top + value - 1;
+            Right = Left + value;
+        }
     }
 }

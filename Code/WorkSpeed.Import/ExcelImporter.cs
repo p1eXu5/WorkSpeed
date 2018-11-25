@@ -39,7 +39,7 @@ namespace WorkSpeed.Import
                     IWorkbook book = new XSSFWorkbook (stream);
                     ISheet sheet = book.GetSheetAt (0);
 
-                    var tableRect = GetFirstCell (sheet, type.GetProperties().Length);
+                    var tableRect = GetFirstCell (sheet);
 
                     if (null == tableRect) {
                         return GetEmptyCollection (type);
@@ -60,9 +60,13 @@ namespace WorkSpeed.Import
         /// <param name="sheet"></param>
         /// <param name="propertyCount"></param>
         /// <returns></returns>
-        private static TableRect? GetFirstCell(ISheet sheet, int propertyCount)
+        private static TableRect? GetFirstCell(ISheet sheet)
         {
-            TableRect tableRect = GetRect();
+            TableRect tableRect = GetRect() ?? new TableRect(-1);
+
+            if (tableRect.Equals (new TableRect (-1))) {
+                return null;
+            }
 
             var j = tableRect.Top;
             var i = tableRect.Left;
@@ -119,7 +123,7 @@ namespace WorkSpeed.Import
 
             #region Functions
 
-            TableRect GetRect()
+            TableRect? GetRect()
             {
                 TableRect rect;
 
@@ -128,7 +132,11 @@ namespace WorkSpeed.Import
 
                 if (rect.Bottom < rect.Top) throw new ArgumentException();
 
-                rect.Left = sheet.GetRow (rect.Top).FirstCellNum;
+                rect.Left = sheet.GetRow (rect.Top)?.FirstCellNum ?? -1;
+                if (rect.Left == -1) {
+                    return null;
+                }
+
                 rect.Right = sheet.GetRow (rect.Bottom).LastCellNum;
 
                 return rect;
@@ -140,6 +148,10 @@ namespace WorkSpeed.Import
         [SuppressMessage ("ReSharper", "PossibleNullReferenceException")]
         private static ICollection TryFillCollection (ISheet sheet, TableRect rect, Type type)
         {
+            if (type.GetProperties().Length != rect.Right - rect.Left) {
+                return GetEmptyCollection (type);
+            }
+
             if (!type.GetCustomAttributes (false).Any() || (type.GetCustomAttributes (false)[0] is HeadlessAttribute attr && !attr.IsHeadless)) {
                 if (!CheckHeaders()) {
                     return GetEmptyCollection (type);
@@ -174,7 +186,10 @@ namespace WorkSpeed.Import
 
                         if (propertyInfo.PropertyType.FullName == typeof(string).FullName) {
 
-                            obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, cell?.StringCellValue);
+                            string stringValue = default(string);
+                            SetStringValue(cell, ref stringValue);
+
+                            obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, stringValue);
                             isSet = true;
                         }
                         else if (propertyInfo.PropertyType.FullName == typeof(int).FullName) {
@@ -234,6 +249,21 @@ namespace WorkSpeed.Import
             }
 
             #endregion
+        }
+
+        private static void SetStringValue (ICell cell, ref string stringValue)
+        {
+            if (cell == null) return;
+
+            if (CellType.Numeric == cell.CellType) {
+                stringValue = cell.NumericCellValue.ToString(CultureInfo.InvariantCulture);
+            }
+            else if (CellType.Boolean == cell.CellType) {
+                stringValue = cell.BooleanCellValue.ToString();
+            }
+            else if (CellType.String == cell.CellType) {
+                stringValue = cell.StringCellValue;
+            }
         }
 
         private static void SetIntValue (ICell cell, ref int intValue)
