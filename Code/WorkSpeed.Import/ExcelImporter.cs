@@ -173,6 +173,7 @@ namespace WorkSpeed.Import
 
             return FillModelCollection();
             
+
             ArrayList FillModelCollection()
             {
                 object obj = Activator.CreateInstance (type);
