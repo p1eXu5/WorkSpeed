@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
@@ -20,6 +16,8 @@ namespace WorkSpeed.Import.Tests.UnitTests
     [SuppressMessage ("ReSharper", "PossibleNullReferenceException")]
     [SuppressMessage ("ReSharper", "MemberCanBePrivate.Local")]
     [SuppressMessage ("ReSharper", "UnusedAutoPropertyAccessor.Local")]
+    [SuppressMessage ("ReSharper", "UnusedMember.Global")]
+    [SuppressMessage ("ReSharper", "UnusedMember.Local")]
     public class ExcelImporterUnitTests
     {
         #region GetFirstCell
@@ -97,9 +95,6 @@ namespace WorkSpeed.Import.Tests.UnitTests
             var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), typeof(FakeModelClassWithWrongHeaderAttribute));
 
             // Assert:
-            var enumerator = resColl.GetEnumerator();
-            var element = enumerator.MoveNext() ? enumerator.Current : null;
-
             Assert.That(resColl.Count == 0);
         }
 
@@ -471,7 +466,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
                         MethodBuilder getterBuilder = typeBuilder.DefineMethod ($"get_TestProperty{i}", getSetAttr, typeof(string), Type.EmptyTypes);
                         LoadIlToGetter (getterBuilder, fieldBuilder);
 
-                        MethodBuilder setterBuilder = typeBuilder.DefineMethod ($"set_TestProperty{i}", getSetAttr, null, new Type[] {typeof(string)});
+                        MethodBuilder setterBuilder = typeBuilder.DefineMethod ($"set_TestProperty{i}", getSetAttr, null, new[] {typeof(string)});
                         LoadIlToSetter (setterBuilder, fieldBuilder);
 
                         propertyBuilder.SetGetMethod (getterBuilder);
@@ -490,7 +485,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
                         getterBuilder = typeBuilder.DefineMethod ($"get_TestProperty{i}", getSetAttr, typeof(int), Type.EmptyTypes);
                         LoadIlToGetter (getterBuilder, fieldBuilder);
 
-                        setterBuilder = typeBuilder.DefineMethod ($"set_TestProperty{i}", getSetAttr, null, new Type[] {typeof(int)});
+                        setterBuilder = typeBuilder.DefineMethod ($"set_TestProperty{i}", getSetAttr, null, new[] {typeof(int)});
                         LoadIlToSetter (setterBuilder, fieldBuilder);
 
                         propertyBuilder.SetGetMethod (getterBuilder);
@@ -509,7 +504,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
                         getterBuilder = typeBuilder.DefineMethod ($"get_TestProperty{i}", getSetAttr, typeof(double), Type.EmptyTypes);
                         LoadIlToGetter (getterBuilder, fieldBuilder);
 
-                        setterBuilder = typeBuilder.DefineMethod ($"set_TestProperty{i}", getSetAttr, null, new Type[] {typeof(double)});
+                        setterBuilder = typeBuilder.DefineMethod ($"set_TestProperty{i}", getSetAttr, null, new[] {typeof(double)});
                         LoadIlToSetter (setterBuilder, fieldBuilder);
 
                         propertyBuilder.SetGetMethod (getterBuilder);
@@ -528,7 +523,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
                         getterBuilder = typeBuilder.DefineMethod ($"get_TestProperty{i}", getSetAttr, typeof(bool), Type.EmptyTypes);
                         LoadIlToGetter (getterBuilder, fieldBuilder);
 
-                        setterBuilder = typeBuilder.DefineMethod ($"set_TestProperty{i}", getSetAttr, null, new Type[] {typeof(bool)});
+                        setterBuilder = typeBuilder.DefineMethod ($"set_TestProperty{i}", getSetAttr, null, new[] {typeof(bool)});
                         LoadIlToSetter (setterBuilder, fieldBuilder);
 
                         propertyBuilder.SetGetMethod (getterBuilder);
@@ -566,8 +561,9 @@ namespace WorkSpeed.Import.Tests.UnitTests
 
         private static CustomAttributeBuilder GetHeaderAttributeBuilder(object headerObj)
         {
-            ConstructorInfo ci = typeof(HeaderAttribute).GetConstructor (new Type[]{ typeof(string) });
-            CustomAttributeBuilder attrBuilder = new CustomAttributeBuilder (ci, new object[] { headerObj });
+            ConstructorInfo ci = typeof(HeaderAttribute).GetConstructor (new[]{ typeof(string) });
+            // ReSharper disable once AssignNullToNotNullAttribute
+            CustomAttributeBuilder attrBuilder = new CustomAttributeBuilder (ci, new[] { headerObj });
             return attrBuilder;
         }
 
@@ -588,130 +584,104 @@ namespace WorkSpeed.Import.Tests.UnitTests
         private string CreateTestFile (TableRect columns, float density, byte mainTop, byte mainLeft)
         {
             Random rnd = new Random((int)DateTime.Now.TimeOfDay.TotalSeconds);
-            try {
-                IWorkbook book = new XSSFWorkbook();
-                ISheet sheet = book.CreateSheet();
 
-                var Nc = columns.Right - columns.Left;
-                var nc = density > 1 
-                            ? (density - Math.Floor (density)) * Nc 
-                            : density * Nc;
+            IWorkbook book = new XSSFWorkbook();
+            ISheet sheet = book.CreateSheet();
 
-                for (int j = columns.Top; j <= columns.Bottom; j++) {
+            var nNc = columns.Right - columns.Left;
+            var nc = density > 1 
+                        ? (density - Math.Floor (density)) * nNc 
+                        : density * nNc;
 
-                    var row = sheet.CreateRow (j);
+            for (int j = columns.Top; j <= columns.Bottom; j++) {
 
-                    for (int i = 0; i < nc; i++) {
+                var row = sheet.CreateRow (j);
 
-                        int nextCell = columns.Left + rnd.Next (Nc);
+                for (int i = 0; i < nc; i++) {
 
-                        while (!(null == row.GetCell (nextCell))) {
-                            ++nextCell;
-                            if (nextCell == columns.Right) {
-                                nextCell = columns.Left;
-                            }
+                    int nextCell = columns.Left + rnd.Next (nNc);
+
+                    while (!(null == row.GetCell (nextCell))) {
+                        ++nextCell;
+                        if (nextCell == columns.Right) {
+                            nextCell = columns.Left;
                         }
-
-                        row.CreateCell (nextCell).SetCellValue ("value");
                     }
-                }
 
-                if (sheet.GetRow (mainTop)?.GetCell (mainLeft) == null) {
-                    sheet.CreateRow (mainTop).CreateCell (mainLeft).SetCellValue (_mainCellText);
-                }
-                else {
-                    sheet.GetRow (mainTop).GetCell (mainLeft).SetCellValue (_mainCellText);
-                }
-
-                using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
-                    
-                    book.Write (stream);
-                    return stream.Name;
+                    row.CreateCell (nextCell).SetCellValue ("value");
                 }
             }
-            catch {
-                throw;
+
+            if (sheet.GetRow (mainTop)?.GetCell (mainLeft) == null) {
+                sheet.CreateRow (mainTop).CreateCell (mainLeft).SetCellValue (_mainCellText);
+            }
+            else {
+                sheet.GetRow (mainTop).GetCell (mainLeft).SetCellValue (_mainCellText);
+            }
+
+            using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
+                    
+                book.Write (stream);
+                return stream.Name;
             }
         }
 
         private string CreateTestFileWithSingleStringCell()
         {
-            try {
-                IWorkbook book = new XSSFWorkbook();
-                ISheet sheet = book.CreateSheet();
+            IWorkbook book = new XSSFWorkbook();
+            ISheet sheet = book.CreateSheet();
 
-                sheet.CreateRow (10).CreateCell (10).SetCellValue (_mainCellText);
+            sheet.CreateRow (10).CreateCell (10).SetCellValue (_mainCellText);
 
-                using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
+            using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
                     
-                    book.Write (stream);
-                    return stream.Name;
-                }
-            }
-            catch {
-                throw;
+                book.Write (stream);
+                return stream.Name;
             }
         }
 
         private string CreateTestHeadedFile (string testValue)
         {
-            try {
-                IWorkbook book = new XSSFWorkbook();
-                ISheet sheet = book.CreateSheet();
+            IWorkbook book = new XSSFWorkbook();
+            ISheet sheet = book.CreateSheet();
 
-                sheet.CreateRow (9).CreateCell (10).SetCellValue (_testHeaderName);
-                sheet.CreateRow (10).CreateCell (10).SetCellValue (testValue);
+            sheet.CreateRow (9).CreateCell (10).SetCellValue (_testHeaderName);
+            sheet.CreateRow (10).CreateCell (10).SetCellValue (testValue);
 
-                using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
+            using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
                     
-                    book.Write (stream);
-                    return stream.Name;
-                }
-            }
-            catch {
-                throw;
+                book.Write (stream);
+                return stream.Name;
             }
         }
 
         private string CreateTestHeadedFile (double testValue)
         {
-            try {
-                IWorkbook book = new XSSFWorkbook();
-                ISheet sheet = book.CreateSheet();
+            IWorkbook book = new XSSFWorkbook();
+            ISheet sheet = book.CreateSheet();
 
-                sheet.CreateRow (9).CreateCell (10).SetCellValue (_testHeaderName);
-                sheet.CreateRow (10).CreateCell (10).SetCellValue (testValue);
+            sheet.CreateRow (9).CreateCell (10).SetCellValue (_testHeaderName);
+            sheet.CreateRow (10).CreateCell (10).SetCellValue (testValue);
 
-
-                using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
+            using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
                     
-                    book.Write (stream);
-                    return stream.Name;
-                }
-            }
-            catch {
-                throw;
+                book.Write (stream);
+                return stream.Name;
             }
         }
 
         private string CreateTestHeadedFile (bool testValue)
         {
-            try {
-                IWorkbook book = new XSSFWorkbook();
-                ISheet sheet = book.CreateSheet();
+            IWorkbook book = new XSSFWorkbook();
+            ISheet sheet = book.CreateSheet();
 
-                sheet.CreateRow (9).CreateCell (10).SetCellValue (_testHeaderName);
-                sheet.CreateRow (10).CreateCell (10).SetCellValue (testValue);
+            sheet.CreateRow (9).CreateCell (10).SetCellValue (_testHeaderName);
+            sheet.CreateRow (10).CreateCell (10).SetCellValue (testValue);
 
-
-                using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
+            using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
                     
-                    book.Write (stream);
-                    return stream.Name;
-                }
-            }
-            catch {
-                throw;
+                book.Write (stream);
+                return stream.Name;
             }
         }
 
