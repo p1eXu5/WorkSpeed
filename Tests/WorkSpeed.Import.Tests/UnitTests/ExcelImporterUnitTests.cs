@@ -18,6 +18,8 @@ namespace WorkSpeed.Import.Tests.UnitTests
 {
     [TestFixture]
     [SuppressMessage ("ReSharper", "PossibleNullReferenceException")]
+    [SuppressMessage ("ReSharper", "MemberCanBePrivate.Local")]
+    [SuppressMessage ("ReSharper", "UnusedAutoPropertyAccessor.Local")]
     public class ExcelImporterUnitTests
     {
         #region GetFirstCell
@@ -26,7 +28,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
         public void ImportDataFromExcel_XlsxFileDoesNotContainData_ReturnsEmptyCollection()
         {
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(GetFullPath ("empty.xlsx"), typeof(FakeModelClass));
+            var resColl = ExcelImporter.ImportDataFromExcel(GetFullPath ("empty.xlsx"), typeof(FakeHeadlessModelClass));
 
             // Assert:
             Assert.That (0 == resColl.Count);
@@ -36,7 +38,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
         public void ImportDataFromExcel_ZeroLenghtFileWithCorrectExtension_ReturnsEmptyCollection()
         {
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(CreateFakeZeroLengthXlsxFile (), typeof(FakeModelClass));
+            var resColl = ExcelImporter.ImportDataFromExcel(CreateFakeZeroLengthXlsxFile (), typeof(FakeHeadlessModelClass));
 
             // Assert:
             Assert.That (0 == resColl.Count);
@@ -46,13 +48,13 @@ namespace WorkSpeed.Import.Tests.UnitTests
         public void ImportDataFromExcel_OneColumnOneProperty_ReturnsTheMostTopLeftCell ()
         {
             // Arrange:
-            var fileName = CreateTestFile ();
+            var fileName = CreateTestFileWithSingleStringCell ();
 
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(fileName, typeof(FakeModelClass));
+            var resColl = ExcelImporter.ImportDataFromExcel(fileName, typeof(FakeHeadlessModelClass));
 
             // Assert:
-            Assert.That (_mainCellText == resColl.OfType<FakeModelClass>().First().MainCell);
+            Assert.That (_mainCellText == resColl.OfType<FakeHeadlessModelClass>().First().MainCell);
         }
 
         [Test]
@@ -62,11 +64,60 @@ namespace WorkSpeed.Import.Tests.UnitTests
             var fileName = CreateTestFile (new TableRect(5, 5, 5), (float)1.0, 5, 5);
 
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(fileName, typeof(FakeModelClass));
+            var resColl = ExcelImporter.ImportDataFromExcel(fileName, typeof(FakeHeadlessModelClass));
 
             // Assert:
             Assert.That (0 == resColl.Count);
         }
+
+        [Test]
+        public void ImportDataFromExcel__ModelPropertyAttributeless_PropertyNameEqualsCellHeaderWithoutWhiteSpaces_CellFilled__ReturnsCellValue()
+        {
+            // Arrange:
+            var cellValue = "Test Value";
+
+            // Action:
+            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), typeof(FakeModelClassWithTestHeaderNamedProperty));
+
+            // Assert:
+            var enumerator = resColl.GetEnumerator();
+            var element = enumerator.MoveNext() ? enumerator.Current : null;
+
+            Assert.That (resColl.Count != 0);
+            Assert.That(cellValue == (element?.GetType().GetProperties()[0].GetValue(element)?.ToString() ?? ""));
+        }
+
+        [Test]
+        public void ImportDataFromExcel_ModelPropertyWithAttributeNotCorrespondingCellHeader_ReturnsEmptyCollection()
+        {
+            // Arrange:
+            var cellValue = "Test Value";
+
+            // Action:
+            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), typeof(FakeModelClassWithWrongHeaderAttribute));
+
+            // Assert:
+            var enumerator = resColl.GetEnumerator();
+            var element = enumerator.MoveNext() ? enumerator.Current : null;
+
+            Assert.That(resColl.Count == 0);
+        }
+
+        [Test]
+        public void ImportDataFromExcel_ModelPropertyWithoutParameterlessConstructor_ReturnsEmptyCollection()
+        {
+            // Arrange:
+            var cellValue = "Test Value";
+
+            // Action:
+            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), typeof(FakeModelClassWithoutParameterlessConstructor));
+
+            // Assert:
+            Assert.That(resColl.Count == 0);
+        }
+
+
+        #region String Property
 
         [TestCase ("", "string")]
         [TestCase (" ", "string")]
@@ -95,6 +146,8 @@ namespace WorkSpeed.Import.Tests.UnitTests
         [TestCase (-1, "string", "-1")]
         [TestCase (1.00123, "string", "1.00123")]
         [TestCase (-1.00123, "string", "-1.00123")]
+        [TestCase(Double.MaxValue, "string", "0.0")]
+        [TestCase(Double.MinValue, "string", "0.0")]
         public void ImportDataFromExcel_StringPropertyNumericCell_CanReadStringCell(double cellValue, string propertyType, string propertyValue)
         {
             // Arrange:
@@ -109,6 +162,28 @@ namespace WorkSpeed.Import.Tests.UnitTests
 
             Assert.That (propertyValue == element.GetType().GetProperties()[0].GetValue (element).ToString());
         }
+
+        [TestCase(true, "string", "Да")]
+        [TestCase(false, "string", "Нет")]
+        public void ImportDataFromExcel_StringPropertyBooleanCell_CanReadStringCell(bool cellValue, string propertyType, string propertyValue)
+        {
+            // Arrange:
+            Type modelType = GetModelType(propertyType);
+
+            // Action:
+            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), modelType);
+
+            // Assert:
+            var enumerator = resColl.GetEnumerator();
+            var element = enumerator.MoveNext() ? enumerator.Current : null;
+
+            Assert.That(propertyValue == element.GetType().GetProperties()[0].GetValue(element).ToString());
+        }
+
+        #endregion
+
+
+        #region Int Property
 
         [TestCase ("", "int", 0)]
         [TestCase (" ", "int", 0)]
@@ -146,6 +221,50 @@ namespace WorkSpeed.Import.Tests.UnitTests
             Assert.That (propertyValue == (int)(element.GetType().GetProperties()[0].GetValue (element)));
         }
 
+
+        [TestCase(0, "int", 0)]
+        [TestCase(999999, "int", 999999)]
+        [TestCase(-98765, "int", -98765)]
+        [TestCase(Int32.MaxValue, "int", Int32.MaxValue)]
+        [TestCase(Int32.MinValue, "int", Int32.MinValue)]
+        public void ImportDataFromExcel_IntPropertyIntCell_CanReadIntAndBoolCell(int cellValue, string propertyType, int propertyValue)
+        {
+            // Arrange:
+            Type modelType = GetModelType(propertyType);
+
+            // Action:
+            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), modelType);
+
+            // Assert:
+            var enumerator = resColl.GetEnumerator();
+            var element = enumerator.MoveNext() ? enumerator.Current : null;
+
+            Assert.That(propertyValue == (int)(element.GetType().GetProperties()[0].GetValue(element)));
+        }
+
+
+        [TestCase(true, "int", 1)]
+        [TestCase(false, "int", 0)]
+        public void ImportDataFromExcel_IntPropertyBooleanCell_CanReadIntAndBoolCell(bool cellValue, string propertyType, int propertyValue)
+        {
+            // Arrange:
+            Type modelType = GetModelType(propertyType);
+
+            // Action:
+            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), modelType);
+
+            // Assert:
+            var enumerator = resColl.GetEnumerator();
+            var element = enumerator.MoveNext() ? enumerator.Current : null;
+
+            Assert.That(propertyValue == (int)(element.GetType().GetProperties()[0].GetValue(element)));
+        }
+
+        #endregion
+
+
+        #region Double Property
+
         [TestCase ("", "double", 0.0)]
         [TestCase (" ", "double", 0.0)]
         [TestCase ("1", "double", 1.0)]
@@ -181,6 +300,54 @@ namespace WorkSpeed.Import.Tests.UnitTests
             
             Assert.That (propertyValue, Is.EqualTo ((double)(element.GetType().GetProperties()[0].GetValue (element))));
         }
+
+
+        [TestCase(0.0, "double", 0.0)]
+        [TestCase(1.02345, "double", 1.02345)]
+        [TestCase(-1.02345, "double", -1.02345)]
+        [TestCase(Single.MaxValue, "double", Single.MaxValue)]
+        [TestCase(Single.MinValue, "double", Single.MinValue)]
+        [TestCase(Double.MaxValue, "double", 0.0)]
+        [TestCase(Double.MinValue, "double", 0.0)]
+        public void ImportDataFromExcel_DoublePropertyDoubleCell_CanReadDoubleAndBoolCell(double cellValue, string propertyType, double propertyValue)
+        {
+            // Arrange:
+            Type modelType = GetModelType(propertyType);
+
+            // Action:
+            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), modelType);
+
+            // Assert:
+            var enumerator = resColl.GetEnumerator();
+            var element = enumerator.MoveNext() ? enumerator.Current : null;
+
+            var delta = Math.Log10 (Math.Abs(propertyValue)) > 25 ? 1e+25 : 1e13; 
+            Assert.That(propertyValue, Is.EqualTo((double)(element.GetType().GetProperties()[0].GetValue(element))).Within (delta));
+        }
+
+
+        [TestCase(true, "double", 1.0)]
+        [TestCase(false, "double", 0.0)]
+        public void ImportDataFromExcel_DoublePropertyBooleanCell_CanReadDoubleAndBoolCell(bool cellValue, string propertyType, double propertyValue)
+        {
+            // Arrange:
+            Type modelType = GetModelType(propertyType);
+
+            // Action:
+            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), modelType);
+
+            // Assert:
+            var enumerator = resColl.GetEnumerator();
+            var element = enumerator.MoveNext() ? enumerator.Current : null;
+
+            var delta = Math.Log10(Math.Abs(propertyValue)) > 25 ? 1e+25 : 1e13;
+            Assert.That(propertyValue, Is.EqualTo((double)(element.GetType().GetProperties()[0].GetValue(element))).Within(delta));
+        }
+
+        #endregion
+
+
+        #region Boolean Property
 
         [TestCase ("", "bool", false)]
         [TestCase (" ", "bool", false)]
@@ -221,21 +388,64 @@ namespace WorkSpeed.Import.Tests.UnitTests
             Assert.That (propertyValue, Is.EqualTo ((bool)(element.GetType().GetProperties()[0].GetValue (element))));
         }
 
+
+        [TestCase(0.0, "bool", false)]
+        [TestCase(1.02345, "bool", true)]
+        [TestCase(-1.02345, "bool", true)]
+        [TestCase(Single.MaxValue, "bool", true)]
+        [TestCase(Single.MinValue, "bool", true)]
+        [TestCase(Double.MaxValue, "bool", false)]
+        [TestCase(Double.MinValue, "bool", false)]
+        public void ImportDataFromExcel_BoolPropertyNumericCell_CanReadBoolCell(double cellValue, string propertyType, bool propertyValue)
+        {
+            // Arrange:
+            Type modelType = GetModelType(propertyType);
+
+            // Action:
+            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), modelType);
+
+            // Assert:
+            var enumerator = resColl.GetEnumerator();
+            var element = enumerator.MoveNext() ? enumerator.Current : null;
+
+            Assert.That(propertyValue, Is.EqualTo((bool)(element.GetType().GetProperties()[0].GetValue(element))));
+        }
+
+
+        [TestCase(true, "bool", true)]
+        [TestCase(false, "bool", false)]
+        public void ImportDataFromExcel_BoolPropertyBoolCell_CanReadBoolCell(bool cellValue, string propertyType, bool propertyValue)
+        {
+            // Arrange:
+            Type modelType = GetModelType(propertyType);
+
+            // Action:
+            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), modelType);
+
+            // Assert:
+            var enumerator = resColl.GetEnumerator();
+            var element = enumerator.MoveNext() ? enumerator.Current : null;
+
+            Assert.That(propertyValue, Is.EqualTo((bool)(element.GetType().GetProperties()[0].GetValue(element))));
+        }
+
+        #endregion
+
+        #endregion
+
+
         [TearDown]
         public void Cleanup()
         {
             RemoveFakeFile();
         }
 
-        // TODO: Property Count Assertions
-
-        #endregion
 
         #region Factory
 
         private const string _fakeFileName = "fakefile.xlsx";
         private const string _mainCellText = "Main Cell";
-        private const string _testHeaderName = "TestHeader";
+        private const string _testHeaderName = "Test Header";
 
         private Type GetModelType (params string[] propertyTypes)
         {
@@ -424,7 +634,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             }
         }
 
-        private string CreateTestFile()
+        private string CreateTestFileWithSingleStringCell()
         {
             try {
                 IWorkbook book = new XSSFWorkbook();
@@ -506,9 +716,34 @@ namespace WorkSpeed.Import.Tests.UnitTests
         }
 
         [Headless]
-        class FakeModelClass
+        class FakeHeadlessModelClass
         {
             public string MainCell { get; set; }
+            public string ReadOnlyProperty { get; } = "Read Only Property";
+        }
+
+        class FakeModelClassWithTestHeaderNamedProperty
+        {
+            public string TestHeader { get; set; }
+            public string ReadOnlyProperty { get; } = "Read Only Property";
+        }
+
+        class FakeModelClassWithWrongHeaderAttribute
+        {
+            [Header("Wrong Header")]
+            public string TestHeader { get; set; }
+            public string ReadOnlyProperty { get; } = "Read Only Property";
+        }
+
+        class FakeModelClassWithoutParameterlessConstructor
+        {
+            public FakeModelClassWithoutParameterlessConstructor (string param)
+            {
+                TestHeader = param;
+            }
+
+            public string TestHeader { get; set; }
+            public string ReadOnlyProperty { get; } = "Read Only Property";
         }
 
         #endregion

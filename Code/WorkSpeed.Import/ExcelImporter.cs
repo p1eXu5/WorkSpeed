@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Zip;
 using NPOI.SS.UserModel;
@@ -33,6 +34,10 @@ namespace WorkSpeed.Import
 
         public static ICollection ImportDataFromExcel(string fileName, Type type)
         {
+            if (type.GetConstructors().Count (c => c.IsPublic && c.GetParameters().Length == 0) == 0) {
+                return GetEmptyCollection(type);
+            }
+
             using (Stream stream = new FileStream (fileName, FileMode.Open, FileAccess.Read)) {
 
                 try {
@@ -58,11 +63,10 @@ namespace WorkSpeed.Import
         /// Returns data area in Excel table.
         /// </summary>
         /// <param name="sheet"></param>
-        /// <param name="propertyCount"></param>
         /// <returns></returns>
         private static TableRect? GetFirstCell(ISheet sheet)
         {
-            TableRect tableRect = GetRect() ?? new TableRect(-1);
+            TableRect tableRect = GetRect();
 
             if (tableRect.Equals (new TableRect (-1))) {
                 return null;
@@ -71,6 +75,7 @@ namespace WorkSpeed.Import
             var j = tableRect.Top;
             var i = tableRect.Left;
 
+            // If file contains only one cell:
             if (tableRect.Top == tableRect.Bottom && tableRect.Left == tableRect.Right - 1) {
 
                 if (sheet.GetRow (tableRect.Top).GetCell (tableRect.Left).CellType == CellType.Blank) {
@@ -80,6 +85,7 @@ namespace WorkSpeed.Import
                 return tableRect;
             }
 
+            // If file contains only one column:
             if (tableRect.Left == tableRect.Right - 1) {
 
                 while (sheet.GetRow (j)?.GetCell (i) == null || sheet.GetRow (j).GetCell (i).CellType == CellType.Blank) {
@@ -98,6 +104,7 @@ namespace WorkSpeed.Import
                 return tableRect;
             }
             
+            // If file contains one or more rows and some columns:
             do {
                 IRow row = sheet.GetRow (j);
 
@@ -119,11 +126,9 @@ namespace WorkSpeed.Import
             return tableRect;
             
 
-            // var forTest = sheet.GetRow (2)?.GetCell (2) ?? null;
-
             #region Functions
 
-            TableRect? GetRect()
+            TableRect GetRect()
             {
                 TableRect rect;
 
@@ -134,7 +139,7 @@ namespace WorkSpeed.Import
 
                 rect.Left = sheet.GetRow (rect.Top)?.FirstCellNum ?? -1;
                 if (rect.Left == -1) {
-                    return null;
+                    return new TableRect(-1);
                 }
 
                 rect.Right = sheet.GetRow (rect.Bottom).LastCellNum;
@@ -148,11 +153,13 @@ namespace WorkSpeed.Import
         [SuppressMessage ("ReSharper", "PossibleNullReferenceException")]
         private static ICollection TryFillCollection (ISheet sheet, TableRect rect, Type type)
         {
-            if (type.GetProperties().Length != rect.Right - rect.Left) {
+            if (type.GetProperties ().Count(p => p.CanWrite) != rect.Right - rect.Left) {
                 return GetEmptyCollection (type);
             }
 
-            if (!type.GetCustomAttributes (false).Any() || (type.GetCustomAttributes (false)[0] is HeadlessAttribute attr && !attr.IsHeadless)) {
+            if (   !type.GetCustomAttributes (false).Any() 
+                || (type.GetCustomAttributes (false)[0] is HeadlessAttribute attr && !attr.IsHeadless)) {
+
                 if (!CheckHeaders()) {
                     return GetEmptyCollection (type);
                 }
@@ -233,12 +240,20 @@ namespace WorkSpeed.Import
             {
                 var i = rect.Left;
 
-                foreach (var propertyInfo in type.GetProperties()) {
+                foreach (var propertyInfo in type.GetProperties().Where (p => p.CanWrite)) {
 
-                    if (((HeaderAttribute) propertyInfo
-                                            .GetCustomAttributes (false)
-                                            .Single (a => a is HeaderAttribute))
-                                            .Header != sheet.GetRow (rect.Top).GetCell (i).StringCellValue) {
+                    var propertyAttr = propertyInfo.GetCustomAttributes (false)
+                                                   .FirstOrDefault (a => a is HeaderAttribute) as HeaderAttribute;
+
+                    var cellHeader = sheet.GetRow (rect.Top).GetCell (i).StringCellValue;
+
+                    if (null == propertyAttr) {
+                        if (!propertyInfo.Name.Equals (Regex.Replace (cellHeader, @"\s+", String.Empty),
+                                                       StringComparison.InvariantCulture)) {
+                            return false;
+                        }
+                    }
+                    else if (propertyAttr.Header != cellHeader) {
                         return false;
                     }
 
@@ -256,10 +271,15 @@ namespace WorkSpeed.Import
             if (cell == null) return;
 
             if (CellType.Numeric == cell.CellType) {
-                stringValue = cell.NumericCellValue.ToString(CultureInfo.InvariantCulture);
+                try {
+                    stringValue = cell.NumericCellValue.ToString (CultureInfo.InvariantCulture);
+                }
+                catch (OverflowException) {
+                    stringValue = "0.0";
+                }
             }
             else if (CellType.Boolean == cell.CellType) {
-                stringValue = cell.BooleanCellValue.ToString();
+                stringValue = cell.BooleanCellValue ? "Да" : "Нет";
             }
             else if (CellType.String == cell.CellType) {
                 stringValue = cell.StringCellValue;
@@ -271,7 +291,12 @@ namespace WorkSpeed.Import
             if (cell == null) return;
 
             if (CellType.Numeric == cell.CellType) {
-                intValue = Convert.ToInt32 (cell.NumericCellValue);
+                try {
+                    intValue = Convert.ToInt32 (cell.NumericCellValue);
+                }
+                catch (OverflowException) {
+                    intValue = 0;
+                }
             }
             else if (CellType.Boolean == cell.CellType) {
                 if (cell.BooleanCellValue) {
@@ -304,8 +329,12 @@ namespace WorkSpeed.Import
             if (cell == null) return;
 
             if (CellType.Numeric == cell.CellType) {
-                
-                doubleValue = cell.NumericCellValue;
+                try {
+                    doubleValue = cell.NumericCellValue;
+                }
+                catch (OverflowException) {
+                    doubleValue = 0.0;
+                }
             }
             else if (CellType.Boolean == cell.CellType) {
 
@@ -342,8 +371,13 @@ namespace WorkSpeed.Import
             if (cell == null) return;
 
             if (CellType.Numeric == cell.CellType) {
-                
-                boolValue = !cell.NumericCellValue.Equals(0.0);
+
+                try {
+                    boolValue = !cell.NumericCellValue.Equals (0.0);
+                }
+                catch (OverflowException) {
+                    boolValue = false;
+                }
             }
             else if (CellType.Boolean == cell.CellType) {
 
