@@ -23,6 +23,13 @@ namespace WorkSpeed.Import.Tests.UnitTests
         #region GetFirstCell
 
         [Test]
+        public void ImportDataFromExcel_FileDoesNotExist_Throw()
+        {
+            // Action:
+            Assert.That(() => ExcelImporter.ImportDataFromExcel(GetFullPath("doesnotexistfile.xlsx"), typeof(FakeHeadlessModelClass)), Throws.Exception);
+        }
+
+        [Test]
         public void ImportDataFromExcel_XlsxFileDoesNotContainData_ReturnsEmptyCollection()
         {
             // Action:
@@ -35,8 +42,11 @@ namespace WorkSpeed.Import.Tests.UnitTests
         [Test]
         public void ImportDataFromExcel_ZeroLenghtFileWithCorrectExtension_ReturnsEmptyCollection()
         {
+            // Arrange:
+            var fileName = CreateFakeZeroLengthXlsxFile();
+
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(CreateFakeZeroLengthXlsxFile (), typeof(FakeHeadlessModelClass));
+            var resColl = ExcelImporter.ImportDataFromExcel(fileName, typeof(FakeHeadlessModelClass));
 
             // Assert:
             Assert.That (0 == resColl.Count);

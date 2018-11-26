@@ -83,15 +83,7 @@
     <Content Include="TestFiles\empty.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="TestFiles\testoperations.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestFiles\Выработка 25.11.2018 8.00 - 26.11.2018 8.00 - копия в xlsx.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestFiles\Выработка 25.11.2018 8.00 - 26.11.2018 8.00.xls">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="TestFiles\testExcel2003FileWithSingleHeadedCell.xls" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\WorkSpeed.Import\WorkSpeed.Import.csproj">
