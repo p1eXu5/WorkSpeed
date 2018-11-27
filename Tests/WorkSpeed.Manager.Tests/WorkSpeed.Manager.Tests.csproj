@@ -50,7 +50,6 @@
     <None Include="TestFiles\Выработка 25.11.2018 8.00 - 26.11.2018 8.00 - копия в xlsx.xlsx" />
     <None Include="TestFiles\Выработка 25.11.2018 8.00 - 26.11.2018 8.00.xls" />
     <None Include="TestFiles\Инвентаризация товара 26.11.2018 8.00 - 27.11.2018 8.00.xls" />
-    <None Include="TestFiles\Отгрузка товара 26.11.2018 8.00 - 27.11.2018 8.00.xls" />
     <None Include="TestFiles\Приём товара 26.11.2018 8.00 - 27.11.2018 8.00.xls" />
     <None Include="TestFiles\ПРР товара 26.11.2018 8.00 - 27.11.2018 8.00.xls" />
     <None Include="TestFiles\Сотрудники от 26.11.2018 г.xls" />
