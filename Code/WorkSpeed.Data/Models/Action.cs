@@ -20,8 +20,8 @@ namespace WorkSpeed.Data.Models
         public short? LineCount { get; set; }
         public float? Volume { get; set; }
         public short? ScanCount { get; set; }
-        public Adress SenderAdress { get; set; }
-        public Adress ReceiverAdress { get; set; }
+        public Address SenderAdress { get; set; }
+        public Address ReceiverAdress { get; set; }
 
         public Operation Operation { get; set; }
     }
