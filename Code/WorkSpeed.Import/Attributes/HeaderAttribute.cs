@@ -11,7 +11,7 @@ namespace WorkSpeed.Import.Attributes
     {
         public HeaderAttribute (string header)
         {
-            Header = header;
+            Header = header.RemoveWhitespaces();
         }
 
         public string Header { get; set; }

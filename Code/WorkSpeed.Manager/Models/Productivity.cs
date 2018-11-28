@@ -11,47 +11,51 @@ namespace WorkSpeed.Manager.Models
     {
         public Productivity(Employee employee)
         {
-            Employee = employee;
+            //Employee = employee;
 
-            GatheringTime = TimeSpan.Zero;
-            GatheredGoods = new HashSet<int>();
+            //GatheringTime = TimeSpan.Zero;
+            //GatheredGoods = new HashSet<int>();
 
-            PackagingTime = TimeSpan.Zero;
-            PackagedGoods = new HashSet<int>();
+            //PackagingTime = TimeSpan.Zero;
+            //PackagedGoods = new HashSet<int>();
 
-            ClientGatheringTime = TimeSpan.Zero;
-            ClientDeliveryTime = TimeSpan.Zero;
-            ClientGatheredGoods = new HashSet<int>();
+            //ClientGatheringTime = TimeSpan.Zero;
+            //ClientDeliveryTime = TimeSpan.Zero;
+            //ClientGatheredGoods = new HashSet<int>();
         }
 
-        public readonly Employee Employee;
+        public Productivity (Dictionary<Operation, OperationDetails> details)
+        {
+        }
 
-        public readonly TimeSpan GatheringTime;
-        public readonly HashSet<int> GatheredGoods;
+        //public readonly Employee Employee;
 
-        public readonly TimeSpan PackagingTime;
-        public readonly HashSet<int> PackagedGoods;
+        //public readonly TimeSpan GatheringTime;
+        //public readonly HashSet<int> GatheredGoods;
 
-        public readonly TimeSpan ClientGatheringTime;
-        public readonly TimeSpan ClientDeliveryTime;
-        public readonly HashSet<int> ClientGatheredGoods;
+        //public readonly TimeSpan PackagingTime;
+        //public readonly HashSet<int> PackagedGoods;
 
-        public readonly TimeSpan LoadingTime;
-        public readonly double LoadingWeight;
+        //public readonly TimeSpan ClientGatheringTime;
+        //public readonly TimeSpan ClientDeliveryTime;
+        //public readonly HashSet<int> ClientGatheredGoods;
 
-        public readonly TimeSpan UnloadingTime;
-        public readonly double UnloadingWeight;
+        //public readonly TimeSpan LoadingTime;
+        //public readonly double LoadingWeight;
 
-        public readonly TimeSpan ScanningTime;
-        public readonly HashSet<int> ScannedGoods;
+        //public readonly TimeSpan UnloadingTime;
+        //public readonly double UnloadingWeight;
 
-        public readonly TimeSpan ClientScanningTime;
-        public readonly HashSet<int> ClientScannedGoods;
+        //public readonly TimeSpan ScanningTime;
+        //public readonly HashSet<int> ScannedGoods;
 
-        public readonly TimeSpan InventoringTime;
-        public readonly HashSet<int> InventoredGoods;
+        //public readonly TimeSpan ClientScanningTime;
+        //public readonly HashSet<int> ClientScannedGoods;
 
-        public readonly Queue<Address> Route;
+        //public readonly TimeSpan InventoringTime;
+        //public readonly HashSet<int> InventoredGoods;
+
+        //public readonly Queue<Address> Route;
     }
 
     public struct CategoryWeight

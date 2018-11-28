@@ -63,6 +63,7 @@
     <Compile Include="IConcreteImporter.cs" />
     <Compile Include="IDataImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringHelper.cs" />
     <Compile Include="TableRect.cs" />
   </ItemGroup>
   <ItemGroup>

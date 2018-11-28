@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Zip;
+using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using WorkSpeed.Import.Attributes;
@@ -18,6 +19,8 @@ namespace WorkSpeed.Import
     public class ExcelImporter : IConcreteImporter
     {
         private static ExcelImporter _excelImporter;
+        private const string XLS_FILE = ".xls";
+        private const string XLSX_FILE = ".xlsx";
 
         private ExcelImporter() {}
 
@@ -25,7 +28,7 @@ namespace WorkSpeed.Import
 
         public static ExcelImporter ExcelImporterInstance => _excelImporter ?? (_excelImporter = new ExcelImporter());
 
-        public string FileExtension { get; } = ".xlsx";
+        public HashSet<string> FileExtensions { get; } = new HashSet<string> {XLS_FILE, XLSX_FILE};
         public Func<string, Type, ICollection> ImportData { get; } = ImportDataFromExcel;
 
         #endregion
@@ -38,10 +41,22 @@ namespace WorkSpeed.Import
                 return GetEmptyCollection(type);
             }
 
+            var fileExtension = Path.GetExtension (fileName);
+            if (!ExcelImporterInstance.FileExtensions.Contains (fileExtension)) return GetEmptyCollection(type);
+
             using (Stream stream = new FileStream (fileName, FileMode.Open, FileAccess.Read)) {
 
                 try {
-                    IWorkbook book = new XSSFWorkbook (stream);
+
+                    IWorkbook book;
+
+                    if (XLS_FILE == fileExtension) {
+                        book = new HSSFWorkbook(stream);
+                    }
+                    else {
+                         book = new XSSFWorkbook (stream);
+                    }
+
                     ISheet sheet = book.GetSheetAt (0);
 
                     var tableRect = GetFirstCell (sheet);
@@ -150,7 +165,6 @@ namespace WorkSpeed.Import
             #endregion
         }
 
-        [SuppressMessage ("ReSharper", "PossibleNullReferenceException")]
         private static ICollection TryFillCollection (ISheet sheet, TableRect rect, Type type)
         {
             if (type.GetProperties ().Count(p => p.CanWrite) != rect.Right - rect.Left) {
@@ -160,110 +174,108 @@ namespace WorkSpeed.Import
             if (   !type.GetCustomAttributes (false).Any() 
                 || (type.GetCustomAttributes (false)[0] is HeadlessAttribute attr && !attr.IsHeadless)) {
 
-                if (!CheckHeaders()) {
+                if (!CheckHeaders(sheet, rect, type)) {
                     return GetEmptyCollection (type);
                 }
 
                 ++rect.Top;
             }
 
-            return FillModelCollection();
+            return FillModelCollection(sheet, rect, type);
+        }
 
+        private static bool CheckHeaders (ISheet sheet, TableRect rect, Type type)
+        {
+            // TODO check property with sets
+            var i = rect.Left;
 
-            #region Functions
+            foreach (var propertyInfo in type.GetProperties().Where (p => p.CanWrite)) {
 
-            ArrayList FillModelCollection()
-            {
-                ArrayList list = new ArrayList(rect.Bottom - rect.Top + 1);
+                var cellHeader = sheet.GetRow (rect.Top).GetCell (i).StringCellValue;
+                if (String.IsNullOrWhiteSpace (cellHeader)) return false;
+                if (cellHeader.Contains (" ")) cellHeader = Regex.Replace (cellHeader, @"\s+", String.Empty);
 
-                for (var j = rect.Top; j <= rect.Bottom; ++j) {
+                var propertyAttr = propertyInfo.GetCustomAttributes (false)
+                                                .FirstOrDefault (a => a is HeaderAttribute) as HeaderAttribute;
 
-                    object obj = Activator.CreateInstance (type);
-                    var i = rect.Left;
-
-                    var row = sheet.GetRow (j);
-                    if (null == row) continue;
-
-                    foreach (var propertyInfo in type.GetProperties()) {
-
-                        if (propertyInfo.SetMethod == null) continue;
-
-                        bool isSet = false;
-                        ICell cell = row.GetCell (i);
-
-                        if (propertyInfo.PropertyType.FullName == typeof(string).FullName) {
-
-                            string stringValue = default(string);
-                            SetStringValue(cell, ref stringValue);
-
-                            obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, stringValue);
-                            isSet = true;
-                        }
-                        else if (propertyInfo.PropertyType.FullName == typeof(int).FullName) {
-
-                            int intValue = default(int);
-                            SetIntValue(cell, ref intValue);
-
-                            obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, intValue);
-                            isSet = true;
-                        }
-                        else if (propertyInfo.PropertyType.FullName == typeof(double).FullName) {
-
-                            double doubleValue = default(double);
-                            SetDoubleValue(cell, ref doubleValue);
-
-                            obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, doubleValue);
-                            isSet = true;
-                        }
-                        else if (propertyInfo.PropertyType.FullName == typeof(bool).FullName) {
-
-                            bool boolValue = default(bool);
-                            SetBoolValue(cell, ref boolValue);
-
-                            obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, boolValue);
-                            isSet = true;
-                        }
-
-                        if (!isSet) {
-                            return null;
-                        }
-                    }
-
-                    list.Add (obj);
-                    ++i;
-                }
-
-                return list;
-            }
-
-            bool CheckHeaders ()
-            {
-                var i = rect.Left;
-
-                foreach (var propertyInfo in type.GetProperties().Where (p => p.CanWrite)) {
-
-                    var propertyAttr = propertyInfo.GetCustomAttributes (false)
-                                                   .FirstOrDefault (a => a is HeaderAttribute) as HeaderAttribute;
-
-                    var cellHeader = sheet.GetRow (rect.Top).GetCell (i).StringCellValue;
-
-                    if (null == propertyAttr) {
-                        if (!propertyInfo.Name.Equals (Regex.Replace (cellHeader, @"\s+", String.Empty),
-                                                       StringComparison.InvariantCulture)) {
-                            return false;
-                        }
-                    }
-                    else if (propertyAttr.Header != cellHeader) {
+                if (null == propertyAttr) {
+                    if (!propertyInfo.Name.Equals (cellHeader)) {
                         return false;
                     }
-
-                    ++i;
+                }
+                else if (propertyAttr.Header != cellHeader) {
+                    return false;
                 }
 
-                return true;
+                ++i;
             }
 
-            #endregion
+            return true;
+        }
+
+        [SuppressMessage ("ReSharper", "PossibleNullReferenceException")]
+        private static ArrayList FillModelCollection(ISheet sheet, TableRect rect, Type type)
+        {
+            ArrayList list = new ArrayList(rect.Bottom - rect.Top + 1);
+
+            for (var j = rect.Top; j <= rect.Bottom; ++j) {
+
+                object obj = Activator.CreateInstance (type);
+                var i = rect.Left;
+
+                var row = sheet.GetRow (j);
+                if (null == row) continue;
+
+                foreach (var propertyInfo in type.GetProperties()) {
+
+                    if (propertyInfo.SetMethod == null) continue;
+
+                    bool isSet = false;
+                    ICell cell = row.GetCell (i);
+
+                    if (typeof(string).FullName == propertyInfo.PropertyType.FullName) {
+
+                        string stringValue = default(string);
+                        SetStringValue(cell, ref stringValue);
+
+                        obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, stringValue);
+                        isSet = true;
+                    }
+                    else if (typeof(int).FullName == propertyInfo.PropertyType.FullName) {
+
+                        int intValue = default(int);
+                        SetIntValue(cell, ref intValue);
+
+                        obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, intValue);
+                        isSet = true;
+                    }
+                    else if (typeof(double).FullName == propertyInfo.PropertyType.FullName) {
+
+                        double doubleValue = default(double);
+                        SetDoubleValue(cell, ref doubleValue);
+
+                        obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, doubleValue);
+                        isSet = true;
+                    }
+                    else if (typeof(bool).FullName == propertyInfo.PropertyType.FullName) {
+
+                        bool boolValue = default(bool);
+                        SetBoolValue(cell, ref boolValue);
+
+                        obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, boolValue);
+                        isSet = true;
+                    }
+
+                    if (!isSet) {
+                        return null;
+                    }
+                }
+
+                list.Add (obj);
+                ++i;
+            }
+
+            return list;
         }
 
         private static void SetStringValue (ICell cell, ref string stringValue)

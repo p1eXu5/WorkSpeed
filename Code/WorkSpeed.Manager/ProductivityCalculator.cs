@@ -33,7 +33,7 @@ namespace WorkSpeed.Manager
 
                 operationsDetails[currentAction.Operation].AddDurationTime
                 (
-                    constraints.GetDurationWithoutBreak (actionCollection[i].Operation,
+                    constraints.GetDurationWithoutBreaks (actionCollection[i].Operation,
                                                             actionCollection[i + 1].Operation)
                 );
 
@@ -42,7 +42,7 @@ namespace WorkSpeed.Manager
 
             operationsDetails[currentAction.Operation].AddDurationTime
             (
-                constraints.GetDurationWithoutBreak(actionCollection[i].Operation)
+                constraints.GetDurationWithoutBreaks(actionCollection[i].Operation)
             );
 
             operationsDetails[currentAction.Operation].AddDetails(actionCollection[i].Operation, constraints.Categories);

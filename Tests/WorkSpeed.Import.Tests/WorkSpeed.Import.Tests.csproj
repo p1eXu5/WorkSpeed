@@ -71,6 +71,7 @@
     <Compile Include="TestHelper.cs" />
     <Compile Include="UnitTests\DataImporterUnitTests.cs" />
     <Compile Include="UnitTests\ExcelImporterUnitTests.cs" />
+    <Compile Include="UnitTests\StringHelperUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -83,7 +84,9 @@
     <Content Include="TestFiles\empty.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="TestFiles\testExcel2003FileWithSingleHeadedCell.xls" />
+    <Content Include="TestFiles\testExcel2003FileWithSingleHeadedCell.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\WorkSpeed.Import\WorkSpeed.Import.csproj">

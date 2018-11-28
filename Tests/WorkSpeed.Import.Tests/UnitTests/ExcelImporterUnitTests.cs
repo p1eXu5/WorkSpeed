@@ -121,6 +121,16 @@ namespace WorkSpeed.Import.Tests.UnitTests
             Assert.That(resColl.Count == 0);
         }
 
+        [Test]
+        public void ImportDataFromExcel_HeaderedXlsFileWithOneColumn_ReturnsCollectionWithCellValue()
+        {
+            // Action
+            var resColl = ExcelImporter.ImportDataFromExcel (GetFullPath ("testExcel2003FileWithSingleHeadedCell.xls"), GetModelType (new[] { "string" }));
+
+            // Assert
+            Assert.That (1 == resColl.Count);
+        }
+
 
         #region String Property
 
@@ -448,7 +458,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
 
         #region Factory
 
-        private const string _fakeFileName = "fakefile.xlsx";
+        private const string _fakeXlsxFileName = "fakefile.xlsx";
         private const string _mainCellText = "Main Cell";
         private const string _testHeaderName = "Test Header";
 
@@ -579,14 +589,14 @@ namespace WorkSpeed.Import.Tests.UnitTests
 
         void RemoveFakeFile()
         {
-            if (File.Exists (GetFullPath(_fakeFileName))) {
-                File.Delete (_fakeFileName);
+            if (File.Exists (GetFullPath(_fakeXlsxFileName))) {
+                File.Delete (_fakeXlsxFileName);
             }
         }
 
         private string CreateFakeZeroLengthXlsxFile()
         {
-            using (var stream = new FileStream (GetFullPath(_fakeFileName),FileMode.Create, FileAccess.Write)) {
+            using (var stream = new FileStream (GetFullPath(_fakeXlsxFileName),FileMode.Create, FileAccess.Write)) {
                 return stream.Name;
             }
         }
@@ -629,7 +639,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
                 sheet.GetRow (mainTop).GetCell (mainLeft).SetCellValue (_mainCellText);
             }
 
-            using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
+            using (var stream = new FileStream (GetFullPath (_fakeXlsxFileName), FileMode.Create, FileAccess.Write)) {
                     
                 book.Write (stream);
                 return stream.Name;
@@ -643,7 +653,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
 
             sheet.CreateRow (10).CreateCell (10).SetCellValue (_mainCellText);
 
-            using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
+            using (var stream = new FileStream (GetFullPath (_fakeXlsxFileName), FileMode.Create, FileAccess.Write)) {
                     
                 book.Write (stream);
                 return stream.Name;
@@ -658,7 +668,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             sheet.CreateRow (9).CreateCell (10).SetCellValue (_testHeaderName);
             sheet.CreateRow (10).CreateCell (10).SetCellValue (testValue);
 
-            using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
+            using (var stream = new FileStream (GetFullPath (_fakeXlsxFileName), FileMode.Create, FileAccess.Write)) {
                     
                 book.Write (stream);
                 return stream.Name;
@@ -673,7 +683,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             sheet.CreateRow (9).CreateCell (10).SetCellValue (_testHeaderName);
             sheet.CreateRow (10).CreateCell (10).SetCellValue (testValue);
 
-            using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
+            using (var stream = new FileStream (GetFullPath (_fakeXlsxFileName), FileMode.Create, FileAccess.Write)) {
                     
                 book.Write (stream);
                 return stream.Name;
@@ -688,7 +698,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             sheet.CreateRow (9).CreateCell (10).SetCellValue (_testHeaderName);
             sheet.CreateRow (10).CreateCell (10).SetCellValue (testValue);
 
-            using (var stream = new FileStream (GetFullPath (_fakeFileName), FileMode.Create, FileAccess.Write)) {
+            using (var stream = new FileStream (GetFullPath (_fakeXlsxFileName), FileMode.Create, FileAccess.Write)) {
                     
                 book.Write (stream);
                 return stream.Name;

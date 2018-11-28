@@ -37,7 +37,11 @@ namespace WorkSpeed.Import
                 throw new NullReferenceException($"{nameof(importer)} can't be null");
             }
 
-            _strategies[importer.FileExtension] = importer.ImportData;
+            // TODO костыль
+            foreach (string fileExtension in importer.FileExtensions) {
+                
+                _strategies[fileExtension] = importer.ImportData;
+            }
         }
 
 
