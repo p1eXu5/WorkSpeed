@@ -23,7 +23,7 @@ namespace WorkSpeed.Import
         private const string XLSX_FILE = ".xlsx";
 
         private static ExcelImporter _excelImporter;
-        private static Dictionary<string,int> _propertyToCellIndex = new Dictionary<string, int>();
+        private static readonly Dictionary<string,int> _propertyToCellIndex = new Dictionary<string, int>();
 
         private ExcelImporter() {}
 
