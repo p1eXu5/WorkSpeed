@@ -22,10 +22,10 @@ namespace WorkSpeed.Import
         private const string XLS_FILE = ".xls";
         private const string XLSX_FILE = ".xlsx";
 
+        protected static readonly Dictionary<string,int> _propertyToCellColumn = new Dictionary<string, int>();
         private static ExcelImporter _excelImporter;
-        private static readonly Dictionary<string,int> _propertyToCellIndex = new Dictionary<string, int>();
 
-        private ExcelImporter() {}
+        protected ExcelImporter() {}
 
         #region Properties
 
@@ -40,7 +40,7 @@ namespace WorkSpeed.Import
 
         public static ICollection ImportDataFromExcel(string fileName, Type type)
         {
-            if (_propertyToCellIndex.Any()) _propertyToCellIndex.Clear();
+            if (_propertyToCellColumn.Any()) _propertyToCellColumn.Clear();
 
             if (type.GetConstructors().Count (c => c.IsPublic && c.GetParameters().Length == 0) == 0) {
                 return GetEmptyCollection(type);
@@ -148,26 +148,27 @@ namespace WorkSpeed.Import
 
             #region Functions
 
-            TableRect GetRect(ISheet sheet_)
-            {
-                TableRect rect;
-
-                rect.Top = sheet_.FirstRowNum;
-                rect.Bottom = sheet_.LastRowNum;
-
-                if (rect.Bottom < rect.Top) throw new ArgumentException();
-
-                rect.Left = sheet_.GetRow (rect.Top)?.FirstCellNum ?? -1;
-                if (rect.Left == -1) {
-                    return new TableRect(-1);
-                }
-
-                rect.Right = sheet_.GetRow (rect.Bottom).LastCellNum;
-
-                return rect;
-            }
 
             #endregion
+        }
+
+        protected static TableRect GetRect(ISheet sheet)
+        {
+            TableRect rect;
+
+            rect.Top = sheet.FirstRowNum;
+            rect.Bottom = sheet.LastRowNum;
+
+            if (rect.Bottom < rect.Top) throw new ArgumentException();
+
+            rect.Left = sheet.GetRow (rect.Top)?.FirstCellNum ?? -1;
+            if (rect.Left == -1) {
+                return new TableRect(-1);
+            }
+
+            rect.Right = sheet.GetRow (rect.Bottom).LastCellNum;
+
+            return rect;
         }
 
         protected static ICollection TryFillCollection (ISheet sheet, TableRect rect, Type type)
@@ -213,7 +214,7 @@ namespace WorkSpeed.Import
                     if (String.IsNullOrWhiteSpace (cellHeader)) return null;
                     if (cellHeader.Contains (" ")) cellHeader = cellHeader.RemoveWhitespaces();
 
-                    resSet.Add (cellHeader);
+                    resSet.Add (cellHeader.ToUpperInvariant());
                 }
 
                 return resSet;
@@ -232,13 +233,13 @@ namespace WorkSpeed.Import
                                                     .FirstOrDefault (a => a is HeaderAttribute) as HeaderAttribute;
 
                     if (null == propertyAttr) {
-                        _propertyToCellIndex[propertyInfo.Name] = cellHeaders.IndexOf (propertyInfo.Name);
+                        _propertyToCellColumn[propertyInfo.Name] = cellHeaders.IndexOf (propertyInfo.Name.ToUpperInvariant());
                     }
                     else{
-                        _propertyToCellIndex[propertyInfo.Name] = cellHeaders.IndexOf (propertyAttr.Header);
+                        _propertyToCellColumn[propertyInfo.Name] = cellHeaders.IndexOf (propertyAttr.Header.ToUpperInvariant());
                     }
 
-                    if (-1 == _propertyToCellIndex[propertyInfo.Name]) return null;
+                    if (-1 == _propertyToCellColumn[propertyInfo.Name]) return null;
                 }
 
                 return resSet;
@@ -262,7 +263,7 @@ namespace WorkSpeed.Import
 
                 foreach (var propertyInfo in type.GetProperties().Where (p => p.CanWrite)) {
 
-                    ICell cell = row.GetCell (_propertyToCellIndex[propertyInfo.Name]);
+                    ICell cell = row.GetCell (_propertyToCellColumn[propertyInfo.Name]);
 
                     if (!SetPropertyValue(propertyInfo, cell, typeInstance)) return GetEmptyCollection(type);
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
     [SuppressMessage ("ReSharper", "UnusedMember.Local")]
     public class ExcelImporterUnitTests
     {
-        #region GetFirstCell
+        #region ImportDataFromExcel
 
         [Test]
         public void ImportDataFromExcel_FileDoesNotExist_Throw()
@@ -125,14 +126,14 @@ namespace WorkSpeed.Import.Tests.UnitTests
         public void ImportDataFromExcel_HeaderedXlsFileWithOneColumn_ReturnsCollectionWithCellValue()
         {
             // Action
-            var resColl = ExcelImporter.ImportDataFromExcel (GetFullPath ("testExcel2003FileWithSingleHeadedCell.xls"), GetModelType (new[] { "string" }));
+            var resColl = ExcelImporter.ImportDataFromExcel (GetFullPath ("testExcel2003FileWithSingleHeadedCell.xls"), GetModelType ("string"));
 
             // Assert
             Assert.That (1 == resColl.Count);
         }
 
 
-        #region String Property
+            #region String Property
 
         [TestCase ("", "string")]
         [TestCase (" ", "string")]
@@ -198,7 +199,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
         #endregion
 
 
-        #region Int Property
+            #region Int Property
 
         [TestCase ("", "int", 0)]
         [TestCase (" ", "int", 0)]
@@ -278,7 +279,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
         #endregion
 
 
-        #region Double Property
+            #region Double Property
 
         [TestCase ("", "double", 0.0)]
         [TestCase (" ", "double", 0.0)]
@@ -362,7 +363,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
         #endregion
 
 
-        #region Boolean Property
+            #region Boolean Property
 
         [TestCase ("", "bool", false)]
         [TestCase (" ", "bool", false)]
@@ -448,6 +449,16 @@ namespace WorkSpeed.Import.Tests.UnitTests
 
         #endregion
 
+        #region CheckHeaders
+        
+        [Test]
+        public void CheckHeaders_TypeHasDifferentHeadersOrderThanSheetHas_ReturnsTrue()
+        {
+            var headers = new[] { "Header One", "2 Header", "The Third Header" };
+            var type = GetModelType(headers);
+        }
+
+        #endregion
 
         [TearDown]
         public void Cleanup()
@@ -456,136 +467,11 @@ namespace WorkSpeed.Import.Tests.UnitTests
         }
 
 
-        #region Factory
+        #region File Factory
 
         private const string _fakeXlsxFileName = "fakefile.xlsx";
-        private const string _mainCellText = "Main Cell";
         private const string _testHeaderName = "Test Header";
-
-        private Type GetModelType (params string[] propertyTypes)
-        {
-            AppDomain domain = AppDomain.CurrentDomain;
-            AssemblyName assemblyName = new AssemblyName("TestAssembly");
-            AssemblyBuilder assemblyBuilder = domain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
-            ModuleBuilder module = assemblyBuilder.DefineDynamicModule("TestModul");
-
-            TypeBuilder typeBuilder = module.DefineType ("TestType", TypeAttributes.Public);
-
-            var i = 0;
-            MethodAttributes getSetAttr = MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig;
-
-            foreach (var propertyType in propertyTypes) {
-
-                switch (propertyType) {
-                        
-                    case "string" :
-
-                        FieldBuilder fieldBuilder = typeBuilder.DefineField ($"_testProperty{i}", typeof(string), FieldAttributes.Private);
-                        PropertyBuilder propertyBuilder = typeBuilder.DefineProperty ($"TestProperty{i}", PropertyAttributes.HasDefault, typeof(string), null);
-
-                        MethodBuilder getterBuilder = typeBuilder.DefineMethod ($"get_TestProperty{i}", getSetAttr, typeof(string), Type.EmptyTypes);
-                        LoadIlToGetter (getterBuilder, fieldBuilder);
-
-                        MethodBuilder setterBuilder = typeBuilder.DefineMethod ($"set_TestProperty{i}", getSetAttr, null, new[] {typeof(string)});
-                        LoadIlToSetter (setterBuilder, fieldBuilder);
-
-                        propertyBuilder.SetGetMethod (getterBuilder);
-                        propertyBuilder.SetSetMethod (setterBuilder);
-
-                        var attrBuilder = GetHeaderAttributeBuilder(_testHeaderName);
-                        propertyBuilder.SetCustomAttribute (attrBuilder);
-
-                        break;
-
-                    case "int" :
-
-                        fieldBuilder = typeBuilder.DefineField ($"_testProperty{i}", typeof(int), FieldAttributes.Private);
-                        propertyBuilder = typeBuilder.DefineProperty ($"TestProperty{i}", PropertyAttributes.HasDefault, typeof(int), null);
-
-                        getterBuilder = typeBuilder.DefineMethod ($"get_TestProperty{i}", getSetAttr, typeof(int), Type.EmptyTypes);
-                        LoadIlToGetter (getterBuilder, fieldBuilder);
-
-                        setterBuilder = typeBuilder.DefineMethod ($"set_TestProperty{i}", getSetAttr, null, new[] {typeof(int)});
-                        LoadIlToSetter (setterBuilder, fieldBuilder);
-
-                        propertyBuilder.SetGetMethod (getterBuilder);
-                        propertyBuilder.SetSetMethod (setterBuilder);
-
-                        attrBuilder = GetHeaderAttributeBuilder(_testHeaderName);
-                        propertyBuilder.SetCustomAttribute (attrBuilder);
-
-                        break;
-
-                    case "double" :
-
-                        fieldBuilder = typeBuilder.DefineField ($"_testProperty{i}", typeof(double), FieldAttributes.Private);
-                        propertyBuilder = typeBuilder.DefineProperty ($"TestProperty{i}", PropertyAttributes.HasDefault, typeof(double), null);
-
-                        getterBuilder = typeBuilder.DefineMethod ($"get_TestProperty{i}", getSetAttr, typeof(double), Type.EmptyTypes);
-                        LoadIlToGetter (getterBuilder, fieldBuilder);
-
-                        setterBuilder = typeBuilder.DefineMethod ($"set_TestProperty{i}", getSetAttr, null, new[] {typeof(double)});
-                        LoadIlToSetter (setterBuilder, fieldBuilder);
-
-                        propertyBuilder.SetGetMethod (getterBuilder);
-                        propertyBuilder.SetSetMethod (setterBuilder);
-
-                        attrBuilder = GetHeaderAttributeBuilder(_testHeaderName);
-                        propertyBuilder.SetCustomAttribute (attrBuilder);
-
-                        break;
-
-                    case "bool" :
-
-                        fieldBuilder = typeBuilder.DefineField ($"_testProperty{i}", typeof(bool), FieldAttributes.Private);
-                        propertyBuilder = typeBuilder.DefineProperty ($"TestProperty{i}", PropertyAttributes.HasDefault, typeof(bool), null);
-
-                        getterBuilder = typeBuilder.DefineMethod ($"get_TestProperty{i}", getSetAttr, typeof(bool), Type.EmptyTypes);
-                        LoadIlToGetter (getterBuilder, fieldBuilder);
-
-                        setterBuilder = typeBuilder.DefineMethod ($"set_TestProperty{i}", getSetAttr, null, new[] {typeof(bool)});
-                        LoadIlToSetter (setterBuilder, fieldBuilder);
-
-                        propertyBuilder.SetGetMethod (getterBuilder);
-                        propertyBuilder.SetSetMethod (setterBuilder);
-
-                        attrBuilder = GetHeaderAttributeBuilder(_testHeaderName);
-                        propertyBuilder.SetCustomAttribute (attrBuilder);
-
-                        break;
-                }
-
-                ++i;
-            }
-
-            return typeBuilder.CreateType();
-
-
-            void LoadIlToGetter (MethodBuilder getterBuilder, FieldBuilder fieldBuilder)
-            {
-                ILGenerator getterGenerator = getterBuilder.GetILGenerator();
-                getterGenerator.Emit (OpCodes.Ldarg_0);
-                getterGenerator.Emit (OpCodes.Ldfld, fieldBuilder);
-                getterGenerator.Emit (OpCodes.Ret);
-            }
-
-            void LoadIlToSetter(MethodBuilder setterBuilder, FieldBuilder fieldBuilder)
-            {
-                ILGenerator setterGenerator = setterBuilder.GetILGenerator();
-                setterGenerator.Emit (OpCodes.Ldarg_0);
-                setterGenerator.Emit (OpCodes.Ldarg_1);
-                setterGenerator.Emit (OpCodes.Stfld, fieldBuilder);
-                setterGenerator.Emit (OpCodes.Ret);
-            }
-        }
-
-        private static CustomAttributeBuilder GetHeaderAttributeBuilder(object headerObj)
-        {
-            ConstructorInfo ci = typeof(HeaderAttribute).GetConstructor (new[]{ typeof(string) });
-            // ReSharper disable once AssignNullToNotNullAttribute
-            CustomAttributeBuilder attrBuilder = new CustomAttributeBuilder (ci, new[] { headerObj });
-            return attrBuilder;
-        }
+        private const string _mainCellText = "Main Cell";
 
         void RemoveFakeFile()
         {
@@ -704,6 +590,143 @@ namespace WorkSpeed.Import.Tests.UnitTests
                 return stream.Name;
             }
         }
+
+        #endregion
+
+        #region Type Builder
+
+        /// <summary>
+        /// Creates Type with one headered property.
+        /// </summary>
+        /// <param name="propertyTypeName">Name of propert type.</param>
+        /// <returns><see cref="Type"/></returns>
+        private Type GetModelType (string propertyTypeName)
+        {
+            var typeBuilder = GetTypeBuilder();
+            CreateProperty(typeBuilder, propertyTypeName, $"TestProperty");
+
+            return typeBuilder.CreateType();
+        }
+
+        /// <summary>
+        /// Creates Type with propertyes that correspondes passed headers.
+        /// </summary>
+        /// <param name="headers">Header names.</param>
+        /// <returns><see cref="Type"/></returns>
+        private Type GetModelType (params string[] headers)
+        {
+            var typeBuilder = GetTypeBuilder();
+
+            foreach (var header in headers) {
+                CreateProperty (typeBuilder, "string", $"Property{header.RemoveWhitespaces()}", header);
+            }
+
+            return typeBuilder.CreateType();
+        }
+
+        private static TypeBuilder GetTypeBuilder()
+        {
+            AppDomain domain = AppDomain.CurrentDomain;
+
+            AssemblyName assemblyName = new AssemblyName ("TestAssembly");
+            AssemblyBuilder assemblyBuilder = domain.DefineDynamicAssembly (assemblyName, AssemblyBuilderAccess.Run);
+
+            ModuleBuilder module = assemblyBuilder.DefineDynamicModule ("TestModul");
+
+            return module.DefineType ("TestType", TypeAttributes.Public);
+        }
+
+        [SuppressMessage ("ReSharper", "AssignNullToNotNullAttribute")]
+        private static void CreateProperty (TypeBuilder typeBuilder, string propertyTypeName, string propertyName, string header = null)
+        {
+            MethodAttributes getSetAttr = MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig;
+            
+            var fieldName = "_" + propertyName.Substring (0, 1).ToLowerInvariant() + propertyName.Substring (1);
+
+            Type propertyType;
+
+            switch (propertyTypeName) {
+
+                    case "int":
+                        propertyType = typeof(int);
+                        break;
+
+                    case "double":
+                        propertyType = typeof(double);
+                        break;
+
+                    case "bool":
+                        propertyType = typeof(bool);
+                        break;
+
+                    case "string":
+                    default:
+                        propertyType = typeof(string);
+                        break;
+            }
+
+
+            FieldBuilder fieldBuilder = typeBuilder.DefineField (fieldName, propertyType, FieldAttributes.Private);
+            PropertyBuilder propertyBuilder = typeBuilder.DefineProperty (propertyName, PropertyAttributes.HasDefault, propertyType, null);
+
+            MethodBuilder getterBuilder = typeBuilder.DefineMethod ($"get_{propertyName}", getSetAttr, propertyType, Type.EmptyTypes);
+            LoadIlToGetter (getterBuilder, fieldBuilder);
+
+            MethodBuilder setterBuilder = typeBuilder.DefineMethod ($"set_{propertyName}", getSetAttr, null, new[] { propertyType });
+            LoadIlToSetter (setterBuilder, fieldBuilder);
+
+            propertyBuilder.SetGetMethod (getterBuilder);
+            propertyBuilder.SetSetMethod (setterBuilder);
+
+            var attrBuilder = GetHeaderAttributeBuilder (header ?? _testHeaderName);
+            propertyBuilder.SetCustomAttribute (attrBuilder);
+
+
+            #region Local Functions
+
+            void LoadIlToGetter (MethodBuilder getterBldr, FieldBuilder fieldBldr)
+            {
+                ILGenerator getterGenerator = getterBldr.GetILGenerator();
+                getterGenerator.Emit (OpCodes.Ldarg_0);
+                getterGenerator.Emit (OpCodes.Ldfld, fieldBldr);
+                getterGenerator.Emit (OpCodes.Ret);
+            }
+
+            void LoadIlToSetter (MethodBuilder setterBldr, FieldBuilder fieldBldr)
+            {
+                ILGenerator setterGenerator = setterBldr.GetILGenerator();
+                setterGenerator.Emit (OpCodes.Ldarg_0);
+                setterGenerator.Emit (OpCodes.Ldarg_1);
+                setterGenerator.Emit (OpCodes.Stfld, fieldBldr);
+                setterGenerator.Emit (OpCodes.Ret);
+            }
+
+            CustomAttributeBuilder GetHeaderAttributeBuilder(object headerName)
+            {
+                ConstructorInfo ci = typeof(HeaderAttribute).GetConstructor (new[]{ typeof(string) });
+                return new CustomAttributeBuilder (ci, new[] { headerName });
+            }
+
+            #endregion
+        }
+
+        #endregion
+
+        #region Fake Classes
+
+        class DataImporterTestHeritor : ExcelImporter
+        {
+            public bool CheckHeaderInvoker(Stream stream, Type type)
+            {
+                IWorkbook book = new XSSFWorkbook(stream);
+                ISheet sheet = book.GetSheetAt (0);
+
+                return CheckHeaders (sheet, GetRect (sheet), type);
+            }
+
+            public Dictionary<string, int> PropertyToCell => _propertyToCellColumn;
+        }
+
 
         [Headless]
         class FakeHeadlessModelClass
