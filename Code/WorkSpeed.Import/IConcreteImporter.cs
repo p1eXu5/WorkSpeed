@@ -10,6 +10,6 @@ namespace WorkSpeed.Import
     public interface IConcreteImporter
     {
         HashSet<string> FileExtensions { get; }
-        Func<string,Type,ICollection> ImportData { get; }
+        Func<string,Type,ICollection> ImportDataFunc { get; }
     }
 }

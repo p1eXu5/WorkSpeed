@@ -40,7 +40,7 @@ namespace WorkSpeed.Import
             // TODO костыль
             foreach (string fileExtension in importer.FileExtensions) {
                 
-                _strategies[fileExtension] = importer.ImportData;
+                _strategies[fileExtension] = importer.ImportDataFunc;
             }
         }
 

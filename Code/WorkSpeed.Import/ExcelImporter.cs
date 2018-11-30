@@ -17,6 +17,7 @@ using WorkSpeed.Import.Attributes;
 
 namespace WorkSpeed.Import
 {
+    [SuppressMessage ("ReSharper", "EmptyGeneralCatchClause")]
     public class ExcelImporter : IConcreteImporter
     {
         private const string XLS_FILE = ".xls";
@@ -32,11 +33,13 @@ namespace WorkSpeed.Import
         public static ExcelImporter ExcelImporterInstance => _excelImporter ?? (_excelImporter = new ExcelImporter());
 
         public HashSet<string> FileExtensions { get; } = new HashSet<string> {XLS_FILE, XLSX_FILE};
-        public Func<string, Type, ICollection> ImportData { get; } = ImportDataFromExcel;
+        public Func<string, Type, ICollection> ImportDataFunc { get; } = ImportDataFromExcel;
 
         #endregion
 
         #region Methods
+
+
 
         public static ICollection ImportDataFromExcel(string fileName, Type type)
         {
@@ -78,6 +81,7 @@ namespace WorkSpeed.Import
                 }
             }
         }
+
 
         /// <summary>
         /// Returns data area in Excel table.
@@ -282,34 +286,27 @@ namespace WorkSpeed.Import
 
             if (typeof (string).FullName == propertyInfo.PropertyType.FullName) {
 
-                string stringValue = default(string);
-                SetStringValue (cell, ref stringValue);
-
-                obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, stringValue);
+                obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, GetStringValue(cell));
                 isSet = true;
             }
             else if (typeof (int).FullName == propertyInfo.PropertyType.FullName) {
 
-                int intValue = default(int);
-                SetIntValue (cell, ref intValue);
-
-                obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, intValue);
+                obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, GetIntValue(cell));
                 isSet = true;
             }
             else if (typeof (double).FullName == propertyInfo.PropertyType.FullName) {
 
-                double doubleValue = default(double);
-                SetDoubleValue (cell, ref doubleValue);
-
-                obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, doubleValue);
+                obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, GetDoubleValue(cell));
                 isSet = true;
             }
             else if (typeof (bool).FullName == propertyInfo.PropertyType.FullName) {
 
-                bool boolValue = default(bool);
-                SetBoolValue (cell, ref boolValue);
+                obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, GetBoolValue(cell));
+                isSet = true;
+            }
+            else if (typeof(DateTime).FullName == propertyInfo.PropertyType.FullName) {
 
-                obj.GetType().GetProperty (propertyInfo.Name).SetValue (obj, boolValue);
+                obj.GetType().GetProperty(propertyInfo.Name).SetValue(obj, GetDateTimeValue(cell));
                 isSet = true;
             }
 
@@ -318,9 +315,11 @@ namespace WorkSpeed.Import
             return true;
         }
 
-        private static void SetStringValue (ICell cell, ref string stringValue)
+        protected static string GetStringValue (ICell cell)
         {
-            if (cell == null) return;
+            if (cell == null) return null;
+
+            string stringValue = default(string);
 
             if (CellType.Numeric == cell.CellType) {
                 try {
@@ -336,11 +335,14 @@ namespace WorkSpeed.Import
             else if (CellType.String == cell.CellType) {
                 stringValue = cell.StringCellValue;
             }
+
+            return stringValue;
         }
 
-        private static void SetIntValue (ICell cell, ref int intValue)
+        protected static int GetIntValue (ICell cell)
         {
-            if (cell == null) return;
+            int intValue = default(int);
+            if (cell == null) return intValue;
 
             if (CellType.Numeric == cell.CellType) {
                 try {
@@ -374,11 +376,14 @@ namespace WorkSpeed.Import
                     }
                 }
             }
+
+            return intValue;
         }
 
-        private static void SetDoubleValue (ICell cell, ref double doubleValue)
+        protected static double GetDoubleValue (ICell cell)
         {
-            if (cell == null) return;
+            double doubleValue = default(double);
+            if (cell == null) return doubleValue;
 
             if (CellType.Numeric == cell.CellType) {
                 try {
@@ -416,11 +421,14 @@ namespace WorkSpeed.Import
                     }
                 }
             }
+
+            return doubleValue;
         }
 
-        private static void SetBoolValue (ICell cell, ref bool boolValue)
+        protected static bool GetBoolValue (ICell cell)
         {
-            if (cell == null) return;
+            bool boolValue = default(bool);
+            if (cell == null) return boolValue;
 
             if (CellType.Numeric == cell.CellType) {
 
@@ -448,15 +456,37 @@ namespace WorkSpeed.Import
                     }
                 }
             }
+
+            return boolValue;
         }
 
-        private static ICollection GetEmptyCollection(Type type)
+        protected static DateTime GetDateTimeValue(ICell cell)
+        {
+            DateTime dateTimeValue = default(DateTime);
+            if (cell == null) return dateTimeValue;
+
+            try {
+                if (CellType.Numeric == cell.CellType) {
+                    dateTimeValue = new DateTime(Convert.ToInt64 (cell.NumericCellValue));
+                }
+                else if (CellType.String == cell.CellType) {
+                    dateTimeValue = DateTime.Parse(cell.StringCellValue);
+                }
+            }
+            catch {
+            }
+
+            return dateTimeValue;
+        }
+
+        protected static ICollection GetEmptyCollection(Type type)
 
         {
             Type t = typeof(List<>);
             var constr = t.MakeGenericType (type);
             return (ICollection)Activator.CreateInstance (constr);
         }
+
         #endregion
     }
 }
