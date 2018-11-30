@@ -39,8 +39,6 @@ namespace WorkSpeed.Import
 
         #region Methods
 
-
-
         public static ICollection ImportDataFromExcel(string fileName, Type type)
         {
             if (_propertyToCellColumn.Any()) _propertyToCellColumn.Clear();
