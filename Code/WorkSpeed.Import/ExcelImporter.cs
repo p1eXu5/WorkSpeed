@@ -195,10 +195,7 @@ namespace WorkSpeed.Import
             var headers = GetCellHeaders (sheet, rect);
             if (null == headers) return false;
 
-            var attrHeaders = FillQueue (type, headers);
-            if (null == attrHeaders) return false;
-
-            return true;
+            return FillPropertyToCellIndexDictionary(type, headers);
 
 
             #region Local Function
@@ -220,12 +217,10 @@ namespace WorkSpeed.Import
                 return resSet;
             }
 
-            HashSet<string> FillQueue (Type type_, List<string> cellHeaders)
+            bool FillPropertyToCellIndexDictionary (Type type_, List<string> cellHeaders)
             {
-                var resSet = new HashSet<string>();
-
                 var properties = type_.GetProperties().Where (p => p.CanWrite).ToArray();
-                if (!properties.Any()) return null;
+                if (!properties.Any()) return false;
 
                 foreach (var propertyInfo in properties) {
 
@@ -239,10 +234,14 @@ namespace WorkSpeed.Import
                         _propertyToCellColumn[propertyInfo.Name] = cellHeaders.IndexOf (propertyAttr.Header.ToUpperInvariant());
                     }
 
-                    if (-1 == _propertyToCellColumn[propertyInfo.Name]) return null;
+                    if (-1 == _propertyToCellColumn[propertyInfo.Name]) {
+                        return false;
+                    }
+
+                    _propertyToCellColumn[propertyInfo.Name] += rect.Left;
                 }
 
-                return resSet;
+                return true;
             }
 
             #endregion
@@ -259,11 +258,11 @@ namespace WorkSpeed.Import
 
                 object typeInstance = Activator.CreateInstance (type);
 
-                var i = 0;
+                var i = rect.Left;
 
                 foreach (var propertyInfo in type.GetProperties().Where (p => p.CanWrite)) {
 
-                    ICell cell = row.GetCell (_propertyToCellColumn[propertyInfo.Name]);
+                    ICell cell = row.GetCell (_propertyToCellColumn.Count == 0 ? i : _propertyToCellColumn[propertyInfo.Name]);
 
                     if (!SetPropertyValue(propertyInfo, cell, typeInstance)) return GetEmptyCollection(type);
 
@@ -314,7 +313,7 @@ namespace WorkSpeed.Import
                 isSet = true;
             }
 
-            if (isSet) return false;
+            if (!isSet) return false;
             
             return true;
         }

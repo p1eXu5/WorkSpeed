@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -21,6 +22,12 @@ namespace WorkSpeed.Import.Tests.UnitTests
     [SuppressMessage ("ReSharper", "UnusedMember.Local")]
     public class ExcelImporterUnitTests
     {
+        [SetUp]
+        public void SetupCulture()
+        {
+            CultureInfo.CurrentUICulture = new CultureInfo ("en-Us", false);
+        }
+
         #region ImportDataFromExcel
 
         [Test]
@@ -454,8 +461,15 @@ namespace WorkSpeed.Import.Tests.UnitTests
         [Test]
         public void CheckHeaders_TypeHasDifferentHeadersOrderThanSheetHas_ReturnsTrue()
         {
+            // Arrange:
             var headers = new[] { "Header One", "2 Header", "The Third Header" };
             var type = GetModelType(headers);
+
+            // Action:
+            var res = DataImporterTestHeritor.CheckHeaderInvoker (SetMemoryStream(headers), type);
+
+            // Assert:
+            Assert.That (true == res);
         }
 
         #endregion
@@ -464,14 +478,17 @@ namespace WorkSpeed.Import.Tests.UnitTests
         public void Cleanup()
         {
             RemoveFakeFile();
+
+            _stream?.Close();
         }
 
 
-        #region File Factory
+        #region Stream Factory
 
         private const string _fakeXlsxFileName = "fakefile.xlsx";
         private const string _testHeaderName = "Test Header";
         private const string _mainCellText = "Main Cell";
+        private MemoryStream _stream;
 
         void RemoveFakeFile()
         {
@@ -589,6 +606,27 @@ namespace WorkSpeed.Import.Tests.UnitTests
                 book.Write (stream);
                 return stream.Name;
             }
+        }
+
+        private MemoryStream SetMemoryStream (params string[] headers)
+        {
+            XSSFWorkbook book = new XSSFWorkbook();
+            ISheet sheet = book.CreateSheet ("TestSheet");
+            IRow rowH = sheet.CreateRow (2);
+            IRow rowV = sheet.CreateRow (3);
+
+            int i = 0;
+
+            foreach (var header in headers) {
+                rowH.CreateCell (i).SetCellValue (header);
+                rowV.CreateCell (i++).SetCellValue ($"value: {header}");
+            }
+
+            _stream = new MemoryStream();
+            book.Write (_stream, true);
+            _stream.Position = 0;
+
+            return _stream;
         }
 
         #endregion
@@ -716,7 +754,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
 
         class DataImporterTestHeritor : ExcelImporter
         {
-            public bool CheckHeaderInvoker(Stream stream, Type type)
+            public static bool CheckHeaderInvoker(Stream stream, Type type)
             {
                 IWorkbook book = new XSSFWorkbook(stream);
                 ISheet sheet = book.GetSheetAt (0);
