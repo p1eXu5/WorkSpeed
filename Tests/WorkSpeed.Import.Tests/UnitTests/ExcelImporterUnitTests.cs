@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using Moq;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
@@ -28,119 +29,32 @@ namespace WorkSpeed.Import.Tests.UnitTests
             CultureInfo.CurrentUICulture = new CultureInfo ("en-Us", false);
         }
 
-        #region ImportDataFromExcel
+        #region ImportData
 
         [Test]
-        public void ImportDataFromExcel_FileDoesNotExist_Throw()
-        {
-            // Action:
-            Assert.That(() => ExcelImporter.ImportDataFromExcel(GetFullPath("doesnotexistfile.xlsx"), typeof(FakeHeadlessModelClass)), Throws.Exception);
-        }
-
-        [Test]
-        public void ImportDataFromExcel_XlsxFileDoesNotContainData_ReturnsEmptyCollection()
-        {
-            // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(GetFullPath ("empty.xlsx"), typeof(FakeHeadlessModelClass));
-
-            // Assert:
-            Assert.That (0 == resColl.Count);
-        }
-
-        [Test]
-        public void ImportDataFromExcel_ZeroLenghtFileWithCorrectExtension_ReturnsEmptyCollection()
+        public void GetSheetAtZero_FileIsNotExcelFileWithWrongException_ReturnsNull()
         {
             // Arrange:
-            var fileName = CreateFakeZeroLengthXlsxFile();
+            var file = CreateFakeEmptyTestFile ("test.tst");
 
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(fileName, typeof(FakeHeadlessModelClass));
+            var result = ExcelImporter.ImportData (file, _stubTypeRepository.Object).ToArray();
 
             // Assert:
-            Assert.That (0 == resColl.Count);
+            Assert.That (0 == result.Length);
         }
 
-        [Test]
-        public void ImportDataFromExcel_OneColumnOneProperty_ReturnsTheMostTopLeftCell ()
+        [TestCase ("test.xls")]
+        [TestCase ("test.xlsx")]
+        public void GetSheetAtZero_FileIsNotExcelFileWithRightException_ReturnsNull(string fileName)
         {
-            // Arrange:
-            var fileName = CreateTestFileWithSingleStringCell ();
-
-            // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(fileName, typeof(FakeHeadlessModelClass));
-
-            // Assert:
-            Assert.That (_mainCellText == resColl.OfType<FakeHeadlessModelClass>().First().MainCell);
+            var file = CreateFakeEmptyTestFile (fileName);
         }
 
-        [Test]
-        public void ImportDataFromExcel_MultiColumnOneProperty_ReturnsEmptyCollection ()
-        {
-            // Arrange:
-            var fileName = CreateTestFile (new TableRect(5, 5, 5), (float)1.0, 5, 5);
-
-            // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(fileName, typeof(FakeHeadlessModelClass));
-
-            // Assert:
-            Assert.That (0 == resColl.Count);
-        }
-
-        [Test]
-        public void ImportDataFromExcel__ModelPropertyAttributeless_PropertyNameEqualsCellHeaderWithoutWhiteSpaces_CellFilled__ReturnsCellValue()
-        {
-            // Arrange:
-            var cellValue = "Test Value";
-
-            // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), typeof(FakeModelClassWithTestHeaderNamedProperty));
-
-            // Assert:
-            var enumerator = resColl.GetEnumerator();
-            var element = enumerator.MoveNext() ? enumerator.Current : null;
-
-            Assert.That (resColl.Count != 0);
-            Assert.That(cellValue == (element?.GetType().GetProperties()[0].GetValue(element)?.ToString() ?? ""));
-        }
-
-        [Test]
-        public void ImportDataFromExcel_ModelPropertyWithAttributeNotCorrespondingCellHeader_ReturnsEmptyCollection()
-        {
-            // Arrange:
-            var cellValue = "Test Value";
-
-            // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), typeof(FakeModelClassWithWrongHeaderAttribute));
-
-            // Assert:
-            Assert.That(resColl.Count == 0);
-        }
-
-        [Test]
-        public void ImportDataFromExcel_ModelPropertyWithoutParameterlessConstructor_ReturnsEmptyCollection()
-        {
-            // Arrange:
-            var cellValue = "Test Value";
-
-            // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), typeof(FakeModelClassWithoutParameterlessConstructor));
-
-            // Assert:
-            Assert.That(resColl.Count == 0);
-        }
-
-        [Test]
-        public void ImportDataFromExcel_HeaderedXlsFileWithOneColumn_ReturnsCollectionWithCellValue()
-        {
-            // Action
-            var resColl = ExcelImporter.ImportDataFromExcel (GetFullPath ("testExcel2003FileWithSingleHeadedCell.xls"), GetModelType ("string"));
-
-            // Assert
-            Assert.That (1 == resColl.Count);
-        }
+        #endregion
 
 
-            #region String Property
+        #region String Property
 
         [TestCase ("", "string")]
         [TestCase (" ", "string")]
@@ -155,7 +69,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             Type modelType = GetModelType(propertyType);
 
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel (CreateTestHeadedFile (cellValue), modelType);
+            var resColl = ExcelImporter.ImportData (CreateTestHeadedFile (cellValue), modelType);
 
             // Assert:
             var enumerator = resColl.GetEnumerator();
@@ -177,7 +91,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             Type modelType = GetModelType(propertyType);
 
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel (CreateTestHeadedFile (cellValue), modelType);
+            var resColl = ExcelImporter.ImportData (CreateTestHeadedFile (cellValue), modelType);
 
             // Assert:
             var enumerator = resColl.GetEnumerator();
@@ -194,7 +108,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             Type modelType = GetModelType(propertyType);
 
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), modelType);
+            var resColl = ExcelImporter.ImportData (CreateTestHeadedFile(cellValue), modelType);
 
             // Assert:
             var enumerator = resColl.GetEnumerator();
@@ -206,7 +120,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
         #endregion
 
 
-            #region Int Property
+        #region Int Property
 
         [TestCase ("", "int", 0)]
         [TestCase (" ", "int", 0)]
@@ -235,7 +149,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             Type modelType = GetModelType(propertyType);
 
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel (CreateTestHeadedFile (cellValue), modelType);
+            var resColl = ExcelImporter.ImportData (CreateTestHeadedFile (cellValue), modelType);
 
             // Assert:
             var enumerator = resColl.GetEnumerator();
@@ -256,7 +170,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             Type modelType = GetModelType(propertyType);
 
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), modelType);
+            var resColl = ExcelImporter.ImportData (CreateTestHeadedFile(cellValue), modelType);
 
             // Assert:
             var enumerator = resColl.GetEnumerator();
@@ -274,7 +188,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             Type modelType = GetModelType(propertyType);
 
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), modelType);
+            var resColl = ExcelImporter.ImportData (CreateTestHeadedFile(cellValue), modelType);
 
             // Assert:
             var enumerator = resColl.GetEnumerator();
@@ -286,7 +200,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
         #endregion
 
 
-            #region Double Property
+        #region Double Property
 
         [TestCase ("", "double", 0.0)]
         [TestCase (" ", "double", 0.0)]
@@ -315,7 +229,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             Type modelType = GetModelType(propertyType);
 
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel (CreateTestHeadedFile (cellValue), modelType);
+            var resColl = ExcelImporter.ImportData (CreateTestHeadedFile (cellValue), modelType);
 
             // Assert:
             var enumerator = resColl.GetEnumerator();
@@ -338,7 +252,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             Type modelType = GetModelType(propertyType);
 
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), modelType);
+            var resColl = ExcelImporter.ImportData (CreateTestHeadedFile(cellValue), modelType);
 
             // Assert:
             var enumerator = resColl.GetEnumerator();
@@ -357,7 +271,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             Type modelType = GetModelType(propertyType);
 
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), modelType);
+            var resColl = ExcelImporter.ImportData (CreateTestHeadedFile(cellValue), modelType);
 
             // Assert:
             var enumerator = resColl.GetEnumerator();
@@ -370,7 +284,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
         #endregion
 
 
-            #region Boolean Property
+        #region Boolean Property
 
         [TestCase ("", "bool", false)]
         [TestCase (" ", "bool", false)]
@@ -402,7 +316,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             Type modelType = GetModelType(propertyType);
 
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel (CreateTestHeadedFile (cellValue), modelType);
+            var resColl = ExcelImporter.ImportData (CreateTestHeadedFile (cellValue), modelType);
 
             // Assert:
             var enumerator = resColl.GetEnumerator();
@@ -425,7 +339,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             Type modelType = GetModelType(propertyType);
 
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), modelType);
+            var resColl = ExcelImporter.ImportData (CreateTestHeadedFile(cellValue), modelType);
 
             // Assert:
             var enumerator = resColl.GetEnumerator();
@@ -443,7 +357,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             Type modelType = GetModelType(propertyType);
 
             // Action:
-            var resColl = ExcelImporter.ImportDataFromExcel(CreateTestHeadedFile(cellValue), modelType);
+            var resColl = ExcelImporter.ImportData (CreateTestHeadedFile(cellValue), modelType);
 
             // Assert:
             var enumerator = resColl.GetEnumerator();
@@ -454,7 +368,6 @@ namespace WorkSpeed.Import.Tests.UnitTests
 
         #endregion
 
-        #endregion
 
         #region CheckHeaders
         
@@ -474,6 +387,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
 
         #endregion
 
+
         [TearDown]
         public void Cleanup()
         {
@@ -490,16 +404,10 @@ namespace WorkSpeed.Import.Tests.UnitTests
         private const string _mainCellText = "Main Cell";
         private MemoryStream _stream;
 
-        void RemoveFakeFile()
-        {
-            if (File.Exists (GetFullPath(_fakeXlsxFileName))) {
-                File.Delete (_fakeXlsxFileName);
-            }
-        }
 
         private string CreateFakeZeroLengthXlsxFile()
         {
-            using (var stream = new FileStream (GetFullPath(_fakeXlsxFileName),FileMode.Create, FileAccess.Write)) {
+            using (var stream = new FileStream (_fakeXlsxFileName.GetFullPath(), FileMode.Create, FileAccess.Write)) {
                 return stream.Name;
             }
         }
@@ -542,7 +450,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
                 sheet.GetRow (mainTop).GetCell (mainLeft).SetCellValue (_mainCellText);
             }
 
-            using (var stream = new FileStream (GetFullPath (_fakeXlsxFileName), FileMode.Create, FileAccess.Write)) {
+            using (var stream = new FileStream (_fakeXlsxFileName.GetFullPath(), FileMode.Create, FileAccess.Write)) {
                     
                 book.Write (stream);
                 return stream.Name;
@@ -556,7 +464,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
 
             sheet.CreateRow (10).CreateCell (10).SetCellValue (_mainCellText);
 
-            using (var stream = new FileStream (GetFullPath (_fakeXlsxFileName), FileMode.Create, FileAccess.Write)) {
+            using (var stream = new FileStream (_fakeXlsxFileName.GetFullPath(), FileMode.Create, FileAccess.Write)) {
                     
                 book.Write (stream);
                 return stream.Name;
@@ -571,7 +479,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             sheet.CreateRow (9).CreateCell (10).SetCellValue (_testHeaderName);
             sheet.CreateRow (10).CreateCell (10).SetCellValue (testValue);
 
-            using (var stream = new FileStream (GetFullPath (_fakeXlsxFileName), FileMode.Create, FileAccess.Write)) {
+            using (var stream = new FileStream (_fakeXlsxFileName.GetFullPath(), FileMode.Create, FileAccess.Write)) {
                     
                 book.Write (stream);
                 return stream.Name;
@@ -586,7 +494,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             sheet.CreateRow (9).CreateCell (10).SetCellValue (_testHeaderName);
             sheet.CreateRow (10).CreateCell (10).SetCellValue (testValue);
 
-            using (var stream = new FileStream (GetFullPath (_fakeXlsxFileName), FileMode.Create, FileAccess.Write)) {
+            using (var stream = new FileStream (_fakeXlsxFileName.GetFullPath(), FileMode.Create, FileAccess.Write)) {
                     
                 book.Write (stream);
                 return stream.Name;
@@ -601,7 +509,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             sheet.CreateRow (9).CreateCell (10).SetCellValue (_testHeaderName);
             sheet.CreateRow (10).CreateCell (10).SetCellValue (testValue);
 
-            using (var stream = new FileStream (GetFullPath (_fakeXlsxFileName), FileMode.Create, FileAccess.Write)) {
+            using (var stream = new FileStream (_fakeXlsxFileName.GetFullPath(), FileMode.Create, FileAccess.Write)) {
                     
                 book.Write (stream);
                 return stream.Name;
@@ -627,6 +535,13 @@ namespace WorkSpeed.Import.Tests.UnitTests
             _stream.Position = 0;
 
             return _stream;
+        }
+
+        void RemoveFakeFile()
+        {
+            if (File.Exists (_fakeXlsxFileName.GetFullPath())) {
+                File.Delete (_fakeXlsxFileName.GetFullPath());
+            }
         }
 
         #endregion
@@ -750,7 +665,9 @@ namespace WorkSpeed.Import.Tests.UnitTests
 
         #endregion
 
-        #region Fake Classes
+        #region Fakes
+
+        private readonly Mock<ITypeRepository> _stubTypeRepository = new Mock<ITypeRepository>();
 
         class DataImporterTestHeritor : ExcelImporter
         {
@@ -762,7 +679,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
                 return CheckHeaders (sheet, GetRect (sheet), type);
             }
 
-            public Dictionary<string, int> PropertyToCell => _propertyToCellColumn;
+            public Dictionary<string, int> PropertyToCell => PropertyToCellColumn;
         }
 
 

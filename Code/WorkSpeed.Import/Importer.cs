@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -13,13 +14,13 @@ using NPOI.XSSF.UserModel;
 
 namespace WorkSpeed.Import
 {
-    public sealed class DataImporter : IDataImporter
+    public sealed class Importer
     {
-        private readonly Dictionary<string,Func<string,Type,ICollection>> _strategies = new Dictionary<string, Func<string,Type,ICollection>>();
+        private readonly ITypeRepository _typeRepository;
 
-        public DataImporter()
+        public Importer(ITypeRepository typeRepository)
         {
-            RegisterImporter (ExcelImporter.ExcelImporterInstance);
+            _typeRepository = typeRepository ?? throw new ArgumentNullException();
         }
 
 
@@ -31,16 +32,10 @@ namespace WorkSpeed.Import
         /// <typeparam name="TConcreteImporter"><see cref="IConcreteImporter"/></typeparam>
         /// <param name="importer">Instance of concrete importer.</param>
         /// 
-        public void RegisterImporter<TConcreteImporter>(TConcreteImporter importer) where TConcreteImporter : IConcreteImporter
+        public void RegisterImporter<TDataImporter>(TDataImporter importer) where TDataImporter : IDataImporter
         {
             if (importer == null) {
                 throw new NullReferenceException($"{nameof(importer)} can't be null");
-            }
-
-            // TODO костыль
-            foreach (string fileExtension in importer.FileExtensions) {
-                
-                _strategies[fileExtension] = importer.ImportDataFunc;
             }
         }
 
@@ -74,16 +69,7 @@ namespace WorkSpeed.Import
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public IEnumerable<TModelType> ImportData<TModelType>(string fileName) where TModelType : new()
         {
-            if (!File.Exists(fileName)) { throw new FileNotFoundException(); }
-            
-            if (!_strategies.ContainsKey(Path.GetExtension(fileName))) {
-                throw new ArgumentException("The source does not handled");
-            }
-
-            var typeProperties = typeof(TModelType).GetProperties();
-            if (0 == typeProperties.Length) { throw new TypeAccessException(@"Passed type does not have public properties"); }
-
-            return (IEnumerable<TModelType>)_strategies[Path.GetExtension(fileName)].Invoke(fileName, typeof(TModelType));
+            throw new NotImplementedException();
         }
 
         #endregion

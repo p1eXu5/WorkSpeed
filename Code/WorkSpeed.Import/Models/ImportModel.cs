@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace WorkSpeed.Import.Models
 {
-    public class GatheringImportModel
+    public class ImportModel
     {
-        public Type Type { get; set; }
+
     }
 }

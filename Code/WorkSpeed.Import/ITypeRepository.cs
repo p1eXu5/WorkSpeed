@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WorkSpeed.Import.Models
+namespace WorkSpeed.Import
 {
-    public class GatheringImportModel
+    public interface ITypeRepository
     {
-        public Type Type { get; set; }
     }
 }

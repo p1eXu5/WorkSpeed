@@ -11,25 +11,19 @@ namespace Continuations
     {
         static void Main(string[] args)
         {
-            var c = new SomeClass();
-            c.CollEvent += (s, e) =>
-                           {
-                               Console.WriteLine ($"Event {e.CollCount} {Thread.CurrentThread.Name}");
-                           };
+            //new Task (() => WriteNum (3)).Start();
+            //Task.Factory.StartNew (() => WriteNum (4));
 
-            Console.WriteLine($"{Thread.CurrentThread.Name = "thread 1"}");
-
-            for (int i = 0; i < 20; i++) {
-
-                Thread.Sleep (1000);
-                Console.WriteLine (i);
-
-                if (10 == i) {
-                    c.GetDataAsync();
-                }
-            }
+            Parallel.For (1, 16, WriteNum);
 
             Console.ReadKey (true);
+        }
+
+        static void WriteNum (int num)
+        {
+            foreach (var i in SomeClass.GetEnumerable (num)) {
+                Console.Write ($"{i} ");
+            }
         }
     }
 
@@ -45,30 +39,11 @@ namespace Continuations
 
     class SomeClass
     {
-        public event EventHandler<CollEvent> CollEvent;
-
-        public void GetDataAsync()
+        public static IEnumerable<int> GetEnumerable (int num)
         {
-            Task.Factory.StartNew (GetDataInnerAsync, TaskCreationOptions.LongRunning);
-        }
-
-        private void GetDataInnerAsync()
-        {
-            var coll = new List<int>();
-            Console.WriteLine($"{Thread.CurrentThread.Name = "thread 2"}");
-
-            for (int i = 0; i < 10; i++) {
-                
-                Thread.Sleep (100);
-                coll.Add (i);
+            for (int i = 0; i < 100; i++) {
+                yield return num;
             }
-
-            coll.ForEach (OnRaise);
-        }
-
-        private void OnRaise(int i)
-        {
-            CollEvent?.Invoke (this, new CollEvent (i));
         }
     }
 }

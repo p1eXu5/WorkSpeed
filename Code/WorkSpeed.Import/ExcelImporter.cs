@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -11,74 +12,148 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ICSharpCode.SharpZipLib.Zip;
 using NPOI.HSSF.UserModel;
+using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using WorkSpeed.Import.Attributes;
+using WorkSpeed.Import.Models;
 
 namespace WorkSpeed.Import
 {
+    /// <summary>
+    /// Singletone.
+    /// </summary>
     [SuppressMessage ("ReSharper", "EmptyGeneralCatchClause")]
-    public class ExcelImporter : IConcreteImporter
+    public class ExcelImporter : IDataImporter
     {
         private const string XLS_FILE = ".xls";
         private const string XLSX_FILE = ".xlsx";
 
-        protected static readonly Dictionary<string,int> _propertyToCellColumn = new Dictionary<string, int>();
-        private static ExcelImporter _excelImporter;
+        protected readonly Dictionary<string,int> PropertyToCellColumn = new Dictionary<string, int>();
 
         protected ExcelImporter() {}
 
         #region Properties
 
-        public static ExcelImporter ExcelImporterInstance => _excelImporter ?? (_excelImporter = new ExcelImporter());
-
-        public HashSet<string> FileExtensions { get; } = new HashSet<string> {XLS_FILE, XLSX_FILE};
-        public Func<string, Type, ICollection> ImportDataFunc { get; } = ImportDataFromExcel;
+        public static ReadOnlyHashSet<string> FileExtensions { get; } = new ReadOnlyHashSet<string> { XLS_FILE, XLSX_FILE };
 
         #endregion
-
+        
         #region Methods
 
-        public static ICollection ImportDataFromExcel(string fileName, Type type)
+        public IEnumerable<string> GetFileExtensions() => FileExtensions;
+
+        IEnumerable<ImportModel> IDataImporter.ImportData (string fileName, ITypeRepository typeRepository) => ImportData (fileName, typeRepository);
+
+
+        public static IEnumerable<ImportModel> ImportData (string fileName, ITypeRepository typeRepository)
         {
-            if (_propertyToCellColumn.Any()) _propertyToCellColumn.Clear();
+            if (!File.Exists(fileName)) throw new ArgumentException("File doesn't contain any sheets", nameof(fileName));
+            if (typeRepository == null) throw new ArgumentException("Type can not be null", nameof(typeRepository));
 
-            if (type.GetConstructors().Count (c => c.IsPublic && c.GetParameters().Length == 0) == 0) {
-                return GetEmptyCollection(type);
-            }
+            ISheet sheet = GetSheetAtZeroIndex (fileName);
+            if (null == sheet) return new ImportModel[0];
 
-            var fileExtension = Path.GetExtension (fileName);
-            if (!ExcelImporterInstance.FileExtensions.Contains (fileExtension)) return GetEmptyCollection(type);
+            (Type type, int[] columns) = GetMap (sheet, typeRepository);
 
+            if (type == null) throw new ArgumentException("Type repository doesn't contain correspoding type", nameof(typeRepository));
+
+            return FillModelCollection (type, columns);
+        }
+
+        public static IEnumerable<ImportModel> ImportData (string fileName, Type type)
+        {
+            if (!File.Exists(fileName)) throw new ArgumentException("File doesn't contain any sheets", nameof(fileName));
+            if (type == null) throw new ArgumentException("Type can not be null", nameof(type));
+
+            ISheet sheet = GetSheetAtZeroIndex (fileName);
+            if (null == sheet) return new ImportModel[0];
+
+            int[] columns = GetMap (sheet, type);
+
+            return FillModelCollection (type, columns);
+        }
+
+        private static ISheet GetSheetAtZeroIndex (string fileName)
+        {
             using (Stream stream = new FileStream (fileName, FileMode.Open, FileAccess.Read)) {
 
                 try {
 
                     IWorkbook book;
 
-                    if (XLS_FILE == fileExtension) {
-                        book = new HSSFWorkbook(stream);
+                    if (XLS_FILE == Path.GetExtension (fileName)) {
+                        book = new HSSFWorkbook (stream);
                     }
                     else {
-                         book = new XSSFWorkbook (stream);
+                        book = new XSSFWorkbook (stream);
                     }
 
-                    ISheet sheet = book.GetSheetAt (0);
-
-                    var tableRect = GetFirstCell (sheet);
-
-                    if (null == tableRect) {
-                        return GetEmptyCollection (type);
-                    }
-
-                    return TryFillCollection (sheet, (TableRect)tableRect, type) ?? GetEmptyCollection (type);
+                    return book.GetSheetAt (0);
                 }
                 catch (ZipException) {
 
-                    return GetEmptyCollection (type);
+                    return null;
                 }
             }
         }
+
+        private static (Type, int[]) GetMap (ISheet sheet, ITypeRepository typeRepository)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static int[] GetMap (ISheet sheet, Type type)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected static ImportModel[] FillModelCollection (Type type, int[] columns)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        //public static ICollection ImportDataFromExcel(string fileName, Type type)
+        //{
+        //    if (PropertyToCellColumn.Any()) PropertyToCellColumn.Clear();
+
+        //    if (type.GetConstructors().Count (c => c.IsPublic && c.GetParameters().Length == 0) == 0) {
+        //        return GetEmptyCollection(type);
+        //    }
+
+        //    var fileExtension = Path.GetExtension (fileName);
+        //    if (!Instance.FileExtensions.Contains (fileExtension)) return GetEmptyCollection(type);
+
+        //    using (Stream stream = new FileStream (fileName, FileMode.Open, FileAccess.Read)) {
+
+        //        try {
+
+        //            IWorkbook book;
+
+        //            if (XLS_FILE == fileExtension) {
+        //                book = new HSSFWorkbook(stream);
+        //            }
+        //            else {
+        //                 book = new XSSFWorkbook (stream);
+        //            }
+
+        //            ISheet sheet = book.GetSheetAt (0);
+
+        //            var tableRect = GetFirstCell (sheet);
+
+        //            if (null == tableRect) {
+        //                return GetEmptyCollection (type);
+        //            }
+
+        //            return TryFillCollection (sheet, (TableRect)tableRect, type) ?? GetEmptyCollection (type);
+        //        }
+        //        catch (ZipException) {
+
+        //            return GetEmptyCollection (type);
+        //        }
+        //    }
+        //}
 
 
         /// <summary>
@@ -189,7 +264,7 @@ namespace WorkSpeed.Import
                 ++rect.Top;
             }
 
-            return FillModelCollection(sheet, rect, type);
+            return null; //FillModelCollection(sheet, rect, type);
         }
 
         protected static bool CheckHeaders (ISheet sheet, TableRect rect, Type type)
@@ -197,7 +272,7 @@ namespace WorkSpeed.Import
             var headers = GetCellHeaders (sheet, rect);
             if (null == headers) return false;
 
-            return FillPropertyToCellIndexDictionary(type, headers);
+            return false;//FillPropertyToCellIndexDictionary(type, headers);
 
 
             #region Local Function
@@ -219,63 +294,63 @@ namespace WorkSpeed.Import
                 return resSet;
             }
 
-            bool FillPropertyToCellIndexDictionary (Type type_, List<string> cellHeaders)
-            {
-                var properties = type_.GetProperties().Where (p => p.CanWrite).ToArray();
-                if (!properties.Any()) return false;
+            //bool FillPropertyToCellIndexDictionary (Type type_, List<string> cellHeaders)
+            //{
+            //    var properties = type_.GetProperties().Where (p => p.CanWrite).ToArray();
+            //    if (!properties.Any()) return false;
 
-                foreach (var propertyInfo in properties) {
+            //    foreach (var propertyInfo in properties) {
 
-                    var propertyAttr = propertyInfo.GetCustomAttributes (false)
-                                                    .FirstOrDefault (a => a is HeaderAttribute) as HeaderAttribute;
+            //        var propertyAttr = propertyInfo.GetCustomAttributes (false)
+            //                                        .FirstOrDefault (a => a is HeaderAttribute) as HeaderAttribute;
 
-                    if (null == propertyAttr) {
-                        _propertyToCellColumn[propertyInfo.Name] = cellHeaders.IndexOf (propertyInfo.Name.ToUpperInvariant());
-                    }
-                    else{
-                        _propertyToCellColumn[propertyInfo.Name] = cellHeaders.IndexOf (propertyAttr.Header.ToUpperInvariant());
-                    }
+            //        if (null == propertyAttr) {
+            //            PropertyToCellColumn[propertyInfo.Name] = cellHeaders.IndexOf (propertyInfo.Name.ToUpperInvariant());
+            //        }
+            //        else{
+            //            PropertyToCellColumn[propertyInfo.Name] = cellHeaders.IndexOf (propertyAttr.Header.ToUpperInvariant());
+            //        }
 
-                    if (-1 == _propertyToCellColumn[propertyInfo.Name]) {
-                        return false;
-                    }
+            //        if (-1 == PropertyToCellColumn[propertyInfo.Name]) {
+            //            return false;
+            //        }
 
-                    _propertyToCellColumn[propertyInfo.Name] += rect.Left;
-                }
+            //        PropertyToCellColumn[propertyInfo.Name] += rect.Left;
+            //    }
 
-                return true;
-            }
+            //    return true;
+            //}
 
             #endregion
         }
 
-        private static ICollection FillModelCollection(ISheet sheet, TableRect rect, Type type)
-        {
-            ArrayList typeInstanceCollection = new ArrayList(rect.Bottom - rect.Top + 1);
+        //private static ICollection FillModelCollection(ISheet sheet, TableRect rect, Type type)
+        //{
+        //    ArrayList typeInstanceCollection = new ArrayList(rect.Bottom - rect.Top + 1);
 
-            for (var j = rect.Top; j <= rect.Bottom; ++j) {
+        //    for (var j = rect.Top; j <= rect.Bottom; ++j) {
 
-                var row = sheet.GetRow (j);
-                if (null == row) continue;
+        //        var row = sheet.GetRow (j);
+        //        if (null == row) continue;
 
-                object typeInstance = Activator.CreateInstance (type);
+        //        object typeInstance = Activator.CreateInstance (type);
 
-                var i = rect.Left;
+        //        var i = rect.Left;
 
-                foreach (var propertyInfo in type.GetProperties().Where (p => p.CanWrite)) {
+        //        foreach (var propertyInfo in type.GetProperties().Where (p => p.CanWrite)) {
 
-                    ICell cell = row.GetCell (_propertyToCellColumn.Count == 0 ? i : _propertyToCellColumn[propertyInfo.Name]);
+        //            ICell cell = row.GetCell (PropertyToCellColumn.Count == 0 ? i : PropertyToCellColumn[propertyInfo.Name]);
 
-                    if (!SetPropertyValue(propertyInfo, cell, typeInstance)) return GetEmptyCollection(type);
+        //            if (!SetPropertyValue(propertyInfo, cell, typeInstance)) return GetEmptyCollection(type);
 
-                    ++i;
-                }
+        //            ++i;
+        //        }
 
-                typeInstanceCollection.Add (typeInstance);
-            }
+        //        typeInstanceCollection.Add (typeInstance);
+        //    }
 
-            return typeInstanceCollection;
-        }
+        //    return typeInstanceCollection;
+        //}
 
         [SuppressMessage ("ReSharper", "PossibleNullReferenceException")]
         private static bool SetPropertyValue (PropertyInfo propertyInfo, ICell cell, object obj)
