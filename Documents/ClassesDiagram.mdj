@@ -19661,7 +19661,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": -2048,
+											"left": -2000,
 											"top": 992,
 											"height": 13
 										},
@@ -19672,11 +19672,11 @@
 												"$ref": "AAAAAAFnZJVyBW0I7rU="
 											},
 											"font": "Arial;13;1",
-											"left": 1173,
+											"left": 1197,
 											"top": 1463,
 											"width": 175,
 											"height": 13,
-											"text": "DataImporter"
+											"text": "_DataImporter"
 										},
 										{
 											"_type": "LabelView",
@@ -19686,7 +19686,7 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": -2048,
+											"left": -2000,
 											"top": 992,
 											"width": 73.67724609375,
 											"height": 13,
@@ -19700,14 +19700,14 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": -2048,
+											"left": -2000,
 											"top": 992,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 1168,
+									"left": 1192,
 									"top": 1456,
 									"width": 185,
 									"height": 25,
@@ -19744,7 +19744,7 @@
 												"$ref": "AAAAAAFnZJWT/XGLN1o="
 											},
 											"font": "Arial;13;0",
-											"left": 1173,
+											"left": 1197,
 											"top": 1486,
 											"width": 175,
 											"height": 13,
@@ -19753,7 +19753,7 @@
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 1168,
+									"left": 1192,
 									"top": 1481,
 									"width": 185,
 									"height": 23
@@ -19768,7 +19768,7 @@
 										"$ref": "AAAAAAFnZJVyBG0FwrQ="
 									},
 									"font": "Arial;13;0",
-									"left": 1168,
+									"left": 1192,
 									"top": 1504,
 									"width": 185,
 									"height": 10
@@ -19784,7 +19784,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -1024,
+									"left": -1000,
 									"top": 496,
 									"width": 10,
 									"height": 10
@@ -19800,7 +19800,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -1024,
+									"left": -1000,
 									"top": 496,
 									"width": 10,
 									"height": 10
@@ -19808,7 +19808,7 @@
 							],
 							"font": "Arial;13;0",
 							"containerChangeable": true,
-							"left": 1168,
+							"left": 1192,
 							"top": 1456,
 							"width": 185,
 							"height": 58,
@@ -20373,7 +20373,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 1117,
+									"left": 1129,
 									"top": 1492,
 									"height": 13,
 									"alpha": 1.5707963267948966,
@@ -20394,7 +20394,7 @@
 									},
 									"visible": null,
 									"font": "Arial;13;0",
-									"left": 1117,
+									"left": 1129,
 									"top": 1507,
 									"height": 13,
 									"alpha": 1.5707963267948966,
@@ -20415,7 +20415,7 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 1116,
+									"left": 1128,
 									"top": 1463,
 									"height": 13,
 									"alpha": -1.5707963267948966,
@@ -20434,7 +20434,7 @@
 								"$ref": "AAAAAAFnZJVyBW0H1D4="
 							},
 							"lineStyle": 1,
-							"points": "1167:1484;1067:1485",
+							"points": "1191:1484;1067:1485",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAFnZKKCb2CRefU="
@@ -20487,9 +20487,9 @@
 											"font": "Arial;13;1",
 											"left": 1149,
 											"top": 1337,
-											"width": 216.88525390625,
+											"width": 268.1806640625,
 											"height": 13,
-											"text": "IDataImporter"
+											"text": "DataImporter"
 										},
 										{
 											"_type": "LabelView",
@@ -20522,7 +20522,7 @@
 									"font": "Arial;13;0",
 									"left": 1144,
 									"top": 1330,
-									"width": 226.88525390625,
+									"width": 278.1806640625,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAFnZKOGKGoX4HU="
@@ -20565,6 +20565,23 @@
 									"subViews": [
 										{
 											"_type": "UMLOperationView",
+											"_id": "AAAAAAFnaIGaw+rvrNI=",
+											"_parent": {
+												"$ref": "AAAAAAFnZKOGKGocmHk="
+											},
+											"model": {
+												"$ref": "AAAAAAFnaIGaiuqPFX8="
+											},
+											"font": "Arial;13;0",
+											"left": 1149,
+											"top": 1360,
+											"width": 268.1806640625,
+											"height": 13,
+											"text": "+DataImporter(typeRepository)",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
 											"_id": "AAAAAAFnZKO8J3ARNIc=",
 											"_parent": {
 												"$ref": "AAAAAAFnZKOGKGocmHk="
@@ -20574,10 +20591,10 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1149,
-											"top": 1360,
-											"width": 216.88525390625,
+											"top": 1375,
+											"width": 268.1806640625,
 											"height": 13,
-											"text": "+ImportData(): IEnumerable",
+											"text": "+ImportData(fileName): IEnumerable",
 											"horizontalAlignment": 0
 										},
 										{
@@ -20591,18 +20608,35 @@
 											},
 											"font": "Arial;13;0",
 											"left": 1149,
-											"top": 1375,
-											"width": 216.88525390625,
+											"top": 1390,
+											"width": 268.1806640625,
 											"height": 13,
-											"text": "+ImportDataAsync(): IEnumerable",
+											"text": "+ImportDataAsync(fileName): IEnumerable",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAFnaIUeTg5AzD4=",
+											"_parent": {
+												"$ref": "AAAAAAFnZKOGKGocmHk="
+											},
+											"model": {
+												"$ref": "AAAAAAFnaIUeGA3gF1o="
+											},
+											"font": "Arial;13;0",
+											"left": 1149,
+											"top": 1405,
+											"width": 268.1806640625,
+											"height": 13,
+											"text": "+RegisterImporter_IDataImporter_()",
 											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 1144,
 									"top": 1355,
-									"width": 226.88525390625,
-									"height": 38
+									"width": 278.1806640625,
+									"height": 68
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -20640,7 +20674,7 @@
 												"$ref": "AAAAAAFnZKSfcIDaF0U="
 											},
 											"font": "Arial;13;0",
-											"left": 1303.353515625,
+											"left": 1354.64892578125,
 											"top": 1317,
 											"width": 71.53173828125,
 											"height": 13,
@@ -20649,7 +20683,7 @@
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 1298.353515625,
+									"left": 1349.64892578125,
 									"top": 1312,
 									"width": 81.53173828125,
 									"height": 23
@@ -20659,8 +20693,8 @@
 							"containerChangeable": true,
 							"left": 1144,
 							"top": 1312,
-							"width": 236.88525390625,
-							"height": 81,
+							"width": 288.1806640625,
+							"height": 111,
 							"nameCompartment": {
 								"$ref": "AAAAAAFnZKOGKGoWPSI="
 							},
@@ -20699,8 +20733,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 1245,
-									"top": 1417,
+									"left": 1270,
+									"top": 1432,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -20720,8 +20754,8 @@
 									},
 									"visible": null,
 									"font": "Arial;13;0",
-									"left": 1230,
-									"top": 1417,
+									"left": 1255,
+									"top": 1431,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -20741,8 +20775,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 1274,
-									"top": 1418,
+									"left": 1299,
+									"top": 1433,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -20760,7 +20794,7 @@
 								"$ref": "AAAAAAFnZJVyBW0H1D4="
 							},
 							"lineStyle": 1,
-							"points": "1260:1455;1261:1393",
+							"points": "1285:1455;1286:1423",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAFnZKTn+YlAGgo="
@@ -20771,6 +20805,35 @@
 							"propertyLabel": {
 								"$ref": "AAAAAAFnZKTn+YlCaoA="
 							}
+						},
+						{
+							"_type": "UMLNoteView",
+							"_id": "AAAAAAFnaH+33tKMSNM=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"font": "Arial;13;0",
+							"left": 1480,
+							"top": 1328,
+							"width": 212.181640625,
+							"height": 25,
+							"text": "RegisterImporter<ExcelImporter>"
+						},
+						{
+							"_type": "UMLNoteLinkView",
+							"_id": "AAAAAAFnaISSygXcG40=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"font": "Arial;13;0",
+							"head": {
+								"$ref": "AAAAAAFnZKOGKGoVT6Y="
+							},
+							"tail": {
+								"$ref": "AAAAAAFnaH+33tKMSNM="
+							},
+							"lineStyle": 1,
+							"points": "1479:1350;1432:1354"
 						}
 					]
 				},
@@ -24397,7 +24460,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "DataImporter",
+					"name": "_DataImporter",
 					"ownedElements": [
 						{
 							"_type": "UMLDependency",
@@ -24433,7 +24496,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFnZJVyBG0FwrQ="
 							},
-							"name": "RegisterImporter"
+							"name": "RegisterImporter",
+							"type": ""
 						}
 					]
 				},
@@ -24467,7 +24531,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFnZJpnkYnpvn4="
 							},
-							"name": "ExcelImporterInstance"
+							"name": "ExcelImporterInstance",
+							"type": ""
 						}
 					],
 					"operations": [
@@ -24496,7 +24561,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFnZJ2Wr60Z2K0="
 							},
-							"name": "FileExtensions"
+							"name": "FileExtensions",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -24504,7 +24570,8 @@
 							"_parent": {
 								"$ref": "AAAAAAFnZJ2Wr60Z2K0="
 							},
-							"name": "ImportDataFunc"
+							"name": "ImportDataFunc",
+							"type": ""
 						}
 					],
 					"isAbstract": true
@@ -24515,7 +24582,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "IDataImporter",
+					"name": "DataImporter",
 					"templateParameters": [
 						{
 							"_type": "UMLTemplateParameter",
@@ -24527,6 +24594,25 @@
 						}
 					],
 					"operations": [
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAFnaIGaiuqPFX8=",
+							"_parent": {
+								"$ref": "AAAAAAFnZKOGJ2oT1vk="
+							},
+							"name": "DataImporter",
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAFnaII+Sexnpwo=",
+									"_parent": {
+										"$ref": "AAAAAAFnaIGaiuqPFX8="
+									},
+									"name": "typeRepository",
+									"type": ""
+								}
+							]
+						},
 						{
 							"_type": "UMLOperation",
 							"_id": "AAAAAAFnZKO75m+xXXg=",
@@ -24543,6 +24629,15 @@
 									},
 									"type": "IEnumerable",
 									"direction": "return"
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAFnaH1up8rlXNI=",
+									"_parent": {
+										"$ref": "AAAAAAFnZKO75m+xXXg="
+									},
+									"name": "fileName",
+									"type": ""
 								}
 							]
 						},
@@ -24562,8 +24657,25 @@
 									},
 									"type": "IEnumerable",
 									"direction": "return"
+								},
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAFnaH2JS86KkMM=",
+									"_parent": {
+										"$ref": "AAAAAAFnZKPqPnZDW/I="
+									},
+									"name": "fileName",
+									"type": ""
 								}
 							]
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAFnaIUeGA3gF1o=",
+							"_parent": {
+								"$ref": "AAAAAAFnZKOGJ2oT1vk="
+							},
+							"name": "RegisterImporter_IDataImporter_"
 						}
 					]
 				}
