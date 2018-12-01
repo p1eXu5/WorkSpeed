@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WorkSpeed.Import
 {
-    static class TypeRepository
+    public class TypeRepository : ITypeRepository
     {
         public static Type GetTypeByHeaderNames(IEnumerable<string> headers)
         {

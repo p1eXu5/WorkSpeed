@@ -48,8 +48,8 @@ namespace WorkSpeed.Import
 
         public static IEnumerable<ImportModel> ImportData (string fileName, ITypeRepository typeRepository)
         {
-            if (!File.Exists(fileName)) throw new ArgumentException("File doesn't contain any sheets", nameof(fileName));
-            if (typeRepository == null) throw new ArgumentException("Type can not be null", nameof(typeRepository));
+            if (!File.Exists(fileName)) throw new ArgumentException("File doesn't exist", nameof(fileName));
+            if (typeRepository == null) throw new ArgumentNullException(nameof(typeRepository), "typeRepository can not be null");
 
             ISheet sheet = GetSheetAtZeroIndex (fileName);
             if (null == sheet) return new ImportModel[0];
@@ -64,7 +64,7 @@ namespace WorkSpeed.Import
         public static IEnumerable<ImportModel> ImportData (string fileName, Type type)
         {
             if (!File.Exists(fileName)) throw new ArgumentException("File doesn't contain any sheets", nameof(fileName));
-            if (type == null) throw new ArgumentException("Type can not be null", nameof(type));
+            if (type == null) throw new ArgumentNullException(nameof(type), "Type can not be null");
 
             ISheet sheet = GetSheetAtZeroIndex (fileName);
             if (null == sheet) return new ImportModel[0];
@@ -82,17 +82,20 @@ namespace WorkSpeed.Import
 
                     IWorkbook book;
 
-                    if (XLS_FILE == Path.GetExtension (fileName)) {
-                        book = new HSSFWorkbook (stream);
-                    }
-                    else {
-                        book = new XSSFWorkbook (stream);
+                    switch (Path.GetExtension(fileName)) {
+                        case XLSX_FILE:
+                            book = new XSSFWorkbook (stream);
+                            break;
+                        case XLS_FILE:
+                            book = new HSSFWorkbook (stream);
+                            break;
+                        default:
+                            return null;
                     }
 
                     return book.GetSheetAt (0);
                 }
-                catch (ZipException) {
-
+                catch {
                     return null;
                 }
             }

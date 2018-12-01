@@ -32,24 +32,66 @@ namespace WorkSpeed.Import.Tests.UnitTests
         #region ImportData
 
         [Test]
-        public void GetSheetAtZero_FileIsNotExcelFileWithWrongException_ReturnsNull()
+        public void GetSheetAtZero_FileDoesNotExist_Throws()
         {
             // Arrange:
-            var file = CreateFakeEmptyTestFile ("test.tst");
+            var file = "not_existed_file.xls";
 
             // Action:
-            var result = ExcelImporter.ImportData (file, _stubTypeRepository.Object).ToArray();
+            var ex = Assert.Catch<ArgumentException> (() => ExcelImporter.ImportData (file, _stubTypeRepository.Object));
 
             // Assert:
-            Assert.That (0 == result.Length);
+            StringAssert.Contains ("File doesn't exist", ex.Message);
         }
 
+        [TestCase ("test.tst")]
         [TestCase ("test.xls")]
         [TestCase ("test.xlsx")]
-        public void GetSheetAtZero_FileIsNotExcelFileWithRightException_ReturnsNull(string fileName)
+        public void ImportData_FileIsNotExcelFileOrFileEmpty_ReturnsEmptyCollection(string fileName)
         {
-            var file = CreateFakeEmptyTestFile (fileName);
+            // Arrange:
+            var file = CreateFakeEmptyTestFile(fileName);
+
+            // Action:
+            var result = ExcelImporter.ImportData(file, _stubTypeRepository.Object);
+
+            // Assert:
+            Assert.That(0 == result?.Count());
+
+            // Cleanup:
+            File.Delete (file);
         }
+
+        [Test]
+        public void ImportData_ValidExcelFileHasNoSheets_ReturnsEmptyCollection()
+        {
+            // Arrange:
+            var file = CreateFakeZeroLengthXlsxFile();
+
+            // Action:
+            var result = ExcelImporter.ImportData (file, _stubTypeRepository.Object);
+
+            // Assert:
+            Assert.That (0 == result?.Count());
+        }
+
+        [Test]
+        public void ImportData_TypeRepositoryIsNull_Throws()
+        {
+            // Arrange:
+            var file = CreateTestXlsxFileWithSingleStringCell();
+            ITypeRepository repo = null;
+
+            // Action:
+            var ex = Assert.Catch<ArgumentNullException> (() => ExcelImporter.ImportData (file, repo));
+
+            // Assert:
+            StringAssert.Contains ("typeRepository can not be null", ex.Message);
+        }
+
+        [Test]
+        public void ImportData_XlsxFileContainsRecordsAreCorrespondedTypeInTypeRepository_ReturnsImportModelCollection()
+        { }
 
         #endregion
 
@@ -369,45 +411,63 @@ namespace WorkSpeed.Import.Tests.UnitTests
         #endregion
 
 
-        #region CheckHeaders
-        
-        [Test]
-        public void CheckHeaders_TypeHasDifferentHeadersOrderThanSheetHas_ReturnsTrue()
-        {
-            // Arrange:
-            var headers = new[] { "Header One", "2 Header", "The Third Header" };
-            var type = GetModelType(headers);
-
-            // Action:
-            var res = DataImporterTestHeritor.CheckHeaderInvoker (SetMemoryStream(headers), type);
-
-            // Assert:
-            Assert.That (true == res);
-        }
-
-        #endregion
-
 
         [TearDown]
         public void Cleanup()
         {
-            RemoveFakeFile();
+            if (File.Exists (_fakeXlsxFileName.GetFullPath())) {
+                File.Delete (_fakeXlsxFileName.GetFullPath());
+            }
 
-            _stream?.Close();
+            _memoryStream?.Close();
         }
 
+        #region Factory
+
+        private readonly Mock<ITypeRepository> _stubTypeRepository = new Mock<ITypeRepository>();
+
+        private ITypeRepository GetTypeRepository()
+        {
+            return new TypeRepository();
+        }
+
+        #endregion
 
         #region Stream Factory
 
         private const string _fakeXlsxFileName = "fakefile.xlsx";
         private const string _testHeaderName = "Test Header";
         private const string _mainCellText = "Main Cell";
-        private MemoryStream _stream;
+        private MemoryStream _memoryStream;
 
-
+        /// <summary>
+        /// Creates file with _fakeXlsxFileName name.
+        /// File is deleted after each test in [TestDown]Cleanup() method.
+        /// </summary>
+        /// <returns></returns>
         private string CreateFakeZeroLengthXlsxFile()
         {
             using (var stream = new FileStream (_fakeXlsxFileName.GetFullPath(), FileMode.Create, FileAccess.Write)) {
+                return stream.Name;
+            }
+        }
+
+        /// <summary>
+        /// Create _fakeXlsxFileName named file with one cell which contains
+        /// string with _mainCellText value.
+        /// File is deleted after each test in [TestDown]Cleanup() method.
+        /// </summary>
+        /// <returns></returns>
+        private string CreateTestXlsxFileWithSingleStringCell()
+        {
+            IWorkbook book = new XSSFWorkbook();
+            ISheet sheet = book.CreateSheet();
+
+            sheet.CreateRow (10).CreateCell (10).SetCellValue (_mainCellText);
+
+            using (var stream = new FileStream (_fakeXlsxFileName.GetFullPath(), FileMode.Create, FileAccess.Write)) {
+                    
+                book.Write (stream);
                 return stream.Name;
             }
         }
@@ -449,20 +509,6 @@ namespace WorkSpeed.Import.Tests.UnitTests
             else {
                 sheet.GetRow (mainTop).GetCell (mainLeft).SetCellValue (_mainCellText);
             }
-
-            using (var stream = new FileStream (_fakeXlsxFileName.GetFullPath(), FileMode.Create, FileAccess.Write)) {
-                    
-                book.Write (stream);
-                return stream.Name;
-            }
-        }
-
-        private string CreateTestFileWithSingleStringCell()
-        {
-            IWorkbook book = new XSSFWorkbook();
-            ISheet sheet = book.CreateSheet();
-
-            sheet.CreateRow (10).CreateCell (10).SetCellValue (_mainCellText);
 
             using (var stream = new FileStream (_fakeXlsxFileName.GetFullPath(), FileMode.Create, FileAccess.Write)) {
                     
@@ -530,19 +576,13 @@ namespace WorkSpeed.Import.Tests.UnitTests
                 rowV.CreateCell (i++).SetCellValue ($"value: {header}");
             }
 
-            _stream = new MemoryStream();
-            book.Write (_stream, true);
-            _stream.Position = 0;
+            _memoryStream = new MemoryStream();
+            book.Write (_memoryStream, true);
+            _memoryStream.Position = 0;
 
-            return _stream;
+            return _memoryStream;
         }
 
-        void RemoveFakeFile()
-        {
-            if (File.Exists (_fakeXlsxFileName.GetFullPath())) {
-                File.Delete (_fakeXlsxFileName.GetFullPath());
-            }
-        }
 
         #endregion
 
@@ -562,7 +602,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
         }
 
         /// <summary>
-        /// Creates Type with propertyes that correspondes passed headers.
+        /// Creates Type with propertyes that correspondes passed properties.
         /// </summary>
         /// <param name="headers">Header names.</param>
         /// <returns><see cref="Type"/></returns>
@@ -572,6 +612,22 @@ namespace WorkSpeed.Import.Tests.UnitTests
 
             foreach (var header in headers) {
                 CreateProperty (typeBuilder, "string", $"Property{header.RemoveWhitespaces()}", header);
+            }
+
+            return typeBuilder.CreateType();
+        }
+
+        /// <summary>
+        /// Creates Type with propertyes that correspondes passed property types and their properties.
+        /// </summary>
+        /// <param name="properties"></param>
+        /// <returns></returns>
+        private Type GetModelType(params (string header, string proprtyType)[] properties)
+        {
+            var typeBuilder = GetTypeBuilder();
+
+            foreach (var tuple in properties) {
+                CreateProperty(typeBuilder, tuple.proprtyType, $"Property{tuple.header.RemoveWhitespaces()}", tuple.header);
             }
 
             return typeBuilder.CreateType();
@@ -665,55 +721,5 @@ namespace WorkSpeed.Import.Tests.UnitTests
 
         #endregion
 
-        #region Fakes
-
-        private readonly Mock<ITypeRepository> _stubTypeRepository = new Mock<ITypeRepository>();
-
-        class DataImporterTestHeritor : ExcelImporter
-        {
-            public static bool CheckHeaderInvoker(Stream stream, Type type)
-            {
-                IWorkbook book = new XSSFWorkbook(stream);
-                ISheet sheet = book.GetSheetAt (0);
-
-                return CheckHeaders (sheet, GetRect (sheet), type);
-            }
-
-            public Dictionary<string, int> PropertyToCell => PropertyToCellColumn;
-        }
-
-
-        [Headless]
-        class FakeHeadlessModelClass
-        {
-            public string MainCell { get; set; }
-            public string ReadOnlyProperty { get; } = "Read Only Property";
-        }
-
-        class FakeModelClassWithTestHeaderNamedProperty
-        {
-            public string TestHeader { get; set; }
-            public string ReadOnlyProperty { get; } = "Read Only Property";
-        }
-
-        class FakeModelClassWithWrongHeaderAttribute
-        {
-            [Header("Wrong Header")]
-            public string TestHeader { get; set; }
-            public string ReadOnlyProperty { get; } = "Read Only Property";
-        }
-
-        class FakeModelClassWithoutParameterlessConstructor
-        {
-            public FakeModelClassWithoutParameterlessConstructor (string param)
-            {
-                TestHeader = param;
-            }
-
-            public string TestHeader { get; set; }
-            public string ReadOnlyProperty { get; } = "Read Only Property";
-        }
-
-        #endregion
     }
 }
