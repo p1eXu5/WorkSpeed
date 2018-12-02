@@ -14,13 +14,11 @@ using NPOI.XSSF.UserModel;
 
 namespace WorkSpeed.Import
 {
-    public sealed class Importer
+    public sealed class Importer : ITypeRepository
     {
-        private readonly ITypeRepository _typeRepository;
 
-        public Importer(ITypeRepository typeRepository)
+        public Importer()
         {
-            _typeRepository = typeRepository ?? throw new ArgumentNullException();
         }
 
 
@@ -29,16 +27,20 @@ namespace WorkSpeed.Import
         /// <summary>
         /// Register a custom data importer.
         /// </summary>
-        /// <typeparam name="TConcreteImporter"><see cref="IConcreteImporter"/></typeparam>
-        /// <param name="importer">Instance of concrete importer.</param>
+        /// <param name="fileImporter">Instance of concrete importer.</param>
         /// 
-        public void RegisterImporter<TDataImporter>(TDataImporter importer) where TDataImporter : IDataImporter
+        public void RegisterFileImporter(IFileImporter fileImporter)
         {
-            if (importer == null) {
-                throw new NullReferenceException($"{nameof(importer)} can't be null");
+            if (fileImporter == null) {
+                throw new NullReferenceException($"{nameof(fileImporter)} can't be null");
             }
         }
 
+
+        public IEnumerable<string> GetFileExtensions()
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Imports data from file in asynchronous manner.
@@ -67,7 +69,7 @@ namespace WorkSpeed.Import
         /// <returns><see cref="IEnumerable{T}"/></returns>
         /// 
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        public IEnumerable<TModelType> ImportData<TModelType>(string fileName) where TModelType : new()
+        public bool ImportData(string fileName)
         {
             throw new NotImplementedException();
         }

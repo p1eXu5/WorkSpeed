@@ -24,7 +24,7 @@ namespace WorkSpeed.Import
     /// Singletone.
     /// </summary>
     [SuppressMessage ("ReSharper", "EmptyGeneralCatchClause")]
-    public class ExcelImporter : IDataImporter
+    public class ExcelImporter : IFileImporter
     {
         private const string XLS_FILE = ".xls";
         private const string XLSX_FILE = ".xlsx";
@@ -43,7 +43,7 @@ namespace WorkSpeed.Import
 
         public IEnumerable<string> GetFileExtensions() => FileExtensions;
 
-        IEnumerable<ProductivityImportModel> IDataImporter.ImportData (string fileName, ITypeRepository typeRepository) => ImportData (fileName, typeRepository);
+        IEnumerable<ProductivityImportModel> IFileImporter.ImportData (string fileName, ITypeRepository typeRepository) => ImportData (fileName, typeRepository);
 
 
         public static IEnumerable<ProductivityImportModel> ImportData (string fileName, ITypeRepository typeRepository)

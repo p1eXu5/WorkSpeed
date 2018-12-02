@@ -65,7 +65,7 @@
     <Compile Include="Importer.cs" />
     <Compile Include="ExcelImporter.cs" />
     <Compile Include="IConcreteImporter.cs" />
-    <Compile Include="IDataImporter.cs" />
+    <Compile Include="IFileImporter.cs" />
     <Compile Include="ITypeRepository.cs" />
     <Compile Include="Models\BaseImportModel.cs" />
     <Compile Include="Models\BaseProductivityImportModel.cs" />

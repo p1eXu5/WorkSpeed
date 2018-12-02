@@ -1,16 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using WorkSpeed.Import.Models;
 
 namespace WorkSpeed.Import
 {
-    public interface IDataImporter
+    public interface IFileImporter
     {
-        /// <summary>
-        /// File extansions that an instance of IDataImporter supports.
-        /// </summary>
-        IEnumerable<string> GetFileExtensions();
+        ISet<string> FileExtensions { get; }
 
         /// <summary>
         /// Import data from file.
@@ -19,7 +17,7 @@ namespace WorkSpeed.Import
         /// <param name="typeRepository"></param>
         /// <returns></returns>
         /// 
-        IEnumerable<ProductivityImportModel> ImportData(string fileName, ITypeRepository typeRepository);
+        IEnumerable ImportData(string fileName, ITypeRepository typeRepository);
 
         ///// <summary>
         ///// Imports data from file in asynchronous manner.
