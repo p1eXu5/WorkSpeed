@@ -43,16 +43,16 @@ namespace WorkSpeed.Import
 
         public IEnumerable<string> GetFileExtensions() => FileExtensions;
 
-        IEnumerable<ImportModel> IDataImporter.ImportData (string fileName, ITypeRepository typeRepository) => ImportData (fileName, typeRepository);
+        IEnumerable<ProductivityImportModel> IDataImporter.ImportData (string fileName, ITypeRepository typeRepository) => ImportData (fileName, typeRepository);
 
 
-        public static IEnumerable<ImportModel> ImportData (string fileName, ITypeRepository typeRepository)
+        public static IEnumerable<ProductivityImportModel> ImportData (string fileName, ITypeRepository typeRepository)
         {
             if (!File.Exists(fileName)) throw new ArgumentException("File doesn't exist", nameof(fileName));
             if (typeRepository == null) throw new ArgumentNullException(nameof(typeRepository), "typeRepository can not be null");
 
             ISheet sheet = GetSheetAtZeroIndex (fileName);
-            if (null == sheet) return new ImportModel[0];
+            if (null == sheet) return new ProductivityImportModel[0];
 
             (Type type, int[] columns) = GetMap (sheet, typeRepository);
 
@@ -61,13 +61,13 @@ namespace WorkSpeed.Import
             return FillModelCollection (type, columns);
         }
 
-        public static IEnumerable<ImportModel> ImportData (string fileName, Type type)
+        public static IEnumerable<ProductivityImportModel> ImportData (string fileName, Type type)
         {
             if (!File.Exists(fileName)) throw new ArgumentException("File doesn't contain any sheets", nameof(fileName));
             if (type == null) throw new ArgumentNullException(nameof(type), "Type can not be null");
 
             ISheet sheet = GetSheetAtZeroIndex (fileName);
-            if (null == sheet) return new ImportModel[0];
+            if (null == sheet) return new ProductivityImportModel[0];
 
             int[] columns = GetMap (sheet, type);
 
@@ -111,7 +111,7 @@ namespace WorkSpeed.Import
             throw new NotImplementedException();
         }
 
-        protected static ImportModel[] FillModelCollection (Type type, int[] columns)
+        protected static ProductivityImportModel[] FillModelCollection (Type type, int[] columns)
         {
             throw new NotImplementedException();
         }

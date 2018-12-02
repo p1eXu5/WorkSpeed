@@ -19,7 +19,7 @@ namespace WorkSpeed.Import
         /// <param name="typeRepository"></param>
         /// <returns></returns>
         /// 
-        IEnumerable<ImportModel> ImportData(string fileName, ITypeRepository typeRepository);
+        IEnumerable<ProductivityImportModel> ImportData(string fileName, ITypeRepository typeRepository);
 
         ///// <summary>
         ///// Imports data from file in asynchronous manner.

@@ -1,13 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WorkSpeed.Import.Attributes;
 
 namespace WorkSpeed.Import.Models
 {
-    public class GatheringImportModel
+    public class GatheringImportModel : BaseProductivityImportModel
     {
-        public Type Type { get; set; }
+        [Header("Операция")]    public string Operation { get; set; }
+
+        [Header("Количество")]      public int ProductQuantity { get; set; }
+
+        [Header("Адрес-отправитель")]   public string AddressSender { get; set; }
+        [Header("Адрес-получатель")]    public string AddressReceiver { get; set; }
     }
 }

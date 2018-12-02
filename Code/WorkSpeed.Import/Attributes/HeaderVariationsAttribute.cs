@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace WorkSpeed.Import.Attributes
 {
-    [AttributeUsage(AttributeTargets.Property, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Property, Inherited = true)]
     class HeaderVariationsAttribute : Attribute
     {
         public HeaderVariationsAttribute (params string[] headers)

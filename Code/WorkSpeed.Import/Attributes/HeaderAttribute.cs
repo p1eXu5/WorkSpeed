@@ -2,7 +2,7 @@
 
 namespace WorkSpeed.Import.Attributes
 {
-    [AttributeUsage(AttributeTargets.Property, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Property, Inherited = true)]
     public class HeaderAttribute : Attribute
     {
         public HeaderAttribute (string header)
