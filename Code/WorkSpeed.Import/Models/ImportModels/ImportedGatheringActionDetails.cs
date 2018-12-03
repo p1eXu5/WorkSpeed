@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WorkSpeed.Import.Models.ImportModels
 {
-    public class ImportedGatheringActionDetails : ImportedActionDetailsBase
+    public class ImportedGatheringActionDetails : ImportedCommonActionDetails
     {
         public readonly ushort Quantity;
         public readonly ushort SenderIdAddressId;

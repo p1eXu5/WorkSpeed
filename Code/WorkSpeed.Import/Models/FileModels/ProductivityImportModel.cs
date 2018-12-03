@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WorkSpeed.Import.Attributes;
+﻿using WorkSpeed.Import.Attributes;
 
-namespace WorkSpeed.Import.Models
+namespace WorkSpeed.Import.Models.FileModels
 {
     public class ProductivityImportModel : BaseProductivityImportModel
     {

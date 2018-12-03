@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using WorkSpeed.Import.Models;
 
-namespace WorkSpeed.Import
+namespace WorkSpeed.Import.FileImporters
 {
     public interface IFileImporter
     {
-        ISet<string> FileExtensions { get; }
+        IEnumerable<string> FileExtensions { get; }
 
         /// <summary>
         /// Import data from file.
@@ -17,7 +17,7 @@ namespace WorkSpeed.Import
         /// <param name="typeRepository"></param>
         /// <returns></returns>
         /// 
-        IEnumerable ImportData(string fileName, ITypeRepository typeRepository);
+        ICollection ImportData(string fileName, ITypeRepository typeRepository);
 
         ///// <summary>
         ///// Imports data from file in asynchronous manner.

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WorkSpeed.Import.Models.ImportModels
 {
-    public class ImportedReceptionActionDetails : ImportedActionDetailsBase
+    public class ImportedReceptionActionDetails : ImportedCommonActionDetails
     {
         public readonly ushort Quantity;
         public readonly ushort ScanQuantity;

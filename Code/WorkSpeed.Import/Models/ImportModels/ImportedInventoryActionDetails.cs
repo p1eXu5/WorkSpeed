@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WorkSpeed.Import.Models.ImportModels
 {
-    public class ImportedInventoryActionDetails : ImportedActionDetailsBase
+    public class ImportedInventoryActionDetails : ImportedCommonActionDetails
     {
         public readonly ushort AccountingQuantity;
         public readonly ushort ActualQuantity;

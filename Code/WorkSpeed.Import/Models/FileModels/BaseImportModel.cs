@@ -1,7 +1,7 @@
 ﻿using System;
 using WorkSpeed.Import.Attributes;
 
-namespace WorkSpeed.Import.Models
+namespace WorkSpeed.Import.Models.FileModels
 {
     public class BaseImportModel
     {

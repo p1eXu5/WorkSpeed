@@ -16,9 +16,10 @@ using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using WorkSpeed.Import.Attributes;
-using WorkSpeed.Import.Models;
+using WorkSpeed.Import.FileImporters;
+using WorkSpeed.Import.Models.FileModels;
 
-namespace WorkSpeed.Import
+namespace WorkSpeed.Import.FileImporters
 {
     /// <summary>
     /// Singletone.
@@ -35,18 +36,13 @@ namespace WorkSpeed.Import
 
         #region Properties
 
-        public static ReadOnlyHashSet<string> FileExtensions { get; } = new ReadOnlyHashSet<string> { XLS_FILE, XLSX_FILE };
+        public IEnumerable<string> FileExtensions { get; } = new HashSet<string> { XLS_FILE, XLSX_FILE };
 
         #endregion
         
         #region Methods
 
-        public IEnumerable<string> GetFileExtensions() => FileExtensions;
-
-        IEnumerable<ProductivityImportModel> IFileImporter.ImportData (string fileName, ITypeRepository typeRepository) => ImportData (fileName, typeRepository);
-
-
-        public static IEnumerable<ProductivityImportModel> ImportData (string fileName, ITypeRepository typeRepository)
+        public ICollection ImportData (string fileName, ITypeRepository typeRepository)
         {
             if (!File.Exists(fileName)) throw new ArgumentException("File doesn't exist", nameof(fileName));
             if (typeRepository == null) throw new ArgumentNullException(nameof(typeRepository), "typeRepository can not be null");

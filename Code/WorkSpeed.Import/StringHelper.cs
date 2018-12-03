@@ -14,6 +14,11 @@ namespace WorkSpeed.Import
             return str.ToCharArray().Where (c => !Char.IsWhiteSpace (c)).Aggregate ("", (s, c1) => s += c1);
         }
 
+        public static bool HasWhitespaces(this string str)
+        {
+            return str.ToCharArray().Where(Char.IsWhiteSpace).Count() != 0;
+        }
+
         /// <summary>
         /// In 6 times slower than RemoveWhitespaces()
         /// </summary>

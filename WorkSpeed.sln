@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkSpeed.Manager", "Code\W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{7D303552-8622-4046-949F-8DAFC83F74EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkSpeed", "Code\WorkSpeed\WorkSpeed.csproj", "{035D995A-6F8A-47C1-AEBD-41B2CC5D6D7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{7D303552-8622-4046-949F-8DAFC83F74EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D303552-8622-4046-949F-8DAFC83F74EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D303552-8622-4046-949F-8DAFC83F74EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{035D995A-6F8A-47C1-AEBD-41B2CC5D6D7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{035D995A-6F8A-47C1-AEBD-41B2CC5D6D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{035D995A-6F8A-47C1-AEBD-41B2CC5D6D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{035D995A-6F8A-47C1-AEBD-41B2CC5D6D7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,6 +110,7 @@ Global
 		{5A035100-5055-4E93-A240-55A46ECE04BE} = {1ECA741B-6388-4A77-8B30-D1E113F4F26F}
 		{D65854B3-652E-466F-9A0F-C22CF8191DCD} = {F1D4BFA4-0774-466A-B80A-3CF5497D6AED}
 		{7D303552-8622-4046-949F-8DAFC83F74EA} = {02ADBBD2-843C-457E-B553-A71CFDBFEF80}
+		{035D995A-6F8A-47C1-AEBD-41B2CC5D6D7D} = {F1D4BFA4-0774-466A-B80A-3CF5497D6AED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {74CCEA37-7ECF-4A64-9DA7-75E503ED2A97}

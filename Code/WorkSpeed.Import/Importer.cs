@@ -1,23 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
+using WorkSpeed.Import.FileImporters;
 using WorkSpeed.Import.Models;
+using WorkSpeed.Import.Models.ImportModels;
 
 namespace WorkSpeed.Import
 {
     public sealed class Importer : ITypeRepository
     {
-        private readonly HashSet<ImportedAction> _actions;
+        private readonly Dictionary<string, IFileImporter> _map = new Dictionary<string, IFileImporter>();
+
+        private readonly HashSet<ImportedAction> _actions = new HashSet<ImportedAction>();
 
         private readonly Dictionary<string, string> _employees = new Dictionary<string, string>();
 
@@ -32,11 +29,13 @@ namespace WorkSpeed.Import
         {
         }
 
-        public (DateTime startDate, DateTime endDate) Period { get; private set; }
+        public IEnumerable<string> FileExtensions => _map.Keys;
+
+        public (DateTime startDate, DateTime endDate)? Period { get; private set; }
 
         public IEnumerable<KeyValuePair<string, string>> Employees => _employees;
 
-        public IEnumerable<KeyValuePair<int, string>> Products => _products;
+        public IEnumerable<ImportedProduct> Products => _products;
         public IEnumerable<KeyValuePair<int, ProductMgh>> ProductMghs => _productMghs;
 
         public IEnumerable<ImportedOperation> Operations => _operations;
@@ -54,14 +53,22 @@ namespace WorkSpeed.Import
         public void RegisterFileImporter(IFileImporter fileImporter)
         {
             if (fileImporter == null) {
-                throw new NullReferenceException($"{nameof(fileImporter)} can't be null");
+                throw new ArgumentNullException($"{nameof(fileImporter)} can't be null");
             }
-        }
 
+            if (fileImporter.FileExtensions == null || !fileImporter.FileExtensions.Any()) {
+                throw new ArgumentException ("IFileImporter instance does not have extensions", nameof(fileImporter.FileExtensions));
+            }
 
-        public IEnumerable<string> GetFileExtensions()
-        {
-            throw new NotImplementedException();
+            var extensions = fileImporter.FileExtensions.Where (e => !String.IsNullOrWhiteSpace(e) && e[0] == '.' && !e.HasWhitespaces()).ToArray();
+
+            if (0 == extensions.Length) {
+                throw new ArgumentException("IFileImporter instance does not have valid extensions", nameof(fileImporter.FileExtensions));
+            }
+
+            foreach (var extension in extensions) {
+                _map[extension] = fileImporter;
+            }
         }
 
         /// <summary>
@@ -90,10 +97,22 @@ namespace WorkSpeed.Import
         /// <param name="fileName">File name.</param>
         /// <returns><see cref="IEnumerable{T}"/></returns>
         /// 
-        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         public bool ImportData(string fileName)
         {
-            throw new NotImplementedException();
+            var ext = Path.GetExtension (fileName);
+
+            if (ext != null && _map.ContainsKey (ext)) {
+                _map[ext].ImportData (fileName, this);
+                return true;
+            }
+
+            return false;
+        }
+
+        public IEnumerable<ImportedAction> GetActions (HashSet<string> operations)
+        {
+            HashSet<byte> operationIndexes = _operations.GetIndexes (operations);
+            return _actions.Where (a => operationIndexes.Contains (a.OperationId));
         }
 
         #endregion

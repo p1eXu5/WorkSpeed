@@ -2,12 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
+using WorkSpeed.Import.FileImporters;
 
 namespace WorkSpeed.Import.Tests.UnitTests
 {
@@ -15,10 +17,16 @@ namespace WorkSpeed.Import.Tests.UnitTests
     [SuppressMessage ("ReSharper", "UseMethodAny.2")]
     public class ImporterUnitTests
     {
+        [SetUp]
+        public void SetupCulture()
+        {
+            CultureInfo.CurrentUICulture = new CultureInfo("en-Us", false);
+        }
+
         [Test]
         public void Importer_IsITypeReposytory()
         {
-            Assert.That (typeof(Importer), Is.TypeOf<ITypeRepository>());
+            Assert.IsTrue (typeof(ITypeRepository).IsAssignableFrom(typeof(Importer)));
         }
 
         [Test]
@@ -33,7 +41,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             importer.RegisterFileImporter (fileImporter);
 
             // Assert:
-            Assert.That (importer.GetFileExtensions, Is.EquivalentTo (fileExtensions));
+            Assert.That (importer.FileExtensions, Is.EquivalentTo (fileExtensions));
         }
 
         [Test]
@@ -63,7 +71,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             var ex = Assert.Catch<ArgumentException> (() => importer.RegisterFileImporter (fileImporter));
 
             // Assert:
-            StringAssert.Contains ("fileImporter does not have extensions", ex.Message);
+            StringAssert.Contains ("IFileImporter instance does not have extensions", ex.Message);
         }
 
         [TestCase ("")]
@@ -80,7 +88,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
             var ex = Assert.Catch<ArgumentException> (() => importer.RegisterFileImporter (fileImporter));
 
             // Assert:
-            StringAssert.Contains ("fileImporter does not have valid extensions", ex.Message);
+            StringAssert.Contains ("IFileImporter instance does not have valid extensions", ex.Message);
         }
 
         [Test]
@@ -95,7 +103,26 @@ namespace WorkSpeed.Import.Tests.UnitTests
             importer.RegisterFileImporter (fileImporter);
 
             // Assert:
-            Assert.That (importer.GetFileExtensions, Is.EquivalentTo (new[] {".xls", ".xlsx"}));
+            Assert.That (importer.FileExtensions, Is.EquivalentTo (new[] {".xls", ".xlsx"}));
+        }
+
+        [Test]
+        public void RegisterFileImporter_FileExtensionAlreadyInMap_ReplacesFileImporterAtFileExtensionInMap()
+        {
+            // Arrange:
+            var importer = GetImporter();
+
+            var mockFileImporter = GetMockFileImporter(".fake");
+            importer.RegisterFileImporter(mockFileImporter.Object);
+
+            // Action:
+            var mockFileImporter2 = GetMockFileImporter(".fake");
+
+            importer.RegisterFileImporter(mockFileImporter2.Object);
+            importer.ImportData ("fake.fake");
+
+            // Assert:
+            mockFileImporter2.Verify(fi => fi.ImportData (It.IsAny<string>(), It.IsAny<ITypeRepository>()));
         }
 
         [Test]
@@ -129,7 +156,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
         }
 
         [Test]
-        public void GetEmployees_ByDefault_ReturnsEmptyCollection()
+        public void EmployeesGetter_ByDefault_ReturnsEmptyCollection()
         {
             // Arrange:
             var importer = GetImporter();
@@ -142,16 +169,42 @@ namespace WorkSpeed.Import.Tests.UnitTests
         }
 
         [Test]
-        public void GetAddresss_ByDefault_ReturnsEmptyCollection()
+        public void AddressesGetter_ByDefault_ReturnsEmptyCollection()
         {
             // Arrange:
             var importer = GetImporter();
 
             // Action:
-            var employees = importer.GetEmployees();
+            var addresses = importer.Addresses;
 
             // Assert:
-            Assert.That(0 == employees.Count());
+            Assert.That(0 == addresses.Count());
+        }
+
+        [Test]
+        public void PeriodGetter_ByDefault_ReturnsNull()
+        {
+            // Arrange:
+            var importer = GetImporter();
+
+            // Action:
+            var period = importer.Period;
+
+            // Assert:
+            Assert.That(period, Is.Null);
+        }
+
+        [Test]
+        public void GetActions__ByDefault_AllOperationTypes__ReturnsEmptyCollection()
+        {
+            // Arrange:
+            var importer = GetImporter();
+
+            // Action:
+            var actions = importer.GetActions (OperationTypes.All);
+
+            // Assert:
+            Assert.That(0 == actions.Count());
         }
 
         #region Factory
@@ -181,8 +234,8 @@ namespace WorkSpeed.Import.Tests.UnitTests
                 FileExtensions = new HashSet<string>(fileExtansions);
             }
 
-            public ISet<string> FileExtensions { get; }
-            public IEnumerable ImportData (string fileName, ITypeRepository typeRepository)
+            public IEnumerable<string> FileExtensions { get; }
+            public ICollection ImportData (string fileName, ITypeRepository typeRepository)
             {
                 throw new NotImplementedException();
             }
