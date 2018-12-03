@@ -17,10 +17,15 @@ namespace WorkSpeed.Import
 {
     public sealed class Importer : ITypeRepository
     {
+        private readonly HashSet<ImportedAction> _actions;
+
         private readonly Dictionary<string, string> _employees = new Dictionary<string, string>();
+
         private readonly HashSet<ImportedProduct> _products;
         private readonly Dictionary<int, ProductMgh> _productMghs = new Dictionary<int, ProductMgh>();
-        private readonly HashSet<string> _operations = new HashSet<string>();
+
+        private readonly HashSet<ImportedOperation> _operations = new HashSet<ImportedOperation>();
+        private readonly HashSet<string> _addresses = new HashSet<string>();
         private readonly Dictionary<string, string> _documents = new Dictionary<string, string>();
 
         public Importer()
@@ -34,7 +39,8 @@ namespace WorkSpeed.Import
         public IEnumerable<KeyValuePair<int, string>> Products => _products;
         public IEnumerable<KeyValuePair<int, ProductMgh>> ProductMghs => _productMghs;
 
-        public IEnumerable<string> Operations => _operations;
+        public IEnumerable<ImportedOperation> Operations => _operations;
+        public IEnumerable<string> Addresses => _addresses;
 
         public IEnumerable<KeyValuePair<string, string>> Documents => _documents;
 
