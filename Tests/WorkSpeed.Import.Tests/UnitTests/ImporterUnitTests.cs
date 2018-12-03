@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using NUnit.Framework.Internal;
 namespace WorkSpeed.Import.Tests.UnitTests
 {
     [TestFixture]
+    [SuppressMessage ("ReSharper", "UseMethodAny.2")]
     public class ImporterUnitTests
     {
         [Test]
@@ -109,6 +111,47 @@ namespace WorkSpeed.Import.Tests.UnitTests
 
             // Assert:
             mockFileImporter.Verify(fi => fi.ImportData (It.IsAny<string>(), It.IsAny<ITypeRepository>()));
+        }
+
+        [Test]
+        public void ImportData_ByDefault_PassesFileToTheFileImporter()
+        {
+            // Arrange:
+            var importer = GetImporter();
+            var mockFileImporter = GetMockFileImporter(".fake");
+
+            // Action:
+            importer.RegisterFileImporter(mockFileImporter.Object);
+            importer.ImportData("fake.fake");
+
+            // Assert:
+            mockFileImporter.Verify(fi => fi.ImportData("fake.fake", It.IsAny<ITypeRepository>()));
+        }
+
+        [Test]
+        public void GetEmployees_ByDefault_ReturnsEmptyCollection()
+        {
+            // Arrange:
+            var importer = GetImporter();
+
+            // Action:
+            var employees = importer.Employees;
+
+            // Assert:
+            Assert.That (0 == employees.Count());
+        }
+
+        [Test]
+        public void GetAddresss_ByDefault_ReturnsEmptyCollection()
+        {
+            // Arrange:
+            var importer = GetImporter();
+
+            // Action:
+            var employees = importer.GetEmployees();
+
+            // Assert:
+            Assert.That(0 == employees.Count());
         }
 
         #region Factory

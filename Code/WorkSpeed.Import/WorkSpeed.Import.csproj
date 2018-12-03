@@ -69,9 +69,12 @@
     <Compile Include="ITypeRepository.cs" />
     <Compile Include="Models\BaseImportModel.cs" />
     <Compile Include="Models\BaseProductivityImportModel.cs" />
+    <Compile Include="Models\Dims.cs" />
     <Compile Include="Models\GatheringImportModel.cs" />
+    <Compile Include="Models\ImportedProduct.cs" />
     <Compile Include="Models\ProductivityImportModel.cs" />
     <Compile Include="Models\InventoryImportModel.cs" />
+    <Compile Include="Models\ProductMgh.cs" />
     <Compile Include="Models\ReceptionImportModel.cs" />
     <Compile Include="Models\ShipmentImportModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

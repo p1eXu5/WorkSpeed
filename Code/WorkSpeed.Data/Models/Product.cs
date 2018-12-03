@@ -11,13 +11,10 @@ namespace WorkSpeed.Data.Models
 
         [MaxLength(196)]
         public string Name { get; set; }
-        public float Weight { get; set; }
-        public float Length { get; set; }
-        public float Width { get; set; }
-        public float Height { get; set; }
-        public float Volume { get; set; }
 
         public bool IsGroup { get; set; }
+
+        public ProductDims ProductDims { get; set; }
 
         public Product Parent { get; set; }
         public Complexity Complexity { get; set; }

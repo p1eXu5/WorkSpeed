@@ -144,6 +144,7 @@
     <Compile Include="Models\PersonnelFileEntry.cs" />
     <Compile Include="Models\Position.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\ProductDims.cs" />
     <Compile Include="Models\Rank.cs" />
     <Compile Include="Models\Salary.cs" />
     <Compile Include="Models\ShipmentComplexity.cs" />

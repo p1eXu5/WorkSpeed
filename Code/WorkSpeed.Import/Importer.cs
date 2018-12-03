@@ -11,16 +11,32 @@ using System.Text;
 using System.Threading.Tasks;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using WorkSpeed.Import.Models;
 
 namespace WorkSpeed.Import
 {
     public sealed class Importer : ITypeRepository
     {
+        private readonly Dictionary<string, string> _employees = new Dictionary<string, string>();
+        private readonly HashSet<ImportedProduct> _products;
+        private readonly Dictionary<int, ProductMgh> _productMghs = new Dictionary<int, ProductMgh>();
+        private readonly HashSet<string> _operations = new HashSet<string>();
+        private readonly Dictionary<string, string> _documents = new Dictionary<string, string>();
 
         public Importer()
         {
         }
 
+        public (DateTime startDate, DateTime endDate) Period { get; private set; }
+
+        public IEnumerable<KeyValuePair<string, string>> Employees => _employees;
+
+        public IEnumerable<KeyValuePair<int, string>> Products => _products;
+        public IEnumerable<KeyValuePair<int, ProductMgh>> ProductMghs => _productMghs;
+
+        public IEnumerable<string> Operations => _operations;
+
+        public IEnumerable<KeyValuePair<string, string>> Documents => _documents;
 
         #region Methods
 
