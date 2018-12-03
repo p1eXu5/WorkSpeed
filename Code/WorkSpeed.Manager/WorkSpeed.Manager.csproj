@@ -45,7 +45,9 @@
     <Compile Include="Models\OperationDetails.cs" />
     <Compile Include="Models\Productivity.cs" />
     <Compile Include="Models\TempAction.cs" />
+    <Compile Include="Models\TimePeriodTypes.cs" />
     <Compile Include="Models\WarehouseConstraints.cs" />
+    <Compile Include="Models\WorkingTime.cs" />
     <Compile Include="Period.cs" />
     <Compile Include="ProductivityCalculator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -55,6 +57,10 @@
     <ProjectReference Include="..\WorkSpeed.Data\WorkSpeed.Data.csproj">
       <Project>{72e065c5-8769-4008-9529-11194be488e0}</Project>
       <Name>WorkSpeed.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WorkSpeed\WorkSpeed.csproj">
+      <Project>{035d995a-6f8a-47c1-aebd-41b2cc5d6d7d}</Project>
+      <Name>WorkSpeed</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
