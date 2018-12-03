@@ -18179,23 +18179,6 @@
 									"subViews": [
 										{
 											"_type": "UMLAttributeView",
-											"_id": "AAAAAAFnVOqdtTo5gqo=",
-											"_parent": {
-												"$ref": "AAAAAAFnVOmC4SMqHmk="
-											},
-											"model": {
-												"$ref": "AAAAAAFnVOqdeTnccJw="
-											},
-											"font": "Arial;13;0",
-											"left": 661,
-											"top": 862,
-											"width": 192.1181640625,
-											"height": 13,
-											"text": "+ActualQuantity",
-											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLAttributeView",
 											"_id": "AAAAAAFnVOxnMUAQVgk=",
 											"_parent": {
 												"$ref": "AAAAAAFnVOmC4SMqHmk="
@@ -18205,10 +18188,27 @@
 											},
 											"font": "Arial;13;0",
 											"left": 661,
-											"top": 877,
+											"top": 862,
 											"width": 192.1181640625,
 											"height": 13,
 											"text": "+AccountingQuantity",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLAttributeView",
+											"_id": "AAAAAAFnVOqdtTo5gqo=",
+											"_parent": {
+												"$ref": "AAAAAAFnVOmC4SMqHmk="
+											},
+											"model": {
+												"$ref": "AAAAAAFnVOqdeTnccJw="
+											},
+											"font": "Arial;13;0",
+											"left": 661,
+											"top": 877,
+											"width": 192.1181640625,
+											"height": 13,
+											"text": "+ActualQuantity",
 											"horizontalAlignment": 0
 										}
 									],
@@ -24291,20 +24291,20 @@
 					"attributes": [
 						{
 							"_type": "UMLAttribute",
-							"_id": "AAAAAAFnVOqdeTnccJw=",
-							"_parent": {
-								"$ref": "AAAAAAFnVOmC4SMiP1c="
-							},
-							"name": "ActualQuantity",
-							"type": ""
-						},
-						{
-							"_type": "UMLAttribute",
 							"_id": "AAAAAAFnVOxm9z+zjIM=",
 							"_parent": {
 								"$ref": "AAAAAAFnVOmC4SMiP1c="
 							},
 							"name": "AccountingQuantity",
+							"type": ""
+						},
+						{
+							"_type": "UMLAttribute",
+							"_id": "AAAAAAFnVOqdeTnccJw=",
+							"_parent": {
+								"$ref": "AAAAAAFnVOmC4SMiP1c="
+							},
+							"name": "ActualQuantity",
 							"type": ""
 						}
 					]
