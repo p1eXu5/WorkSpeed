@@ -109,11 +109,6 @@ namespace WorkSpeed.Import
             return false;
         }
 
-        public IEnumerable<ImportedAction> GetActions (HashSet<string> operations)
-        {
-            HashSet<byte> operationIndexes = _operations.GetIndexes (operations);
-            return _actions.Where (a => operationIndexes.Contains (a.OperationId));
-        }
 
         #endregion
         

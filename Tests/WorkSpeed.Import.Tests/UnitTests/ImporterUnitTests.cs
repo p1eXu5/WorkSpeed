@@ -194,18 +194,6 @@ namespace WorkSpeed.Import.Tests.UnitTests
             Assert.That(period, Is.Null);
         }
 
-        [Test]
-        public void GetActions__ByDefault_AllOperationTypes__ReturnsEmptyCollection()
-        {
-            // Arrange:
-            var importer = GetImporter();
-
-            // Action:
-            var actions = importer.GetActions (OperationTypes.All);
-
-            // Assert:
-            Assert.That(0 == actions.Count());
-        }
 
         #region Factory
 

@@ -51,7 +51,7 @@ namespace WorkSpeed.Import.Tests.UnitTests
         public void ImportData_FileIsNotExcelFileOrFileEmpty_ReturnsEmptyCollection(string fileName)
         {
             // Arrange:
-            var file = CreateFakeEmptyTestFile(fileName);
+            var file = CreateEmptyFile(fileName);
 
             // Action:
             //var result = ExcelImporter.ImportData(file, _stubTypeRepository.Object);

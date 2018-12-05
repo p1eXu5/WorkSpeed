@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NPOI.SS.UserModel;
 using WorkSpeed.Import;
 
@@ -9,6 +8,7 @@ namespace ExcelImporter
     public struct SheetTable
     {
         #region Fileds
+
         public readonly ISheet Sheet;
         public readonly CellPoint StartCell;
         public readonly CellPoint EndCell;
@@ -16,7 +16,9 @@ namespace ExcelImporter
 
         private readonly Dictionary<int, string> _normalizedHeaders;
         private readonly Dictionary<int, string> _headers;
+        
         #endregion
+
 
         #region Constructor
 
@@ -28,7 +30,7 @@ namespace ExcelImporter
         {
             Sheet = sheet ?? throw new ArgumentNullException(nameof(sheet), "Sheet can't be null!");
 
-            if ((StartCell = FindStartCell (Sheet)) < CellPoint.ZeroPoint) throw new ArgumentException("Sheet have not data", nameof(sheet));
+            if ((StartCell = FindStartCell (Sheet)) < CellPoint.ZeroPoint) throw new ArgumentException("Sheet has no data", nameof(sheet));
             EndCell = FindEndCell (Sheet);
             Lenght = EndCell.Row - StartCell.Row;
 
@@ -38,12 +40,14 @@ namespace ExcelImporter
 
         #endregion
 
+
         #region Properties
 
         public IEnumerable<string> Headers => _headers.Values;
         public IEnumerable<string> NormalizedHeaders => _normalizedHeaders.Values;
-
+        
         #endregion
+
 
         #region Methods
 
@@ -62,50 +66,87 @@ namespace ExcelImporter
 
         private static CellPoint FindStartCell (ISheet sheet)
         {
-            int y = sheet.FirstRowNum;
-            int x = sheet.GetRow (y).FirstCellNum; 
+            int row = sheet.FirstRowNum;
+            int column = sheet.GetRow (row)?.FirstCellNum ?? -1;
+            if (-1 == column) return CellPoint.NegativePoint;
 
-            while (sheet.GetRow (y)?.GetCell (x)?.CellType == CellType.Blank) {
+            while (sheet.GetRow (row)?.GetCell (column)?.CellType == CellType.Blank) {
 
-                ++y;
+                ++row;
 
-                if (y > sheet.LastRowNum) {
+                if (row > sheet.LastRowNum) {
 
-                    y = sheet.FirstRowNum;
-                    ++x;
+                    row = sheet.FirstRowNum;
+                    ++column;
 
-                    if (x >= sheet.GetRow (y).LastCellNum) {
+                    if (column >= sheet.GetRow (row).LastCellNum) {
 
                         return CellPoint.NegativePoint;
                     }
                 }
             }
 
-            return new CellPoint(x, y);
+            if (row == sheet.FirstRowNum) {
+                return new CellPoint(column, row);
+            }
+
+            var startColumn = column;
+            row = sheet.FirstRowNum;
+
+            while (sheet.GetRow (row)?.GetCell (column)?.CellType == CellType.Blank) {
+
+                ++column;
+
+                if (column >= sheet.GetRow (row)?.LastCellNum) {
+
+                    ++row;
+                    column = startColumn;
+                }
+            }
+
+            return new CellPoint(column, row);
         }
 
         private static CellPoint FindEndCell(ISheet sheet)
         {
-            int y = sheet.LastRowNum;
-            int x = sheet.GetRow(y).LastCellNum - 1;
+            int row = sheet.LastRowNum;
+            int column = sheet.GetRow(row).LastCellNum - 1;
 
-            while (sheet.GetRow(y)?.GetCell(x)?.CellType == CellType.Blank) {
+            while (sheet.GetRow(row)?.GetCell(column)?.CellType == CellType.Blank) {
 
-                --y;
+                --row;
 
-                if (y < sheet.FirstRowNum) {
+                if (row < sheet.FirstRowNum) {
 
-                    y = sheet.LastRowNum;
-                    --x;
+                    row = sheet.LastRowNum;
+                    --column;
 
-                    if (x < sheet.GetRow(y).FirstCellNum) {
+                    if (column < sheet.GetRow(row).FirstCellNum) {
 
                         return CellPoint.NegativePoint;
                     }
                 }
             }
+            
+            if (row == sheet.LastRowNum) {
+                return new CellPoint(column + 1, row + 1);
+            }
 
-            return new CellPoint(x + 1, y + 1);
+            var lastColumn = column;
+            row = sheet.LastRowNum;
+
+            while (sheet.GetRow (row)?.GetCell (column)?.CellType == CellType.Blank) {
+
+                --column;
+
+                if (column < sheet.GetRow (row)?.FirstCellNum) {
+
+                    --row;
+                    column = lastColumn;
+                }
+            }
+
+            return new CellPoint(column + 1, row + 1);
         }
 
         private static Dictionary<int, string> GetHeaders (ISheet sheet, CellPoint startPoint, CellPoint endPoint)

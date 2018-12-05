@@ -17,7 +17,7 @@ namespace WorkSpeed.Import.Tests
         }
 
 
-        internal static string CreateFakeEmptyTestFile (string fileName)
+        internal static string CreateEmptyFile (string fileName)
         {
             using (var stream = new FileStream (fileName.GetFullPath(), FileMode.Create, FileAccess.Write)) {
                 return stream.Name;

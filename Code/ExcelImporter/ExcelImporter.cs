@@ -21,13 +21,14 @@ namespace ExcelImporter
         private const string XLS_FILE = ".xls";
         private const string XLSX_FILE = ".xlsx";
 
-        static readonly Dictionary<string, int> _propertyToCellColumn = new Dictionary<string, int>();
+        private static Dictionary<string, int> _propertyToCellColumn = new Dictionary<string, int>();
 
         #region Properties
 
         public static HashSet<string> FileExtensions { get; } = new HashSet<string> { XLS_FILE, XLSX_FILE };
 
         #endregion
+
 
         #region Methods
 
@@ -70,45 +71,6 @@ namespace ExcelImporter
             }
         }
 
-        /// <summary>
-        /// Returns public writable properties with no HiddenAttribute
-        /// </summary>
-        /// <param name="type"><see cref="Type"/></param>
-        /// <returns><see cref="Array"/></returns>
-        public static HashSet<(string[] headers, string name)> GetPropertyNames (Type type)
-        {
-            return  new HashSet<(string[] headers, string name)> 
-                        (
-                                type.GetProperties()
-                                    .Where (p => p.CanWrite && !p.GetCustomAttributes(typeof(HiddenAttribute)).Any())
-                                    .Select (p => (new [] {""}, p.Name))
-                        );
-        }
-
-        public static IEnumerable<PropertyInfo> GetPropertyInfos (this Type type)
-        {
-            return type.GetProperties()
-                       .Where (p => p.CanWrite && !p.GetCustomAttributes (typeof(HiddenAttribute)).Any());
-        }
-
-        public static HashSet<(string[] headers, string name)> GetPropertyHeaders (Type type)
-        {
-            return  new HashSet<(string[] headers, string propertyName)> 
-                        (
-                                type.GetProperties()
-                                    .Where(p => p.CanWrite && !p.GetCustomAttributes(typeof(HiddenAttribute)).Any())
-                                    .Select(p =>
-                                            {
-                                                var attr = p.GetCustomAttributes (typeof (HeaderAttribute)).Select (a => ((HeaderAttribute)a).Header).ToArray();
-                                                return (attr, p.Name);
-                                            })
-                       );
-        }
-
-        public static bool IsHeaderless (this Type type)
-        {
-            return type.GetCustomAttributes (typeof (HeaderlessAttribute)).Any();
-        }
 
         public static ISheet GetSheet (Stream stream, int sheetIndex, string excelVerion = XLSX_FILE)
         {
@@ -154,174 +116,6 @@ namespace ExcelImporter
             return map;
         }
 
-        /// <summary>
-        /// Returns data area in Excel table.
-        /// </summary>
-        /// <param name="sheet"></param>
-        /// <returns></returns>
-        private static TableRect? GetFirstCell(ISheet sheet)
-        {
-            TableRect tableRect = GetRect(sheet);
-
-            if (tableRect.Equals(new TableRect(-1))) {
-                return null;
-            }
-
-            var j = tableRect.Top;
-            var i = tableRect.Left;
-
-            // If file contains only one cell:
-            if (tableRect.Top == tableRect.Bottom && tableRect.Left == tableRect.Right - 1) {
-
-                if (sheet.GetRow(tableRect.Top).GetCell(tableRect.Left).CellType == CellType.Blank) {
-                    return null;
-                }
-
-                return tableRect;
-            }
-
-            // If file contains only one column:
-            if (tableRect.Left == tableRect.Right - 1) {
-
-                while (sheet.GetRow(j)?.GetCell(i) == null || sheet.GetRow(j).GetCell(i).CellType == CellType.Blank) {
-                    if (j == tableRect.Bottom) {
-                        break;
-                    }
-                    ++j;
-                }
-
-
-                if (j == tableRect.Bottom && sheet.GetRow(j).GetCell(i).CellType == CellType.Blank) {
-                    return null;
-                }
-
-                tableRect.Top = j;
-                return tableRect;
-            }
-
-            // If file contains one or more rows and some columns:
-            do {
-                IRow row = sheet.GetRow(j);
-
-                if (row != null) {
-                    if (tableRect.Left > 0) {
-                        if (tableRect.Left > row.FirstCellNum) {
-                            tableRect.Left = row.FirstCellNum;
-                        }
-                    }
-
-                    if (tableRect.Right < row.LastCellNum) {
-                        tableRect.Right = row.LastCellNum;
-                    }
-                }
-
-                ++j;
-            } while (j <= tableRect.Bottom);
-
-            return tableRect;
-
-
-            #region Functions
-
-
-            #endregion
-        }
-
-        private static TableRect GetRect(ISheet sheet)
-        {
-            TableRect rect;
-
-            rect.Top = sheet.FirstRowNum;
-            rect.Bottom = sheet.LastRowNum;
-
-            if (rect.Bottom < rect.Top) throw new ArgumentException();
-
-            rect.Left = sheet.GetRow(rect.Top)?.FirstCellNum ?? -1;
-            if (rect.Left == -1) {
-                return new TableRect(-1);
-            }
-
-            rect.Right = sheet.GetRow(rect.Bottom).LastCellNum;
-
-            return rect;
-        }
-
-        private static ICollection TryFillCollection(ISheet sheet, TableRect rect, Type type)
-        {
-            if (type.GetProperties().Count(p => p.CanWrite && (!p.GetCustomAttributes(typeof(HiddenAttribute), true).Any())) != rect.Right - rect.Left) {
-                return GetEmptyCollection(type);
-            }
-
-            if (!type.GetCustomAttributes(false).Any()
-                || (type.GetCustomAttributes(false)[0] is HeaderlessAttribute attr && !attr.IsHeadless)) {
-
-                if (!CheckHeaders(sheet, rect, type)) {
-                    return GetEmptyCollection(type);
-                }
-
-                ++rect.Top;
-            }
-
-            return FillModelCollection(sheet, rect, type);
-        }
-
-        private static bool CheckHeaders(ISheet sheet, TableRect rect, Type type)
-        {
-            var headers = GetCellHeaders(sheet, rect);
-            if (null == headers) return false;
-
-            return FillPropertyToCellIndexDictionary(type, headers);
-
-
-            #region Local Function
-
-            List<string> GetCellHeaders(ISheet sheet_, TableRect rect_)
-            {
-                var resSet = new List<string>();
-
-                for (var i = rect.Left; i < rect.Right; ++i) {
-
-                    var cellHeader = sheet_.GetRow(rect_.Top).GetCell(i).StringCellValue;
-
-                    if (String.IsNullOrWhiteSpace(cellHeader)) return null;
-                    if (cellHeader.Contains(" ")) cellHeader = cellHeader.RemoveWhitespaces();
-
-                    resSet.Add(cellHeader.ToUpperInvariant());
-                }
-
-                return resSet;
-            }
-
-            bool FillPropertyToCellIndexDictionary(Type type_, List<string> cellHeaders)
-            {
-                var properties = type_.GetProperties().Where(p => p.CanWrite && (!p.GetCustomAttributes(typeof(HiddenAttribute), true).Any())).ToArray();
-                if (!properties.Any()) return false;
-
-                foreach (var propertyInfo in properties) {
-
-                    var propertyAttr = propertyInfo.GetCustomAttributes(false)
-                                                    .FirstOrDefault(a => a is HeaderAttribute) as HeaderAttribute;
-
-                    if (null == propertyAttr) {
-                        _propertyToCellColumn[propertyInfo.Name] = cellHeaders.IndexOf(propertyInfo.Name.ToUpperInvariant());
-                    }
-                    else {
-                        _propertyToCellColumn[propertyInfo.Name] = cellHeaders.IndexOf(propertyAttr.Header.ToUpperInvariant());
-                    }
-
-                    if (-1 == _propertyToCellColumn[propertyInfo.Name]) {
-                        return false;
-                    }
-
-                    _propertyToCellColumn[propertyInfo.Name] += rect.Left;
-                }
-
-                return true;
-            }
-
-            #endregion
-        }
-
         private static ICollection FillModelCollection(SheetTable sheetTable, Type type)
         {
             ArrayList typeInstanceCollection = new ArrayList(sheetTable.Lenght);
@@ -349,6 +143,48 @@ namespace ExcelImporter
 
             return typeInstanceCollection;
         }
+
+
+        public static bool IsHeaderless (this Type type)
+        {
+            return type.GetCustomAttributes (typeof (HeaderlessAttribute)).Any();
+        }
+
+        /// <summary>
+        /// Returns public writable properties with no HiddenAttribute
+        /// </summary>
+        /// <param name="type"><see cref="Type"/></param>
+        /// <returns><see cref="Array"/></returns>
+        public static HashSet<(string[] headers, string name)> GetPropertyNames (Type type)
+        {
+            return  new HashSet<(string[] headers, string name)> 
+                        (
+                                type.GetProperties()
+                                    .Where (p => p.CanWrite && !p.GetCustomAttributes(typeof(HiddenAttribute)).Any())
+                                    .Select (p => (new [] {""}, p.Name))
+                        );
+        }
+
+        public static IEnumerable<PropertyInfo> GetPropertyInfos (this Type type)
+        {
+            return type.GetProperties()
+                       .Where (p => p.CanWrite && !p.GetCustomAttributes (typeof(HiddenAttribute)).Any());
+        }
+
+        public static HashSet<(string[] headers, string name)> GetPropertyHeaders (Type type)
+        {
+            return  new HashSet<(string[] headers, string propertyName)> 
+                        (
+                                type.GetProperties()
+                                    .Where(p => p.CanWrite && !p.GetCustomAttributes(typeof(HiddenAttribute)).Any())
+                                    .Select(p =>
+                                            {
+                                                var attr = p.GetCustomAttributes (typeof (HeaderAttribute)).Select (a => ((HeaderAttribute)a).Header).ToArray();
+                                                return (attr, p.Name);
+                                            })
+                       );
+        }
+
 
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         private static bool SetPropertyValue(PropertyInfo propertyInfo, ICell cell, object obj)
@@ -553,6 +389,7 @@ namespace ExcelImporter
 
             return dateTimeValue;
         }
+
 
         private static ICollection GetEmptyCollection(Type type)
 
