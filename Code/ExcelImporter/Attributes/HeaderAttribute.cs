@@ -8,9 +8,12 @@ namespace ExcelImporter.Attributes
     {
         public HeaderAttribute (string header)
         {
-            Header = header.RemoveWhitespaces();
+            Header = header.RemoveWhitespaces().ToUpperInvariant();
         }
 
+        /// <summary>
+        /// Normalized header namely without whitespases and in upper case.
+        /// </summary>
         public string Header { get; set; }
     }
 }

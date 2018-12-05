@@ -8,13 +8,13 @@ namespace ExcelImporter
 {
     public struct CellPoint
     {
-        public readonly int X;
-        public readonly int Y;
+        public readonly int Column;
+        public readonly int Row;
 
-        public CellPoint (int x, int y)
+        public CellPoint (int column, int row)
         {
-            X = x;
-            Y = y;
+            Column = column;
+            Row = row;
         }
 
         public static CellPoint NegativePoint => new CellPoint (-1, -1);
@@ -22,17 +22,17 @@ namespace ExcelImporter
 
         public override int GetHashCode()
         {
-            return X + Y * 101;
+            return Column + Row * 101;
         }
 
         public static bool operator < (CellPoint pointA, CellPoint pointB)
         {
-            if (pointA.Y < pointB.Y) {
+            if (pointA.Row < pointB.Row) {
                 return true;
             }
 
-            if (pointA.Y == pointB.Y) {
-                if (pointA.X < pointB.X) {
+            if (pointA.Row == pointB.Row) {
+                if (pointA.Column < pointB.Column) {
                     return true;
                 }
             }
@@ -47,7 +47,7 @@ namespace ExcelImporter
 
         public static bool operator == (CellPoint pointA, CellPoint pointB)
         {
-            return (pointA.Y == pointB.Y) && (pointA.X == pointB.X);
+            return (pointA.Row == pointB.Row) && (pointA.Column == pointB.Column);
         }
 
         public static bool operator != (CellPoint pointA, CellPoint pointB)

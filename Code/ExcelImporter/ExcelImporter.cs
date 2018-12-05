@@ -42,19 +42,15 @@ namespace ExcelImporter
 
             using (Stream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
 
-                // Load sheet:
-                ISheet sheet = null;
+                // Load sheetTable:
+                ISheet sheet;
 
                 try {
                     sheet = GetSheet (stream, sheetIndex, fileExtension);
                 }
                 catch {
-                    throw new FileFormatException($"{fileName} has invalid file format or has no sheet with {sheetIndex} index!");
+                    throw new FileFormatException($"{fileName} has invalid file format or has no sheetTable with {sheetIndex} index!");
                 }
-
-                // Load properties:
-                var properties = GetPropertyNames (type);
-                if (!properties.Any()) throw new TypeAccessException($"{type} has not public parameterized constructor!");
 
                 // Load SheetTable:
                 SheetTable sheetTable;
@@ -67,10 +63,10 @@ namespace ExcelImporter
                 }
 
                 // Load headers map:
-                var headersMap = GetHeaderMap (properties, sheetTable);
+                var headersMap = GetHeaderMap (type, sheetTable);
                 if (!headersMap.Keys.Any()) return GetEmptyCollection (type);
 
-                return TryFillCollection(sheet, (TableRect)tableRect, type) ?? GetEmptyCollection(type);
+                return FillModelCollection(sheetTable, type);
             }
         }
 
@@ -79,24 +75,34 @@ namespace ExcelImporter
         /// </summary>
         /// <param name="type"><see cref="Type"/></param>
         /// <returns><see cref="Array"/></returns>
-        public static (string[] headers, string propertyName)[] GetPropertyNames (Type type)
+        public static HashSet<(string[] headers, string name)> GetPropertyNames (Type type)
         {
-            return  type.GetProperties()
-                        .Where (p => p.CanWrite && !p.GetCustomAttributes(typeof(HiddenAttribute)).Any())
-                        .Select (p => (new [] {""}, p.Name))
-                        .ToArray();
+            return  new HashSet<(string[] headers, string name)> 
+                        (
+                                type.GetProperties()
+                                    .Where (p => p.CanWrite && !p.GetCustomAttributes(typeof(HiddenAttribute)).Any())
+                                    .Select (p => (new [] {""}, p.Name))
+                        );
         }
 
-        public static (string[] headers, string propertyName)[] GetPropertyHeaders (Type type)
+        public static IEnumerable<PropertyInfo> GetPropertyInfos (this Type type)
         {
             return type.GetProperties()
-                       .Where(p => p.CanWrite && !p.GetCustomAttributes(typeof(HiddenAttribute)).Any())
-                       .Select(p =>
-                               {
-                                   var attr = p.GetCustomAttributes (typeof (HeaderAttribute)).Select (a => ((HeaderAttribute)a).Header).ToArray();
-                                   return (attr, p.Name);
-                               })
-                       .ToArray();
+                       .Where (p => p.CanWrite && !p.GetCustomAttributes (typeof(HiddenAttribute)).Any());
+        }
+
+        public static HashSet<(string[] headers, string name)> GetPropertyHeaders (Type type)
+        {
+            return  new HashSet<(string[] headers, string propertyName)> 
+                        (
+                                type.GetProperties()
+                                    .Where(p => p.CanWrite && !p.GetCustomAttributes(typeof(HiddenAttribute)).Any())
+                                    .Select(p =>
+                                            {
+                                                var attr = p.GetCustomAttributes (typeof (HeaderAttribute)).Select (a => ((HeaderAttribute)a).Header).ToArray();
+                                                return (attr, p.Name);
+                                            })
+                       );
         }
 
         public static bool IsHeaderless (this Type type)
@@ -118,49 +124,34 @@ namespace ExcelImporter
             return book.GetSheetAt(sheetIndex);
         }
 
-        public static Dictionary<string, int> GetHeaderMap (Type type, SheetTable sheet)
+        public static Dictionary<string, int> GetHeaderMap (Type type, SheetTable sheetTable)
         {
             var map = new Dictionary<string, int>();
+            var propertyTuples = type.IsHeaderless() ? GetPropertyNames (type) : GetPropertyHeaders (type);
 
-            (string[] headers, string propertyName)[] propertyHeaders;
-            Func<(string[],string), List<string>, Dictionary<string, int>, int> columnIndex;
+            if (!propertyTuples.Any()) return map;
 
-            if (type.IsHeaderless()) {
+            for (var i = sheetTable.StartCell.Column; i < sheetTable.EndCell.Column; ++i) {
 
-                propertyHeaders = GetPropertyNames (type);
-                columnIndex = FindIndexByPropertyName;
-            }
-            else {
-                propertyHeaders = GetPropertyHeaders (type);
-                columnIndex = FindIndexByPropertyHeader;
-            }
+                foreach (var tuple in propertyTuples) {
 
-            if (!propertyHeaders.Any()) return map;
+                    if (tuple.headers.Contains (sheetTable[i])) {
 
-            foreach (var property in propertyHeaders) {
+                        map[tuple.name] = i;
+                        propertyTuples.Remove (tuple);
 
-                if (-1 == columnIndex(property, sheet.NormalizedHeaders, map)) {
-
-                    map.Clear();
-                    return map;
+                        break;
+                    }
                 }
+
+                if (!propertyTuples.Any()) return map;
+            }
+
+            if (propertyTuples.Any()) {
+                map.Clear();
             }
 
             return map;
-        }
-
-        private static int FindIndexByPropertyName ( (string[] headers, string name) property, 
-                                                                        List<string> sheetHeaders,
-                                                             Dictionary<string, int> map            )
-        {
-            return map[property.name] = sheetHeaders.IndexOf(property.name.ToUpperInvariant());
-        }
-
-        private static int FindIndexByPropertyHeader ( (string[] headers, string name) property,
-                                                                          List<string> sheetHeaders,
-                                                               Dictionary<string, int> map )
-        {
-            return sheetHeaders.IndexOf(property.name.ToUpperInvariant());
         }
 
         /// <summary>
@@ -331,20 +322,20 @@ namespace ExcelImporter
             #endregion
         }
 
-        private static ICollection FillModelCollection(ISheet sheet, TableRect rect, Type type)
+        private static ICollection FillModelCollection(SheetTable sheetTable, Type type)
         {
-            ArrayList typeInstanceCollection = new ArrayList(rect.Bottom - rect.Top + 1);
+            ArrayList typeInstanceCollection = new ArrayList(sheetTable.Lenght);
 
-            for (var j = rect.Top; j <= rect.Bottom; ++j) {
+            for (var j = sheetTable.StartCell.Row; j < sheetTable.Lenght; ++j) {
 
-                var row = sheet.GetRow(j);
+                var row = sheetTable.Sheet.GetRow(j);
                 if (null == row) continue;
 
                 object typeInstance = Activator.CreateInstance(type);
 
-                var i = rect.Left;
+                var i = sheetTable.StartCell.Column;
 
-                foreach (var propertyInfo in type.GetProperties().Where(p => p.CanWrite && (!p.GetCustomAttributes(typeof(HiddenAttribute), true).Any()))) {
+                foreach (var propertyInfo in type.GetPropertyInfos()) {
 
                     ICell cell = row.GetCell(_propertyToCellColumn.Count == 0 ? i : _propertyToCellColumn[propertyInfo.Name]);
 
@@ -548,10 +539,13 @@ namespace ExcelImporter
 
             try {
                 if (CellType.Numeric == cell.CellType) {
+
                     dateTimeValue = new DateTime(Convert.ToInt64(cell.NumericCellValue));
                 }
                 else if (CellType.String == cell.CellType) {
-                    dateTimeValue = DateTime.Parse(cell.StringCellValue.RemoveWhitespaces().Replace (',', '.'));
+
+                    int days = Int32.Parse (cell.StringCellValue);
+                    dateTimeValue = new DateTime(1900, 1, 1).AddDays (days - 2);
                 }
             }
             catch {

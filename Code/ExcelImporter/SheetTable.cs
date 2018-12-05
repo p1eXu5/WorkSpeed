@@ -8,27 +8,50 @@ namespace ExcelImporter
 {
     public struct SheetTable
     {
-        private readonly Dictionary<int, string> _normalizedHeaders;
-        private readonly Dictionary<int, string> _headers;
-
+        #region Fileds
         public readonly ISheet Sheet;
         public readonly CellPoint StartCell;
         public readonly CellPoint EndCell;
+        public readonly int Lenght;
 
+        private readonly Dictionary<int, string> _normalizedHeaders;
+        private readonly Dictionary<int, string> _headers;
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Creates instance of SheetTable.
+        /// </summary>
+        /// <param name="sheet"></param>
         public SheetTable(ISheet sheet)
         {
             Sheet = sheet ?? throw new ArgumentNullException(nameof(sheet), "Sheet can't be null!");
 
             if ((StartCell = FindStartCell (Sheet)) < CellPoint.ZeroPoint) throw new ArgumentException("Sheet have not data", nameof(sheet));
             EndCell = FindEndCell (Sheet);
+            Lenght = EndCell.Row - StartCell.Row;
 
             _headers = GetHeaders (sheet, StartCell, EndCell);
             _normalizedHeaders = GetNormalizedHeaders (_headers, StartCell, EndCell);
         }
 
+        #endregion
+
+        #region Properties
+
         public IEnumerable<string> Headers => _headers.Values;
         public IEnumerable<string> NormalizedHeaders => _normalizedHeaders.Values;
 
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Returns normalized header by index.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public string this [int index]
         {
             get {
@@ -82,16 +105,16 @@ namespace ExcelImporter
                 }
             }
 
-            return new CellPoint(x + 1, y);
+            return new CellPoint(x + 1, y + 1);
         }
 
         private static Dictionary<int, string> GetHeaders (ISheet sheet, CellPoint startPoint, CellPoint endPoint)
         {
-            var headers = new Dictionary<int, string> (endPoint.X - startPoint.X);
+            var headers = new Dictionary<int, string> (endPoint.Column - startPoint.Column);
 
-            for (int i = startPoint.X; i < endPoint.X; ++i) {
+            for (int i = startPoint.Column; i < endPoint.Column; ++i) {
 
-                headers[i] = sheet.GetRow (startPoint.Y).GetCell (i)?.StringCellValue ?? "";
+                headers[i] = sheet.GetRow (startPoint.Row).GetCell (i)?.StringCellValue ?? "";
             }
 
             return headers;
@@ -99,15 +122,15 @@ namespace ExcelImporter
 
         private static Dictionary<int, string> GetNormalizedHeaders(Dictionary<int, string> headers, CellPoint startPoint, CellPoint endPoint)
         {
-            var normalizedHeaders = new Dictionary<int, string>(endPoint.X - startPoint.X);
+            var normalizedHeaders = new Dictionary<int, string>(endPoint.Column - startPoint.Column);
 
-            for (int i = startPoint.X; i < endPoint.X; ++i) {
+            for (int i = startPoint.Column; i < endPoint.Column; ++i) {
 
                 headers[i] = headers[i].RemoveWhitespaces().ToUpperInvariant();
             }
 
             return normalizedHeaders;
         }
-
+        #endregion
     }
 }

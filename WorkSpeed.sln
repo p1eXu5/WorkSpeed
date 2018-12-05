@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelImporter", "Code\Excel
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Code\Helpers\Helpers.csproj", "{12FAA7BD-A5D4-48E3-80C4-6D7A72BE99B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelImporterTests", "Tests\ExcelImporterTests\ExcelImporterTests.csproj", "{0943E858-2173-4084-AFC8-C0524D8CB825}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{12FAA7BD-A5D4-48E3-80C4-6D7A72BE99B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12FAA7BD-A5D4-48E3-80C4-6D7A72BE99B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12FAA7BD-A5D4-48E3-80C4-6D7A72BE99B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0943E858-2173-4084-AFC8-C0524D8CB825}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0943E858-2173-4084-AFC8-C0524D8CB825}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0943E858-2173-4084-AFC8-C0524D8CB825}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0943E858-2173-4084-AFC8-C0524D8CB825}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,6 +124,7 @@ Global
 		{035D995A-6F8A-47C1-AEBD-41B2CC5D6D7D} = {F1D4BFA4-0774-466A-B80A-3CF5497D6AED}
 		{47680BF8-C76A-44B9-BDE3-694F1A73CCB1} = {F1D4BFA4-0774-466A-B80A-3CF5497D6AED}
 		{12FAA7BD-A5D4-48E3-80C4-6D7A72BE99B0} = {F1D4BFA4-0774-466A-B80A-3CF5497D6AED}
+		{0943E858-2173-4084-AFC8-C0524D8CB825} = {1ECA741B-6388-4A77-8B30-D1E113F4F26F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {74CCEA37-7ECF-4A64-9DA7-75E503ED2A97}
