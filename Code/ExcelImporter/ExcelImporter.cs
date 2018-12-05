@@ -33,45 +33,135 @@ namespace ExcelImporter
 
         public static ICollection ImportDataFromExcel(string fileName, Type type, int sheetIndex)
         {
-            if (_propertyToCellColumn.Any()) _propertyToCellColumn.Clear();
+            var fileExtension = Path.GetExtension(fileName);
+            if (!FileExtensions.Contains(fileExtension)) throw new FileFormatException($"{fileName} has wrong file extansion!");
 
             if (type.GetConstructors().Count(c => c.IsPublic && c.GetParameters().Length == 0) == 0) {
-                return GetEmptyCollection(type);
+                throw new TypeAccessException($"{type} has not public parameterized constructor!");
             }
-
-            var fileExtension = Path.GetExtension(fileName);
-            if (!FileExtensions.Contains(fileExtension)) return GetEmptyCollection(type);
 
             using (Stream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
 
+                // Load sheet:
+                ISheet sheet = null;
+
                 try {
-
-                    IWorkbook book;
-
-                    if (XLS_FILE == fileExtension) {
-                        book = new HSSFWorkbook(stream);
-                    }
-                    else {
-                        book = new XSSFWorkbook(stream);
-                    }
-
-                    ISheet sheet = book.GetSheetAt(sheetIndex);
-
-                    var tableRect = GetFirstCell(sheet);
-
-                    if (null == tableRect) {
-                        return GetEmptyCollection(type);
-                    }
-
-                    return TryFillCollection(sheet, (TableRect)tableRect, type) ?? GetEmptyCollection(type);
+                    sheet = GetSheet (stream, sheetIndex, fileExtension);
                 }
-                catch (ZipException) {
-
-                    return GetEmptyCollection(type);
+                catch {
+                    throw new FileFormatException($"{fileName} has invalid file format or has no sheet with {sheetIndex} index!");
                 }
+
+                // Load properties:
+                var properties = GetPropertyNames (type);
+                if (!properties.Any()) throw new TypeAccessException($"{type} has not public parameterized constructor!");
+
+                // Load SheetTable:
+                SheetTable sheetTable;
+
+                try {
+                    sheetTable = new SheetTable (sheet);
+                }
+                catch (ArgumentException) {
+                    return GetEmptyCollection (type);
+                }
+
+                // Load headers map:
+                var headersMap = GetHeaderMap (properties, sheetTable);
+                if (!headersMap.Keys.Any()) return GetEmptyCollection (type);
+
+                return TryFillCollection(sheet, (TableRect)tableRect, type) ?? GetEmptyCollection(type);
             }
         }
 
+        /// <summary>
+        /// Returns public writable properties with no HiddenAttribute
+        /// </summary>
+        /// <param name="type"><see cref="Type"/></param>
+        /// <returns><see cref="Array"/></returns>
+        public static (string[] headers, string propertyName)[] GetPropertyNames (Type type)
+        {
+            return  type.GetProperties()
+                        .Where (p => p.CanWrite && !p.GetCustomAttributes(typeof(HiddenAttribute)).Any())
+                        .Select (p => (new [] {""}, p.Name))
+                        .ToArray();
+        }
+
+        public static (string[] headers, string propertyName)[] GetPropertyHeaders (Type type)
+        {
+            return type.GetProperties()
+                       .Where(p => p.CanWrite && !p.GetCustomAttributes(typeof(HiddenAttribute)).Any())
+                       .Select(p =>
+                               {
+                                   var attr = p.GetCustomAttributes (typeof (HeaderAttribute)).Select (a => ((HeaderAttribute)a).Header).ToArray();
+                                   return (attr, p.Name);
+                               })
+                       .ToArray();
+        }
+
+        public static bool IsHeaderless (this Type type)
+        {
+            return type.GetCustomAttributes (typeof (HeaderlessAttribute)).Any();
+        }
+
+        public static ISheet GetSheet (Stream stream, int sheetIndex, string excelVerion = XLSX_FILE)
+        {
+            IWorkbook book;
+
+            if (XLS_FILE == excelVerion) {
+                book = new HSSFWorkbook(stream);
+            }
+            else {
+                book = new XSSFWorkbook(stream);
+            }
+
+            return book.GetSheetAt(sheetIndex);
+        }
+
+        public static Dictionary<string, int> GetHeaderMap (Type type, SheetTable sheet)
+        {
+            var map = new Dictionary<string, int>();
+
+            (string[] headers, string propertyName)[] propertyHeaders;
+            Func<(string[],string), List<string>, Dictionary<string, int>, int> columnIndex;
+
+            if (type.IsHeaderless()) {
+
+                propertyHeaders = GetPropertyNames (type);
+                columnIndex = FindIndexByPropertyName;
+            }
+            else {
+                propertyHeaders = GetPropertyHeaders (type);
+                columnIndex = FindIndexByPropertyHeader;
+            }
+
+            if (!propertyHeaders.Any()) return map;
+
+            foreach (var property in propertyHeaders) {
+
+                if (-1 == columnIndex(property, sheet.NormalizedHeaders, map)) {
+
+                    map.Clear();
+                    return map;
+                }
+            }
+
+            return map;
+        }
+
+        private static int FindIndexByPropertyName ( (string[] headers, string name) property, 
+                                                                        List<string> sheetHeaders,
+                                                             Dictionary<string, int> map            )
+        {
+            return map[property.name] = sheetHeaders.IndexOf(property.name.ToUpperInvariant());
+        }
+
+        private static int FindIndexByPropertyHeader ( (string[] headers, string name) property,
+                                                                          List<string> sheetHeaders,
+                                                               Dictionary<string, int> map )
+        {
+            return sheetHeaders.IndexOf(property.name.ToUpperInvariant());
+        }
 
         /// <summary>
         /// Returns data area in Excel table.
@@ -172,7 +262,7 @@ namespace ExcelImporter
             }
 
             if (!type.GetCustomAttributes(false).Any()
-                || (type.GetCustomAttributes(false)[0] is HeadlessAttribute attr && !attr.IsHeadless)) {
+                || (type.GetCustomAttributes(false)[0] is HeaderlessAttribute attr && !attr.IsHeadless)) {
 
                 if (!CheckHeaders(sheet, rect, type)) {
                     return GetEmptyCollection(type);

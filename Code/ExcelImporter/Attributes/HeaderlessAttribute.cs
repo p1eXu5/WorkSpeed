@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ExcelImporter.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-    public sealed class HeadlessAttribute : Attribute
+    public sealed class HeaderlessAttribute : Attribute
     {
         public bool IsHeadless { get; set; } = true;
     }
