@@ -8,10 +8,10 @@ namespace ExcelImporter
 {
     public struct CellPoint
     {
-        public readonly int Column;
+        public readonly short Column;
         public readonly int Row;
 
-        public CellPoint (int column, int row)
+        public CellPoint (short column, int row)
         {
             Column = column;
             Row = row;
@@ -64,6 +64,13 @@ namespace ExcelImporter
         public bool Equals (CellPoint pointB)
         {
             return this == pointB;
+        }
+
+        public override string ToString()
+        {
+            return new StringBuilder().Append("Column: ").Append(Column).Append("; ")
+                                      .Append("Row: ").Append(Row).Append(".")
+                                      .ToString(); ;
         }
     }
 }

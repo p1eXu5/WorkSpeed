@@ -30,8 +30,18 @@ namespace ExcelImporter
         {
             Sheet = sheet ?? throw new ArgumentNullException(nameof(sheet), "Sheet can't be null!");
 
-            if ((StartCell = FindStartCell (Sheet)) < CellPoint.ZeroPoint) throw new ArgumentException("Sheet has no data", nameof(sheet));
-            EndCell = FindEndCell (Sheet);
+            (short minColumn, short maxColumn) boundColumns;
+
+            try {
+                boundColumns = GetBoundColumns (Sheet);
+            }
+            catch (NullReferenceException) {
+                throw new ArgumentException("Sheet has no data", nameof(sheet));
+            }
+
+            if ((StartCell = FindStartCell (Sheet, boundColumns.minColumn)) < CellPoint.ZeroPoint) throw new ArgumentException("Sheet has no data", nameof(sheet));
+            EndCell = FindEndCell (Sheet, boundColumns.maxColumn);
+
             Lenght = EndCell.Row - StartCell.Row;
 
             _headers = GetHeaders (sheet, StartCell, EndCell);
@@ -52,25 +62,48 @@ namespace ExcelImporter
         #region Methods
 
         /// <summary>
-        /// Returns normalized header by index.
+        /// Returns normalized header by column.
         /// </summary>
-        /// <param name="index"></param>
+        /// <param name="column"></param>
         /// <returns></returns>
-        public string this [int index]
+        public string this [int column]
         {
             get {
-                if (!_normalizedHeaders.ContainsKey (index)) throw new IndexOutOfRangeException();
-                return _normalizedHeaders[index];
+                if (!_normalizedHeaders.ContainsKey (column)) throw new IndexOutOfRangeException("Column was outside the bounds of sheet table!");
+                return _normalizedHeaders[column];
             }
         }
 
-        private static CellPoint FindStartCell (ISheet sheet)
+
+        private static (short minColumn, short maxColumn) GetBoundColumns(ISheet sheet)
+        {
+            var minColumn = sheet.GetRow (sheet.FirstRowNum).FirstCellNum;
+            var maxColumn = sheet.GetRow (sheet.LastRowNum).LastCellNum;
+
+            for (int i = sheet.FirstRowNum; i <= sheet.LastRowNum; i++) {
+
+                var row = sheet.GetRow (i);
+                if (null == row) continue;
+
+                if (maxColumn < row.LastCellNum) {
+                    maxColumn = row.LastCellNum;
+                }
+
+                if (minColumn > row.FirstCellNum) {
+                    minColumn = row.FirstCellNum;
+                }
+            }
+
+            return (minColumn, maxColumn);
+        }
+
+        private static CellPoint FindStartCell (ISheet sheet, short minColumn)
         {
             int row = sheet.FirstRowNum;
-            int column = sheet.GetRow (row)?.FirstCellNum ?? -1;
-            if (-1 == column) return CellPoint.NegativePoint;
+            short column = minColumn;
 
-            while (sheet.GetRow (row)?.GetCell (column)?.CellType == CellType.Blank) {
+            while (sheet.GetRow(row)?.GetCell(column) == null
+                   || sheet.GetRow (row).GetCell (column).CellType == CellType.Blank) {
 
                 ++row;
 
@@ -93,7 +126,8 @@ namespace ExcelImporter
             var startColumn = column;
             row = sheet.FirstRowNum;
 
-            while (sheet.GetRow (row)?.GetCell (column)?.CellType == CellType.Blank) {
+            while (sheet.GetRow(row)?.GetCell(column) == null
+                   || sheet.GetRow(row).GetCell(column).CellType == CellType.Blank) {
 
                 ++column;
 
@@ -104,15 +138,16 @@ namespace ExcelImporter
                 }
             }
 
-            return new CellPoint(column, row);
+            return new CellPoint(startColumn, row);
         }
 
-        private static CellPoint FindEndCell(ISheet sheet)
+        private static CellPoint FindEndCell(ISheet sheet, short maxColumn)
         {
             int row = sheet.LastRowNum;
-            int column = sheet.GetRow(row).LastCellNum - 1;
+            short column = maxColumn;
 
-            while (sheet.GetRow(row)?.GetCell(column)?.CellType == CellType.Blank) {
+            while (sheet.GetRow(row)?.GetCell(column) == null
+                   || sheet.GetRow(row).GetCell(column).CellType == CellType.Blank) {
 
                 --row;
 
@@ -129,13 +164,14 @@ namespace ExcelImporter
             }
             
             if (row == sheet.LastRowNum) {
-                return new CellPoint(column + 1, row + 1);
+                return new CellPoint((short)(column + 1), row + 1);
             }
 
             var lastColumn = column;
             row = sheet.LastRowNum;
 
-            while (sheet.GetRow (row)?.GetCell (column)?.CellType == CellType.Blank) {
+            while (sheet.GetRow(row)?.GetCell(column) == null
+                   || sheet.GetRow(row).GetCell(column).CellType == CellType.Blank) {
 
                 --column;
 
@@ -146,7 +182,7 @@ namespace ExcelImporter
                 }
             }
 
-            return new CellPoint(column + 1, row + 1);
+            return new CellPoint((short)(lastColumn + 1), row + 1);
         }
 
         private static Dictionary<int, string> GetHeaders (ISheet sheet, CellPoint startPoint, CellPoint endPoint)
@@ -161,13 +197,13 @@ namespace ExcelImporter
             return headers;
         }
 
-        private static Dictionary<int, string> GetNormalizedHeaders(Dictionary<int, string> headers, CellPoint startPoint, CellPoint endPoint)
+        private static Dictionary<int, string> GetNormalizedHeaders(Dictionary<int, string> headers, CellPoint startCell, CellPoint endCell)
         {
-            var normalizedHeaders = new Dictionary<int, string>(endPoint.Column - startPoint.Column);
+            var normalizedHeaders = new Dictionary<int, string>(endCell.Column - startCell.Column);
 
-            for (int i = startPoint.Column; i < endPoint.Column; ++i) {
+            for (int i = startCell.Column; i < endCell.Column; ++i) {
 
-                headers[i] = headers[i].RemoveWhitespaces().ToUpperInvariant();
+                normalizedHeaders[i] = headers[i].RemoveWhitespaces().ToUpperInvariant();
             }
 
             return normalizedHeaders;
