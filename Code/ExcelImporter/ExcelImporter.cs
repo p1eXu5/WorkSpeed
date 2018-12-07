@@ -16,7 +16,6 @@ using static Helpers.EasyTypeBuilder;
 
 namespace ExcelImporter
 {
-    [SuppressMessage("ReSharper", "EmptyGeneralCatchClause")]
     public static class ExcelImporter
     {
         public static ICollection ImportData(string fileName, Type type, int sheetIndex)
@@ -55,7 +54,7 @@ namespace ExcelImporter
                 var headersMap = GetHeaderMap (type, sheetTable);
                 if (!headersMap.Keys.Any()) return GetEmptyCollection (type);
 
-                return FillModelCollection(sheetTable, type);
+                return FillModelCollection(sheetTable, type, headersMap);
             }
         }
 
@@ -104,11 +103,11 @@ namespace ExcelImporter
             return map;
         }
 
-        private static ICollection FillModelCollection(SheetTable sheetTable, Type type)
+        private static ICollection FillModelCollection(SheetTable sheetTable, Type type, Dictionary<string, int> headersMap)
         {
             ArrayList typeInstanceCollection = new ArrayList(sheetTable.Lenght);
 
-            for (var j = sheetTable.StartCell.Row; j < sheetTable.Lenght; ++j) {
+            for (var j = sheetTable.StartCell.Row; j < sheetTable.EndCell.Row; ++j) {
 
                 var row = sheetTable.Sheet.GetRow(j);
                 if (null == row) continue;
@@ -119,7 +118,7 @@ namespace ExcelImporter
 
                 foreach (var propertyInfo in type.GetPropertyInfos()) {
 
-                    ICell cell = row.GetCell(_propertyToCellColumn.Count == 0 ? i : _propertyToCellColumn[propertyInfo.Name]);
+                    ICell cell = row.GetCell(headersMap[propertyInfo.Name]);
 
                     if (!SetPropertyValue(propertyInfo, cell, typeInstance)) return GetEmptyCollection(type);
 

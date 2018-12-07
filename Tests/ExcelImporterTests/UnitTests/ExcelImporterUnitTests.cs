@@ -24,21 +24,27 @@ namespace ExcelImporter.Tests.UnitTests
         [Test]
         public void ImportData_FileNameIsNull_Throws()
         {
-            var ex = Assert.Catch<ArgumentException> (() => ExcelImporter.ImportData(null, TypeFactory.Instance[Types.Default], 0));
+            var type = TypeExcelFactory.EmptyClass;
+            var ex = Assert.Catch<ArgumentException> (() => ExcelImporter.ImportData(null, type, 0));
+
             StringAssert.Contains ("fileName can't be null or empty.", ex.Message);
         }
 
         [Test]
         public void ImportData_FileNameIsEmptyString_Throws()
         {
-            var ex = Assert.Catch<ArgumentException>(() => ExcelImporter.ImportData(String.Empty, TypeFactory.Instance[Types.Default], 0));
+            var type = TypeExcelFactory.EmptyClass;
+            var ex = Assert.Catch<ArgumentException>(() => ExcelImporter.ImportData(String.Empty, type, 0));
+
             StringAssert.Contains("fileName can't be null or empty.", ex.Message);
         }
 
         [Test]
         public void ImportData_FileNameIsWhitespaces_Throws()
         {
-            var ex = Assert.Catch<ArgumentException>(() => ExcelImporter.ImportData("  ", TypeFactory.Instance[Types.Default], 0));
+            var type = TypeExcelFactory.EmptyClass;
+            var ex = Assert.Catch<ArgumentException>(() => ExcelImporter.ImportData("  ", type, 0));
+
             StringAssert.Contains("fileName can't be null or empty.", ex.Message);
         }
 
@@ -46,16 +52,15 @@ namespace ExcelImporter.Tests.UnitTests
         public void ImportData_TypeIsNull_Throws()
         {
             var ex = Assert.Catch<ArgumentNullException>(() => ExcelImporter.ImportData("some.xlsx", null, 0));
+
             StringAssert.Contains("type can't be null.", ex.Message);
         }
 
         [Test]
         public void ImportData_TypeWithoutPublicParameterlessCtor_Throws()
         {
-            var ex = Assert.Catch<TypeAccessException>
-                        (
-                            () => ExcelImporter.ImportData ("some.xlsx", TypeFactory.Instance[Types.WithoutParameterlessCtor], 0)
-                        );
+            var type = TypeExcelFactory.ClassWithParameterizedCtor;
+            var ex = Assert.Catch<TypeAccessException> (() => ExcelImporter.ImportData ("some.xlsx", type, 0));
 
             StringAssert.Contains("has no public parameterless constructor!", ex.Message);
         }
@@ -63,21 +68,27 @@ namespace ExcelImporter.Tests.UnitTests
         [Test]
         public void ImportData_SheetIndexIsNegative_Throws()
         {
-            var ex = Assert.Catch<ArgumentException>(() => ExcelImporter.ImportData("some.xlsx", TypeFactory.Instance[Types.Default], -1));
+            var type = TypeExcelFactory.EmptyClass;
+            var ex = Assert.Catch<ArgumentException>(() => ExcelImporter.ImportData("some.xlsx", type, -1));
+
             StringAssert.Contains("sheetIndex must be equal or greater than zero.", ex.Message);
         }
 
         [Test]
         public void ImportData_FileNameConsistsOfExtensionOnly_Throws()
         {
-            var ex = Assert.Catch<FileNotFoundException>(() => ExcelImporter.ImportData(".xlsx", TypeFactory.Instance[Types.Default], 0));
+            var type = TypeExcelFactory.EmptyClass;
+            var ex = Assert.Catch<FileNotFoundException>(() => ExcelImporter.ImportData(".xlsx", type, 0));
+
             StringAssert.Contains("Could not find file", ex.Message);
         }
 
         [Test]
         public void ImportData_FileDoesntExist_Throws()
         {
-            var ex = Assert.Catch<FileNotFoundException>(() => ExcelImporter.ImportData("notexistedfile.xlsx", TypeFactory.Instance[0], 0));
+            var type = TypeExcelFactory.EmptyClass;
+            var ex = Assert.Catch<FileNotFoundException>(() => ExcelImporter.ImportData("notexistedfile.xlsx", type, 0));
+
             StringAssert.Contains("Could not find file", ex.Message);
         }
 
