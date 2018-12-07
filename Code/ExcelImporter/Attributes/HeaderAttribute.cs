@@ -1,5 +1,5 @@
 ﻿using System;
-using WorkSpeed.Import;
+using static Helpers.StringExtensions;
 
 namespace ExcelImporter.Attributes
 {

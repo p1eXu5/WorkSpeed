@@ -11,34 +11,22 @@ using ICSharpCode.SharpZipLib.Zip;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
-using WorkSpeed.Import;
+using static Helpers.StringExtensions;
+using static Helpers.EasyTypeBuilder;
 
 namespace ExcelImporter
 {
     [SuppressMessage("ReSharper", "EmptyGeneralCatchClause")]
     public static class ExcelImporter
     {
-        private const string XLS_FILE = ".xls";
-        private const string XLSX_FILE = ".xlsx";
-
-        private static Dictionary<string, int> _propertyToCellColumn = new Dictionary<string, int>();
-
-        #region Properties
-
-        public static HashSet<string> FileExtensions { get; } = new HashSet<string> { XLS_FILE, XLSX_FILE };
-
-        #endregion
-
-
-        #region Methods
-
-        public static ICollection ImportDataFromExcel(string fileName, Type type, int sheetIndex)
+        public static ICollection ImportData(string fileName, Type type, int sheetIndex)
         {
-            var fileExtension = Path.GetExtension(fileName);
-            if (!FileExtensions.Contains(fileExtension)) throw new FileFormatException($"{fileName} has wrong file extansion!");
+            if (String.IsNullOrWhiteSpace (fileName)) throw new ArgumentException ("fileName can't be null or empty.", nameof(fileName));
+            if (type == null) throw new ArgumentNullException (nameof(type), "type can't be null.");
+            if (sheetIndex < 0) throw new ArgumentException ("sheetIndex must be equal or greater than zero.", nameof(sheetIndex));
 
             if (type.GetConstructors().Count(c => c.IsPublic && c.GetParameters().Length == 0) == 0) {
-                throw new TypeAccessException($"{type} has not public parameterized constructor!");
+                throw new TypeAccessException($"{type} has no public parameterless constructor!");
             }
 
             using (Stream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
@@ -47,7 +35,7 @@ namespace ExcelImporter
                 ISheet sheet;
 
                 try {
-                    sheet = GetSheet (stream, sheetIndex, fileExtension);
+                    sheet = GetSheet (stream, sheetIndex);
                 }
                 catch {
                     throw new FileFormatException($"{fileName} has invalid file format or has no sheetTable with {sheetIndex} index!");
@@ -72,21 +60,21 @@ namespace ExcelImporter
         }
 
 
-        public static ISheet GetSheet (Stream stream, int sheetIndex, string excelVerion = XLSX_FILE)
+        private static ISheet GetSheet (Stream stream, int sheetIndex)
         {
             IWorkbook book;
 
-            if (XLS_FILE == excelVerion) {
+            try { 
                 book = new HSSFWorkbook(stream);
             }
-            else {
+            catch {
                 book = new XSSFWorkbook(stream);
             }
 
             return book.GetSheetAt(sheetIndex);
         }
 
-        public static Dictionary<string, int> GetHeaderMap (Type type, SheetTable sheetTable)
+        private static Dictionary<string, int> GetHeaderMap (Type type, SheetTable sheetTable)
         {
             var map = new Dictionary<string, int>();
             var propertyTuples = type.IsHeaderless() ? GetPropertyNames (type) : GetPropertyHeaders (type);
@@ -145,7 +133,7 @@ namespace ExcelImporter
         }
 
 
-        public static bool IsHeaderless (this Type type)
+        private static bool IsHeaderless (this Type type)
         {
             return type.GetCustomAttributes (typeof (HeaderlessAttribute)).Any();
         }
@@ -155,7 +143,7 @@ namespace ExcelImporter
         /// </summary>
         /// <param name="type"><see cref="Type"/></param>
         /// <returns><see cref="Array"/></returns>
-        public static HashSet<(string[] headers, string name)> GetPropertyNames (Type type)
+        private static HashSet<(string[] headers, string name)> GetPropertyNames (Type type)
         {
             return  new HashSet<(string[] headers, string name)> 
                         (
@@ -165,13 +153,7 @@ namespace ExcelImporter
                         );
         }
 
-        public static IEnumerable<PropertyInfo> GetPropertyInfos (this Type type)
-        {
-            return type.GetProperties()
-                       .Where (p => p.CanWrite && !p.GetCustomAttributes (typeof(HiddenAttribute)).Any());
-        }
-
-        public static HashSet<(string[] headers, string name)> GetPropertyHeaders (Type type)
+        private static HashSet<(string[] headers, string name)> GetPropertyHeaders (Type type)
         {
             return  new HashSet<(string[] headers, string propertyName)> 
                         (
@@ -183,6 +165,12 @@ namespace ExcelImporter
                                                 return (attr, p.Name);
                                             })
                        );
+        }
+
+        private static IEnumerable<PropertyInfo> GetPropertyInfos (this Type type)
+        {
+            return type.GetProperties()
+                       .Where (p => p.CanWrite && !p.GetCustomAttributes (typeof(HiddenAttribute)).Any());
         }
 
 
@@ -389,16 +377,5 @@ namespace ExcelImporter
 
             return dateTimeValue;
         }
-
-
-        private static ICollection GetEmptyCollection(Type type)
-
-        {
-            Type t = typeof(List<>);
-            var constr = t.MakeGenericType(type);
-            return (ICollection)Activator.CreateInstance(constr);
-        }
-
-        #endregion
     }
 }

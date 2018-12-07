@@ -81,26 +81,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="TestHelper.cs" />
-    <Compile Include="UnitTests\DataImporterUnitTests.cs" />
-    <Compile Include="UnitTests\ExcelImporterUnitTests.cs" />
-    <Compile Include="UnitTests\ImporterUnitTests.cs" />
-    <Compile Include="UnitTests\StringHelperUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Content Include="TestFiles\test.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestFiles\test">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestFiles\empty.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestFiles\testExcel2003FileWithSingleHeadedCell.xls">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\WorkSpeed.Import\WorkSpeed.Import.csproj">
@@ -120,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="IntagretionTests\" />
+    <Folder Include="UnitTests\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

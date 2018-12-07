@@ -2,11 +2,11 @@
 using System.Globalization;
 using System.Linq;
 using ExcelImporter;
-using ExcelImporterTests.Factory;
+using ExcelImporter.Tests.Factory;
 using NPOI.SS.UserModel;
 using NUnit.Framework;
 
-namespace ExcelImporterTests.UnitTests
+namespace ExcelImporter.Tests.UnitTests
 {
     [TestFixture]
     public class SheetTableUnitTests
@@ -28,21 +28,21 @@ namespace ExcelImporterTests.UnitTests
         [Test]
         public void Ctor_EmptySheet_Throws()
         {
-            var ex = Assert.Catch<ArgumentException> (() => new SheetTable (SheetFactory.EmptySheet));
+            var ex = Assert.Catch<ArgumentException> (() => new SheetTable (MockedSheetFactory.EmptySheet));
 
             StringAssert.Contains ("Sheet has no data", ex.Message);
         }
 
-        [TestCaseSource(typeof(SheetFactory), nameof(SheetFactory.TestCases), new object[] { 5, 5})]
-        [TestCaseSource(typeof(SheetFactory), nameof(SheetFactory.TestCases), new object[] { 0, 5})]
-        [TestCaseSource(typeof(SheetFactory), nameof(SheetFactory.TestCases), new object[] { 5, 0})]
+        [TestCaseSource(typeof(MockedSheetFactory), nameof(MockedSheetFactory.TestCases), new object[] { 5, 5})]
+        [TestCaseSource(typeof(MockedSheetFactory), nameof(MockedSheetFactory.TestCases), new object[] { 0, 5})]
+        [TestCaseSource(typeof(MockedSheetFactory), nameof(MockedSheetFactory.TestCases), new object[] { 5, 0})]
         public (CellPoint, CellPoint) Ctor_EmptySheet_ReturnsExpectedStartAndEndCells (ISheet sheet)
         {
             var sheetTable = new SheetTable(sheet);
             return (sheetTable.StartCell, sheetTable.EndCell);
         }
 
-        [TestCaseSource (typeof (SheetFactory), nameof(SheetFactory.HeaderTestCases), new object[] {5, 5})]
+        [TestCaseSource (typeof (MockedSheetFactory), nameof(MockedSheetFactory.HeaderTestCases), new object[] {5, 5})]
         public void NormalizedHeadersGetter_NotEmptySheet_ReturnsNotEmptyCollection (ISheet sheet)
         {
             var sheetTable = new SheetTable(sheet);
@@ -50,7 +50,7 @@ namespace ExcelImporterTests.UnitTests
             Assert.That (sheetTable.NormalizedHeaders.Any());
         }
 
-        [TestCaseSource(typeof(SheetFactory), nameof(SheetFactory.HeaderTestCases), new object[] { 5, 5 })]
+        [TestCaseSource(typeof(MockedSheetFactory), nameof(MockedSheetFactory.HeaderTestCases), new object[] { 5, 5 })]
         public void Indexator__NotEmptySheet_IndexGreaterThanMaxColumn__Throws (ISheet sheet)
         {
             var sheetTable = new SheetTable(sheet);
@@ -61,7 +61,7 @@ namespace ExcelImporterTests.UnitTests
             StringAssert.Contains("Column was outside the bounds of sheet table!", ex.Message);
         }
 
-        [TestCaseSource(typeof(SheetFactory), nameof(SheetFactory.HeaderTestCases), new object[] { 5, 5 })]
+        [TestCaseSource(typeof(MockedSheetFactory), nameof(MockedSheetFactory.HeaderTestCases), new object[] { 5, 5 })]
         public void Indexator__NotEmptySheet_IndexLessThanMinColumn__Throws (ISheet sheet)
         {
             var sheetTable = new SheetTable(sheet);
@@ -73,7 +73,7 @@ namespace ExcelImporterTests.UnitTests
             StringAssert.Contains("Column was outside the bounds of sheet table!", ex.Message);
         }
 
-        [TestCaseSource(typeof(SheetFactory), nameof(SheetFactory.HeaderTestCasesWithReturns), new object[] { 5, 5 })]
+        [TestCaseSource(typeof(MockedSheetFactory), nameof(MockedSheetFactory.HeaderTestCasesWithReturns), new object[] { 5, 5 })]
         public string[] Indexator__NotEmptySheet_ValidIndex__ReturnsColumnHeader (ISheet sheet)
         {
             var sheetTable = new SheetTable(sheet);

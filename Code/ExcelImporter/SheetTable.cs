@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NPOI.SS.UserModel;
-using WorkSpeed.Import;
+using static Helpers.StringExtensions;
 
 namespace ExcelImporter
 {

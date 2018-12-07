@@ -10,9 +10,9 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework;
 
-namespace ExcelImporterTests.Factory
+namespace ExcelImporter.Tests.Factory
 {
-    public class SheetFactory
+    public class MockedSheetFactory
     {
         public static ISheet EmptySheet => new XSSFSheet();
 
