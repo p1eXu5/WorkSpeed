@@ -61,6 +61,7 @@
     <Compile Include="Attributes\HeaderlessAttribute.cs" />
     <Compile Include="Attributes\HiddenAttribute.cs" />
     <Compile Include="CellPoint.cs" />
+    <Compile Include="CellValue.cs" />
     <Compile Include="ExcelImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SheetTable.cs" />

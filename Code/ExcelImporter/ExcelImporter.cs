@@ -18,46 +18,50 @@ namespace ExcelImporter
 {
     public static class ExcelImporter
     {
-        public static ICollection ImportData(string fileName, Type type, int sheetIndex)
+        public static ICollection ImportData (string path, Type type, int sheetIndex)
         {
-            if (String.IsNullOrWhiteSpace (fileName)) throw new ArgumentException ("fileName can't be null or empty.", nameof(fileName));
+            using (var stream = new FileStream (path, FileMode.Open, FileAccess.Read)) {
+
+                return ImportData (stream, type, sheetIndex);
+            }
+        }
+
+        public static ICollection ImportData (Stream source, Type type, int sheetIndex)
+        {
             if (type == null) throw new ArgumentNullException (nameof(type), "type can't be null.");
-            if (sheetIndex < 0) throw new ArgumentException ("sheetIndex must be equal or greater than zero.", nameof(sheetIndex));
 
             if (type.GetConstructors().Count(c => c.IsPublic && c.GetParameters().Length == 0) == 0) {
                 throw new TypeAccessException($"{type} has no public parameterless constructor!");
             }
 
-            using (Stream stream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
+            if (sheetIndex < 0) throw new ArgumentException ("sheetIndex must be equal or greater than zero.", nameof(sheetIndex));
 
-                // Load sheetTable:
-                ISheet sheet;
+            // Load sheetTable:
+            ISheet sheet;
 
-                try {
-                    sheet = GetSheet (stream, sheetIndex);
-                }
-                catch {
-                    throw new FileFormatException($"{fileName} has invalid file format or has no sheetTable with {sheetIndex} index!");
-                }
-
-                // Load SheetTable:
-                SheetTable sheetTable;
-
-                try {
-                    sheetTable = new SheetTable (sheet);
-                }
-                catch (ArgumentException) {
-                    return GetEmptyCollection (type);
-                }
-
-                // Load headers map:
-                var headersMap = GetHeaderMap (type, sheetTable);
-                if (!headersMap.Keys.Any()) return GetEmptyCollection (type);
-
-                return FillModelCollection(sheetTable, type, headersMap);
+            try {
+                sheet = GetSheet (source, sheetIndex);
             }
-        }
+            catch {
+                throw new FileFormatException($"{source} has invalid data format or has no sheetTable with {sheetIndex} index!");
+            }
 
+            // Load SheetTable:
+            SheetTable sheetTable;
+
+            try {
+                sheetTable = new SheetTable (sheet);
+            }
+            catch (ArgumentException) {
+                return GetEmptyCollection (type);
+            }
+
+            // Load headers map:
+            var headersMap = GetHeaderMap (type, sheetTable);
+            if (!headersMap.Keys.Any()) return GetEmptyCollection (type);
+
+            return FillModelCollection(sheetTable, type, headersMap);
+        }
 
         private static ISheet GetSheet (Stream stream, int sheetIndex)
         {
@@ -80,11 +84,11 @@ namespace ExcelImporter
 
             if (!propertyTuples.Any()) return map;
 
-            for (var i = sheetTable.StartCell.Column; i < sheetTable.EndCell.Column; ++i) {
+            for (var i = 0; i < sheetTable.ColumnCount; ++i) {
 
                 foreach (var tuple in propertyTuples) {
 
-                    if (tuple.headers.Contains (sheetTable[i])) {
+                    if (tuple.headers.Contains (sheetTable.GetNormalizedHeaderAt(i))) {
 
                         map[tuple.name] = i;
                         propertyTuples.Remove (tuple);
@@ -105,20 +109,17 @@ namespace ExcelImporter
 
         private static ICollection FillModelCollection(SheetTable sheetTable, Type type, Dictionary<string, int> headersMap)
         {
-            ArrayList typeInstanceCollection = new ArrayList(sheetTable.Lenght);
+            ArrayList typeInstanceCollection = new ArrayList(sheetTable.RowCount);
 
-            for (var j = sheetTable.StartCell.Row; j < sheetTable.EndCell.Row; ++j) {
-
-                var row = sheetTable.Sheet.GetRow(j);
-                if (null == row) continue;
+            for (var j = 0; j < sheetTable.RowCount; ++j) {
 
                 object typeInstance = Activator.CreateInstance(type);
 
-                var i = sheetTable.StartCell.Column;
+                var i = 0;
 
                 foreach (var propertyInfo in type.GetPropertyInfos()) {
 
-                    ICell cell = row.GetCell(headersMap[propertyInfo.Name]);
+                    ICell cell = sheetTable[j, headersMap[propertyInfo.Name]];
 
                     if (!SetPropertyValue(propertyInfo, cell, typeInstance)) return GetEmptyCollection(type);
 

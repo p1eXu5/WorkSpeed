@@ -9,10 +9,12 @@ namespace ExcelImporter
     {
         #region Fileds
 
-        public readonly ISheet Sheet;
-        public readonly CellPoint StartCell;
-        public readonly CellPoint EndCell;
-        public readonly int Lenght;
+        public readonly int RowCount;
+        public readonly int ColumnCount;
+
+        private readonly ISheet _sheet;
+        private readonly CellPoint _startCell;
+        private readonly CellPoint _endCell;
 
         private readonly Dictionary<int, string> _normalizedHeaders;
         private readonly Dictionary<int, string> _headers;
@@ -28,24 +30,25 @@ namespace ExcelImporter
         /// <param name="sheet"></param>
         public SheetTable(ISheet sheet)
         {
-            Sheet = sheet ?? throw new ArgumentNullException(nameof(sheet), "Sheet can't be null!");
+            _sheet = sheet ?? throw new ArgumentNullException(nameof(sheet), "_sheet can't be null!");
 
             (short minColumn, short maxColumn) boundColumns;
 
             try {
-                boundColumns = GetBoundColumns (Sheet);
+                boundColumns = GetBoundColumns (_sheet);
             }
             catch (NullReferenceException) {
-                throw new ArgumentException("Sheet has no data", nameof(sheet));
+                throw new ArgumentException("_sheet has no data", nameof(sheet));
             }
 
-            if ((StartCell = FindStartCell (Sheet, boundColumns.minColumn)) < CellPoint.ZeroPoint) throw new ArgumentException("Sheet has no data", nameof(sheet));
-            EndCell = FindEndCell (Sheet, boundColumns.maxColumn);
+            if ((_startCell = FindStartCell (_sheet, boundColumns.minColumn)) < CellPoint.ZeroPoint) throw new ArgumentException("_sheet has no data", nameof(sheet));
+            _endCell = FindEndCell (_sheet, boundColumns.maxColumn);
 
-            Lenght = EndCell.Row - StartCell.Row;
+            RowCount = _endCell.Row - _startCell.Row;
+            ColumnCount = _endCell.Column - _startCell.Column;
 
-            _headers = GetHeaders (sheet, StartCell, EndCell);
-            _normalizedHeaders = GetNormalizedHeaders (_headers, StartCell, EndCell);
+            _headers = GetHeaders (sheet, _startCell, _endCell);
+            _normalizedHeaders = GetNormalizedHeaders (_headers, _startCell, _endCell);
         }
 
         #endregion
@@ -66,14 +69,18 @@ namespace ExcelImporter
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
-        public string this [int column]
+        public string GetNormalizedHeaderAt (int column)
         {
-            get {
-                if (!_normalizedHeaders.ContainsKey (column)) throw new IndexOutOfRangeException("Column was outside the bounds of sheet table!");
-                return _normalizedHeaders[column];
-            }
+            if (!_normalizedHeaders.ContainsKey (column)) throw new IndexOutOfRangeException("Column was outside the bounds of sheet table!");
+            return _normalizedHeaders[column];
         }
 
+        public ICell this [int row, int column]
+        {
+            get {
+                throw new NotImplementedException();
+            }
+        }
 
         private static (short minColumn, short maxColumn) GetBoundColumns(ISheet sheet)
         {

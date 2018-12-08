@@ -25,7 +25,8 @@ namespace ExcelImporter.Tests.UnitTests
         public void ImportData_FileNameIsNull_Throws()
         {
             var type = TypeExcelFactory.EmptyClass;
-            var ex = Assert.Catch<ArgumentException> (() => ExcelImporter.ImportData(null, type, 0));
+            string path = null;
+            var ex = Assert.Catch<ArgumentException> (() => ExcelImporter.ImportData(path, type, 0));
 
             StringAssert.Contains ("fileName can't be null or empty.", ex.Message);
         }
@@ -90,6 +91,18 @@ namespace ExcelImporter.Tests.UnitTests
             var ex = Assert.Catch<FileNotFoundException>(() => ExcelImporter.ImportData("notexistedfile.xlsx", type, 0));
 
             StringAssert.Contains("Could not find file", ex.Message);
+        }
+
+        [Test]
+        public void ImportData__StreamWithExcelData_ExistingSheet__ReturnsSheetTable()
+        {
+
+        }
+
+        [Test]
+        public void ImportData__StreamWithExcelData_SheetNumIsByDefault__ReturnsAllSheetTables()
+        {
+
         }
 
         #endregion

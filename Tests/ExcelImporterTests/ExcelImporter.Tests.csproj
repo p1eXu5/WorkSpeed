@@ -84,6 +84,7 @@
     <Compile Include="Factory\TypeExcelFactory.cs" />
     <Compile Include="IntegrationalTests\ExcelImporterIntegrationalTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="IntegrationalTests\CellValueIntegrationalTests.cs" />
     <Compile Include="UnitTests\ExcelImporterUnitTests.cs" />
     <Compile Include="UnitTests\SheetTableUnitTests.cs" />
   </ItemGroup>

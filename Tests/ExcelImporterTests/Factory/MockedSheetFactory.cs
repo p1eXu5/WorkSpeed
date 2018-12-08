@@ -223,7 +223,7 @@ namespace ExcelImporter.Tests.Factory
                     { 1, 0, 0, 0 },
                 };
             yield return new TestCaseData(GetMockedSheet((short)firstColumn, firsrtRow, area))
-                                .Returns((new CellPoint((short)(firstColumn + 0), firsrtRow + 0), new CellPoint((short)(firstColumn + 4), firsrtRow + 4)))
+                                .Returns((3, 4))
                                 .SetName($"Test case #1 ({firstColumn}, {firsrtRow});");
 
             // 2
@@ -235,7 +235,7 @@ namespace ExcelImporter.Tests.Factory
                     { 0, 0, 0, 1 },
                 };
             yield return new TestCaseData(GetMockedSheet((short)firstColumn, firsrtRow, area))
-                                .Returns((new CellPoint((short)(firstColumn + 0), firsrtRow + 0), new CellPoint((short)(firstColumn + 4), firsrtRow + 4)))
+                                .Returns((3, 4))
                                 .SetName($"Test case #2 ({firstColumn}, {firsrtRow});");
 
             // 3
@@ -247,7 +247,7 @@ namespace ExcelImporter.Tests.Factory
                     { 1, 0, 0, 0 },
                 };
             yield return new TestCaseData(GetMockedSheet((short)firstColumn, firsrtRow, area))
-                                .Returns((new CellPoint((short)(firstColumn + 0), firsrtRow + 0), new CellPoint((short)(firstColumn + 4), firsrtRow + 4)))
+                                .Returns((3, 4))
                                 .SetName($"Test case #3 ({firstColumn}, {firsrtRow});");
 
             // 4
@@ -259,7 +259,7 @@ namespace ExcelImporter.Tests.Factory
                     { 0, 1, 0, 0 },
                 };
             yield return new TestCaseData(GetMockedSheet((short)firstColumn, firsrtRow, area))
-                                .Returns((new CellPoint((short)(firstColumn + 0), firsrtRow + 0), new CellPoint((short)(firstColumn + 4), firsrtRow + 4)))
+                                .Returns((3, 4))
                                 .SetName($"Test case #4 ({firstColumn}, {firsrtRow});").SetCategory ("Headers");
 
             // 5
@@ -271,7 +271,7 @@ namespace ExcelImporter.Tests.Factory
                     { 0, 0, 0, 1 },
                 };
             yield return new TestCaseData(GetMockedSheet((short)firstColumn, firsrtRow, area))
-                                .Returns((new CellPoint((short)(firstColumn + 0), firsrtRow + 0), new CellPoint((short)(firstColumn + 4), firsrtRow + 4)))
+                                .Returns((3, 4))
                                 .SetName($"Test case #5 ({firstColumn}, {firsrtRow});");
 
             // 6
@@ -283,7 +283,7 @@ namespace ExcelImporter.Tests.Factory
                     { 1, 1, 1, 1 },
                 };
             yield return new TestCaseData(GetMockedSheet((short)firstColumn, firsrtRow, area))
-                                .Returns((new CellPoint((short)(firstColumn + 0), firsrtRow + 0), new CellPoint((short)(firstColumn + 4), firsrtRow + 4)))
+                                .Returns((3, 4))
                                 .SetName($"Test case #6 ({firstColumn}, {firsrtRow});");
 
             // 7
@@ -295,7 +295,7 @@ namespace ExcelImporter.Tests.Factory
                     { 0, 0, 0, 0 },
                 };
             yield return new TestCaseData (GetMockedSheet((short)firstColumn, firsrtRow, area))
-                                .Returns((new CellPoint((short)(firstColumn + 1), firsrtRow + 1), new CellPoint((short)(firstColumn + 2), firsrtRow + 3)))
+                                .Returns((1, 1))
                                 .SetName($"Test case #7 ({firstColumn}, {firsrtRow});");
 
             // 8
@@ -307,7 +307,7 @@ namespace ExcelImporter.Tests.Factory
                     { 0, 0, 0, 0 },
                 };
             yield return new TestCaseData (GetMockedSheet((short)firstColumn, firsrtRow, area))
-                                    .Returns((new CellPoint((short)(firstColumn + 1), firsrtRow + 1), new CellPoint((short)(firstColumn + 3), firsrtRow + 2)))
+                                    .Returns((0, 0))
                                     .SetName($"Test case #8 ({firstColumn}, {firsrtRow});");
 
             // 9
@@ -319,7 +319,7 @@ namespace ExcelImporter.Tests.Factory
                     { 0, 0, 0, 0 },
                 };
             yield return new TestCaseData (GetMockedSheet((short)firstColumn, firsrtRow, area))
-                                .Returns((new CellPoint((short)(firstColumn + 2), firsrtRow + 1), new CellPoint((short)(firstColumn + 3), firsrtRow + 2)))
+                                .Returns((0, 1))
                                 .SetName($"Test case #9 ({firstColumn}, {firsrtRow});");
         }
 
