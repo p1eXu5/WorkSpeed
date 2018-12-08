@@ -212,7 +212,7 @@ namespace ExcelImporter.Tests.Factory
         /// <param name="firstColumn"></param>
         /// <param name="firsrtRow"></param>
         /// <returns></returns>
-        public static IEnumerable TestCases(int firstColumn, int firsrtRow)
+        public static IEnumerable RowColumnCountsTestCases(int firstColumn, int firsrtRow)
         {
             // 1
             var area = new[,]
@@ -307,7 +307,7 @@ namespace ExcelImporter.Tests.Factory
                     { 0, 0, 0, 0 },
                 };
             yield return new TestCaseData (GetMockedSheet((short)firstColumn, firsrtRow, area))
-                                    .Returns((0, 0))
+                                    .Returns((0, 2))
                                     .SetName($"Test case #8 ({firstColumn}, {firsrtRow});");
 
             // 9

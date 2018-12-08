@@ -119,7 +119,7 @@ namespace ExcelImporter
 
                 foreach (var propertyInfo in type.GetPropertyInfos()) {
 
-                    ICell cell = sheetTable[j, headersMap[propertyInfo.Name]];
+                    var cell = sheetTable[j, headersMap[propertyInfo.Name]];
 
                     if (!SetPropertyValue(propertyInfo, cell, typeInstance)) return GetEmptyCollection(type);
 
@@ -175,207 +175,39 @@ namespace ExcelImporter
 
 
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-        private static bool SetPropertyValue(PropertyInfo propertyInfo, ICell cell, object obj)
+        private static bool SetPropertyValue(PropertyInfo propertyInfo, CellValue cell, object obj)
         {
             bool isSet = false;
 
             if (typeof(string).FullName == propertyInfo.PropertyType.FullName) {
 
-                obj.GetType().GetProperty(propertyInfo.Name).SetValue(obj, GetStringValue(cell));
+                obj.GetType().GetProperty(propertyInfo.Name).SetValue(obj, cell);
                 isSet = true;
             }
             else if (typeof(int).FullName == propertyInfo.PropertyType.FullName) {
 
-                obj.GetType().GetProperty(propertyInfo.Name).SetValue(obj, GetIntValue(cell));
+                obj.GetType().GetProperty(propertyInfo.Name).SetValue(obj, cell);
                 isSet = true;
             }
             else if (typeof(double).FullName == propertyInfo.PropertyType.FullName) {
 
-                obj.GetType().GetProperty(propertyInfo.Name).SetValue(obj, GetDoubleValue(cell));
+                obj.GetType().GetProperty(propertyInfo.Name).SetValue(obj, cell);
                 isSet = true;
             }
             else if (typeof(bool).FullName == propertyInfo.PropertyType.FullName) {
 
-                obj.GetType().GetProperty(propertyInfo.Name).SetValue(obj, GetBoolValue(cell));
+                obj.GetType().GetProperty(propertyInfo.Name).SetValue(obj, cell);
                 isSet = true;
             }
             else if (typeof(DateTime).FullName == propertyInfo.PropertyType.FullName) {
 
-                obj.GetType().GetProperty(propertyInfo.Name).SetValue(obj, GetDateTimeValue(cell));
+                obj.GetType().GetProperty(propertyInfo.Name).SetValue(obj, cell);
                 isSet = true;
             }
 
             if (!isSet) return false;
 
             return true;
-        }
-
-        private static string GetStringValue(ICell cell)
-        {
-            if (cell == null) return null;
-
-            string stringValue = default(string);
-
-            if (CellType.Numeric == cell.CellType) {
-                try {
-                    stringValue = cell.NumericCellValue.ToString(CultureInfo.InvariantCulture);
-                }
-                catch (OverflowException) {
-                    stringValue = "0.0";
-                }
-            }
-            else if (CellType.Boolean == cell.CellType) {
-                stringValue = cell.BooleanCellValue ? "Да" : "Нет";
-            }
-            else if (CellType.String == cell.CellType) {
-                stringValue = cell.StringCellValue;
-            }
-
-            return stringValue;
-        }
-
-        private static int GetIntValue(ICell cell)
-        {
-            int intValue = default(int);
-            if (cell == null) return intValue;
-
-            if (CellType.Numeric == cell.CellType) {
-                try {
-                    intValue = Convert.ToInt32(cell.NumericCellValue);
-                }
-                catch (OverflowException) {
-                    intValue = 0;
-                }
-            }
-            else if (CellType.Boolean == cell.CellType) {
-                if (cell.BooleanCellValue) {
-                    intValue = 1;
-                }
-            }
-            else if (CellType.String == cell.CellType) {
-
-                var cellValue = cell.StringCellValue.RemoveWhitespaces();
-
-                if (!String.IsNullOrWhiteSpace(cellValue)) {
-                    if (cellValue.ToUpperInvariant() == "Да".ToUpperInvariant()
-                        || cellValue.ToUpperInvariant() == "Yes".ToUpperInvariant()) {
-                        intValue = 1;
-                    }
-                    else {
-                        cellValue = cellValue.Replace(',', '.');
-
-                        try {
-                            intValue = Convert.ToInt32(Double.Parse(cellValue));
-                        }
-                        catch {
-                        }
-                    }
-                }
-            }
-
-            return intValue;
-        }
-
-        private static double GetDoubleValue(ICell cell)
-        {
-            double doubleValue = default(double);
-            if (cell == null) return doubleValue;
-
-            if (CellType.Numeric == cell.CellType) {
-                try {
-                    doubleValue = cell.NumericCellValue;
-                }
-                catch (OverflowException) {
-                    doubleValue = 0.0;
-                }
-            }
-            else if (CellType.Boolean == cell.CellType) {
-
-                if (cell.BooleanCellValue) {
-                    doubleValue = 1.0;
-                }
-            }
-            else if (CellType.String == cell.CellType) {
-
-                var cellValue = cell.StringCellValue.RemoveWhitespaces();
-
-                if (!String.IsNullOrWhiteSpace(cellValue)) {
-
-                    if (cellValue.ToUpperInvariant() == "Да".ToUpperInvariant()
-                        || cellValue.ToUpperInvariant() == "Yes".ToUpperInvariant()) {
-
-                        doubleValue = 1.0;
-                    }
-                    else {
-                        cellValue = cellValue.Replace(',', '.');
-
-                        try {
-                            doubleValue = Double.Parse(cellValue);
-                        }
-                        catch {
-                        }
-                    }
-                }
-            }
-
-            return doubleValue;
-        }
-
-        private static bool GetBoolValue(ICell cell)
-        {
-            bool boolValue = default(bool);
-            if (cell == null) return boolValue;
-
-            if (CellType.Numeric == cell.CellType) {
-
-                try {
-                    boolValue = !cell.NumericCellValue.Equals(0.0);
-                }
-                catch (OverflowException) {
-                    boolValue = false;
-                }
-            }
-            else if (CellType.Boolean == cell.CellType) {
-
-                boolValue = cell.BooleanCellValue;
-            }
-            else if (CellType.String == cell.CellType) {
-
-                var cellValue = cell.StringCellValue.RemoveWhitespaces();
-
-                if (!String.IsNullOrWhiteSpace(cellValue)) {
-
-                    if (cellValue.ToUpperInvariant() == "Да".ToUpperInvariant()
-                        || cellValue.ToUpperInvariant() == "Yes".ToUpperInvariant()) {
-
-                        boolValue = true;
-                    }
-                }
-            }
-
-            return boolValue;
-        }
-
-        private static DateTime GetDateTimeValue(ICell cell)
-        {
-            DateTime dateTimeValue = default(DateTime);
-            if (cell == null) return dateTimeValue;
-
-            try {
-                if (CellType.Numeric == cell.CellType) {
-
-                    dateTimeValue = new DateTime(Convert.ToInt64(cell.NumericCellValue));
-                }
-                else if (CellType.String == cell.CellType) {
-
-                    int days = Int32.Parse (cell.StringCellValue);
-                    dateTimeValue = new DateTime(1900, 1, 1).AddDays (days - 2);
-                }
-            }
-            catch {
-            }
-
-            return dateTimeValue;
         }
     }
 }

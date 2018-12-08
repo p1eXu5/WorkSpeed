@@ -30,7 +30,7 @@ namespace ExcelImporter
         /// <param name="sheet"></param>
         public SheetTable(ISheet sheet)
         {
-            _sheet = sheet ?? throw new ArgumentNullException(nameof(sheet), "_sheet can't be null!");
+            _sheet = sheet ?? throw new ArgumentNullException(nameof(sheet), "sheet can't be null!");
 
             (short minColumn, short maxColumn) boundColumns;
 
@@ -38,17 +38,18 @@ namespace ExcelImporter
                 boundColumns = GetBoundColumns (_sheet);
             }
             catch (NullReferenceException) {
-                throw new ArgumentException("_sheet has no data", nameof(sheet));
+                throw new ArgumentException("sheet has no data", nameof(sheet));
             }
 
             if ((_startCell = FindStartCell (_sheet, boundColumns.minColumn)) < CellPoint.ZeroPoint) throw new ArgumentException("_sheet has no data", nameof(sheet));
             _endCell = FindEndCell (_sheet, boundColumns.maxColumn);
 
-            RowCount = _endCell.Row - _startCell.Row;
+            // Row #0 is headers not counted
+            RowCount = _endCell.Row - _startCell.Row - 1;
             ColumnCount = _endCell.Column - _startCell.Column;
 
             _headers = GetHeaders (sheet, _startCell, _endCell);
-            _normalizedHeaders = GetNormalizedHeaders (_headers, _startCell, _endCell);
+            _normalizedHeaders = GetNormalizedHeaders (_headers, _startCell);
         }
 
         #endregion
@@ -71,14 +72,18 @@ namespace ExcelImporter
         /// <returns></returns>
         public string GetNormalizedHeaderAt (int column)
         {
-            if (!_normalizedHeaders.ContainsKey (column)) throw new IndexOutOfRangeException("Column was outside the bounds of sheet table!");
+            if (!_normalizedHeaders.ContainsKey (column)) throw new IndexOutOfRangeException("Column was outside the bounds of sheet table.");
             return _normalizedHeaders[column];
         }
 
-        public ICell this [int row, int column]
+        public CellValue this [int row, int column]
         {
             get {
-                throw new NotImplementedException();
+                if ((row | RowCount) == 0) throw new InvalidOperationException("Sheet has only headers.");
+                if (row < 0 || row >= RowCount) throw new IndexOutOfRangeException("Row was outside the bounds of sheet table.");
+                if (column < 0 || column >= ColumnCount) throw new IndexOutOfRangeException("Column was outside the bounds of sheet table.");
+
+                return new CellValue (_sheet.GetRow (_startCell.Row + row)?.GetCell (_startCell.Column + column + 1));
             }
         }
 
@@ -204,13 +209,13 @@ namespace ExcelImporter
             return headers;
         }
 
-        private static Dictionary<int, string> GetNormalizedHeaders(Dictionary<int, string> headers, CellPoint startCell, CellPoint endCell)
+        private static Dictionary<int, string> GetNormalizedHeaders(Dictionary<int, string> headers, CellPoint startCell)
         {
-            var normalizedHeaders = new Dictionary<int, string>(endCell.Column - startCell.Column);
+            var normalizedHeaders = new Dictionary<int, string>(headers.Count);
 
-            for (int i = startCell.Column; i < endCell.Column; ++i) {
+            for (int i = 0; i < headers.Count; ++i) {
 
-                normalizedHeaders[i] = headers[i].RemoveWhitespaces().ToUpperInvariant();
+                normalizedHeaders[i] = headers[i + startCell.Column].RemoveWhitespaces().ToUpperInvariant();
             }
 
             return normalizedHeaders;

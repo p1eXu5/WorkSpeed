@@ -22,7 +22,7 @@ namespace ExcelImporter.Tests.UnitTests
         {
             var ex = Assert.Catch<ArgumentNullException> (() => new SheetTable (null));
 
-            StringAssert.Contains ("Sheet can't be null", ex.Message);
+            StringAssert.Contains ("sheet can't be null", ex.Message);
         }
 
         [Test]
@@ -30,12 +30,12 @@ namespace ExcelImporter.Tests.UnitTests
         {
             var ex = Assert.Catch<ArgumentException> (() => new SheetTable (MockedSheetFactory.EmptySheet));
 
-            StringAssert.Contains ("Sheet has no data", ex.Message);
+            StringAssert.Contains ("sheet has no data", ex.Message);
         }
 
-        [TestCaseSource(typeof(MockedSheetFactory), nameof(MockedSheetFactory.TestCases), new object[] { 5, 5})]
-        [TestCaseSource(typeof(MockedSheetFactory), nameof(MockedSheetFactory.TestCases), new object[] { 0, 5})]
-        [TestCaseSource(typeof(MockedSheetFactory), nameof(MockedSheetFactory.TestCases), new object[] { 5, 0})]
+        [TestCaseSource(typeof(MockedSheetFactory), nameof(MockedSheetFactory.RowColumnCountsTestCases), new object[] { 5, 5})]
+        [TestCaseSource(typeof(MockedSheetFactory), nameof(MockedSheetFactory.RowColumnCountsTestCases), new object[] { 0, 5})]
+        [TestCaseSource(typeof(MockedSheetFactory), nameof(MockedSheetFactory.RowColumnCountsTestCases), new object[] { 5, 0})]
         public (int, int) Ctor_EmptySheet_ReturnsExpectedRowAndColumnLenghts (ISheet sheet)
         {
             var sheetTable = new SheetTable(sheet);
@@ -88,6 +88,70 @@ namespace ExcelImporter.Tests.UnitTests
             return headers;
         }
 
+        [Test]
+        public void Indexer_RowOutOfRange_Throws()
+        {
+            // Arrange:
+            var sheet = MockedSheetFactory.HeaderTestCases (5, 5).Cast<TestCaseData>().First().Arguments[0] as ISheet;
+            var sheetTable = new SheetTable(sheet);
 
+            // Action:
+            var ex = Assert.Catch<IndexOutOfRangeException>(() =>
+                {
+                    var res = sheetTable[-1, 0];
+                });
+
+            // Assert:
+            StringAssert.Contains ("Row was outside the bounds of sheet table.", ex.Message);
+        }
+
+        [Test]
+        public void Indexer_ColumnOutOfRange_Throws()
+        {
+            // Arrange:
+            var sheet = MockedSheetFactory.HeaderTestCases (5, 5).Cast<TestCaseData>().First().Arguments[0] as ISheet;
+            var sheetTable = new SheetTable(sheet);
+
+            // Action:
+            var ex = Assert.Catch<IndexOutOfRangeException>(() =>
+                {
+                    var res = sheetTable[0, -1];
+                });
+
+            // Assert:
+            StringAssert.Contains ("Column was outside the bounds of sheet table.", ex.Message);
+        }
+
+        [Test]
+        public void Indexer_SheetTableContainsOnlyHeaders_Throws()
+        {
+            // Arrange:
+            var sheet = MockedSheetFactory.HeaderTestCases (5, 5).Cast<TestCaseData>().Where (tc => tc.TestName.Contains ("#8"))?.First().Arguments[0] as ISheet;
+            var sheetTable = new SheetTable(sheet);
+
+            // Action:
+            var ex = Assert.Catch<InvalidOperationException>(() =>
+                {
+                    var res = sheetTable[0, 0];
+                });
+
+            // Assert:
+            StringAssert.Contains ("Sheet has only headers.", ex.Message);
+        }
+
+        [Test]
+        public void Indexer_ValidRowAndColumn_ReturnsCellValue()
+        {
+            // Arrange:
+            var sheet = MockedSheetFactory.HeaderTestCases (5, 5).Cast<TestCaseData>().First().Arguments[0] as ISheet;
+            var sheetTable = new SheetTable(sheet);
+
+            // Action:
+            var res = sheetTable[2, 2];
+
+            // Assert:
+            Assert.That (res, Is.Not.Null);
+            Assert.That (res.GetType().IsAssignableFrom (typeof(CellValue)));
+        }
     }
 }
