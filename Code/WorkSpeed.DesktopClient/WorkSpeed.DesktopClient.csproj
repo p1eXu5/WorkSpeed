@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="Attributes\DistanceAttribute.cs" />
     <Compile Include="Attributes\SegmentAttribute.cs" />
+    <Compile Include="ViewModels\EmployeeViewModel.cs" />
     <Compile Include="WorkingTimeViewModel.cs" />
     <Page Include="Views\ImportDataUserControl.xaml">
       <SubType>Designer</SubType>
@@ -108,6 +109,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WorkSpeed.Data\WorkSpeed.Data.csproj">
+      <Project>{72e065c5-8769-4008-9529-11194be488e0}</Project>
+      <Name>WorkSpeed.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WorkSpeed.Manager\WorkSpeed.Manager.csproj">
       <Project>{d65854b3-652e-466f-9a0f-c22cf8191dcd}</Project>
       <Name>WorkSpeed.Manager</Name>
@@ -115,6 +120,10 @@
     <ProjectReference Include="..\WorkSpeed.MvvmBaseLibrary\WorkSpeed.MvvmBaseLibrary.csproj">
       <Project>{aa23ec1f-26a2-4962-8b57-8c4626c4cd9f}</Project>
       <Name>WorkSpeed.MvvmBaseLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WorkSpeed\WorkSpeed.csproj">
+      <Project>{035d995a-6f8a-47c1-aebd-41b2cc5d6d7d}</Project>
+      <Name>WorkSpeed</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

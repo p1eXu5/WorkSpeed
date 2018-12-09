@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
@@ -23,6 +24,26 @@ namespace WorkSpeed.MvvmBaseLibrary
             }
 
             return null;
+        }
+
+        protected static void Observe<TModel, TViewModel> (ReadOnlyObservableCollection<TModel> observable, 
+                                                               ObservableCollection<TViewModel> observator, 
+                                                                        Func<TViewModel,TModel> func)
+        {
+            ((INotifyCollectionChanged) observable).CollectionChanged += (s, e) =>
+                {
+                    if (e.NewItems[0] != null) {
+                        observator.Add ((TViewModel)Activator.CreateInstance (typeof(TViewModel), new[] { (TModel)e.NewItems[0] }));
+                    }
+
+                    if (e.OldItems[0] != null) {
+                        observator.Remove (observator.First(vm => ReferenceEquals (func(vm), e.OldItems[0])));
+                    }
+
+                    if (e.NewItems[0] == null && e.OldItems[0] == null) {
+                        observator.Clear();
+                    }
+                };
         }
     }
 }

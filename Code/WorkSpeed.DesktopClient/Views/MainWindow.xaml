@@ -33,7 +33,7 @@
                     </Border>
                 </TabItem.Header>
 
-                <views:ImportDataUserControl Content="{Binding DataImport}" />
+                <views:ImportDataUserControl Content="{Binding ImportVm}" />
 
             </TabItem>
         </TabControl>

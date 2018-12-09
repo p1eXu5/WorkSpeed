@@ -9,6 +9,14 @@ namespace WorkSpeed.DesktopClient.ViewModels
 {
     public class MainViewModel : ViewModel
     {
-        public DataImportViewModel DataImportViewModel { get; set; } = new DataImportViewModel();
+        private readonly IWarehouse _warehouse;
+
+        public MainViewModel(IWarehouse warehouse)
+        {
+            _warehouse = warehouse;
+            ImportVm = new DataImportViewModel (warehouse);
+        }
+
+        public DataImportViewModel ImportVm { get; set; }
     }
 }
