@@ -71,7 +71,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ViewModels\DataImportViewModel.cs" />
+    <Compile Include="ViewModels\ImportViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ProductivityViewModel.cs" />
     <Compile Include="Views\ImportDataUserControl.xaml.cs">

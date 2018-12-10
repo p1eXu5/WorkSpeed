@@ -8,12 +8,14 @@ using WorkSpeed.MvvmBaseLibrary;
 
 namespace WorkSpeed.DesktopClient.ViewModels
 {
-    public class DataImportViewModel : ViewModel
+    public class ImportViewModel : ViewModel
     {
         private readonly IWarehouse _warehouse;
         private readonly ObservableCollection<EmployeeViewModel> _unknownVmCollection;
 
-        public DataImportViewModel (IWarehouse warehouse)
+        private bool _isFileProcessing;
+
+        public ImportViewModel (IWarehouse warehouse)
         {
             _warehouse = warehouse ?? throw new ArgumentNullException(nameof(warehouse));
 
@@ -24,11 +26,19 @@ namespace WorkSpeed.DesktopClient.ViewModels
         }
 
         public ReadOnlyObservableCollection<EmployeeViewModel> UnknownEmployeeVmCollection { get; }
-    
+
+        public bool IsFileProcessing
+        {
+            get => _isFileProcessing;
+            set {
+                _isFileProcessing = value;
+                OnPropertyChanged ();
+            }
+        }
         
         public ICommand OpenFileCommand => new MvvmCommand (OpenFile);
 
-        private void OpenFile (object obj)
+        private async void OpenFile (object obj)
         {
             var ofd = new OpenFileDialog
                 {
@@ -39,8 +49,16 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
             if (true == ofd.ShowDialog()) {
 
-                _warehouse.ImportAsync (ofd.FileName);
+                _isFileProcessing = true;
+                ((MvvmCommand)OpenFileCommand).RaiseCanExecuteChanged();
+
+                await _warehouse.ImportAsync (ofd.FileName);
+
+                _isFileProcessing = false;
+                ((MvvmCommand)OpenFileCommand).RaiseCanExecuteChanged();
             }
         }
+
+        private bool IsFileProcess() => !_isFileProcessing;
     }
 }

@@ -17,11 +17,5 @@ namespace ExcelImporter.Tests.IntegrationalTests
         {
             CultureInfo.CurrentUICulture = new CultureInfo ("en-us");
         }
-
-        [TestCaseSource(typeof(TypeExcelFactory), nameof(TypeExcelFactory.TestCases))]
-        public void ImportData__ExistingFile_CorrespondingType__ReturnsExpectedData (string fileName, Type type, string[,] results)
-        {
-
-        }
     }
 }
