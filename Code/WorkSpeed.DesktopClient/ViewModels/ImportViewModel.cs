@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Input;
 using Microsoft.Win32;
+using WorkSpeed.Interfaces;
 using WorkSpeed.MvvmBaseLibrary;
 
 namespace WorkSpeed.DesktopClient.ViewModels

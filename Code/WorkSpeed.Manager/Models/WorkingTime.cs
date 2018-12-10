@@ -41,7 +41,7 @@ namespace WorkSpeed.Manager.Models
                 _times[i++] = TimeSpan.Zero;
             }
 
-            _times[9] = _times.Sum();
+            _times[9] = new TimeSpan(_times.Sum(span => span.Milliseconds));
         }
     }
 }

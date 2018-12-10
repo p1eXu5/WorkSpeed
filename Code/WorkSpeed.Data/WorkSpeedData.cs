@@ -23,9 +23,14 @@ namespace WorkSpeed.Data
             return _dbContext.Employees.OrderBy (e => e.Name);
         }
 
+        public Employee GetEmployee (string id)
+        {
+            return _dbContext.Employees.FirstOrDefault(e => e.Id == id);
+        }
+
         public IEnumerable<Document1C> GetDocuments()
         {
-            return _dbContext
+            return _dbContext.Documents.OrderBy (d => d.Date);
         }
 
         #region IDisposable

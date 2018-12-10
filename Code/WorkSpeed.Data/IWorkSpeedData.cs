@@ -10,5 +10,6 @@ namespace WorkSpeed.Data
     public interface IWorkSpeedData
     {
         IEnumerable<Employee> GetEmployees();
+        Employee GetEmployee (string id);
     }
 }

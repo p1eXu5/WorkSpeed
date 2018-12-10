@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using WorkSpeed.Data.Context;
+using WorkSpeed.Data.DataContexts;
 
 namespace WorkSpeed.Data.Tests.FunctionalTests
 {

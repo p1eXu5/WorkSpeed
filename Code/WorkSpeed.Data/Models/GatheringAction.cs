@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace WorkSpeed.Data.Models
 {
-    public class GatheringAction
+    public class GatheringAction : EmployeeAction
     {
         public Product Product { get; set; }
 
         public Address SenderAdress { get; set; }
         public Address ReceiverAdress { get; set; }
 
-        public ushort ItemCount { get; set; }
+        public ushort ProductQuantity { get; set; }
 
     }
 }

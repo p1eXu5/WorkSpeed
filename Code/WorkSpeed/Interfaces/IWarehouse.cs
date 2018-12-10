@@ -8,7 +8,7 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Interfaces
 {
-    public interface IWarehouse: IWarehouseEntities
+    public interface IWarehouse
     {
         IWarehouseEntities NewData { get; }
 

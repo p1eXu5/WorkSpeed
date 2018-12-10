@@ -4,7 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WorkSpeed.Data.Context;
+using WorkSpeed.Comparers;
+using WorkSpeed.Data;
 using WorkSpeed.Data.Models;
 using WorkSpeed.FileModels;
 using WorkSpeed.Interfaces;
@@ -14,13 +15,13 @@ namespace WorkSpeed
 {
     public class WarehouseEntities : IWarehouseEntities
     {
-        private readonly IWorkSpeedDbContext _dbContext;
+        private readonly IWorkSpeedData _dbContext;
         private readonly IProductivityCalculator _productivityCalculator;
 
         private readonly ObservableCollection<Employee> _employees;
         private readonly ObservableCollection<Productivity> _productivity;
 
-        public WarehouseEntities(IWorkSpeedDbContext dbContext,IProductivityCalculator productivityCalculator)
+        public WarehouseEntities(IWorkSpeedData dbContext,IProductivityCalculator productivityCalculator)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException();
             _productivityCalculator = productivityCalculator ?? throw new ArgumentNullException();
@@ -35,6 +36,7 @@ namespace WorkSpeed
         public ReadOnlyObservableCollection<Employee> Employees { get; }
         public ReadOnlyObservableCollection<Employee> Productivities { get; }
 
+
         public void Add (IEnumerable<ImportModel> importModels)
         {
             if (importModels == null) throw new ArgumentNullException();
@@ -43,17 +45,16 @@ namespace WorkSpeed
 
             Clear();
 
-            foreach (var model in models) {
+            var employees = models.Select (m => m.GetEmployee()).Distinct (new EmployeeComparer());
 
-                var dbEmployee = _dbContext.GetEmployees().FirstOrDefault (e => e.Id == model.Employee.Id) ?? model.Employee;
+            foreach (var employee in employees) {
 
-                if (dbEmployee != null) {
-                    _employees.Add (model.Employee);
-                }
-
-                _productivity.Add (_productivityCalculator.CalculatePoductivities(model.GetActions()));
+                _employees.Add (employee);
+                _productivity.Add (_productivityCalculator.CalculatePoductivities (models.Select (m => m.GetAction())
+                                                                                         .Where (a => a.Employee.Id.Equals (employee.Id))));
             }
         }
+
 
         private void Clear()
         {

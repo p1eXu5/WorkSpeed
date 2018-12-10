@@ -7,8 +7,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using NpoiExcel.Attributes;
-using ICSharpCode.SharpZipLib.Zip;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -163,7 +161,7 @@ namespace NpoiExcel
 
         private static bool IsHeaderless (this Type type)
         {
-            return type.GetCustomAttributes (typeof (HeaderlessAttribute)).Any();
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -173,32 +171,17 @@ namespace NpoiExcel
         /// <returns><see cref="Array"/></returns>
         private static HashSet<(string[] headers, string name)> GetPropertyNames (Type type)
         {
-            return  new HashSet<(string[] headers, string name)> 
-                        (
-                                type.GetProperties()
-                                    .Where (p => p.CanWrite && !p.GetCustomAttributes(typeof(HiddenAttribute)).Any())
-                                    .Select (p => (new [] {""}, p.Name))
-                        );
+            throw new NotImplementedException();
         }
 
         private static HashSet<(string[] headers, string name)> GetPropertyHeaders (Type type)
         {
-            return  new HashSet<(string[] headers, string propertyName)> 
-                        (
-                                type.GetProperties()
-                                    .Where(p => p.CanWrite && !p.GetCustomAttributes(typeof(HiddenAttribute)).Any())
-                                    .Select(p =>
-                                            {
-                                                var attr = p.GetCustomAttributes (typeof (HeaderAttribute)).Select (a => ((HeaderAttribute)a).Header).ToArray();
-                                                return (attr, p.Name);
-                                            })
-                       );
+            throw new NotImplementedException();
         }
 
         private static IEnumerable<PropertyInfo> GetPropertyInfos (this Type type)
         {
-            return type.GetProperties()
-                       .Where (p => p.CanWrite && !p.GetCustomAttributes (typeof(HiddenAttribute)).Any());
+            throw new NotImplementedException();
         }
 
 

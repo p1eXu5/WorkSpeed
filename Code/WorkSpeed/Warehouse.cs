@@ -15,7 +15,7 @@ using WorkSpeed.Interfaces;
 
 namespace WorkSpeed
 {
-    public class Warehouse : WarehouseEntities, IWarehouse
+    public class Warehouse : IWarehouse
     {
         private readonly ITypeRepository _typeRepository;
 

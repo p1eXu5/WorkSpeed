@@ -1,8 +1,8 @@
-﻿using WorkSpeed.Import.Attributes;
+﻿using WorkSpeed.Attributes;
 
 namespace WorkSpeed.FileModels
 {
-    public class BaseProductivityImportModel : BaseImportModel
+    public abstract class BaseProductivityImportModel : BaseImportModel
     {
         [Header("Код товара")]          public int ProductId { get; set; }
         [Header("Товар")]               public string Product { get; set; }

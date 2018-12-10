@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionModels\Dims.cs" />
-    <Compile Include="ActionModels\EmployeeAction.cs" />
+    <Compile Include="ActionModels\ImportedEmployeeAction.cs" />
     <Compile Include="ActionModels\ImportedActionDetailsBase.cs" />
     <Compile Include="ActionModels\ImportedAddress.cs" />
     <Compile Include="ActionModels\ImportedCommonActionDetails.cs" />
@@ -52,6 +52,7 @@
     <Compile Include="ActionModels\ImportedProduct.cs" />
     <Compile Include="ActionModels\ImportedReceptionActionDetails.cs" />
     <Compile Include="ActionModels\ImportedShipmentActionDetails.cs" />
+    <Compile Include="Comparers\EmployeeComparer.cs" />
     <Compile Include="ProductivityCalculator\IProductivityCalculator.cs" />
     <Compile Include="ProductivityCalculator\Productivity.cs" />
     <Compile Include="ActionModels\ProductMgh.cs" />

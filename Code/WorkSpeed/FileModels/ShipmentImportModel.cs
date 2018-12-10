@@ -1,4 +1,5 @@
-﻿using WorkSpeed.Import.Attributes;
+﻿using WorkSpeed.Attributes;
+using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.FileModels
 {
@@ -10,5 +11,10 @@ namespace WorkSpeed.FileModels
 
         [Header("Номерные ГМ на сотрудника")]       public double ClientCargoQuantity { get; set; }
         [Header("Безномерные ГМ на сотрудника")]    public double CommonCargoQuantity { get; set; }
+
+        public override EmployeeAction GetAction()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WorkSpeed.Data.Models
 {
-    public class ShipmentAction : Action
+    public class ShipmentAction : EmployeeAction
     {
         public float Weight { get; set; }
         public float ClientCargoQuantity { get; set; }

@@ -1,4 +1,5 @@
-﻿using WorkSpeed.Import.Attributes;
+﻿using WorkSpeed.Attributes;
+using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.FileModels
 {
@@ -9,5 +10,10 @@ namespace WorkSpeed.FileModels
         [Header("Сканирование транзитов")]  public bool IsClientScanning { get; set; }
 
         [Header("Адрес")]                   public string Address { get; set; }
+
+        public override EmployeeAction GetAction()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
