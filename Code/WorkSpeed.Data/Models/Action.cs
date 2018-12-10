@@ -15,14 +15,7 @@ namespace WorkSpeed.Data.Models
         public DateTime StartTime { get; set; }
         public TimeSpan Duration { get; set; }
 
-        public string Document1C { get; set; }
-        public short? ItemCount { get; set; }
-        public short? LineCount { get; set; }
-        public float? Volume { get; set; }
-        public short? ScanCount { get; set; }
-        public Address SenderAdress { get; set; }
-        public Address ReceiverAdress { get; set; }
-
         public Operation Operation { get; set; }
+        public Document1C Document { get; set; }
     }
 }

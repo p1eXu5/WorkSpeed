@@ -41,14 +41,50 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IWarehouse.cs" />
-    <Compile Include="IWarehouseEntities.cs" />
+    <Compile Include="ActionModels\Dims.cs" />
+    <Compile Include="ActionModels\EmployeeAction.cs" />
+    <Compile Include="ActionModels\ImportedActionDetailsBase.cs" />
+    <Compile Include="ActionModels\ImportedAddress.cs" />
+    <Compile Include="ActionModels\ImportedCommonActionDetails.cs" />
+    <Compile Include="ActionModels\ImportedGatheringActionDetails.cs" />
+    <Compile Include="ActionModels\ImportedInventoryActionDetails.cs" />
+    <Compile Include="ActionModels\ImportedOperation.cs" />
+    <Compile Include="ActionModels\ImportedProduct.cs" />
+    <Compile Include="ActionModels\ImportedReceptionActionDetails.cs" />
+    <Compile Include="ActionModels\ImportedShipmentActionDetails.cs" />
+    <Compile Include="ProductivityCalculator\IProductivityCalculator.cs" />
+    <Compile Include="ProductivityCalculator\Productivity.cs" />
+    <Compile Include="ActionModels\ProductMgh.cs" />
+    <Compile Include="Attributes\HeaderAttribute.cs" />
+    <Compile Include="Attributes\HeaderlessAttribute.cs" />
+    <Compile Include="Attributes\HiddenAttribute.cs" />
+    <Compile Include="FileModels\BaseImportModel.cs" />
+    <Compile Include="FileModels\BaseProductivityImportModel.cs" />
+    <Compile Include="FileModels\GatheringImportModel.cs" />
+    <Compile Include="FileModels\ImportModel.cs" />
+    <Compile Include="FileModels\InventoryImportModel.cs" />
+    <Compile Include="FileModels\ProductivityImportModel.cs" />
+    <Compile Include="FileModels\ReceptionImportModel.cs" />
+    <Compile Include="FileModels\ShipmentImportModel.cs" />
+    <Compile Include="Interfaces\ITypeRepository.cs" />
+    <Compile Include="Interfaces\IWarehouse.cs" />
+    <Compile Include="Interfaces\IWarehouseEntities.cs" />
     <Compile Include="OperationTypes.cs" />
+    <Compile Include="ProductivityCalculator\ProductivityCalculator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeRepository.cs" />
     <Compile Include="Warehouse.cs" />
-    <Compile Include="WorkSpeedExtensions.cs" />
+    <Compile Include="WarehouseEntities.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Helpers\Helpers.csproj">
+      <Project>{12faa7bd-a5d4-48e3-80c4-6d7a72be99b0}</Project>
+      <Name>Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NpoiExcel\NpoiExcel.csproj">
+      <Project>{47680bf8-c76a-44b9-bde3-694f1a73ccb1}</Project>
+      <Name>NpoiExcel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WorkSpeed.Data\WorkSpeed.Data.csproj">
       <Project>{72e065c5-8769-4008-9529-11194be488e0}</Project>
       <Name>WorkSpeed.Data</Name>

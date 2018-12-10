@@ -59,48 +59,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\HeaderAttribute.cs" />
-    <Compile Include="Attributes\HeaderVariationsAttribute.cs" />
-    <Compile Include="Attributes\HeadlessAttribute.cs" />
-    <Compile Include="Importer.cs" />
-    <Compile Include="FileImporters\ExcelImporter.cs" />
-    <Compile Include="IConcreteImporter.cs" />
-    <Compile Include="FileImporters\IFileImporter.cs" />
-    <Compile Include="ITypeRepository.cs" />
-    <Compile Include="Models\FileModels\BaseImportModel.cs" />
-    <Compile Include="Models\FileModels\BaseProductivityImportModel.cs" />
-    <Compile Include="Models\ImportModels\IImportedAction.cs" />
-    <Compile Include="Models\ImportModels\ImportedActionDetailsBase.cs" />
-    <Compile Include="Models\ImportModels\Dims.cs" />
-    <Compile Include="Models\FileModels\GatheringImportModel.cs" />
-    <Compile Include="Models\ImportModels\ImportedCommonActionDetails.cs" />
-    <Compile Include="Models\ImportModels\ImportedGatheringActionDetails.cs" />
-    <Compile Include="Models\ImportModels\ImportedAction.cs" />
-    <Compile Include="Models\ImportModels\ImportedAddress.cs" />
-    <Compile Include="Models\ImportModels\ImportedInventoryActionDetails.cs" />
-    <Compile Include="Models\ImportModels\ImportedOperation.cs" />
-    <Compile Include="Models\ImportModels\ImportedProduct.cs" />
-    <Compile Include="Models\FileModels\ProductivityImportModel.cs" />
-    <Compile Include="Models\FileModels\InventoryImportModel.cs" />
-    <Compile Include="Models\ImportModels\ImportedReceptionActionDetails.cs" />
-    <Compile Include="Models\ImportModels\ImportedShipmentActionDetails.cs" />
-    <Compile Include="Models\ImportModels\ProductMgh.cs" />
-    <Compile Include="Models\FileModels\ReceptionImportModel.cs" />
-    <Compile Include="Models\FileModels\ShipmentImportModel.cs" />
+    <Compile Include="ActionModels\IImportedAction.cs" />
+    <Compile Include="ActionModels\ImportedActionDetailsBase.cs" />
+    <Compile Include="ActionModels\Dims.cs" />
+    <Compile Include="ActionModels\ImportedCommonActionDetails.cs" />
+    <Compile Include="ActionModels\ImportedGatheringActionDetails.cs" />
+    <Compile Include="ActionModels\ImportedAction.cs" />
+    <Compile Include="ActionModels\ImportedAddress.cs" />
+    <Compile Include="ActionModels\ImportedInventoryActionDetails.cs" />
+    <Compile Include="ActionModels\ImportedOperation.cs" />
+    <Compile Include="ActionModels\ImportedProduct.cs" />
+    <Compile Include="ActionModels\ImportedReceptionActionDetails.cs" />
+    <Compile Include="ActionModels\ImportedShipmentActionDetails.cs" />
+    <Compile Include="ActionModels\Productivity.cs" />
+    <Compile Include="ActionModels\ProductMgh.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadOnlyHashSet.cs" />
-    <Compile Include="StringHelper.cs" />
-    <Compile Include="TableRect.cs" />
-    <Compile Include="TypeRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WorkSpeed\WorkSpeed.csproj">
-      <Project>{035d995a-6f8a-47c1-aebd-41b2cc5d6d7d}</Project>
-      <Name>WorkSpeed</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

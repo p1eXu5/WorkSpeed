@@ -35,7 +35,7 @@ namespace Helpers
             return str.ToCharArray().Where(Char.IsWhiteSpace).Count() != 0;
         }
 
-        public static string AddAssemblyPath(this string fileName, string subpath = "")
+        public static string AppendAssemblyPath(this string fileName, string subpath = "")
         {
             return new StringBuilder().Append(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
                                       .Append ("\\")

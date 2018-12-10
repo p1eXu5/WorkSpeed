@@ -125,7 +125,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Context\WorkSpeedDbContext.cs" />
+    <Compile Include="IWorkSpeedData.cs" />
+    <Compile Include="DataContexts\WorkSpeedDbContext.cs" />
     <Compile Include="Migrations\20181122130858_InitialCreate.cs" />
     <Compile Include="Migrations\20181122130858_InitialCreate.designer.cs">
       <DependentUpon>20181122130858_InitialCreate.cs</DependentUpon>
@@ -138,7 +139,9 @@
     <Compile Include="Models\BonusOrPenalty.cs" />
     <Compile Include="Models\CellTypes.cs" />
     <Compile Include="Models\Complexity.cs" />
+    <Compile Include="Models\Document1C.cs" />
     <Compile Include="Models\Employee.cs" />
+    <Compile Include="Models\GatheringAction.cs" />
     <Compile Include="Models\Operation.cs" />
     <Compile Include="Models\OperationGroups.cs" />
     <Compile Include="Models\PersonnelFileEntry.cs" />
@@ -147,10 +150,12 @@
     <Compile Include="Models\ProductDims.cs" />
     <Compile Include="Models\Rank.cs" />
     <Compile Include="Models\Salary.cs" />
+    <Compile Include="Models\ShipmentAction.cs" />
     <Compile Include="Models\ShipmentComplexity.cs" />
     <Compile Include="Models\WorkDay.cs" />
     <Compile Include="Models\WorkDayStates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorkSpeedData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
