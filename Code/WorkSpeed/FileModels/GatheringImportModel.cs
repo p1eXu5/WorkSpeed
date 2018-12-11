@@ -5,7 +5,7 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.FileModels
 {
-    public class GatheringImportModel : BaseProductivityImportModel
+    public class GatheringImportModel : ActionProductivityImportModel
     {
         [Header("Операция")]    public string Operation { get; set; }
 

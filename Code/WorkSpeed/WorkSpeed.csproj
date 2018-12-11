@@ -52,14 +52,15 @@
     <Compile Include="ActionModels\ImportedProduct.cs" />
     <Compile Include="ActionModels\ImportedReceptionActionDetails.cs" />
     <Compile Include="ActionModels\ImportedShipmentActionDetails.cs" />
-    <Compile Include="Comparers\EmployeeComparer.cs" />
+    <Compile Include="FileModels\ActionImportModelComparer.cs" />
+    <Compile Include="ProductivityCalculator\ProductivityCalculator.cs" />
     <Compile Include="ProductivityCalculator\IProductivityCalculator.cs" />
     <Compile Include="ProductivityCalculator\Productivity.cs" />
     <Compile Include="ActionModels\ProductMgh.cs" />
     <Compile Include="Attributes\HeaderAttribute.cs" />
     <Compile Include="Attributes\HeaderlessAttribute.cs" />
     <Compile Include="Attributes\HiddenAttribute.cs" />
-    <Compile Include="FileModels\BaseImportModel.cs" />
+    <Compile Include="FileModels\ActionImportModel.cs" />
     <Compile Include="FileModels\BaseProductivityImportModel.cs" />
     <Compile Include="FileModels\GatheringImportModel.cs" />
     <Compile Include="FileModels\ImportModel.cs" />
@@ -71,9 +72,14 @@
     <Compile Include="Interfaces\IWarehouse.cs" />
     <Compile Include="Interfaces\IWarehouseEntities.cs" />
     <Compile Include="OperationTypes.cs" />
-    <Compile Include="ProductivityCalculator\ProductivityCalculator.cs" />
+    <Compile Include="ProductivityCalculator\ProductivityObservableCollection.cs" />
+    <Compile Include="ProductivityIndicatorsModels\LineIndicators.cs" />
+    <Compile Include="ProductivityIndicatorsModels\ProductivityIndicators.cs" />
+    <Compile Include="ProductivityIndicatorsModels\TimeIndicators.cs" />
+    <Compile Include="ProductivityIndicatorsModels\VolumeIndicators.cs" />
+    <Compile Include="ProductivityIndicatorsModels\WeightIndicators.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TypeRepository.cs" />
+    <Compile Include="ImportActionTypeRepository.cs" />
     <Compile Include="Warehouse.cs" />
     <Compile Include="WarehouseEntities.cs" />
   </ItemGroup>

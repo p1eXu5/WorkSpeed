@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
 
-namespace WorkSpeed.Comparers
+namespace WorkSpeed.Data.Comparers
 {
     public class EmployeeComparer : IEqualityComparer<Employee>
     {

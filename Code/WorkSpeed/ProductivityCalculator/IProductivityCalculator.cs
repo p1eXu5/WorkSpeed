@@ -8,8 +8,8 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.ProductivityCalculator
 {
-    public interface IProductivityCalculator
+    public interface IProductivityCalculator<TAction> where TAction : EmployeeAction
     {
-        Productivity CalculatePoductivities (IEnumerable<EmployeeAction> actions);
+        void Calculate (SortedSet<TAction> actions, ICollection<Productivity> productivities);
     }
 }

@@ -3,7 +3,7 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.FileModels
 {
-    public class ReceptionImportModel : BaseProductivityImportModel
+    public class ReceptionImportModel : ActionProductivityImportModel
     {
         [Header("Количество")]              public int ActualQuantity { get; set; }
         [Header("Количество сканов")]       public int ScanQuantity { get; set; }

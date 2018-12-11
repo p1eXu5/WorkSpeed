@@ -18,12 +18,14 @@ namespace WorkSpeed
     public class Warehouse : IWarehouse
     {
         private readonly ITypeRepository _typeRepository;
-
+        private readonly ProductivityObservableCollection _productivities;
 
         public Warehouse()
         {
-            _typeRepository = new TypeRepository();
+            _typeRepository = new ImportActionTypeRepository();
             AddTypesToRepository (_typeRepository);
+
+            _productivities = new ProductivityObservableCollection();
         }
 
         /// <summary>
@@ -31,24 +33,40 @@ namespace WorkSpeed
         /// </summary>
         public IWarehouseEntities NewData { get; }
 
-        public async Task ImportAsync (string fileName)
+        public async Task<bool> ImportAsync (string fileName)
         {
-            await Task.Factory.StartNew (() => Import (fileName), TaskCreationOptions.LongRunning);
+            return await Task<bool>.Factory.StartNew (() => Import (fileName), TaskCreationOptions.LongRunning);
         }
 
-        private void Import (string fileName)
+        private bool Import (string fileName)
         {
             var sheetTable = ExcelImporter.ImportData (fileName, 0);
-            var type = _typeRepository.GetType (sheetTable.Headers, new[] {typeof (HeaderAttribute)},
-                                                                    new[] {typeof (HiddenAttribute)});
+            var importCollection = _typeRepository.GetTypeCollection (sheetTable, new[] {typeof (HeaderAttribute)},
+                                                                                  new[] {typeof (HiddenAttribute)});
 
-            FillProductivityCollection (ExcelImporter.ToCollection (sheetTable, type), type);
+            if (importCollection == null || importCollection.Count == 0) return false;
 
+            switch (importCollection[0]) {
+
+                case ActionImportModel action:
+
+                    FillProductivityCollection (importCollection.Cast<ActionImportModel>());
+                    CheckNewData (_productivities);
+                    break;
+            }
+
+            return true;
         }
 
-        private void FillProductivityCollection (IEnumerable data, Type type)
+        private void FillProductivityCollection (IEnumerable<ActionImportModel> actions)
         {
-                NewData.Add (data.Cast<ImportModel>());
+            if (_productivities.Any()) {
+                _productivities.Clear();
+            }
+
+            foreach (var action in actions) {
+                _productivities.Add (action);
+            }
         }
 
         private void AddTypesToRepository (ITypeRepository repository)

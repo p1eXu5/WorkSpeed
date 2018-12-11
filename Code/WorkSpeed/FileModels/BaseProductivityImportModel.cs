@@ -2,7 +2,7 @@
 
 namespace WorkSpeed.FileModels
 {
-    public abstract class BaseProductivityImportModel : BaseImportModel
+    public abstract class ActionProductivityImportModel : ActionImportModel
     {
         [Header("Код товара")]          public int ProductId { get; set; }
         [Header("Товар")]               public string Product { get; set; }

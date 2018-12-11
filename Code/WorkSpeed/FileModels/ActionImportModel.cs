@@ -6,7 +6,7 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.FileModels
 {
-    public abstract class BaseImportModel : ImportModel
+    public abstract class ActionImportModel : ImportModel
     {
         [Header("Дата")]        public DateTime DateTime { get; set; }
 

@@ -12,6 +12,6 @@ namespace WorkSpeed.Interfaces
     {
         IWarehouseEntities NewData { get; }
 
-        Task ImportAsync (string fileName);
+        Task<bool> ImportAsync (string fileName);
     }
 }
