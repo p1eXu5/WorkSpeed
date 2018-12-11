@@ -37,7 +37,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
             }
         }
         
-        public ICommand OpenFileCommand => new MvvmCommand (OpenFile);
+        public ICommand OpenFileCommand => new MvvmCommand (OpenFile, IsFileProcess);
 
         private async void OpenFile (object obj)
         {
@@ -60,6 +60,6 @@ namespace WorkSpeed.DesktopClient.ViewModels
             }
         }
 
-        private bool IsFileProcess() => !_isFileProcessing;
+        private bool IsFileProcess(object obj) => !_isFileProcessing;
     }
 }

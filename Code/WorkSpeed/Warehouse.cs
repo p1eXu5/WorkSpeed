@@ -26,6 +26,9 @@ namespace WorkSpeed
             AddTypesToRepository (_typeRepository);
         }
 
+        /// <summary>
+        /// Entities that don't contained in DB.
+        /// </summary>
         public IWarehouseEntities NewData { get; }
 
         public async Task ImportAsync (string fileName)
@@ -39,11 +42,11 @@ namespace WorkSpeed
             var type = _typeRepository.GetType (sheetTable.Headers, new[] {typeof (HeaderAttribute)},
                                                                     new[] {typeof (HiddenAttribute)});
 
-            FillNewData (ExcelImporter.ToCollection (sheetTable, type), type);
+            FillProductivityCollection (ExcelImporter.ToCollection (sheetTable, type), type);
 
         }
 
-        private void FillNewData (IEnumerable data, Type type)
+        private void FillProductivityCollection (IEnumerable data, Type type)
         {
                 NewData.Add (data.Cast<ImportModel>());
         }
