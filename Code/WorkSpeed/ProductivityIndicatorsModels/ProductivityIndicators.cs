@@ -8,6 +8,11 @@ namespace WorkSpeed.ProductivityIndicatorsModels
 {
     public abstract class ProductivityIndicators
     {
-        public abstract string GetName();
+        protected ProductivityIndicators ( string name )
+        {
+            Name = name ?? throw new ArgumentNullException();
+        }
+
+        public string Name { get; }
     }
 }

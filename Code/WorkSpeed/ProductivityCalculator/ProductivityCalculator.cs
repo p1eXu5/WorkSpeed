@@ -17,7 +17,7 @@ namespace WorkSpeed.ProductivityCalculator
             var employeeActions = actions.ToArray();
 
             var productivities = new Dictionary<Employee, Productivity>();
-            if (employeeActions.Any()) return productivities;
+            if (employeeActions.Any()) return productivities.Values;
 
             Productivity productivity = null;
             Dictionary<Employee, EmployeeAction> prevOperations = new Dictionary<Employee, EmployeeAction>();

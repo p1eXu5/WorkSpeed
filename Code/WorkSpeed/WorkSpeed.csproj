@@ -52,7 +52,13 @@
     <Compile Include="ActionModels\ImportedProduct.cs" />
     <Compile Include="ActionModels\ImportedReceptionActionDetails.cs" />
     <Compile Include="ActionModels\ImportedShipmentActionDetails.cs" />
+    <Compile Include="BreakConstraintsForNotSmokers.cs" />
+    <Compile Include="BreakConstraintsForSmokers.cs" />
+    <Compile Include="CategoryConstraints.cs" />
     <Compile Include="FileModels\ActionImportModelComparer.cs" />
+    <Compile Include="Interfaces\IBreakConstraints.cs" />
+    <Compile Include="Interfaces\ICategoryConstraints.cs" />
+    <Compile Include="ProductivityCalculator\AddTimeOptions.cs" />
     <Compile Include="ProductivityCalculator\ProductivityCalculator.cs" />
     <Compile Include="ProductivityCalculator\IProductivityCalculator.cs" />
     <Compile Include="ProductivityCalculator\Productivity.cs" />
@@ -73,8 +79,12 @@
     <Compile Include="Interfaces\IWarehouseEntities.cs" />
     <Compile Include="OperationTypes.cs" />
     <Compile Include="ProductivityCalculator\ProductivityObservableCollection.cs" />
-    <Compile Include="ProductivityIndicatorsModels\LineIndicators.cs" />
+    <Compile Include="ProductivityIndicatorsModels\CompositeQuantityIndicators.cs" />
+    <Compile Include="ProductivityIndicatorsModels\GatheringIndicators.cs" />
+    <Compile Include="ProductivityIndicatorsModels\IQuantityIndicators.cs" />
+    <Compile Include="ProductivityIndicatorsModels\QuantityIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\ProductivityIndicators.cs" />
+    <Compile Include="ProductivityIndicatorsModels\ProductivityTimer.cs" />
     <Compile Include="ProductivityIndicatorsModels\TimeIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\VolumeIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\WeightIndicators.cs" />

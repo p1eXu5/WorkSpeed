@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace WorkSpeed.ProductivityIndicatorsModels
 {
-    class LineIndicators : ProductivityIndicators
+    public struct ProductivityTimer
     {
-        public override string GetName()
-        {
-            throw new NotImplementedException();
-        }
+        public TimeSpan Duration;
+        public DateTime EndTime;
     }
 }

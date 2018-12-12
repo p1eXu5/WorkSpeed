@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace WorkSpeed.ProductivityIndicatorsModels
 {
-    class TimeIndicators : ProductivityIndicators
+    public class TimeIndicators : ProductivityIndicators
     {
-        public TimeSpan GatheringTime { get; set; }
-        public TimeSpan ClientGatheringTime { get; set; }
-        public TimeSpan ScanningTime { get; set; }
-        public TimeSpan ClientScanningTime { get; set; }
-        public TimeSpan DefragmentationTime { get; set; }
-        public TimeSpan PlacingTime { get; set; }
-        public TimeSpan InventorizationTime { get; set; }
-        public TimeSpan ShipmentTime { get; set; }
-        public TimeSpan NonProductiveTime { get; set; }
+        public ProductivityTimer GatheringTime = new ProductivityTimer();
+        public ProductivityTimer ClientGatheringTime = new ProductivityTimer();
+        public ProductivityTimer ScanningTime = new ProductivityTimer();
+        public ProductivityTimer ClientScanningTime = new ProductivityTimer();
+        public ProductivityTimer DefragmentationTime = new ProductivityTimer();
+        public ProductivityTimer PlacingTime = new ProductivityTimer();
+        public ProductivityTimer InventorizationTime = new ProductivityTimer();
+        public ProductivityTimer ShipmentTime = new ProductivityTimer();
+        public ProductivityTimer NonProductiveTime = new ProductivityTimer();
 
         public override string GetName()
         {

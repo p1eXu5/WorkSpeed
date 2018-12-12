@@ -7,10 +7,15 @@ namespace WorkSpeed.Data.Models
     public enum OperationGroups
     {
         Gathering,
+        ClientGathering,
+        Packing,
+        ClientPacking,
         Placing,
+        Replacing,
         Defragmentation,
         Inventory,
-        Reception,
+        Scanning,
+        ClientScanning,
         Shipment
     }
 }
