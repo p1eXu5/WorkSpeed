@@ -83,10 +83,12 @@
     <Compile Include="ProductivityIndicatorsModels\CompositeQuantityIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\GatheringIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\IQuantityIndicators.cs" />
+    <Compile Include="ProductivityIndicatorsModels\LineIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\QuantityIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\ProductivityIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\ProductivityTimer.cs" />
     <Compile Include="ProductivityIndicatorsModels\TimeIndicators.cs" />
+    <Compile Include="ProductivityIndicatorsModels\ValueIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\VolumeIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\WeightIndicators.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

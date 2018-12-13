@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkSpeed.Constraints;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Interfaces;
 
 namespace WorkSpeed.ProductivityIndicatorsModels
 {
-    public class CompositeQuantityIndicators : QuantityIndicators, IQuantityIndicators
+    public class CompositeQuantityIndicators : QuantityIndicators
     {
         private readonly Dictionary< string, QuantityIndicators > _indicatorsDictionary;
 
@@ -45,11 +46,11 @@ namespace WorkSpeed.ProductivityIndicatorsModels
             }
         }
 
-        void IQuantityIndicators.AddQuantity ( EmployeeAction gatheringAction )
+        protected override void Add ( EmployeeAction employeeAction )
         {
             foreach ( var indicators in _indicatorsDictionary.Values ) {
-                
-                ( ( IQuantityIndicators )indicators ).AddQuantity( gatheringAction );
+
+                indicators.AddQuantity( employeeAction );
             }
         }
 

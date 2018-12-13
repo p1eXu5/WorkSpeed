@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkSpeed.Interfaces;
 
-namespace WorkSpeed.Constraints
+namespace WorkSpeed.ProductivityIndicatorsModels
 {
-    public interface ICategoryConstraints
+    public class LineIndicators : QuantityIndicators
     {
-        int Count { get; }
     }
 }
