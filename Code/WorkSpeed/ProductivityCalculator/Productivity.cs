@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Attributes;
+using WorkSpeed.Constraints;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Interfaces;
 using WorkSpeed.ProductivityIndicatorsModels;
@@ -37,18 +38,20 @@ namespace WorkSpeed.ProductivityCalculator
         {
             Gathered = new CompositeQuantityIndicators( "Набор", categoryConstraints );
 
+
             Gathered.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.Gathering ] ) );
 
             ( ( CompositeQuantityIndicators ) Gathered[ _indicatorsNames[ OperationGroups.Gathering ] ] )
-                .AddIndicators( new QuantityIndicators( "Строчки" ) );
+                .AddIndicators( new LineIndicators( "Строчки" ) );
 
             ( ( CompositeQuantityIndicators ) Gathered[ _indicatorsNames[ OperationGroups.Gathering ] ] )
                 .AddIndicators( new QuantityIndicators( "Объём" ) );
 
+
             Gathered.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.ClientGathering ] ) );
 
             ( ( CompositeQuantityIndicators ) Gathered[ _indicatorsNames[ OperationGroups.ClientGathering ] ] )
-                .AddIndicators( new QuantityIndicators( "Строчки" ) );
+                .AddIndicators( new LineIndicators( "Строчки" ) );
 
             ( ( CompositeQuantityIndicators ) Gathered[ _indicatorsNames[ OperationGroups.ClientGathering ] ] )
                 .AddIndicators( new QuantityIndicators( "Объём" ) );
@@ -83,6 +86,11 @@ namespace WorkSpeed.ProductivityCalculator
                 case OperationGroups.ClientPacking :
 
                     Times.ClientGatheringTime += GetProductivityTimer( employeeAction, option, Times.ClientGatheringTime );
+                    break;
+
+                case OperationGroups.ShopperGathering:
+
+                    Times.ShopperGatheringTime += GetProductivityTimer( employeeAction, option, Times.ShopperGatheringTime );
                     break;
 
                 case OperationGroups.Scanning :

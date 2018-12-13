@@ -15,6 +15,7 @@ namespace WorkSpeed.ProductivityIndicatorsModels
 
         private ProductivityTimer _gatheringTime = new ProductivityTimer();
         private ProductivityTimer _clientGatheringTime = new ProductivityTimer();
+        private ProductivityTimer _shopperGatheringTime = new ProductivityTimer();
         private ProductivityTimer _scanningTime = new ProductivityTimer();
         private ProductivityTimer _clientScanningTime = new ProductivityTimer();
         private ProductivityTimer _defragmentationTime = new ProductivityTimer();
@@ -45,6 +46,12 @@ namespace WorkSpeed.ProductivityIndicatorsModels
         {
             get => _clientGatheringTime;
             set => _clientGatheringTime = _breakConstraints.TryModify( value );
+        }
+
+        public ProductivityTimer ShopperGatheringTime
+        {
+            get => _shopperGatheringTime;
+            set => _shopperGatheringTime = _breakConstraints.TryModify( value );
         }
 
         public ProductivityTimer ScanningTime
