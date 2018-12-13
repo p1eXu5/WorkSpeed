@@ -25,11 +25,17 @@ namespace WorkSpeed.ProductivityIndicatorsModels
         public ICategoryConstraints CategoryConstraints
         {
             get => _categoryConstraints; 
-            set => _categoryConstraints = value ?? throw new ArgumentNullException();
+            internal set => _categoryConstraints = value ?? throw new ArgumentNullException();
         }
 
-        void IQuantityIndicators.AddQuantity ( EmployeeAction employeeAction )
+        public void AddQuantity ( EmployeeAction employeeAction )
         {
+            Add( employeeAction );
+        }
+
+        protected virtual void Add ( EmployeeAction employeeAction )
+        {
+            throw new NotImplementedException();
         }
 
         public static QuantityIndicators operator + ( QuantityIndicators indicators, EmployeeAction employeeAction )
