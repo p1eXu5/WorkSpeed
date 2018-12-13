@@ -46,9 +46,12 @@ namespace WorkSpeed.ProductivityIndicatorsModels
             }
         }
 
-        protected override ICategoryConstraints OnChangeCategoryConstraints ( ICategoryConstraints categoryConstraints )
+        protected override void OnChangeCategoryConstraints ( ICategoryConstraints categoryConstraints )
         {
-            throw new NotImplementedException();
+            foreach ( var indicators in _indicatorsDictionary.Values ) {
+
+                indicators.CategoryConstraints = categoryConstraints;
+            }
         }
 
         protected override void Add ( EmployeeAction employeeAction )

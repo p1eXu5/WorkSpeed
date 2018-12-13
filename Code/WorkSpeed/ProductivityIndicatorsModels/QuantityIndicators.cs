@@ -26,7 +26,7 @@ namespace WorkSpeed.ProductivityIndicatorsModels
         public ICategoryConstraints CategoryConstraints
         {
             get => _categoryConstraints; 
-            internal set => _categoryConstraints = OnChangeCategoryConstraints( value );
+            internal set => OnChangeCategoryConstraints( value );
         }
 
         public void AddQuantity ( EmployeeAction employeeAction )
@@ -34,7 +34,7 @@ namespace WorkSpeed.ProductivityIndicatorsModels
             Add( employeeAction );
         }
 
-        protected abstract ICategoryConstraints OnChangeCategoryConstraints ( ICategoryConstraints categoryConstraints );
+        protected abstract void OnChangeCategoryConstraints ( ICategoryConstraints categoryConstraints );
 
         protected abstract void Add ( EmployeeAction employeeAction );
 
