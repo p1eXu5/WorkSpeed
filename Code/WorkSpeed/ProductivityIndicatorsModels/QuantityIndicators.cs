@@ -9,15 +9,15 @@ using WorkSpeed.Interfaces;
 
 namespace WorkSpeed.ProductivityIndicatorsModels
 {
-    public class QuantityIndicators : ProductivityIndicators, IQuantityIndicators
+    public abstract class QuantityIndicators : ProductivityIndicators, IQuantityIndicators
     {
         protected ICategoryConstraints _categoryConstraints;
 
-        public QuantityIndicators ( string name )
+        protected QuantityIndicators ( string name )
             : base( name )
         { }
 
-        public QuantityIndicators ( string name, ICategoryConstraints constraints )
+        protected QuantityIndicators ( string name, ICategoryConstraints constraints )
             : base( name )
         {
             _categoryConstraints = constraints ?? throw new ArgumentNullException();
@@ -26,7 +26,7 @@ namespace WorkSpeed.ProductivityIndicatorsModels
         public ICategoryConstraints CategoryConstraints
         {
             get => _categoryConstraints; 
-            internal set => _categoryConstraints = value ?? throw new ArgumentNullException();
+            internal set => _categoryConstraints = OnChangeCategoryConstraints( value );
         }
 
         public void AddQuantity ( EmployeeAction employeeAction )
@@ -34,14 +34,13 @@ namespace WorkSpeed.ProductivityIndicatorsModels
             Add( employeeAction );
         }
 
-        protected virtual void Add ( EmployeeAction employeeAction )
-        {
-            throw new NotImplementedException();
-        }
+        protected abstract ICategoryConstraints OnChangeCategoryConstraints ( ICategoryConstraints categoryConstraints );
+
+        protected abstract void Add ( EmployeeAction employeeAction );
 
         public static QuantityIndicators operator + ( QuantityIndicators indicators, EmployeeAction employeeAction )
         {
-            (( IQuantityIndicators )indicators).AddQuantity( employeeAction );
+            indicators.AddQuantity( employeeAction );
             return indicators;
         }
     }
