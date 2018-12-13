@@ -14,38 +14,10 @@ namespace WorkSpeed.ProductivityCalculator
 {
     public class Productivity
     {
-        private static readonly Dictionary<
-            OperationGroups,
-            Action <
-                Productivity,
-                EmployeeAction,
-                AddTimeOptions
-            >
-        > _addTimeMap;
-
         private static readonly Dictionary<OperationGroups, string> _indicatorsNames;
 
         static Productivity ()
         {
-            _addTimeMap = new Dictionary<OperationGroups, Action<Productivity, EmployeeAction, AddTimeOptions>>()
-            {
-                [ OperationGroups.Gathering ] = ( productivity, action, timer ) => productivity.AddTime( action, timer, ref productivity.Times.GatheringTime ),
-                [ OperationGroups.Packing ] = _addTimeMap[ OperationGroups.Gathering ],
-
-                [ OperationGroups.ClientGathering ] = ( productivity, action, timer ) => productivity.AddTime( action, timer, ref productivity.Times.ClientGatheringTime ),
-                [ OperationGroups.ClientPacking ] = _addTimeMap[ OperationGroups.ClientGathering ],
-
-                [ OperationGroups.Scanning ] = ( productivity, action, timer ) => productivity.AddTime( action, timer, ref productivity.Times.ScanningTime ),
-                [ OperationGroups.ClientScanning ] = ( productivity, action, timer ) => productivity.AddTime( action, timer, ref productivity.Times.ClientScanningTime ),
-
-                [ OperationGroups.Placing ] = ( productivity, action, timer ) => productivity.AddTime( action, timer, ref productivity.Times.PlacingTime ),
-                [ OperationGroups.Replacing ] = _addTimeMap[ OperationGroups.Placing ],
-
-                [ OperationGroups.Defragmentation ] = ( productivity, action, timer ) => productivity.AddTime( action, timer, ref productivity.Times.DefragmentationTime ),
-                [ OperationGroups.Inventory ] = ( productivity, action, timer ) => productivity.AddTime( action, timer, ref productivity.Times.InventorizationTime ),
-                [ OperationGroups.Shipment ] = ( productivity, action, timer ) => productivity.AddTime( action, timer, ref productivity.Times.ShipmentTime ),
-            };
-
             _indicatorsNames = new Dictionary< OperationGroups, string >
             {
                 [ OperationGroups.ClientGathering ] = "Набор клиентского товара",
@@ -92,14 +64,62 @@ namespace WorkSpeed.ProductivityCalculator
         public Employee Employee { get; }
 
         [Header("Время работы")]
-        public TimeIndicators Times { get; set; } = new TimeIndicators();
+        public TimeIndicators Times { get; set; } = new TimeIndicators( "Рабочее время" );
 
         [ Header( "Собрано" ) ]
         public CompositeQuantityIndicators Gathered { get; set; }
 
         public void AddTime ( EmployeeAction employeeAction,  AddTimeOptions option = AddTimeOptions.Duration )
         {
-            _addTimeMap[employeeAction.Operation.OperationGroup].Invoke( this, employeeAction, option );
+            switch ( employeeAction.Operation.OperationGroup ) {
+
+                case OperationGroups.Gathering :
+                case OperationGroups.Packing :
+
+                    Times.GatheringTime += GetProductivityTimer( employeeAction, option, Times.GatheringTime );
+                    break;
+
+                case OperationGroups.ClientGathering :
+                case OperationGroups.ClientPacking :
+
+                    Times.ClientGatheringTime += GetProductivityTimer( employeeAction, option, Times.ClientGatheringTime );
+                    break;
+
+                case OperationGroups.Scanning :
+
+                    Times.ScanningTime += GetProductivityTimer( employeeAction, option, Times.ScanningTime );
+                    break;
+
+                case OperationGroups.ClientScanning :
+
+                    Times.ClientScanningTime += GetProductivityTimer( employeeAction, option, Times.ClientScanningTime );
+                    break;
+
+                case OperationGroups.Defragmentation :
+
+                    Times.DefragmentationTime += GetProductivityTimer( employeeAction, option, Times.DefragmentationTime );
+                    break;
+
+                case OperationGroups.Placing :
+
+                    Times.PlacingTime += GetProductivityTimer( employeeAction, option, Times.PlacingTime );
+                    break;
+
+                case OperationGroups.Inventory :
+
+                    Times.InventoryTime += GetProductivityTimer( employeeAction, option, Times.InventoryTime );
+                    break;
+
+                case OperationGroups.Shipment :
+
+                    Times.ShipmentTime += GetProductivityTimer( employeeAction, option, Times.ShipmentTime );
+                    break;
+
+                default :
+
+                    Times.NonProductivTime += GetProductivityTimer( employeeAction, option, Times.NonProductivTime );
+                    break;
+            }
         }
 
         public void AddActionDetails ( EmployeeAction employeeAction )
@@ -114,7 +134,7 @@ namespace WorkSpeed.ProductivityCalculator
             }
         }
 
-        private void AddTime ( EmployeeAction employeeAction,  AddTimeOptions option,  ref ProductivityTimer timer )
+        private ProductivityTimer GetProductivityTimer ( EmployeeAction employeeAction,  AddTimeOptions option,  ProductivityTimer timer )
         {
             switch ( option ) {
 
@@ -132,20 +152,14 @@ namespace WorkSpeed.ProductivityCalculator
                     timer.EndTime = employeeAction.StartTime.Add(employeeAction.Duration);
 
                     break;
-
-                case AddTimeOptions.NonProductiveTime :
-
-                    timer.Duration += employeeAction.Duration;
-                    timer.EndTime = employeeAction.StartTime.Add(employeeAction.Duration);
-                    Times.NonProductiveTime.Duration += employeeAction.StartTime - timer.EndTime;
-
-                    break;
             }
+
+            return timer;
         }
 
         private void AddGatheringDetails ( GatheringAction gatheringAction )
         {
-            _gatheringDetailsMap[ gatheringAction.Operation.OperationGroup ] += gatheringAction;
+            
         }
     }
 }

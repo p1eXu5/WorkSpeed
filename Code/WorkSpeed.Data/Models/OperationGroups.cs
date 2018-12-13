@@ -6,7 +6,7 @@ namespace WorkSpeed.Data.Models
 {
     public enum OperationGroups
     {
-        Gathering,
+        Gathering = 1,
         ClientGathering,
         Packing,
         ClientPacking,
@@ -16,6 +16,7 @@ namespace WorkSpeed.Data.Models
         Inventory,
         Scanning,
         ClientScanning,
-        Shipment
+        Shipment,
+        Unknown
     }
 }
