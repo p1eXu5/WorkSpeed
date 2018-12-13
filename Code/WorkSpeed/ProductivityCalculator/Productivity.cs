@@ -45,7 +45,7 @@ namespace WorkSpeed.ProductivityCalculator
                 .AddIndicators( new LineIndicators( "Строчки" ) );
 
             ( ( CompositeQuantityIndicators ) Gathered[ _indicatorsNames[ OperationGroups.Gathering ] ] )
-                .AddIndicators( new QuantityIndicators( "Объём" ) );
+                .AddIndicators( new VolumeIndicators( "Объём" ) );
 
 
             Gathered.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.ClientGathering ] ) );
@@ -54,7 +54,7 @@ namespace WorkSpeed.ProductivityCalculator
                 .AddIndicators( new LineIndicators( "Строчки" ) );
 
             ( ( CompositeQuantityIndicators ) Gathered[ _indicatorsNames[ OperationGroups.ClientGathering ] ] )
-                .AddIndicators( new QuantityIndicators( "Объём" ) );
+                .AddIndicators( new VolumeIndicators( "Объём" ) );
         }
 
         public Productivity ( EmployeeAction employeeAction )
