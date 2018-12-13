@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Constraints;
+using WorkSpeed.Data.Models;
 using WorkSpeed.Interfaces;
 using WorkSpeed.ProductivityCalculator;
 
@@ -90,5 +91,9 @@ namespace WorkSpeed.ProductivityIndicatorsModels
             set => _nonProductivTime = _timeConstraint.GetProductivityTime( value, _nonProductivTime );
         }
 
+        protected override void Add ( EmployeeAction employeeAction )
+        {
+            throw new NotImplementedException();
+        }
     }
 }

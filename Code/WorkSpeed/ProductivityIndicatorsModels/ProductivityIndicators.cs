@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.ProductivityIndicatorsModels
 {
@@ -14,5 +15,7 @@ namespace WorkSpeed.ProductivityIndicatorsModels
         }
 
         public string Name { get; }
+
+        protected abstract void Add ( EmployeeAction employeeAction );
     }
 }

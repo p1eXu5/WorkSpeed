@@ -36,8 +36,6 @@ namespace WorkSpeed.ProductivityIndicatorsModels
 
         protected abstract void OnChangeCategoryConstraints ( ICategoryConstraints categoryConstraints );
 
-        protected abstract void Add ( EmployeeAction employeeAction );
-
         public static QuantityIndicators operator + ( QuantityIndicators indicators, EmployeeAction employeeAction )
         {
             indicators.AddQuantity( employeeAction );
