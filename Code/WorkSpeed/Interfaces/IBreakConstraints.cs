@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WorkSpeed.Interfaces
 {
-    interface IBreakConstraints
+    public interface IBreakConstraints
     {
     }
 }

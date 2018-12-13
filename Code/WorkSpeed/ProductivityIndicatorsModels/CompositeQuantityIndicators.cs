@@ -10,42 +10,50 @@ namespace WorkSpeed.ProductivityIndicatorsModels
 {
     public class CompositeQuantityIndicators : QuantityIndicators, IQuantityIndicators
     {
-        private readonly List< QuantityIndicators > _indicatorsCollection;
+        private readonly Dictionary< string, QuantityIndicators > _indicatorsDictionary;
+
+        public CompositeQuantityIndicators ( string name )
+            : base( name )
+        {
+        }
 
         public CompositeQuantityIndicators ( string name,  ICategoryConstraints constraints )
             :base(name, constraints)
         {
-            _indicatorsCollection = new List< QuantityIndicators >();
+            _indicatorsDictionary = new Dictionary< string, QuantityIndicators >();
         }
 
-        public CompositeQuantityIndicators ( string name,  ICategoryConstraints constraints,  IEnumerable< QuantityIndicators > list )
-            : base( name, constraints )
+        public CompositeQuantityIndicators ( string name,  ICategoryConstraints constraints,  IEnumerable< QuantityIndicators > indicatorsList )
+            : this( name, constraints )
         {
-            _indicatorsCollection = new List< QuantityIndicators >( list );
+            var indicators = indicatorsList.ToArray();
+            foreach (var quantityIndicators in indicators) {
+                _indicatorsDictionary[  quantityIndicators.Name ] = quantityIndicators;
+            }
         }
 
-        public void AddIndicators ( QuantityIndicators indicators ) => _indicatorsCollection.Add( indicators );
+        public void AddIndicators ( QuantityIndicators indicators )
+        {
+            indicators.CategoryConstraints = _categoryConstraints;
+            _indicatorsDictionary[ indicators.Name ] = indicators;
+        } 
 
         public void RemoveIndicators ( QuantityIndicators indicators )
         {
-            if ( _indicatorsCollection.Contains( indicators ) ) {
-                _indicatorsCollection.Remove( indicators );
+            if ( _indicatorsDictionary.ContainsKey( indicators.Name ) ) {
+                _indicatorsDictionary.Remove( indicators.Name );
             }
         }
 
         void IQuantityIndicators.AddQuantity ( EmployeeAction gatheringAction )
         {
-            foreach ( var quantityIndicators in _indicatorsCollection ) {
+            foreach ( var indicators in _indicatorsDictionary.Values ) {
                 
-                ( ( IQuantityIndicators )quantityIndicators ).AddQuantity( gatheringAction );
+                ( ( IQuantityIndicators )indicators ).AddQuantity( gatheringAction );
             }
-
-            ;
         }
 
-        public override string GetName ()
-        {
-            throw new NotImplementedException();
-        }
+        public QuantityIndicators this [ string key ] => _indicatorsDictionary[ key ];
+
     }
 }

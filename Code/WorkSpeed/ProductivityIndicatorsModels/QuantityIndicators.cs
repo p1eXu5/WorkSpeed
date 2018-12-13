@@ -10,15 +10,23 @@ namespace WorkSpeed.ProductivityIndicatorsModels
 {
     public class QuantityIndicators : ProductivityIndicators, IQuantityIndicators
     {
-        private readonly ICategoryConstraints constraints;
+        protected ICategoryConstraints _categoryConstraints;
+
+        public QuantityIndicators ( string name )
+            : base( name )
+        { }
 
         public QuantityIndicators ( string name, ICategoryConstraints constraints )
-            : base(name)
+            : base( name )
         {
-
+            _categoryConstraints = constraints ?? throw new ArgumentNullException();
         }
 
-        public ICategoryConstraints CategoryConstraints { get; set; }
+        public ICategoryConstraints CategoryConstraints
+        {
+            get => _categoryConstraints; 
+            set => _categoryConstraints = value ?? throw new ArgumentNullException();
+        }
 
         void IQuantityIndicators.AddQuantity ( EmployeeAction employeeAction )
         {

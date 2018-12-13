@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Attributes;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Interfaces;
 using WorkSpeed.ProductivityIndicatorsModels;
 
 namespace WorkSpeed.ProductivityCalculator
@@ -21,6 +22,8 @@ namespace WorkSpeed.ProductivityCalculator
                 AddTimeOptions
             >
         > _addTimeMap;
+
+        private static readonly Dictionary<OperationGroups, string> _indicatorsNames;
 
         static Productivity ()
         {
@@ -42,14 +45,41 @@ namespace WorkSpeed.ProductivityCalculator
                 [ OperationGroups.Inventory ] = ( productivity, action, timer ) => productivity.AddTime( action, timer, ref productivity.Times.InventorizationTime ),
                 [ OperationGroups.Shipment ] = ( productivity, action, timer ) => productivity.AddTime( action, timer, ref productivity.Times.ShipmentTime ),
             };
+
+            _indicatorsNames = new Dictionary< OperationGroups, string >
+            {
+                [ OperationGroups.ClientGathering ] = "Набор клиентского товара",
+                [ OperationGroups.Gathering ] = "Набор неклиентского товара",
+                [ OperationGroups.Packing ] = "",
+            };
         }
 
-        public Productivity ( Employee employee, ICategoryConstraints categoryConstraints )
+        public Productivity ( Employee employee,  IBreakConstraints breakConstraints,  ICategoryConstraints categoryConstraints )
         {
             Employee = employee ?? throw new ArgumentNullException();
 
-            Gathered = new CompositeQuantityIndicators();
-            Gathered.AddIndicators(  );
+            FillGetheringIndicators( categoryConstraints );
+        }
+
+        private void FillGetheringIndicators ( ICategoryConstraints categoryConstraints )
+        {
+            Gathered = new CompositeQuantityIndicators( "Набор", categoryConstraints );
+
+            Gathered.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.Gathering ] ) );
+
+            ( ( CompositeQuantityIndicators ) Gathered[ _indicatorsNames[ OperationGroups.Gathering ] ] )
+                .AddIndicators( new QuantityIndicators( "Строчки" ) );
+
+            ( ( CompositeQuantityIndicators ) Gathered[ _indicatorsNames[ OperationGroups.Gathering ] ] )
+                .AddIndicators( new QuantityIndicators( "Объём" ) );
+
+            Gathered.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.ClientGathering ] ) );
+
+            ( ( CompositeQuantityIndicators ) Gathered[ _indicatorsNames[ OperationGroups.ClientGathering ] ] )
+                .AddIndicators( new QuantityIndicators( "Строчки" ) );
+
+            ( ( CompositeQuantityIndicators ) Gathered[ _indicatorsNames[ OperationGroups.ClientGathering ] ] )
+                .AddIndicators( new QuantityIndicators( "Объём" ) );
         }
 
         public Productivity ( EmployeeAction employeeAction )
@@ -66,17 +96,6 @@ namespace WorkSpeed.ProductivityCalculator
 
         [ Header( "Собрано" ) ]
         public CompositeQuantityIndicators Gathered { get; set; }
-
-        [Header("Расставлено")]
-        public ICollection<ProductivityIndicators> Placed { get; set; } = new List<ProductivityIndicators>();
-        [Header("Подтоварено")]
-        public ICollection<ProductivityIndicators> Defragmented { get; set; } = new List<ProductivityIndicators>();
-        [Header("Проинвентарено")]
-        public ICollection<ProductivityIndicators> Inventory { get; set; } = new List<ProductivityIndicators>();
-        [Header("Просканировано")]
-        public ICollection<ProductivityIndicators> Scanned { get; set; } = new List<ProductivityIndicators>();
-        [Header("Загружено/Погружено")]
-        public ICollection<ProductivityIndicators> LoadedUnloaded { get; set; } = new List<ProductivityIndicators>();
 
         public void AddTime ( EmployeeAction employeeAction,  AddTimeOptions option = AddTimeOptions.Duration )
         {
