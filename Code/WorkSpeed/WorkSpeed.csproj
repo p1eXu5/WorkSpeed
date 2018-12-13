@@ -82,6 +82,7 @@
     <Compile Include="Interfaces\IWarehouseEntities.cs" />
     <Compile Include="OperationTypes.cs" />
     <Compile Include="ProductivityCalculator\ProductivityObservableCollection.cs" />
+    <Compile Include="ProductivityIndicatorsModels\CargoIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\CompositeQuantityIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\GatheringIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\IQuantityIndicators.cs" />
