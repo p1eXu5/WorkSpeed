@@ -8,6 +8,7 @@ namespace WorkSpeed.Data.Models
 {
     public class ScanningAction : WithProductAction
     {
-
+        public ushort ScanQuantity { get; set; }
+        public Address ReceptionDynamicCellAdress { get; set; }
     }
 }

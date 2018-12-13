@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace WorkSpeed.Data.Models
 {
-    public class GatheringAction : WithProductAction
+    /// <summary>
+    /// Упаковка товара как клиентского так и общего.
+    /// </summary>
+    public class PackingAction : WithProductAction
     {
-        public Address FastGatheringCellAdress { get; set; }
         public Address DynamicCellAdress { get; set; }
     }
 }

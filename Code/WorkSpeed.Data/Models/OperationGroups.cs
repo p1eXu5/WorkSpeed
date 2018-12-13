@@ -11,6 +11,7 @@ namespace WorkSpeed.Data.Models
         Packing,
         ClientPacking,
         Placing,
+        ShopperGathering,
         Replacing,
         Defragmentation,
         Inventory,
