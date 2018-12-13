@@ -8,8 +8,8 @@ namespace WorkSpeed.ProductivityCalculator
 {
     public enum AddTimeOptions
     {
-        Continuous,
+        Continuous = 1,
         Duration,
-        NonProductiveTime,
+        Unkown,
     }
 }
