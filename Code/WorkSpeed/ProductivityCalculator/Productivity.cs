@@ -37,7 +37,20 @@ namespace WorkSpeed.ProductivityCalculator
                 [ OperationGroups.Shipment ] = "Загружено/Погружено",
             };
         }
-        
+
+        #endregion
+
+
+        #region Filds
+
+        protected readonly TimeIndicators _times;
+        protected readonly CompositeQuantityIndicators _gathered;
+        protected readonly LineIndicators _placed;
+        protected readonly LineIndicators _defragment;
+        protected readonly LineIndicators _inventory;
+        protected readonly CompositeQuantityIndicators _scanned;
+        protected readonly CompositeQuantityIndicators _shipment;
+
         #endregion
 
 
@@ -47,92 +60,85 @@ namespace WorkSpeed.ProductivityCalculator
         {
             Employee = employeeAction.Employee ?? throw new ArgumentNullException();
 
-            Times = new TimeIndicators( "Рабочее время", timeConstraintFactory.GeTimeConstraint( Employee ) );
+            _times = new TimeIndicators( "Рабочее время", timeConstraintFactory.GeTimeConstraint( Employee ) );
 
-            FillGetheringIndicators( categoryConstraints );
+            _gathered = new CompositeQuantityIndicators( "Набор", categoryConstraints );
+            FillGetheringIndicators( _gathered );
 
-            Placed = new LineIndicators( _indicatorsNames[ OperationGroups.Placing ], categoryConstraints );
-            Defragment = new LineIndicators( _indicatorsNames[ OperationGroups.Defragmentation ], categoryConstraints );
-            Inventory = new LineIndicators( _indicatorsNames[ OperationGroups.Inventory ], categoryConstraints );
+            _placed = new LineIndicators( _indicatorsNames[ OperationGroups.Placing ], categoryConstraints );
+            _defragment = new LineIndicators( _indicatorsNames[ OperationGroups.Defragmentation ], categoryConstraints );
+            _inventory = new LineIndicators( _indicatorsNames[ OperationGroups.Inventory ], categoryConstraints );
 
-            FillScanningIndicators( categoryConstraints );
+            _scanned = new CompositeQuantityIndicators( "Сканирование" );
+            FillScanningIndicators( _scanned );
 
-            FillShipmentIndicators( categoryConstraints );
+            _shipment = new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.Shipment ] );
+            FillShipmentIndicators( _shipment );
 
             AddTime( employeeAction );
             AddActionDetails( employeeAction );
         }
 
-        private void FillGetheringIndicators ( ICategoryConstraints categoryConstraints )
+        private void FillGetheringIndicators ( CompositeQuantityIndicators gathered )
         {
-            // root
-            Gathered = new CompositeQuantityIndicators( "Набор", categoryConstraints );
-
-
             // gathering
-            Gathered.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.Gathering ] ) );
+            gathered.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.Gathering ] ) );
 
-            ( ( CompositeQuantityIndicators ) Gathered[ _indicatorsNames[ OperationGroups.Gathering ] ] )
+            ( ( CompositeQuantityIndicators )gathered[ _indicatorsNames[ OperationGroups.Gathering ] ] )
                 .AddIndicators( new LineIndicators( "Строчки" ) );
 
-            ( ( CompositeQuantityIndicators ) Gathered[ _indicatorsNames[ OperationGroups.Gathering ] ] )
+            ( ( CompositeQuantityIndicators )gathered[ _indicatorsNames[ OperationGroups.Gathering ] ] )
                 .AddIndicators( new VolumeIndicators( "Объём" ) );
 
 
             // client gathering
-            Gathered.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.ClientGathering ] ) );
+            gathered.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.ClientGathering ] ) );
 
-            ( ( CompositeQuantityIndicators ) Gathered[ _indicatorsNames[ OperationGroups.ClientGathering ] ] )
+            ( ( CompositeQuantityIndicators )gathered[ _indicatorsNames[ OperationGroups.ClientGathering ] ] )
                 .AddIndicators( new LineIndicators( "Строчки" ) );
 
-            ( ( CompositeQuantityIndicators ) Gathered[ _indicatorsNames[ OperationGroups.ClientGathering ] ] )
+            ( ( CompositeQuantityIndicators )gathered[ _indicatorsNames[ OperationGroups.ClientGathering ] ] )
                 .AddIndicators( new VolumeIndicators( "Объём" ) );
 
 
             // shopper gathering
-            Gathered.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.ShopperGathering ] ) );
+            gathered.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.ShopperGathering ] ) );
 
-            ( ( CompositeQuantityIndicators )Gathered[ _indicatorsNames[ OperationGroups.ShopperGathering ] ] )
+            ( ( CompositeQuantityIndicators )gathered[ _indicatorsNames[ OperationGroups.ShopperGathering ] ] )
                 .AddIndicators( new LineIndicators( "Строчки" ) );
 
-            ( ( CompositeQuantityIndicators )Gathered[ _indicatorsNames[ OperationGroups.ShopperGathering ] ] )
+            ( ( CompositeQuantityIndicators )gathered[ _indicatorsNames[ OperationGroups.ShopperGathering ] ] )
                 .AddIndicators( new VolumeIndicators( "Объём" ) );
         }
 
-        private void FillScanningIndicators ( ICategoryConstraints categoryConstraints )
+        private void FillScanningIndicators ( CompositeQuantityIndicators scanned )
         {
-            Scanned = new CompositeQuantityIndicators( "Сканирование" );
+            scanned.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.Scanning ] ) );
 
-
-            Scanned.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.Scanning ] ) );
-
-            ( ( CompositeQuantityIndicators )Scanned[ _indicatorsNames[ OperationGroups.Scanning ] ] )
+            ( ( CompositeQuantityIndicators )scanned[ _indicatorsNames[ OperationGroups.Scanning ] ] )
                 .AddIndicators( new LineIndicators( "Строчки" ) );
 
-            ( ( CompositeQuantityIndicators )Scanned[ _indicatorsNames[ OperationGroups.Scanning ] ] )
+            ( ( CompositeQuantityIndicators )scanned[ _indicatorsNames[ OperationGroups.Scanning ] ] )
                 .AddIndicators( new VolumeIndicators( "Объём" ) );
 
 
-            Scanned.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.ClientScanning ] ) );
+            scanned.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.ClientScanning ] ) );
 
-            ( ( CompositeQuantityIndicators )Scanned[ _indicatorsNames[ OperationGroups.ClientScanning ] ] )
+            ( ( CompositeQuantityIndicators )scanned[ _indicatorsNames[ OperationGroups.ClientScanning ] ] )
                 .AddIndicators( new LineIndicators( "Строчки" ) );
 
-            ( ( CompositeQuantityIndicators )Scanned[ _indicatorsNames[ OperationGroups.ClientScanning ] ] )
+            ( ( CompositeQuantityIndicators )scanned[ _indicatorsNames[ OperationGroups.ClientScanning ] ] )
                 .AddIndicators( new VolumeIndicators( "Объём" ) );
         }
 
-        private void FillShipmentIndicators ( ICategoryConstraints categoryConstraints )
+        private void FillShipmentIndicators ( CompositeQuantityIndicators shipment )
         {
-            Shipment = new CompositeQuantityIndicators( "Сканирование" );
+            shipment.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.Shipment ] ) );
 
-
-            Shipment.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.Scanning ] ) );
-
-            ( ( CompositeQuantityIndicators )Shipment[ _indicatorsNames[ OperationGroups.Shipment ] ] )
+            ( ( CompositeQuantityIndicators )shipment[ _indicatorsNames[ OperationGroups.Shipment ] ] )
                 .AddIndicators( new WeightIndicators( "Объём" ) );
 
-            ( ( CompositeQuantityIndicators )Shipment[ _indicatorsNames[ OperationGroups.Shipment ] ] )
+            ( ( CompositeQuantityIndicators )shipment[ _indicatorsNames[ OperationGroups.Shipment ] ] )
                 .AddIndicators( new CargoIndicators( "Места" ) );
         }
 
@@ -143,26 +149,13 @@ namespace WorkSpeed.ProductivityCalculator
 
         public Employee Employee { get; }
 
-        [Header("Время работы")]
-        public TimeIndicators Times { get; }
-
-        [ Header( "Собрано" ) ]
-        public CompositeQuantityIndicators Gathered { get; private set; }
-
-        [Header( "Расставлено" )]
-        public LineIndicators Placed { get; private set; }
-
-        [Header( "Подтоварено" )]
-        public LineIndicators Defragment { get; private set; }
-
-        [Header( "Проинвентарено" )]
-        public LineIndicators Inventory { get; private set; }
-
-        [Header( "Просканировано" )]
-        public CompositeQuantityIndicators Scanned { get; private set; }
-
-        [Header( "Загружено/Погружено" )]
-        public CompositeQuantityIndicators Shipment { get; private set; }
+        public ProductivityIndicators Times => _times;
+        public ProductivityIndicators Gathered => _gathered;
+        public ProductivityIndicators Placed => _placed;
+        public ProductivityIndicators Defragment => _defragment;
+        public ProductivityIndicators Inventory => _inventory;
+        public ProductivityIndicators Scanned => _scanned;
+        public ProductivityIndicators Shipment => _shipment;
 
         #endregion
 
@@ -234,7 +227,7 @@ namespace WorkSpeed.ProductivityCalculator
 
                 case GatheringAction gatheringAction :
 
-                    AddGatheringDetails( gatheringAction );
+                    (()Gathered).AddQuantity( gatheringAction );
                     break;
             }
         }
