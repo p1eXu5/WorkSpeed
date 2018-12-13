@@ -156,8 +156,10 @@
     <Compile Include="Models\Rank.cs" />
     <Compile Include="Models\ReceptionAction.cs" />
     <Compile Include="Models\Salary.cs" />
+    <Compile Include="Models\ScanningAction.cs" />
     <Compile Include="Models\ShipmentAction.cs" />
     <Compile Include="Models\ShipmentComplexity.cs" />
+    <Compile Include="Models\WithProductAction.cs" />
     <Compile Include="Models\WorkDay.cs" />
     <Compile Include="Models\WorkDayStates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

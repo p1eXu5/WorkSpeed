@@ -9,26 +9,21 @@ using WorkSpeed.Interfaces;
 
 namespace WorkSpeed.ProductivityIndicatorsModels
 {
-    public class ValueIndicators : QuantityIndicators
+    public abstract class ValueIndicators : QuantityIndicators
     {
-        protected List< double > _valueList;
+        protected List< double > ValueList;
 
-        public ValueIndicators ( string name ) : base( name )
+        protected ValueIndicators ( string name ) : base( name )
         {
-            _valueList = new List< double >( 1 );
+            ValueList = new List< double >( 1 );
         }
 
-        public ValueIndicators ( string name, ICategoryConstraints constraints ) : base( name, constraints )
+        protected ValueIndicators ( string name, ICategoryConstraints constraints ) : base( name, constraints )
         {
-            _valueList = new List< double >( _categoryConstraints.Count );
+            ValueList = new List< double >( _categoryConstraints.Count );
         }
 
         protected override void OnChangeCategoryConstraints ( ICategoryConstraints categoryConstraints )
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void Add ( EmployeeAction employeeAction )
         {
             throw new NotImplementedException();
         }
