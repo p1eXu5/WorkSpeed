@@ -11,6 +11,7 @@ namespace WorkSpeed.Data.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }
+        public bool IsSmoker { get; set; }
         public DateTime? ProbationEnd { get; set; }
 
         public Position Position { get; set; }

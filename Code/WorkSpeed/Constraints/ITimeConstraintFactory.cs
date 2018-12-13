@@ -7,9 +7,8 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Constraints
 {
-    public interface ICategoryConstraints
+    public interface ITimeConstraintFactory
     {
-        int Count { get; }
-        int GetCategoryNum ( Product product );
+        ITimeConstraint GeTimeConstraint ( Employee employee );
     }
 }

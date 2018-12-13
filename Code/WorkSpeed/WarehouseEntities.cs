@@ -4,8 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WorkSpeed.Comparers;
+
 using WorkSpeed.Data;
+using WorkSpeed.Data.Comparers;
 using WorkSpeed.Data.Models;
 using WorkSpeed.FileModels;
 using WorkSpeed.Interfaces;
@@ -16,15 +17,15 @@ namespace WorkSpeed
     public class WarehouseEntities : IWarehouseEntities
     {
         private readonly IWorkSpeedData _dbContext;
-        private readonly IProductivityCalculator _productivityCalculator;
+        //private readonly IProductivityCalculator _productivityCalculator;
 
         private readonly ObservableCollection<Employee> _employees;
         private readonly ObservableCollection<Productivity> _productivity;
 
-        public WarehouseEntities(IWorkSpeedData dbContext,IProductivityCalculator productivityCalculator)
+        public WarehouseEntities(IWorkSpeedData dbContext)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException();
-            _productivityCalculator = productivityCalculator ?? throw new ArgumentNullException();
+            //_productivityCalculator = productivityCalculator ?? throw new ArgumentNullException();
 
             _employees = new ObservableCollection<Employee>();
             Employees = new ReadOnlyObservableCollection<Employee> (_employees);
@@ -50,8 +51,7 @@ namespace WorkSpeed
             foreach (var employee in employees) {
 
                 _employees.Add (employee);
-                _productivity.Add (_productivityCalculator.CalculatePoductivities (models.Select (m => m.GetAction())
-                                                                                         .Where (a => a.Employee.Id.Equals (employee.Id))));
+
             }
         }
 

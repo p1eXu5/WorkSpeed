@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.ProductivityIndicatorsModels;
 
-namespace WorkSpeed.Interfaces
+namespace WorkSpeed.Constraints
 {
-    public interface IBreakConstraints
+    public interface ITimeConstraint
     {
-        ProductivityTime TryModify ( ProductivityTime timer );
+        ProductivityTime GetProductivityTime ( ProductivityTime addingTime, ProductivityTime targetTime );
     }
 }

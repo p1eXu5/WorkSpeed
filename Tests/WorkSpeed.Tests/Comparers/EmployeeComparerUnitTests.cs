@@ -1,7 +1,9 @@
 ﻿using System.Globalization;
 using NUnit.Framework;
-using WorkSpeed.Comparers;
+using WorkSpeed.Data.Comparers;
 using WorkSpeed.Data.Models;
+using WorkSpeed.ProductivityIndicatorsModels;
+
 // ReSharper disable ExpressionIsAlwaysNull
 // ReSharper disable RedundantBoolCompare
 
@@ -43,6 +45,8 @@ namespace WorkSpeed.Tests.Comparers
         [Test]
         public void Equals__EmployeeXIsNull_EmployeeYIsNotNull__ReturnsFalse()
         {
+            var p = new ProductivityTime();
+
             var comparer = new EmployeeComparer();
             Employee employeeX = null;
             Employee employeeY = new Employee();

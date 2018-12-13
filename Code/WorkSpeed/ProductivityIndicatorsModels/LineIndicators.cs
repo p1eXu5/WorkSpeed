@@ -25,7 +25,6 @@ namespace WorkSpeed.ProductivityIndicatorsModels
                     ++ValueList[ valueIndex ];
                     break;
                     
-                case Scanning
             }
 
         }

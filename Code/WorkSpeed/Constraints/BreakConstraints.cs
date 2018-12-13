@@ -15,6 +15,6 @@ namespace WorkSpeed.Constraints
 
     internal sealed class DefaultBreakConstraints : IBreakConstraints
     {
-        public ProductivityTimer TryModify ( ProductivityTimer timer ) => timer;
+        public ProductivityTime TryModify ( ProductivityTime timer ) => timer;
     }
 }

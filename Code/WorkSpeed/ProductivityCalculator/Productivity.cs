@@ -23,14 +23,15 @@ namespace WorkSpeed.ProductivityCalculator
             {
                 [ OperationGroups.ClientGathering ] = "Набор клиентского товара",
                 [ OperationGroups.Gathering ] = "Набор неклиентского товара",
-                [ OperationGroups.Packing ] = "",
+                [ OperationGroups.Packing ] = "Упаковка товара",
             };
         }
 
-        public Productivity ( Employee employee,  IBreakConstraints breakConstraints,  ICategoryConstraints categoryConstraints )
+        public Productivity ( Employee employee,  ITimeConstraintFactory timeConstraintFactory,  ICategoryConstraints categoryConstraints )
         {
             Employee = employee ?? throw new ArgumentNullException();
 
+            Times = new TimeIndicators( "Рабочее время", timeConstraintFactory.GeTimeConstraint( Employee ) );
             FillGetheringIndicators( categoryConstraints );
         }
 
@@ -67,10 +68,10 @@ namespace WorkSpeed.ProductivityCalculator
         public Employee Employee { get; }
 
         [Header("Время работы")]
-        public TimeIndicators Times { get; set; } = new TimeIndicators( "Рабочее время" );
+        public TimeIndicators Times { get; }
 
         [ Header( "Собрано" ) ]
-        public CompositeQuantityIndicators Gathered { get; set; }
+        public CompositeQuantityIndicators Gathered { get; private set; }
 
         public void AddTime ( EmployeeAction employeeAction,  AddTimeOptions option = AddTimeOptions.Duration )
         {
@@ -142,7 +143,7 @@ namespace WorkSpeed.ProductivityCalculator
             }
         }
 
-        private ProductivityTimer GetProductivityTimer ( EmployeeAction employeeAction,  AddTimeOptions option,  ProductivityTimer timer )
+        private ProductivityTime GetProductivityTimer ( EmployeeAction employeeAction,  AddTimeOptions option,  ProductivityTime timer )
         {
             switch ( option ) {
 

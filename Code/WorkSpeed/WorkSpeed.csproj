@@ -56,6 +56,8 @@
     <Compile Include="BreakConstraintsForSmokers.cs" />
     <Compile Include="CategoryConstraints.cs" />
     <Compile Include="Constraints\BreakConstraints.cs" />
+    <Compile Include="Constraints\ITimeConstraint.cs" />
+    <Compile Include="Constraints\ITimeConstraintFactory.cs" />
     <Compile Include="FileModels\ActionImportModelComparer.cs" />
     <Compile Include="Constraints\IBreakConstraints.cs" />
     <Compile Include="Constraints\ICategoryConstraints.cs" />
@@ -86,7 +88,7 @@
     <Compile Include="ProductivityIndicatorsModels\LineIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\QuantityIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\ProductivityIndicators.cs" />
-    <Compile Include="ProductivityIndicatorsModels\ProductivityTimer.cs" />
+    <Compile Include="ProductivityIndicatorsModels\ProductivityTime.cs" />
     <Compile Include="ProductivityIndicatorsModels\TimeIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\ValueIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\VolumeIndicators.cs" />

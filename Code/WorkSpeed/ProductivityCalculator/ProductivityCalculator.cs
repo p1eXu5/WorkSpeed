@@ -35,6 +35,8 @@ namespace WorkSpeed.ProductivityCalculator
 
                 }
             }
+
+            return null;
         }
 
         private static Productivity GetProductivity (ICollection<Productivity> productivities, EmployeeAction employeeActions)
@@ -42,11 +44,15 @@ namespace WorkSpeed.ProductivityCalculator
             var productivity = productivities.FirstOrDefault (p => p.Employee.Equals (employeeActions.Employee));
 
             if (null == productivity) {
-                productivity = new Productivity (employeeActions.Employee);
-                productivities.Add (productivity);
+
             }
 
             return productivity;
+        }
+
+        public void Calculate ( SortedSet< EmployeeAction > actions, ICollection< Productivity > productivities )
+        {
+            throw new NotImplementedException();
         }
     }
 }

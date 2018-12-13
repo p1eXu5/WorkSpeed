@@ -12,6 +12,7 @@ using WorkSpeed.Attributes;
 using WorkSpeed;
 using WorkSpeed.FileModels;
 using WorkSpeed.Interfaces;
+using WorkSpeed.ProductivityCalculator;
 
 namespace WorkSpeed
 {
@@ -51,7 +52,7 @@ namespace WorkSpeed
                 case ActionImportModel action:
 
                     FillProductivityCollection (importCollection.Cast<ActionImportModel>());
-                    CheckNewData (_productivities);
+                    //CheckNewData (_productivities);
                     break;
             }
 

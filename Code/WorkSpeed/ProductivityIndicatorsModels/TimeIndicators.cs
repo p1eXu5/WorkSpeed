@@ -11,89 +11,83 @@ namespace WorkSpeed.ProductivityIndicatorsModels
 {
     public class TimeIndicators : ProductivityIndicators
     {
-        private readonly IBreakConstraints _breakConstraints;
+        private readonly ITimeConstraint _timeConstraint;
 
-        private ProductivityTimer _gatheringTime = new ProductivityTimer();
-        private ProductivityTimer _clientGatheringTime = new ProductivityTimer();
-        private ProductivityTimer _shopperGatheringTime = new ProductivityTimer();
-        private ProductivityTimer _scanningTime = new ProductivityTimer();
-        private ProductivityTimer _clientScanningTime = new ProductivityTimer();
-        private ProductivityTimer _defragmentationTime = new ProductivityTimer();
-        private ProductivityTimer _placingTime = new ProductivityTimer();
-        private ProductivityTimer _inventoryTime = new ProductivityTimer();
-        private ProductivityTimer _shipmentTime = new ProductivityTimer();
-        private ProductivityTimer _nonProductivTime = new ProductivityTimer();
+        private ProductivityTime _gatheringTime = new ProductivityTime();
+        private ProductivityTime _clientGatheringTime = new ProductivityTime();
+        private ProductivityTime _shopperGatheringTime = new ProductivityTime();
+        private ProductivityTime _scanningTime = new ProductivityTime();
+        private ProductivityTime _clientScanningTime = new ProductivityTime();
+        private ProductivityTime _defragmentationTime = new ProductivityTime();
+        private ProductivityTime _placingTime = new ProductivityTime();
+        private ProductivityTime _inventoryTime = new ProductivityTime();
+        private ProductivityTime _shipmentTime = new ProductivityTime();
+        private ProductivityTime _nonProductivTime = new ProductivityTime();
 
-        public TimeIndicators ( string name )
+        public TimeIndicators ( string name, ITimeConstraint timeConstraint )
             : base( name )
         {
-            _breakConstraints = BreakConstraints.DefaultBreakConstraints;
+            _timeConstraint = timeConstraint ?? throw new ArgumentNullException();
         }
 
-        public TimeIndicators ( string name, IBreakConstraints breakConstraints )
-            : this( name )
-        {
-            _breakConstraints = breakConstraints ?? throw new ArgumentNullException();
-        }
-
-        public ProductivityTimer GatheringTime
+        public ProductivityTime GatheringTime
         {
             get => _gatheringTime;
-            set => _gatheringTime = _breakConstraints.TryModify( value );
+            set => _gatheringTime += _timeConstraint.GetProductivityTime ( value, _gatheringTime );
         }
 
-        public ProductivityTimer ClientGatheringTime
+        public ProductivityTime ClientGatheringTime
         {
             get => _clientGatheringTime;
-            set => _clientGatheringTime = _breakConstraints.TryModify( value );
+            set => _clientGatheringTime = _timeConstraint.GetProductivityTime( value, _clientGatheringTime );
         }
 
-        public ProductivityTimer ShopperGatheringTime
+        public ProductivityTime ShopperGatheringTime
         {
             get => _shopperGatheringTime;
-            set => _shopperGatheringTime = _breakConstraints.TryModify( value );
+            set => _shopperGatheringTime = _timeConstraint.GetProductivityTime( value, _shopperGatheringTime );
         }
 
-        public ProductivityTimer ScanningTime
+        public ProductivityTime ScanningTime
         {
             get => _scanningTime;
-            set => _scanningTime = _breakConstraints.TryModify( value );
+            set => _scanningTime = _timeConstraint.GetProductivityTime( value, _scanningTime );
         }
 
-        public ProductivityTimer ClientScanningTime
+        public ProductivityTime ClientScanningTime
         {
             get => _clientScanningTime;
-            set => _clientScanningTime = _breakConstraints.TryModify( value );
+            set => _clientScanningTime = _timeConstraint.GetProductivityTime( value, _clientScanningTime );
         }
 
-        public ProductivityTimer DefragmentationTime
+        public ProductivityTime DefragmentationTime
         {
             get => _defragmentationTime;
-            set => _defragmentationTime = _breakConstraints.TryModify( value );
+            set => _defragmentationTime = _timeConstraint.GetProductivityTime( value, _defragmentationTime );
         }
 
-        public ProductivityTimer PlacingTime
+        public ProductivityTime PlacingTime
         {
             get => _placingTime;
-            set => _placingTime = _breakConstraints.TryModify( value );
+            set => _placingTime = _timeConstraint.GetProductivityTime( value, _placingTime );
         }
 
-        public ProductivityTimer InventoryTime
+        public ProductivityTime InventoryTime
         {
             get => _inventoryTime;
-            set => _inventoryTime = _breakConstraints.TryModify( value );
+            set => _inventoryTime = _timeConstraint.GetProductivityTime( value, _inventoryTime );
         }
 
-        public ProductivityTimer ShipmentTime
+        public ProductivityTime ShipmentTime
         {
             get => _shipmentTime;
-            set => _shipmentTime = _breakConstraints.TryModify( value );
+            set => _shipmentTime = _timeConstraint.GetProductivityTime( value,_shipmentTime );
         }
 
-        public ProductivityTimer NonProductivTime
+        public ProductivityTime NonProductivTime
         {
             get => _nonProductivTime;
-            set => _nonProductivTime = _breakConstraints.TryModify( value );
+            set => _nonProductivTime = _timeConstraint.GetProductivityTime( value, _nonProductivTime );
         }
 
     }
