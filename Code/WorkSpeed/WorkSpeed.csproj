@@ -69,7 +69,6 @@
     <Compile Include="ProductivityCalculator\Productivity.cs" />
     <Compile Include="ActionModels\ProductMgh.cs" />
     <Compile Include="Attributes\HeaderAttribute.cs" />
-    <Compile Include="Attributes\HeaderlessAttribute.cs" />
     <Compile Include="Attributes\HiddenAttribute.cs" />
     <Compile Include="FileModels\ActionImportModel.cs" />
     <Compile Include="FileModels\BaseProductivityImportModel.cs" />

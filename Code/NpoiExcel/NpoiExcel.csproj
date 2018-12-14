@@ -57,6 +57,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\HeaderAttribute.cs" />
+    <Compile Include="Attributes\HiddenAttribute.cs" />
     <Compile Include="CellPoint.cs" />
     <Compile Include="CellValue.cs" />
     <Compile Include="ExcelImporter.cs" />

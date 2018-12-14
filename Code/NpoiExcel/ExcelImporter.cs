@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using NpoiExcel.Attributes;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -17,6 +18,7 @@ namespace NpoiExcel
 {
     public static class ExcelImporter
     {
+        #region ImportData
 
         public static SheetTable ImportData (string fileName, int sheetIndex)
         {
@@ -63,17 +65,25 @@ namespace NpoiExcel
                 return GetEmptyCollection (type);
             }
 
-            var typeWithMap = new 
+            var typeRepository = new TypeRepository();
+            typeRepository.RegisterType( type, typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+
+            var typeWithMap = typeRepository.GetTypeWithMap( sheetTable );
+
+            if (null == typeWithMap.type) {
+                return null;
+            }
 
             // Load headers map:
-            var headersMap = GetHeaderMap (type, sheetTable);
-            if (!headersMap.Keys.Any()) return GetEmptyCollection (type);
+            var headersMap = GetHeaderMap (typeWithMap.map);
 
             return FillModelCollection(sheetTable, type, headersMap);
         }
 
+        #endregion
+
         /// <summary>
-        /// 
+        /// Returns enumerable collection of TOutType.
         /// </summary>
         /// <typeparam name="TIn">Converter origin type</typeparam>
         /// <typeparam name="TOutType">Converter output type</typeparam>
@@ -98,8 +108,6 @@ namespace NpoiExcel
         /// <param name="type"></param>
         private static void CheckType (Type type)
         {
-            if (type == null) throw new ArgumentNullException(nameof(type), "type can't be null.");
-
             if (type.GetConstructors().Count(c => c.IsPublic && c.GetParameters().Length == 0) == 0) {
                 throw new TypeAccessException($"{type} has no public parameterless constructor!");
             }

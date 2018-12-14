@@ -7,8 +7,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Helpers;
-using NpoiExcel;
-using WorkSpeed.Interfaces;
 
 namespace NpoiExcel
 {
@@ -16,17 +14,41 @@ namespace NpoiExcel
     {
         private readonly Dictionary< Type, Dictionary< string[], string > > _typeDictionary = new Dictionary< Type, Dictionary< string[], string > >();
 
-        public void RegisterType< TType >( Type propertyAttribute = null )
+        /// <summary>
+        /// Registers type of TType.
+        /// </summary>
+        /// <typeparam name="TType"></typeparam>
+        /// <param name="includeAttribute"></param>
+        /// <param name="excludeAttribute"></param>
+        public void RegisterType< TType >( Type includeAttribute = null, Type excludeAttribute = null )
         {
+            RegisterType( typeof( TType ), includeAttribute );
+        }
+
+        /// <summary>
+        /// Registers type of type parameter.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="includeAttribute"></param>
+        /// <param name="excludeAttribute"></param>
+        /// <exception cref="ArgumentNullException">When type is null.</exception>
+        public void RegisterType( Type type, Type includeAttribute, Type excludeAttribute = null )
+        {
+            if ( type == null ) throw new ArgumentNullException();
+
             // Key in dictionary is a list of attribute values.
             var propertyMap = new Dictionary< string[], string >();
 
-            var propertyInfos = typeof( TType ).GetProperties( BindingFlags.Public | BindingFlags.SetProperty );
+            var propertyInfos = type.GetProperties( BindingFlags.Public | BindingFlags.SetProperty );
 
             foreach ( var propertyInfo in propertyInfos ) {
 
-                List< string > attributeValues = propertyAttribute != null 
-                                               ? propertyInfo.GetCustomAttributes( propertyAttribute, true )
+                if (excludeAttribute != null && propertyInfo.GetCustomAttributes( excludeAttribute, true ).Any()) {
+                    continue;
+                }
+
+                List< string > attributeValues = includeAttribute != null 
+                                               ? propertyInfo.GetCustomAttributes( includeAttribute, true )
                                                              .Select( a => a.ToString().RemoveWhitespaces().ToUpperInvariant() )
                                                              .ToList() 
                                                : new List< string >();
@@ -36,7 +58,7 @@ namespace NpoiExcel
                 propertyMap[ attributeValues.ToArray() ] = propertyInfo.Name;
             }
 
-            _typeDictionary[ typeof( TType ) ] = propertyMap;
+            _typeDictionary[ type ] = propertyMap;
         }
 
         /// <summary>
