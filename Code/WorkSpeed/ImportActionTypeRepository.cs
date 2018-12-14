@@ -39,10 +39,41 @@ namespace WorkSpeed
             _typeDictionary[ typeof( TType ) ] = propertyMap;
         }
 
-        public KeyValuePair< Dictionary< string, int>, Type >  GetTypeWithMap( SheetTable sheetTable )
+        /// <summary>
+        /// Returns tuple of Type and Dictionary&lt; propertyName, header &gt;
+        /// </summary>
+        /// <param name="sheetTable"></param>
+        /// <returns></returns>
+        public (Type type, Dictionary< string, string > map) GetTypeWithMap( SheetTable sheetTable )
         {
-            var propertyIdentities = new List< IEnumerable< string > >();
-            throw new NotImplementedException();
+            var fileHeaders = sheetTable.Headers.ToList();
+            var propertyMap = new Dictionary< string, string >();
+
+            foreach ( var type in _typeDictionary.Keys ) {
+
+                var propertyAttributes = _typeDictionary[ type ];
+                bool found = false;
+
+                foreach ( var fileHeader in fileHeaders.ToArray() ) {
+
+                    foreach ( var propertyIdentity in propertyAttributes.Keys.OrderBy( a => a.Length ) ) {
+
+                        if ( propertyIdentity.Contains( fileHeader ) ) {
+
+                            found = true;
+                            propertyMap[ propertyAttributes[ propertyIdentity ] ] = fileHeader;
+                            propertyAttributes.Remove( propertyIdentity );
+                            break;
+                        }
+                    }
+
+                    if (!found) break;
+                }
+
+                if ( found ) return (type, propertyMap);
+            }
+
+            return (null, null);
         }
     }
 }

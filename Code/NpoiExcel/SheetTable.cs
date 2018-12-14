@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NPOI.SS.UserModel;
-using static Helpers.StringExtensions;
 
 namespace NpoiExcel
 {
@@ -14,10 +14,11 @@ namespace NpoiExcel
 
         private readonly ISheet _sheet;
         private readonly CellPoint _startCell;
+
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly CellPoint _endCell;
 
-        private readonly Dictionary<int, string> _normalizedHeaders;
-        private readonly Dictionary<int, string> _headers;
+        private readonly HashSet<( string header, int column )> _headers;
         
         #endregion
 
@@ -49,7 +50,6 @@ namespace NpoiExcel
             ColumnCount = _endCell.Column - _startCell.Column;
 
             _headers = GetHeaders (sheet, _startCell, _endCell);
-            _normalizedHeaders = GetNormalizedHeaders (_headers, _startCell);
         }
 
         #endregion
@@ -57,24 +57,12 @@ namespace NpoiExcel
 
         #region Properties
 
-        public IEnumerable<string> Headers => _headers.Values;
-        public IEnumerable<string> NormalizedHeaders => _normalizedHeaders.Values;
+        public IEnumerable<string> Headers => _headers.Select( h => h.header );
         
         #endregion
 
 
         #region Methods
-
-        /// <summary>
-        /// Returns normalized header by column.
-        /// </summary>
-        /// <param name="column"></param>
-        /// <returns></returns>
-        public string GetNormalizedHeaderAt (int column)
-        {
-            if (!_normalizedHeaders.ContainsKey (column)) throw new IndexOutOfRangeException("Column was outside the bounds of sheet table.");
-            return _normalizedHeaders[column];
-        }
 
         public CellValue this [int row, int column]
         {
@@ -197,29 +185,27 @@ namespace NpoiExcel
             return new CellPoint((short)(lastColumn + 1), row + 1);
         }
 
-        private static Dictionary<int, string> GetHeaders (ISheet sheet, CellPoint startPoint, CellPoint endPoint)
+        private static HashSet<( string, int )> GetHeaders (ISheet sheet, CellPoint startPoint, CellPoint endPoint)
         {
-            var headers = new Dictionary<int, string> (endPoint.Column - startPoint.Column);
+            var headerSet = new HashSet<( string header, int column )> ();
 
             for (int i = startPoint.Column; i < endPoint.Column; ++i) {
 
-                headers[i] = sheet.GetRow (startPoint.Row).GetCell (i)?.StringCellValue ?? "";
+                var header = sheet.GetRow (startPoint.Row).GetCell (i)?.StringCellValue ?? "";
+                headerSet.Add( ( header, i ) );
             }
 
-            return headers;
+            return headerSet;
         }
 
-        private static Dictionary<int, string> GetNormalizedHeaders(Dictionary<int, string> headers, CellPoint startCell)
+        // ReSharper disable once UnusedMember.Local
+        private int[] GetColumnsByHeader( string header )
         {
-            var normalizedHeaders = new Dictionary<int, string>(headers.Count);
+            if ( null == header ) throw new ArgumentNullException();
 
-            for (int i = 0; i < headers.Count; ++i) {
-
-                normalizedHeaders[i] = headers[i + startCell.Column].RemoveWhitespaces().ToUpperInvariant();
-            }
-
-            return normalizedHeaders;
+            return _headers.Where( h => h.header.Equals( header ) ).Select( h => h.column ).ToArray();
         }
+
         #endregion
     }
 }

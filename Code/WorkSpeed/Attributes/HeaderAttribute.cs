@@ -8,12 +8,14 @@ namespace WorkSpeed.Attributes
     {
         public HeaderAttribute (string header)
         {
-            Header = header.RemoveWhitespaces().ToUpperInvariant();
+            Header = header;
         }
 
-        /// <summary>
-        /// Normalized header namely without whitespases and in upper case.
-        /// </summary>
         public string Header { get; set; }
+
+        public override string ToString()
+        {
+            return Header;
+        }
     }
 }
