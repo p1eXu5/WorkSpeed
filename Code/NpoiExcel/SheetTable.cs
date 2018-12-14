@@ -5,6 +5,9 @@ using NPOI.SS.UserModel;
 
 namespace NpoiExcel
 {
+    /// <summary>
+    /// Represents data table contained in an Excel sheet what had been mported from an Excel file.
+    /// </summary>
     public struct SheetTable
     {
         #region Fileds

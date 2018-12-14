@@ -42,7 +42,7 @@ namespace WorkSpeed
         /// <summary>
         /// Returns tuple of Type and Dictionary&lt; propertyName, header &gt;
         /// </summary>
-        /// <param name="sheetTable"></param>
+        /// <param name="sheetTable"><see cref="SheetTable"/></param>
         /// <returns></returns>
         public (Type type, Dictionary< string, string > map) GetTypeWithMap( SheetTable sheetTable )
         {
