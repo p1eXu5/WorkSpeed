@@ -1,21 +1,22 @@
 ﻿using System;
 using NpoiExcel;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Interfaces;
 
 namespace WorkSpeed.FileModels
 {
     public class ImportModelConverter : ITypeConverter< ImportModel, EmployeeAction >
     {
-        private readonly IImportModelVisiter _visiter;
+        private readonly IImportModelVisitor _visitor;
 
-        public ImportModelConverter ( IImportModelVisiter visiter )
+        public ImportModelConverter ( IImportModelVisitor visitor )
         {
-            _visiter = visiter ?? throw new ArgumentNullException();
+            _visitor = visitor ?? throw new ArgumentNullException();
         }
 
         public EmployeeAction Convert ( ImportModel obj )
         {
-            return obj.ToEmployeeAction( _visiter );
+            return obj.ToEmployeeAction( _visitor );
         }
     }
 }

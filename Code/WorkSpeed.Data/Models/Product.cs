@@ -20,6 +20,6 @@ namespace WorkSpeed.Data.Models
         public Complexity Complexity { get; set; }
 
         public float Volume => ProductDims.Volume;
-        public float Weight => ProductDims.ItemWeight;
+        public float Weight => ProductDims.Weight;
     }
 }

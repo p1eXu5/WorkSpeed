@@ -10,6 +10,7 @@ using WorkSpeed.Data.Models;
 using NpoiExcel;
 using WorkSpeed.Attributes;
 using WorkSpeed;
+using WorkSpeed.Data;
 using WorkSpeed.FileModels;
 using WorkSpeed.Interfaces;
 using WorkSpeed.ProductivityCalculator;
@@ -18,11 +19,14 @@ namespace WorkSpeed
 {
     public class Warehouse : IWarehouse
     {
+        private readonly IWorkSpeedData _context;
         private readonly ITypeRepository _typeRepository;
         private readonly ProductivityObservableCollection _productivities;
 
-        public Warehouse()
+        public Warehouse( IWorkSpeedData context )
         {
+            _context = context ?? throw new ArgumentNullException( nameof(context) );
+
             _typeRepository = new TypeRepository();
             AddTypesToRepository (_typeRepository);
 
@@ -53,9 +57,8 @@ namespace WorkSpeed
             var sheetTable = ExcelImporter.ImportData (fileName, 0);
             var mappedType = _typeRepository.GetTypeWithMap ( sheetTable );
 
-            FillProductivityCollection(
-                ExcelImporter.GetEnumerable( sheetTable, mappedType,
-                                             new ImportModelConverter( new ImportModelVisiter() ) )
+            FillProductivityCollection( 
+                ExcelImporter.GetEnumerable( sheetTable,  mappedType,  new ImportModelConverter( new ImportModelVisitor( _context ) ) )
             );
 
             return true;

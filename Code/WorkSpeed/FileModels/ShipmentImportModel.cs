@@ -3,7 +3,7 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.FileModels
 {
-    public class ShipmentImportModel : ActionImportModel
+    public class ShipmentImportModel : EmployeeActionImportModel
     {
         [Header("Операция")]                public string Operation { get; set; }
 

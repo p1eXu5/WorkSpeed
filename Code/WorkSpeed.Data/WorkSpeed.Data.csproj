@@ -128,6 +128,7 @@
     <Compile Include="Comparers\EmployeeActionComparer.cs" />
     <Compile Include="Comparers\EmployeeComparer.cs" />
     <Compile Include="Comparers\OperationComparer.cs" />
+    <Compile Include="IProductsAndOperations.cs" />
     <Compile Include="Interfaces\IEntity.cs" />
     <Compile Include="IWorkSpeedData.cs" />
     <Compile Include="DataContexts\WorkSpeedDbContext.cs" />

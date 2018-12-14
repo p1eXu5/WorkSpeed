@@ -23,13 +23,13 @@ namespace WorkSpeed.ProductivityCalculator
         public IProductivityCalculator<EmployeeAction> ProductivityCalculator { get; set; }
 
         /// <summary>
-        /// Adds action into internal collection. After adding
+        /// Adds employeeAction into internal collection. After adding
         /// Calculate method must be called.
         /// </summary>
-        /// <param name="action">Imported action.</param>
-        public void Add(ActionImportModel action)
+        /// <param name="employeeAction">Imported employeeAction.</param>
+        public void Add(EmployeeActionImportModel employeeAction)
         {
-            _actions.Add (action.GetAction());
+            _actions.Add (employeeAction.GetAction());
         }
 
         public void Calculate()

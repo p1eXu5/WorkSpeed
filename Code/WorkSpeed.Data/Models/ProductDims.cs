@@ -18,9 +18,9 @@ namespace WorkSpeed.Data.Models
         public float CartonWidth { get; set; }
         public float CartonHeight { get; set; }
 
-        public float CartonQuantity { get; set; }
+        public int CartonQuantity { get; set; }
 
-        public float ItemWeight { get; set; }
+        public float Weight { get; set; }
         public float Volume { get; set; }
     }
 }

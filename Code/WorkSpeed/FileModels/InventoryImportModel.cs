@@ -3,7 +3,7 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.FileModels
 {
-    public class InventoryImportModel : ActionProductivityImportModel
+    public class InventoryImportModel : ActionProductImportModel
     {
         [Header("Учётное количество")]      public int AccountingQuantity { get; set; }
         [Header("Фактическое количество")]  public int ActualQuantity { get; set; }

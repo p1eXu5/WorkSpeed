@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WorkSpeed.Data.Models;
 
-namespace WorkSpeed.FileModels
+namespace WorkSpeed.Data
 {
-    public abstract class ImportModel
+    public interface IProductsAndOperations
     {
+
     }
 }

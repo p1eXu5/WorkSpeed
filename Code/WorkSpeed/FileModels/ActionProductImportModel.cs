@@ -1,8 +1,8 @@
-﻿using WorkSpeed.Attributes;
+﻿using NpoiExcel.Attributes;
 
 namespace WorkSpeed.FileModels
 {
-    public abstract class ActionProductivityImportModel : ActionImportModel
+    public abstract class ActionProductImportModel : EmployeeActionImportModel
     {
         [Header("Код товара")]          public int ProductId { get; set; }
         [Header("Товар")]               public string Product { get; set; }
