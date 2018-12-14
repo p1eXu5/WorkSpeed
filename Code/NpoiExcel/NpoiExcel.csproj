@@ -60,6 +60,7 @@
     <Compile Include="CellPoint.cs" />
     <Compile Include="CellValue.cs" />
     <Compile Include="ExcelImporter.cs" />
+    <Compile Include="ITypeConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SheetTable.cs" />
     <Compile Include="TableRect.cs" />

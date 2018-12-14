@@ -29,6 +29,11 @@ namespace WorkSpeed
             _productivities = new ProductivityObservableCollection();
         }
 
+        private void AddTypesToRepository ( ITypeRepository repo )
+        {
+
+        }
+
         /// <summary>
         /// Entities that don't contained in DB.
         /// </summary>
@@ -42,35 +47,17 @@ namespace WorkSpeed
         private bool Import (string fileName)
         {
             var sheetTable = ExcelImporter.ImportData (fileName, 0);
-            var importCollection = _typeRepository.GetTypeCollection (sheetTable, new[] {typeof (HeaderAttribute)},
-                                                                                  new[] {typeof (HiddenAttribute)});
+            var mappedType = _typeRepository.GetTypeWithMap ( sheetTable );
 
-            if (importCollection == null || importCollection.Count == 0) return false;
-
-            switch (importCollection[0]) {
-
-                case ActionImportModel action:
-
-                    FillProductivityCollection (importCollection.Cast<ActionImportModel>());
-                    //CheckNewData (_productivities);
-                    break;
-            }
+            FillProductivityCollection(
+                ExcelImporter.GetEnumerable( sheetTable, mappedType,
+                                             new ImportModelConverter( new ImportModelVisiter() ) )
+            );
 
             return true;
         }
 
-        private void FillProductivityCollection (IEnumerable<ActionImportModel> actions)
-        {
-            if (_productivities.Any()) {
-                _productivities.Clear();
-            }
-
-            foreach (var action in actions) {
-                _productivities.Add (action);
-            }
-        }
-
-        private void AddTypesToRepository (ITypeRepository repository)
+        private void FillProductivityCollection (IEnumerable<EmployeeAction> actions)
         {
 
         }

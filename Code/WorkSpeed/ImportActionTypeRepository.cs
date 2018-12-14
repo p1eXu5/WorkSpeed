@@ -11,7 +11,7 @@ namespace WorkSpeed
 {
     public class ImportActionTypeRepository : ITypeRepository
     {
-        public ArrayList GetTypeCollection (SheetTable sheetTable, Type[] includingAttributes, Type[] excludingAttributes)
+        public KeyValuePair< Dictionary< string, int>, Type >  GetTypeWithMap( SheetTable sheetTable )
         {
             throw new NotImplementedException();
         }

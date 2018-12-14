@@ -10,6 +10,6 @@ namespace WorkSpeed.Interfaces
 {
     public interface ITypeRepository
     {
-        ArrayList GetTypeCollection (SheetTable sheetTable, Type[] includingAttributes, Type[] excludingAttributes);
+        KeyValuePair< Dictionary< string, int >, Type > GetTypeWithMap ( SheetTable sheetTable );
     }
 }

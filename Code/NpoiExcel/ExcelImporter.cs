@@ -73,15 +73,28 @@ namespace NpoiExcel
         }
 
 
-
-        public static ICollection ToCollection (SheetTable sheetTable, Type type, ITypeConverter converter)
+        public static IEnumerable< TOutType > GetEnumerable< TIn, TOutType> ( SheetTable sheetTable, 
+                                                                             KeyValuePair< Dictionary<string, int>, Type > keyValue,  
+                                                                             ITypeConverter< TIn, TOutType > converter )
         {
+            var typeCollection = FillModelCollection( sheetTable, keyValue.Value, keyValue.Key );
 
-            return null;
+            return typeCollection.Cast< TIn >().Select( obj => ( TOutType )converter.Convert( obj ) );
+        }
+
+        public static IEnumerable<TOutType> GetEnumerable<TIn, TOutType> ( SheetTable sheetTable, Type type, ITypeConverter<TIn, TOutType> converter )
+        {
+            var map = GetHeaderMap( type, sheetTable );
+            var typeCollection = FillModelCollection( sheetTable, type, map );
+
+            return typeCollection.Cast<TIn>().Select( obj => ( TOutType )converter.Convert( obj ) );
         }
 
 
-
+        /// <summary>
+        /// Checks out is a type has a parameterless constructor?
+        /// </summary>
+        /// <param name="type"></param>
         private static void CheckType (Type type)
         {
             if (type == null) throw new ArgumentNullException(nameof(type), "type can't be null.");
@@ -108,7 +121,7 @@ namespace NpoiExcel
             return book.GetSheetAt(sheetIndex);
         }
 
-        private static Dictionary<string, int> GetHeaderMap (Type type, SheetTable sheetTable)
+        public static Dictionary<string, int> GetHeaderMap (Type type, SheetTable sheetTable)
         {
             var map = new Dictionary<string, int>();
             var propertyTuples = type.IsHeaderless() ? GetPropertyNames (type) : GetPropertyHeaders (type);

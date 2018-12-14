@@ -61,6 +61,7 @@
     <Compile Include="FileModels\ActionImportModelComparer.cs" />
     <Compile Include="Constraints\IBreakConstraints.cs" />
     <Compile Include="Constraints\ICategoryConstraints.cs" />
+    <Compile Include="FileModels\ImportModelConverter.cs" />
     <Compile Include="FileModels\ImportModelVisiter.cs" />
     <Compile Include="ProductivityCalculator\AddTimeOptions.cs" />
     <Compile Include="ProductivityCalculator\ProductivityCalculator.cs" />
