@@ -21,7 +21,7 @@ namespace NpoiExcel
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly CellPoint _endCell;
 
-        private readonly HashSet<( string header, int column )> _headers;
+        private readonly HashSet<( string header, int column )> _headerMap;
         
         #endregion
 
@@ -52,7 +52,7 @@ namespace NpoiExcel
             RowCount = _endCell.Row - _startCell.Row - 1;
             ColumnCount = _endCell.Column - _startCell.Column;
 
-            _headers = GetHeaders (sheet, _startCell, _endCell);
+            _headerMap = GetHeaderMap (sheet, _startCell, _endCell);
         }
 
         #endregion
@@ -60,7 +60,8 @@ namespace NpoiExcel
 
         #region Properties
 
-        public IEnumerable<string> Headers => _headers.Select( h => h.header );
+        public IEnumerable<string> Headers => _headerMap.Select( h => h.header );
+        public IEnumerable<( string header, int column )> HeaderMap => _headerMap;
         
         #endregion
 
@@ -188,14 +189,14 @@ namespace NpoiExcel
             return new CellPoint((short)(lastColumn + 1), row + 1);
         }
 
-        private static HashSet<( string, int )> GetHeaders (ISheet sheet, CellPoint startPoint, CellPoint endPoint)
+        private static HashSet<( string, int )> GetHeaderMap (ISheet sheet, CellPoint startPoint, CellPoint endPoint)
         {
             var headerSet = new HashSet<( string header, int column )> ();
 
             for (int i = startPoint.Column; i < endPoint.Column; ++i) {
 
                 var header = sheet.GetRow (startPoint.Row).GetCell (i)?.StringCellValue ?? "";
-                headerSet.Add( ( header, i ) );
+                headerSet.Add( ( header, i - startPoint.Column ) );
             }
 
             return headerSet;
@@ -206,7 +207,7 @@ namespace NpoiExcel
         {
             if ( null == header ) throw new ArgumentNullException();
 
-            return _headers.Where( h => h.header.Equals( header ) ).Select( h => h.column ).ToArray();
+            return _headerMap.Where( h => h.header.Equals( header ) ).Select( h => h.column ).ToArray();
         }
 
         #endregion

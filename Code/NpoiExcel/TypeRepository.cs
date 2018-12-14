@@ -66,24 +66,24 @@ namespace NpoiExcel
         /// </summary>
         /// <param name="sheetTable"><see cref="SheetTable"/></param>
         /// <returns>Tuple of Type and Dictionary&lt; propertyName, header &gt;</returns>
-        public (Type type, Dictionary< string, string > map) GetTypeWithMap( SheetTable sheetTable )
+        public (Type type, Dictionary< string, (string header, int column) > propertyMap) GetTypeWithMap( SheetTable sheetTable )
         {
-            var fileHeaders = sheetTable.Headers.ToList();
-            var propertyMap = new Dictionary< string, string >();
+            var headerMap = sheetTable.HeaderMap.ToArray();
+            var propertyMap = new Dictionary< string, (string header, int column) >();
 
             foreach ( var type in _typeDictionary.Keys ) {
 
                 var propertyAttributes = _typeDictionary[ type ];
                 bool found = false;
 
-                foreach ( var fileHeader in fileHeaders.ToArray() ) {
+                foreach ( var header in headerMap.ToArray() ) {
 
                     foreach ( var propertyIdentity in propertyAttributes.Keys.OrderBy( a => a.Length ) ) {
 
-                        if ( propertyIdentity.Contains( fileHeader ) ) {
+                        if ( propertyIdentity.Contains( header.header ) ) {
 
                             found = true;
-                            propertyMap[ propertyAttributes[ propertyIdentity ] ] = fileHeader;
+                            propertyMap[ propertyAttributes[ propertyIdentity ] ] = header;
                             propertyAttributes.Remove( propertyIdentity );
                             break;
                         }

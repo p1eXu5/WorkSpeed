@@ -31,7 +31,7 @@ namespace NpoiExcel
         /// Returns tuple of Type and Dictionary&lt; propertyName, header &gt;
         /// </summary>
         /// <param name="sheetTable"><see cref="SheetTable"/></param>
-        /// <returns>Tuple of Type and Dictionary&lt; propertyName, header &gt;</returns>
-        (Type type, Dictionary< string, string > map) GetTypeWithMap ( SheetTable sheetTable );
+        /// <returns>Tuple of Type and Dictionary&lt; propertyName, (header, int) &gt;</returns>
+        (Type type, Dictionary< string, (string header, int column) > propertyMap) GetTypeWithMap ( SheetTable sheetTable );
     }
 }

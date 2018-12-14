@@ -74,10 +74,7 @@ namespace NpoiExcel
                 return null;
             }
 
-            // Load headers map:
-            var headersMap = GetHeaderMap (typeWithMap.map);
-
-            return FillModelCollection(sheetTable, type, headersMap);
+            return FillModelCollection(sheetTable, type, typeWithMap.propertyMap);
         }
 
         #endregion
@@ -88,16 +85,14 @@ namespace NpoiExcel
         /// <typeparam name="TIn">Converter origin type</typeparam>
         /// <typeparam name="TOutType">Converter output type</typeparam>
         /// <param name="sheetTable"><see cref="SheetTable"/></param>
-        /// <param name="typeWithMap">Dictionary&lt; propertyName, header &gt;</param>
+        /// <param name="typeWithMap">Tuple of Type and Dictionary&lt; propertyName, header &gt;</param>
         /// <param name="typeConverter">Type typeConverter</param>
         /// <returns></returns>
         public static IEnumerable< TOutType > GetEnumerable< TIn, TOutType>( SheetTable sheetTable,
-                                                                             (Type type, Dictionary<string, string> propertyMap) typeWithMap,  
+                                                                             (Type type, Dictionary< string, (string header, int column) > propertyMap) typeWithMap,  
                                                                              ITypeConverter< TIn, TOutType > typeConverter )
         {
-            var headerMap = GetHeaderMap( typeWithMap.propertyMap );
-            var typeCollection = FillModelCollection( sheetTable, typeWithMap.type, headerMap );
-
+            var typeCollection = FillModelCollection( sheetTable, typeWithMap.type, typeWithMap.propertyMap );
             return typeCollection.Cast< TIn >().Select( obj => ( TOutType )typeConverter.Convert( obj ) );
         }
 
@@ -130,13 +125,7 @@ namespace NpoiExcel
             return book.GetSheetAt(sheetIndex);
         }
 
-
-        private static Dictionary<string, int> GetHeaderMap( Dictionary<string, string> propertyMap )
-        {
-
-        }
-
-        private static ICollection FillModelCollection(SheetTable sheetTable, Type type, Dictionary<string, int> headersMap)
+        private static ICollection FillModelCollection( SheetTable sheetTable,  Type type,  Dictionary< string, (string header, int column) > headersMap )
         {
             CheckType( type );
             ArrayList typeInstanceCollection = new ArrayList(sheetTable.RowCount);
@@ -145,84 +134,18 @@ namespace NpoiExcel
 
                 object typeInstance = Activator.CreateInstance(type);
 
-                var i = 0;
+                foreach (var propertyName in headersMap.Keys) {
 
-                foreach (var propertyInfo in type.GetPropertyInfos()) {
+                    var cell = sheetTable[ j, headersMap[ propertyName ].column ];
 
-                    var cell = sheetTable[j, headersMap[propertyInfo.Name]];
-
-                    if (!SetPropertyValue(propertyInfo, cell, typeInstance)) return GetEmptyCollection(type);
-
-                    ++i;
+                    // ReSharper disable once PossibleNullReferenceException
+                    type.GetProperty( propertyName ).SetValue( typeInstance, cell );
                 }
 
                 typeInstanceCollection.Add(typeInstance);
             }
 
             return typeInstanceCollection;
-        }
-
-
-        private static bool IsHeaderless (this Type type)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Returns public writable properties with no HiddenAttribute
-        /// </summary>
-        /// <param name="type"><see cref="Type"/></param>
-        /// <returns><see cref="Array"/></returns>
-        private static HashSet<(string[] headers, string name)> GetPropertyNames (Type type)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static HashSet<(string[] headers, string name)> GetPropertyHeaders (Type type)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static IEnumerable<PropertyInfo> GetPropertyInfos (this Type type)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-        private static bool SetPropertyValue(PropertyInfo propertyInfo, CellValue cell, object obj)
-        {
-            bool isSet = false;
-
-            if (typeof(string).FullName == propertyInfo.PropertyType.FullName) {
-
-                obj.GetType().GetProperty(propertyInfo.Name).SetValue(obj, cell);
-                isSet = true;
-            }
-            else if (typeof(int).FullName == propertyInfo.PropertyType.FullName) {
-
-                obj.GetType().GetProperty(propertyInfo.Name).SetValue(obj, cell);
-                isSet = true;
-            }
-            else if (typeof(double).FullName == propertyInfo.PropertyType.FullName) {
-
-                obj.GetType().GetProperty(propertyInfo.Name).SetValue(obj, cell);
-                isSet = true;
-            }
-            else if (typeof(bool).FullName == propertyInfo.PropertyType.FullName) {
-
-                obj.GetType().GetProperty(propertyInfo.Name).SetValue(obj, cell);
-                isSet = true;
-            }
-            else if (typeof(DateTime).FullName == propertyInfo.PropertyType.FullName) {
-
-                obj.GetType().GetProperty(propertyInfo.Name).SetValue(obj, cell);
-                isSet = true;
-            }
-
-            if (!isSet) return false;
-
-            return true;
         }
     }
 }
