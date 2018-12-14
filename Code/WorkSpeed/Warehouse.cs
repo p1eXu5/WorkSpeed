@@ -23,7 +23,7 @@ namespace WorkSpeed
 
         public Warehouse()
         {
-            _typeRepository = new ImportActionTypeRepository();
+            _typeRepository = new TypeRepository();
             AddTypesToRepository (_typeRepository);
 
             _productivities = new ProductivityObservableCollection();

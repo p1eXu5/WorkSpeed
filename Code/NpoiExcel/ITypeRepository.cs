@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using NpoiExcel;
 
-namespace WorkSpeed.Interfaces
+namespace NpoiExcel
 {
     public interface ITypeRepository
     {
         (Type type, Dictionary< string, string > map) GetTypeWithMap ( SheetTable sheetTable );
-        void RegisterType< TType >( Type propertyAttribute );
+        void RegisterType< TType >( Type propertyAttribute = null );
     }
 }

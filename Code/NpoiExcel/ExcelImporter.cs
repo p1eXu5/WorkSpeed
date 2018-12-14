@@ -54,8 +54,6 @@ namespace NpoiExcel
 
         public static ICollection ImportData (Stream source, Type type, int sheetIndex)
         {
-            CheckType (type);
-
             SheetTable sheetTable;
 
             try {
@@ -65,6 +63,8 @@ namespace NpoiExcel
                 return GetEmptyCollection (type);
             }
 
+            var typeWithMap = new 
+
             // Load headers map:
             var headersMap = GetHeaderMap (type, sheetTable);
             if (!headersMap.Keys.Any()) return GetEmptyCollection (type);
@@ -72,22 +72,23 @@ namespace NpoiExcel
             return FillModelCollection(sheetTable, type, headersMap);
         }
 
-
-        public static IEnumerable< TOutType > GetEnumerable< TIn, TOutType> ( SheetTable sheetTable, 
-                                                                             KeyValuePair< Dictionary<string, int>, Type > keyValue,  
-                                                                             ITypeConverter< TIn, TOutType > converter )
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TIn">Converter origin type</typeparam>
+        /// <typeparam name="TOutType">Converter output type</typeparam>
+        /// <param name="sheetTable"><see cref="SheetTable"/></param>
+        /// <param name="typeWithMap">Dictionary&lt; propertyName, header &gt;</param>
+        /// <param name="typeConverter">Type typeConverter</param>
+        /// <returns></returns>
+        public static IEnumerable< TOutType > GetEnumerable< TIn, TOutType>( SheetTable sheetTable,
+                                                                             (Type type, Dictionary<string, string> propertyMap) typeWithMap,  
+                                                                             ITypeConverter< TIn, TOutType > typeConverter )
         {
-            var typeCollection = FillModelCollection( sheetTable, keyValue.Value, keyValue.Key );
+            var headerMap = GetHeaderMap( typeWithMap.propertyMap );
+            var typeCollection = FillModelCollection( sheetTable, typeWithMap.type, headerMap );
 
-            return typeCollection.Cast< TIn >().Select( obj => ( TOutType )converter.Convert( obj ) );
-        }
-
-        public static IEnumerable<TOutType> GetEnumerable<TIn, TOutType> ( SheetTable sheetTable, Type type, ITypeConverter<TIn, TOutType> converter )
-        {
-            var map = GetHeaderMap( type, sheetTable );
-            var typeCollection = FillModelCollection( sheetTable, type, map );
-
-            return typeCollection.Cast<TIn>().Select( obj => ( TOutType )converter.Convert( obj ) );
+            return typeCollection.Cast< TIn >().Select( obj => ( TOutType )typeConverter.Convert( obj ) );
         }
 
 
@@ -121,38 +122,15 @@ namespace NpoiExcel
             return book.GetSheetAt(sheetIndex);
         }
 
-        public static Dictionary<string, int> GetHeaderMap (Type type, SheetTable sheetTable)
+
+        private static Dictionary<string, int> GetHeaderMap( Dictionary<string, string> propertyMap )
         {
-            var map = new Dictionary<string, int>();
-            var propertyTuples = type.IsHeaderless() ? GetPropertyNames (type) : GetPropertyHeaders (type);
 
-            if (!propertyTuples.Any()) return map;
-
-            for (var i = 0; i < sheetTable.ColumnCount; ++i) {
-
-                foreach (var tuple in propertyTuples) {
-
-                    if (tuple.headers.Contains (sheetTable.GetNormalizedHeaderAt(i))) {
-
-                        map[tuple.name] = i;
-                        propertyTuples.Remove (tuple);
-
-                        break;
-                    }
-                }
-
-                if (!propertyTuples.Any()) return map;
-            }
-
-            if (propertyTuples.Any()) {
-                map.Clear();
-            }
-
-            return map;
         }
 
         private static ICollection FillModelCollection(SheetTable sheetTable, Type type, Dictionary<string, int> headersMap)
         {
+            CheckType( type );
             ArrayList typeInstanceCollection = new ArrayList(sheetTable.RowCount);
 
             for (var j = 0; j < sheetTable.RowCount; ++j) {

@@ -10,9 +10,9 @@ using Helpers;
 using NpoiExcel;
 using WorkSpeed.Interfaces;
 
-namespace WorkSpeed
+namespace NpoiExcel
 {
-    public class ImportActionTypeRepository : ITypeRepository
+    public class TypeRepository : ITypeRepository
     {
         private readonly Dictionary< Type, Dictionary< string[], string > > _typeDictionary = new Dictionary< Type, Dictionary< string[], string > >();
 
@@ -43,7 +43,7 @@ namespace WorkSpeed
         /// Returns tuple of Type and Dictionary&lt; propertyName, header &gt;
         /// </summary>
         /// <param name="sheetTable"><see cref="SheetTable"/></param>
-        /// <returns></returns>
+        /// <returns>Tuple of Type and Dictionary&lt; propertyName, header &gt;</returns>
         public (Type type, Dictionary< string, string > map) GetTypeWithMap( SheetTable sheetTable )
         {
             var fileHeaders = sheetTable.Headers.ToList();

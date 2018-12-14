@@ -79,7 +79,6 @@
     <Compile Include="FileModels\ProductivityImportModel.cs" />
     <Compile Include="FileModels\ReceptionImportModel.cs" />
     <Compile Include="FileModels\ShipmentImportModel.cs" />
-    <Compile Include="Interfaces\ITypeRepository.cs" />
     <Compile Include="Interfaces\IWarehouse.cs" />
     <Compile Include="Interfaces\IWarehouseEntities.cs" />
     <Compile Include="OperationTypes.cs" />
@@ -97,7 +96,6 @@
     <Compile Include="ProductivityIndicatorsModels\VolumeIndicators.cs" />
     <Compile Include="ProductivityIndicatorsModels\WeightIndicators.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ImportActionTypeRepository.cs" />
     <Compile Include="Warehouse.cs" />
     <Compile Include="WarehouseEntities.cs" />
   </ItemGroup>
