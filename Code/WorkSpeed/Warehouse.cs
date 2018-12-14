@@ -31,8 +31,11 @@ namespace WorkSpeed
 
         private void AddTypesToRepository ( ITypeRepository repo )
         {
-            repo.RegisterType< ProductivityImportModel >();
-            repo.RegisterType< GatheringImportModel >();
+            repo.RegisterType< ProductivityImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            repo.RegisterType< GatheringImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            repo.RegisterType< ReceptionImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            repo.RegisterType< InventoryImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            repo.RegisterType< ShipmentImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
         }
 
         /// <summary>
