@@ -10,6 +10,7 @@ namespace WorkSpeed.Interfaces
 {
     public interface ITypeRepository
     {
-        KeyValuePair< Dictionary< string, int >, Type > GetTypeWithMap ( SheetTable sheetTable );
+        KeyValuePair< Dictionary< string, int >, Type > GetTypeWithMap( SheetTable sheetTable );
+        void RegisterType< TType >( Type propertyAttribute );
     }
 }

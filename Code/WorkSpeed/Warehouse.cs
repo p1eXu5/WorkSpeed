@@ -31,7 +31,8 @@ namespace WorkSpeed
 
         private void AddTypesToRepository ( ITypeRepository repo )
         {
-
+            repo.RegisterType< ProductivityImportModel >();
+            repo.RegisterType< GatheringImportModel >();
         }
 
         /// <summary>
