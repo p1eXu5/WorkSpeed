@@ -17,13 +17,6 @@ namespace NpoiExcel
 {
     public static class ExcelImporter
     {
-        public static ICollection ImportData (string fileName, Type type, int sheetIndex)
-        {
-            using (var stream = new FileStream (fileName, FileMode.Open, FileAccess.Read)) {
-
-                return ImportData (stream, type, sheetIndex);
-            }
-        }
 
         public static SheetTable ImportData (string fileName, int sheetIndex)
         {
@@ -51,9 +44,12 @@ namespace NpoiExcel
         }
 
 
-        public static ICollection ToCollection (SheetTable sheetTable, Type type)
+        public static ICollection ImportData (string fileName, Type type, int sheetIndex)
         {
-            return null;
+            using (var stream = new FileStream (fileName, FileMode.Open, FileAccess.Read)) {
+
+                return ImportData (stream, type, sheetIndex);
+            }
         }
 
         public static ICollection ImportData (Stream source, Type type, int sheetIndex)
@@ -75,6 +71,15 @@ namespace NpoiExcel
 
             return FillModelCollection(sheetTable, type, headersMap);
         }
+
+
+
+        public static ICollection ToCollection (SheetTable sheetTable, Type type, ITypeConverter converter)
+        {
+
+            return null;
+        }
+
 
 
         private static void CheckType (Type type)

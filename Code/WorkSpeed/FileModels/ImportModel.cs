@@ -11,5 +11,10 @@ namespace WorkSpeed.FileModels
     {
         public abstract Employee GetEmployee();
         public abstract EmployeeAction GetAction();
+
+        public virtual EmployeeAction ToEmployeeAction ( IImportModelVisiter visiter )
+        {
+            return visiter.ToEmployeeAction( this );
+        }
     }
 }
