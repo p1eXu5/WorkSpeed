@@ -7,7 +7,7 @@ using WorkSpeed.Interfaces;
 
 namespace WorkSpeed.FileModels
 {
-    public abstract class EmployeeActionImportModel : WithEmployeeImportModel
+    public abstract class ActionImportModel : WithEmployeeImportModel
     {
         [Header("Дата")]        public DateTime DateTime { get; set; }
 
@@ -19,7 +19,7 @@ namespace WorkSpeed.FileModels
 
         public virtual EmployeeAction ToEmployeeAction( IImportModelVisitor visitor )
         {
-            return visitor.ToEmployeeAction( this );
+            return visitor.GetDbModel( this );
         }
     }
 }

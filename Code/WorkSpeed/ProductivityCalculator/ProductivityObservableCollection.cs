@@ -27,7 +27,7 @@ namespace WorkSpeed.ProductivityCalculator
         /// Calculate method must be called.
         /// </summary>
         /// <param name="employeeAction">Imported employeeAction.</param>
-        public void Add(EmployeeActionImportModel employeeAction)
+        public void Add(ActionImportModel employeeAction)
         {
             _actions.Add (employeeAction.GetAction());
         }

@@ -131,7 +131,7 @@
     <Compile Include="IProductsAndOperations.cs" />
     <Compile Include="Interfaces\IEntity.cs" />
     <Compile Include="IWorkSpeedData.cs" />
-    <Compile Include="DataContexts\WorkSpeedDbContext.cs" />
+    <Compile Include="DbContexts\WorkSpeedDbContext.cs" />
     <Compile Include="Migrations\20181122130858_InitialCreate.cs" />
     <Compile Include="Migrations\20181122130858_InitialCreate.designer.cs">
       <DependentUpon>20181122130858_InitialCreate.cs</DependentUpon>

@@ -3,9 +3,11 @@ using NpoiExcel;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Interfaces;
 
-namespace WorkSpeed.FileModels
+namespace WorkSpeed.FileModels.Converters
 {
-    public class ImportModelConverter : ITypeConverter< ImportModel, EmployeeAction >
+    public class ImportModelConverter< TImport, TDataBase > : ITypeConverter< TImport, TDataBase >
+        where   TImport : ImportModel
+        where TDataBase : new()
     {
         private readonly IImportModelVisitor _visitor;
 
@@ -14,9 +16,9 @@ namespace WorkSpeed.FileModels
             _visitor = visitor ?? throw new ArgumentNullException();
         }
 
-        public EmployeeAction Convert ( ImportModel obj )
+        public TDataBase Convert ( TImport obj )
         {
-            return obj.ToEmployeeAction( _visitor );
+            return ( TDataBase )obj.Convert( _visitor );
         }
     }
 }

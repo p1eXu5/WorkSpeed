@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using WorkSpeed.Data.Models;
 
-namespace WorkSpeed.Data.DataContexts
+namespace WorkSpeed.Data.DbContexts
 {
     public class WorkSpeedDbContext : DbContext
     {
@@ -18,5 +18,6 @@ namespace WorkSpeed.Data.DataContexts
         public DbSet<Document1C> Documents { get; set; }
         public DbSet<GatheringAction> GatheringActions { get; set; }
         public DbSet<ShipmentAction> ShipmentActions { get; set; }
+        public DbSet<Product> Products { get; set; }
     }
 }

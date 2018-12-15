@@ -5,7 +5,6 @@ namespace WorkSpeed.Interfaces
 {
     public interface IImportModelVisitor
     {
-        EmployeeAction ToEmployeeAction ( ImportModel importModel );
-        Product ToProduct( ProductImportModel         importModel );
+        object GetDbModel ( ImportModel importModel );
     }
 }

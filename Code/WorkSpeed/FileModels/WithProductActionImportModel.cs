@@ -2,7 +2,7 @@
 
 namespace WorkSpeed.FileModels
 {
-    public abstract class ActionProductImportModel : EmployeeActionImportModel
+    public abstract class WithProductActionImportModel : ActionImportModel
     {
         [Header("Код товара")]          public int ProductId { get; set; }
         [Header("Товар")]               public string Product { get; set; }

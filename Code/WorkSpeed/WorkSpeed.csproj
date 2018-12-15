@@ -62,7 +62,7 @@
     <Compile Include="Constraints\IBreakConstraints.cs" />
     <Compile Include="Constraints\ICategoryConstraints.cs" />
     <Compile Include="FileModels\EmployeeImportModel.cs" />
-    <Compile Include="FileModels\ImportModelConverter.cs" />
+    <Compile Include="FileModels\Converters\ImportModelConverter.cs" />
     <Compile Include="FileModels\ImportModelVisitor.cs" />
     <Compile Include="FileModels\ProductImportModel.cs" />
     <Compile Include="FileModels\WithEmployeeImportModel.cs" />
@@ -72,8 +72,8 @@
     <Compile Include="ProductivityCalculator\IProductivityCalculator.cs" />
     <Compile Include="ProductivityCalculator\Productivity.cs" />
     <Compile Include="ActionModels\ProductMgh.cs" />
-    <Compile Include="FileModels\EmployeeActionImportModel.cs" />
-    <Compile Include="FileModels\ActionProductImportModel.cs" />
+    <Compile Include="FileModels\ActionImportModel.cs" />
+    <Compile Include="FileModels\WithProductActionImportModel.cs" />
     <Compile Include="FileModels\GatheringImportModel.cs" />
     <Compile Include="FileModels\ImportModel.cs" />
     <Compile Include="FileModels\InventoryImportModel.cs" />

@@ -85,14 +85,14 @@ namespace NpoiExcel
         /// <typeparam name="TIn">Converter origin type</typeparam>
         /// <typeparam name="TOutType">Converter output type</typeparam>
         /// <param name="sheetTable"><see cref="SheetTable"/></param>
-        /// <param name="typeWithMap">Tuple of Type and Dictionary&lt; propertyName, header &gt;</param>
+        /// <param name="propertyMap">Dictionary&lt; propertyName, header &gt;</param>
         /// <param name="typeConverter">Type typeConverter</param>
         /// <returns></returns>
         public static IEnumerable< TOutType > GetEnumerable< TIn, TOutType>( SheetTable sheetTable,
-                                                                             (Type type, Dictionary< string, (string header, int column) > propertyMap) typeWithMap,  
+                                                                             Dictionary< string, (string header, int column) > propertyMap,  
                                                                              ITypeConverter< TIn, TOutType > typeConverter )
         {
-            var typeCollection = FillModelCollection( sheetTable, typeWithMap.type, typeWithMap.propertyMap );
+            var typeCollection = FillModelCollection( sheetTable, typeof( TIn ), propertyMap );
             return typeCollection.Cast< TIn >().Select( obj => ( TOutType )typeConverter.Convert( obj ) );
         }
 

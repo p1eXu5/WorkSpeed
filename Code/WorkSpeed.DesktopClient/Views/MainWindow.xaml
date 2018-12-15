@@ -1,12 +1,19 @@
 ﻿<Window x:Class="WorkSpeed.DesktopClient.Views.MainWindow"
+        x:Name="m_Window"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkSpeed.DesktopClient"
         xmlns:views="clr-namespace:WorkSpeed.DesktopClient.Views"
+        xmlns:behaviour="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <behaviour:Interaction.Triggers>
+        <behaviour:EventTrigger EventName="Loaded" SourceObject="{Binding ElementName=m_Window}">
+            <behaviour:InvokeCommandAction Command="{Binding LoadedCommand}" />
+        </behaviour:EventTrigger>
+    </behaviour:Interaction.Triggers>
     <DockPanel>
 
         <Menu DockPanel.Dock="Top">

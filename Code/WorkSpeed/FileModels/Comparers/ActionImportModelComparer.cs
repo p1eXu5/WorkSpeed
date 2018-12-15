@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace WorkSpeed.FileModels
 {
     public class ActionImportModelComparer<T> : IComparer<T>
-        where T : EmployeeActionImportModel
+        where T : ActionImportModel
     {
         public int Compare (T x, T y)
         {

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WorkSpeed.Data.DataContexts;
+using Microsoft.EntityFrameworkCore;
+using WorkSpeed.Data.DbContexts;
 using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Data
@@ -31,6 +32,11 @@ namespace WorkSpeed.Data
         public IEnumerable<Document1C> GetDocuments()
         {
             return _dbContext.Documents.OrderBy (d => d.Date);
+        }
+
+        public Task<bool> HasProductsAsync ()
+        {
+            return _dbContext.Products.AnyAsync();
         }
 
         #region IDisposable

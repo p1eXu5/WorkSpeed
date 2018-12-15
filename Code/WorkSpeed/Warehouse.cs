@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
 using NpoiExcel;
-using WorkSpeed.Attributes;
+using NpoiExcel.Attributes;
 using WorkSpeed;
 using WorkSpeed.Data;
 using WorkSpeed.FileModels;
@@ -35,11 +35,17 @@ namespace WorkSpeed
 
         private void AddTypesToRepository ( ITypeRepository repo )
         {
-            repo.RegisterType< ProductivityImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-            repo.RegisterType< GatheringImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-            repo.RegisterType< ReceptionImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-            repo.RegisterType< InventoryImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            repo.RegisterType< ProductImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+
+            repo.RegisterType< EmployeeImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+
             repo.RegisterType< ShipmentImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+
+            repo.RegisterType< GatheringImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            repo.RegisterType< InventoryImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            repo.RegisterType< ReceptionImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+
+            repo.RegisterType< ProductivityImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
         }
 
         /// <summary>
@@ -52,19 +58,48 @@ namespace WorkSpeed
             return await Task<bool>.Factory.StartNew (() => Import (fileName), TaskCreationOptions.LongRunning);
         }
 
-        private bool Import (string fileName)
+        public async Task<bool> ImportAsync< TImportModel > (string fileName) where TImportModel : ImportModel
+        {
+            return await Task<bool>.Factory.StartNew (() => Import (fileName), TaskCreationOptions.LongRunning);
+        }
+
+        public Task<bool> HasProductsAsync () => _context.HasProductsAsync();
+
+        private bool Import ( string fileName,  Type type = null )
         {
             var sheetTable = ExcelImporter.ImportData (fileName, 0);
             var mappedType = _typeRepository.GetTypeWithMap ( sheetTable );
 
-            FillProductivityCollection( 
-                ExcelImporter.GetEnumerable( sheetTable,  mappedType,  new ImportModelConverter( new ImportModelVisitor( _context ) ) )
-            );
+            if ( type != null && !mappedType.type.IsAssignableFrom( type ) ) {
+                return false;
+            }
+
+            if ( typeof( ProductImportModel ) == mappedType.type  ) {
+
+                ExcelImporter.GetEnumerable( sheetTable, mappedType, new ImportModelConverter( new ImportModelVisitor(  ) ) )
+            }
+            else if ( typeof( EmployeeImportModel ) == mappedType.type ) {
+
+            }
+            else if ( typeof( ShipmentImportModel ) == mappedType.type ) {
+
+            }
+            else if ( typeof( WithProductActionImportModel ) == mappedType.type ) {
+
+                FillProductivityCollection( 
+                    ExcelImporter.GetEnumerable( sheetTable,  mappedType,  new ImportModelConverter( new ImportModelVisitor( _context ) ) )
+                );
+            }
 
             return true;
         }
 
         private void FillProductivityCollection (IEnumerable<EmployeeAction> actions)
+        {
+
+        }
+
+        private void AddProductsToDataBase ( IEnumerable<Product> products )
         {
 
         }

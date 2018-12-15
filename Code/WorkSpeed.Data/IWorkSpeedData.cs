@@ -11,5 +11,9 @@ namespace WorkSpeed.Data
     {
         IEnumerable<Employee> GetEmployees();
         Employee GetEmployee (string id);
+
+        Task<bool> HasProductsAsync ();
+        bool HasProduct ();
+        Product GetProduct ( int id );
     }
 }

@@ -11,19 +11,20 @@ namespace WorkSpeed.FileModels
 {
     public class ImportModelVisitor : IImportModelVisitor
     {
-        private readonly IProductsAndOperations _productsAndOperations;
+        private readonly IWorkSpeedData _productsAndOperations;
 
-        public ImportModelVisitor( IProductsAndOperations productsAndOperations )
+        public ImportModelVisitor( IWorkSpeedData productsAndOperations )
         {
             _productsAndOperations = productsAndOperations ?? throw new ArgumentNullException( nameof(productsAndOperations) );
         }
 
-        public EmployeeAction ToEmployeeAction ( ImportModel importModel )
+        public object GetDbModel ( ImportModel importModel )
         {
             //  *********************************
             //  To fill:
             //          - Product data
             //          - OperationGroup
+            //          - Action
             //
             //  *********************************
 
@@ -31,17 +32,20 @@ namespace WorkSpeed.FileModels
 
             switch ( importModel ) {
                     
-                case ActionProductImportModel withProductImportModel:
-                    return GetEmployeeAction( withProductImportModel );
-
-                case GatheringImportModel gatheringImportModel:
-                    return GetEmployeeAction( gatheringImportModel );
+                case ProductImportModel productImportModel:
+                    return GetProduct( productImportModel );
             }
+
+            return new object();
         }
 
-        public Product ToProduct( ProductImportModel importModel )
+        public Product GetProduct( ProductImportModel productImportModel )
         {
-            throw new NotImplementedException();
+            var newProduct = new Product();
+
+            // TODO:
+
+            return newProduct;
         }
     }
 }
