@@ -93,7 +93,7 @@ namespace NpoiExcel
                                                                              ITypeConverter< TIn, TOutType > typeConverter )
         {
             var typeCollection = FillModelCollection( sheetTable, typeof( TIn ), propertyMap );
-            return typeCollection.Cast< TIn >().Select( obj => ( TOutType )typeConverter.Convert( obj ) );
+            return typeCollection.Cast< TIn >().Select( typeConverter.Convert );
         }
 
 

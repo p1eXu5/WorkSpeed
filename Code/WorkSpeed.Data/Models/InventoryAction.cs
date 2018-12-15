@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace WorkSpeed.Data.Models
 {
-    public class InventoryAction : EmployeeAction
+    public class InventoryAction : WithProductAction
     {
+        public int AccountingQuantity { get; set; }
+        public Address InventoryCellAddress { get; set; }
     }
 }

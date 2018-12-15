@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using WorkSpeed.Data.Interfaces;
+using System.Threading.Tasks;
 
 namespace WorkSpeed.Data.Models
 {
-    public class Operation : IEntity<int>
+    public class OperationGroup
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public OperationGroup Group { get; set; }
+        public OperationGroups Name { get; set; }
         public float Complexity { get; set; }
     }
 }

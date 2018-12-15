@@ -13,9 +13,9 @@ namespace WorkSpeed.Data.Models
         public Employee Employee { get; set; }
 
         public DateTime StartTime { get; set; }
-        public TimeSpan Duration { get; set; }
+        public Document1C Document { get; set; }
 
         public Operation Operation { get; set; }
-        public Document1C Document { get; set; }
+        public TimeSpan Duration { get; set; }
     }
 }

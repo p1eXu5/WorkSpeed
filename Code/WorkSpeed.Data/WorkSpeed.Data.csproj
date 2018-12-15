@@ -150,6 +150,7 @@
     <Compile Include="Models\GatheringAction.cs" />
     <Compile Include="Models\InventoryAction.cs" />
     <Compile Include="Models\Operation.cs" />
+    <Compile Include="Models\OperationGroup.cs" />
     <Compile Include="Models\OperationGroups.cs" />
     <Compile Include="Models\PackingAction.cs" />
     <Compile Include="Models\PersonnelFileEntry.cs" />

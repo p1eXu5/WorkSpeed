@@ -15,7 +15,7 @@ namespace WorkSpeed.FileModels
                 return 0;
             }
 
-            return x.DateTime.CompareTo (y.DateTime);
+            return x.StartTime.CompareTo (y.StartTime);
         }
     }
 }

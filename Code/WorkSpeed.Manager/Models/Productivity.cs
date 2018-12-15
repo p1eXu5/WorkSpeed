@@ -11,7 +11,7 @@ namespace WorkSpeed.Manager.Models
     {
         public Productivity(Employee employee)
         {
-            //Employee = employee;
+            //EmployeeName = employee;
 
             //GatheringTime = TimeSpan.Zero;
             //GatheredGoods = new HashSet<int>();
@@ -28,7 +28,7 @@ namespace WorkSpeed.Manager.Models
         {
         }
 
-        //public readonly Employee Employee;
+        //public readonly EmployeeName EmployeeName;
 
         //public readonly TimeSpan GatheringTime;
         //public readonly HashSet<int> GatheredGoods;

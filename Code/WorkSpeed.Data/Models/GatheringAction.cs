@@ -8,7 +8,7 @@ namespace WorkSpeed.Data.Models
 {
     public class GatheringAction : WithProductAction
     {
-        public Address FastGatheringCellAdress { get; set; }
-        public Address DynamicCellAdress { get; set; }
+        public Address SenderCellAdress { get; set; }
+        public Address ReceiverCellAdress { get; set; }
     }
 }

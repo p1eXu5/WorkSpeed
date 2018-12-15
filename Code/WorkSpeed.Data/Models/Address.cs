@@ -10,7 +10,7 @@ namespace WorkSpeed.Data.Models
         public byte Section { get; set; }
         public byte Row { get; set; }
         public byte Shelf { get; set; }
-        public byte Cell { get; set; }
+        public byte CellNum { get; set; }
 
         public CellTypes CellType { get; set; }
 
