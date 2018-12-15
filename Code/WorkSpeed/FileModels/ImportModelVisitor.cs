@@ -39,11 +39,26 @@ namespace WorkSpeed.FileModels
 
         public Product GetProduct( ProductImportModel productImportModel )
         {
-            var newProduct = new Product();
+            return new Product{
 
-            // TODO:
+                Id = productImportModel.Id,
+                Name = productImportModel.Name,
 
-            return newProduct;
+                GatheringComplexity = (float)1.0,
+                InventoryComplexity = (float)1.0,
+                PackagingComplexity = (float)1.0,
+                PlacingComplexity = (float)1.0,
+                ScanningComplexity = (float)1.0,
+
+                CartonLength = ( float )productImportModel.CartonLength,
+                CartonWidth = ( float )productImportModel.CartonWidth,
+                CartonHeight = ( float )productImportModel.CartonHeight,
+                CartonQuantity = productImportModel.CartonQuantity,
+                ItemLength = ( float )productImportModel.ItemLength,
+                ItemWidth = ( float )productImportModel.CartonWidth,
+                ItemHeight = ( float )productImportModel.ItemHeight,
+                Weight = ( float )productImportModel.Weight
+            };
         }
     }
 }

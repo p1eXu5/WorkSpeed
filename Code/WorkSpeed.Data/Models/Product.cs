@@ -14,12 +14,26 @@ namespace WorkSpeed.Data.Models
 
         public bool IsGroup { get; set; }
 
-        public ProductDims ProductDims { get; set; }
+        public float ItemLength { get; set; }
+        public float ItemWidth  { get; set; }
+        public float ItemHeight { get; set; }
+
+        public float CartonLength { get; set; }
+        public float CartonWidth  { get; set; }
+        public float CartonHeight { get; set; }
+
+        public int CartonQuantity { get; set; }
+
+        public float Weight { get; set; }
+        public float Volume { get; set; }
+
+        public float GatheringComplexity { get; set; }
+        public float PackagingComplexity { get; set; }
+        public float ScanningComplexity  { get; set; }
+        public float InventoryComplexity { get; set; }
+        public float PlacingComplexity   { get; set; }
 
         public Product Parent { get; set; }
-        public Complexity Complexity { get; set; }
 
-        public float Volume => ProductDims.Volume;
-        public float Weight => ProductDims.Weight;
     }
 }
