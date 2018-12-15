@@ -28,8 +28,6 @@ namespace WorkSpeed.FileModels
             //
             //  *********************************
 
-            EmployeeAction employeeAction = null;
-
             switch ( importModel ) {
                     
                 case ProductImportModel productImportModel:

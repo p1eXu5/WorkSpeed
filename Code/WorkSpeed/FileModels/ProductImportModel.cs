@@ -26,7 +26,7 @@ namespace WorkSpeed.FileModels
 
         public Product ToProduct( IImportModelVisitor visitor )
         {
-            return visitor.ToProduct( this );
+            return ( Product )visitor.GetDbModel( this );
         }
     }
 }
