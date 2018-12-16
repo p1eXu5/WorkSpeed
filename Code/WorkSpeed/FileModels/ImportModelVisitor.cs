@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WorkSpeed.Data;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Interfaces;
 
@@ -13,31 +8,9 @@ namespace WorkSpeed.FileModels
     {
         public object GetDbModel ( ImportModel importModel )
         {
-            //  *********************************
-            //  To fill:
-            //          - Product data
-            //          - OperationGroup
-            //          - Action
-            //
-            //  *********************************
-
-            //switch ( withProductModel ) {
-                    
-            //    case ProductImportModel productImportModel :
-            //        return GetProduct( productImportModel );
-
-            //    case EmployeeImportModel employeeImportModel :
-            //        return GetEmployee( employeeImportModel );
-
-            //    case GatheringImportModel gatheringImportModel :
-            //        return GetGatheringAction( gatheringImportModel );
-
-            //    case ReceptionImportModel receptionImportModel:
-            //        return GetReception
-            //}
-
             return new object();
         }
+
 
         public Product GetDbModel( ProductImportModel productImportModel )
         {
@@ -117,8 +90,8 @@ namespace WorkSpeed.FileModels
 
         public EmployeeAction GetDbModel ( ProductivityImportModel productivityImportModel )
         {
-            var receiverAddress = productivityImportModel.AddressReceiver;
-            var senderAddress = productivityImportModel.AddressSender;
+            var receiverAddress = productivityImportModel.ReceiverAddress;
+            var senderAddress = productivityImportModel.SenderAddress;
 
             if ( String.IsNullOrWhiteSpace( receiverAddress ) && String.IsNullOrWhiteSpace( senderAddress ) ) {
 
@@ -131,6 +104,28 @@ namespace WorkSpeed.FileModels
             }
             else if ( String.IsNullOrWhiteSpace( receiverAddress ) ) {
 
+                InventoryImportModel inventoryImportModel = GetImportModel< InventoryImportModel >( productivityImportModel );
+                inventoryImportModel.Address = productivityImportModel.SenderAddress;
+                inventoryImportModel.AccountingQuantity = productivityImportModel.AccountingQuantity;
+
+                return GetDbModel( inventoryImportModel );
+            }
+            else if ( String.IsNullOrWhiteSpace( senderAddress ) ) {
+
+                ReceptionImportModel receptionImportModel = GetImportModel< ReceptionImportModel >( productivityImportModel );
+                receptionImportModel.Address = productivityImportModel.ReceiverAddress;
+                receptionImportModel.IsClientScanning = productivityImportModel.IsClientScanning;
+                receptionImportModel.ScanQuantity = productivityImportModel.ScanQuantity;
+
+                return GetDbModel( receptionImportModel );
+            }
+            else {
+
+                GatheringImportModel gatheringImportModel = GetImportModel< GatheringImportModel >( productivityImportModel );
+                gatheringImportModel.AddressSender = productivityImportModel.SenderAddress;
+                gatheringImportModel.AddressReceiver = productivityImportModel.ReceiverAddress;
+
+                return GetDbModel( gatheringImportModel );
             }
 
             return (EmployeeAction)new object();
@@ -210,6 +205,7 @@ namespace WorkSpeed.FileModels
 
             return importModel;
         }
+
 
         private Address GetAddress ( string address )
         {

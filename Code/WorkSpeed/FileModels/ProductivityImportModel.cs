@@ -8,8 +8,8 @@ namespace WorkSpeed.FileModels
         [Header("Количество сканов")]           public int ScanQuantity { get; set; }
         [Header("Сканирование транзитов")]      public bool IsClientScanning { get; set; }
 
-        [Header("Адрес-отправитель")]           public string AddressSender { get; set; }
-        [Header("Адрес-получатель")]            public string AddressReceiver { get; set; }
+        [Header("Адрес-отправитель")]           public string SenderAddress { get; set; }
+        [Header("Адрес-получатель")]            public string ReceiverAddress { get; set; }
 
         [Header("Вес на сотрудника")]               public double WeightPerEmployee { get; set; }
         [Header("Номерные ГМ на сотрудника")]       public double ClientCargoQuantityt { get; set; }
