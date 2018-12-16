@@ -125,6 +125,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessContexts\RuntimeWorkSpeedBusinessContext.cs" />
     <Compile Include="Comparers\EmployeeActionComparer.cs" />
     <Compile Include="Comparers\EmployeeComparer.cs" />
     <Compile Include="Comparers\OperationComparer.cs" />
