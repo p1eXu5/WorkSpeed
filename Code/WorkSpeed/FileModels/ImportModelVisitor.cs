@@ -74,7 +74,7 @@ namespace WorkSpeed.FileModels
 
         public GatheringAction GetDbModel ( GatheringImportModel gatheringImportModel )
         {
-            GatheringAction gatheringAction = ( GatheringAction )GetWithProductAction( gatheringImportModel );
+            GatheringAction gatheringAction = GetWithProductAction< GatheringAction >( gatheringImportModel );
 
             gatheringAction.SenderCellAdress = GetAddress( gatheringImportModel.AddressSender );
             gatheringAction.ReceiverCellAdress = GetAddress( gatheringImportModel.AddressReceiver );
@@ -84,7 +84,7 @@ namespace WorkSpeed.FileModels
 
         public ReceptionAction GetDbModel ( ReceptionImportModel receptionImportModel )
         {
-            ReceptionAction reseptionAction = ( ReceptionAction )GetWithProductAction( receptionImportModel );
+            ReceptionAction reseptionAction = GetWithProductAction< ReceptionAction >( receptionImportModel );
 
             reseptionAction.ScanQuantity = receptionImportModel.ScanQuantity;
 
@@ -96,7 +96,7 @@ namespace WorkSpeed.FileModels
 
         public InventoryAction GetDbModel ( InventoryImportModel inventoryImportModel )
         {
-            InventoryAction inventoryAction = ( InventoryAction )GetWithProductAction( inventoryImportModel );
+            InventoryAction inventoryAction = GetWithProductAction< InventoryAction >( inventoryImportModel );
 
             inventoryAction.AccountingQuantity = inventoryImportModel.AccountingQuantity;
             inventoryAction.InventoryCellAddress = GetAddress( inventoryImportModel.Address );
@@ -106,8 +106,13 @@ namespace WorkSpeed.FileModels
 
         public ShipmentAction GetDbModel ( ShipmentImportModel shipmentImportModel )
         {
-            ShipmentAction shipmentAction = ( ShipmentAction )GetEmployeeAction( shipmentImportModel );
+            ShipmentAction shipmentAction = GetEmployeeAction< ShipmentAction >( shipmentImportModel );
 
+            shipmentAction.Weight = ( float )shipmentImportModel.WeightPerEmployee;
+            shipmentAction.ClientCargoQuantity = ( float )shipmentImportModel.ClientCargoQuantity;
+            shipmentAction.CommonCargoQuantity = ( float )shipmentAction.CommonCargoQuantity;
+
+            return shipmentAction;
         }
 
         public EmployeeAction GetDbModel ( ProductivityImportModel productivityImportModel )
@@ -124,42 +129,21 @@ namespace WorkSpeed.FileModels
 
                 return GetDbModel( shipmentImportModel );
             }
+            else if ( String.IsNullOrWhiteSpace( receiverAddress ) ) {
+
+            }
 
             return (EmployeeAction)new object();
         }
 
-        private EmployeeAction GetEmployeeAction ( ActionImportModel actionImportModel )
+
+        private TImportModel GetWithProductAction< TImportModel >( WithProductActionImportModel withProductModel )
+            where TImportModel : WithProductAction
         {
-            return new WithProductAction {
+            var withProductAction = GetEmployeeAction< WithProductAction >( withProductModel );
+            var importModel = ( TImportModel )Activator.CreateInstance( typeof( TImportModel ) );
 
-                StartTime = actionImportModel.StartTime,
-
-                Employee = new Employee {
-
-                    Id = actionImportModel.EmployeeId,
-                    Name = actionImportModel.EmployeeName,
-                },
-
-                Duration = TimeSpan.FromSeconds( actionImportModel.OperationDuration ),
-
-                Document = new Document1C {
-
-                    Id = actionImportModel.DocumentNumber,
-                    Name = actionImportModel.DocumentName,
-                    Date = actionImportModel.StartTime
-                },
-
-                Operation = new Operation {
-                    Name = actionImportModel.Operation
-                },
-            };
-        }
-
-        private WithProductAction GetWithProductAction ( WithProductActionImportModel withProductModel )
-        {
-            WithProductAction withProductAction = ( WithProductAction )GetEmployeeAction( withProductModel );
-
-            withProductAction.Product = new Product {
+            importModel.Product = new Product {
 
                 Id = withProductModel.ProductId,
                 Name = withProductModel.Product,
@@ -179,7 +163,36 @@ namespace WorkSpeed.FileModels
 
             withProductAction.ProductQuantity = withProductModel.ProductQuantity;
 
-            return withProductAction;
+            return importModel;
+        }
+
+        private TImportModel GetEmployeeAction< TImportModel >( ActionImportModel actionImportModel )
+            where TImportModel : EmployeeAction
+        {
+            var importModel = ( TImportModel )Activator.CreateInstance( typeof( TImportModel ) );
+
+            importModel.StartTime = actionImportModel.StartTime;
+
+            importModel.Employee = new Employee {
+
+                Id = actionImportModel.EmployeeId,
+                Name = actionImportModel.EmployeeName,
+            };
+
+            importModel.Duration = TimeSpan.FromSeconds( actionImportModel.OperationDuration );
+
+            importModel.Document = new Document1C {
+
+                Id = actionImportModel.DocumentNumber,
+                Name = actionImportModel.DocumentName,
+                Date = actionImportModel.StartTime
+            };
+
+            importModel.Operation = new Operation {
+                Name = actionImportModel.Operation
+            };
+
+            return importModel;
         }
 
         private TImportType GetImportModel< TImportType > ( ActionImportModel actionImportModel )
