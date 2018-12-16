@@ -50,44 +50,6 @@ namespace NpoiExcel.Tests.UnitTests
             Assert.That (sheetTable.Headers.Any());
         }
 
-        [TestCaseSource(typeof(MockedSheetFactory), nameof(MockedSheetFactory.HeaderTestCases), new object[] { 5, 5 })]
-        public void GetNormalizedHeaderAt__NotEmptySheet_IndexGreaterThanMaxColumn__Throws (ISheet sheet)
-        {
-            var sheetTable = new SheetTable(sheet);
-
-            string header;
-            var ex = Assert.Catch<IndexOutOfRangeException> (() => header = sheetTable.GetNormalizedHeaderAt (sheetTable.ColumnCount));
-
-            StringAssert.Contains("Column was outside the bounds of sheet table!", ex.Message);
-        }
-
-        [TestCaseSource(typeof(MockedSheetFactory), nameof(MockedSheetFactory.HeaderTestCases), new object[] { 5, 5 })]
-        public void GetNormalizedHeaderAt__NotEmptySheet_IndexLessThanMinColumn__Throws (ISheet sheet)
-        {
-            var sheetTable = new SheetTable(sheet);
-
-            // ReSharper disable once NotAccessedVariable
-            string header;
-            var ex = Assert.Catch<IndexOutOfRangeException>(() => header = sheetTable.GetNormalizedHeaderAt (-1));
-
-            StringAssert.Contains("Column was outside the bounds of sheet table!", ex.Message);
-        }
-
-        [TestCaseSource(typeof(MockedSheetFactory), nameof(MockedSheetFactory.HeaderTestCasesWithReturns), new object[] { 5, 5 })]
-        public string[] GetNormalizedHeaderAt__NotEmptySheet_ValidIndex__ReturnsColumnHeader (ISheet sheet)
-        {
-            var sheetTable = new SheetTable(sheet);
-
-            string[] headers = new string[sheetTable.ColumnCount];
-
-            for (int i = 0; i < sheetTable.ColumnCount; i++) {
-
-                headers[i] = sheetTable.GetNormalizedHeaderAt (i);
-            }
-
-            return headers;
-        }
-
         [Test]
         public void Indexer_RowOutOfRange_Throws()
         {
