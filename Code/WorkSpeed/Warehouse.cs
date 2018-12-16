@@ -71,7 +71,7 @@ namespace WorkSpeed
 
         private bool Import ( string fileName,  Type type = null )
         {
-            var sheetTable = ExcelImporter.ImportData (fileName, 0);
+            var sheetTable = _dataImporter.ImportData (fileName, 0);
             var mappedType = _typeRepository.GetTypeWithMap ( sheetTable );
 
             if ( type != null && !mappedType.type.IsAssignableFrom( type ) ) {
@@ -80,7 +80,7 @@ namespace WorkSpeed
 
             if ( typeof( ProductImportModel ) == mappedType.type  ) {
 
-                ExcelImporter.GetEnumerable( sheetTable, mappedType.propertyMap, new ImportModelConverter< ProductImportModel, Product >( new ImportModelVisitor() ) );
+                _dataImporter.GetEnumerable( sheetTable,  mappedType.propertyMap,  new ImportModelConverter< ProductImportModel, Product >( new ImportModelVisitor() ) );
             }
             else if ( typeof( EmployeeImportModel ) == mappedType.type ) {
 

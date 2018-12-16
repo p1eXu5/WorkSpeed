@@ -12,5 +12,12 @@ namespace NpoiExcel
         {
             return ExcelImporter.ImportData( fileName, sheetIndex );
         }
+
+        public IEnumerable< TOutType > GetEnumerable< TIn, TOutType > ( SheetTable                                          sheetTable,  
+                                                                        Dictionary< string, (string header, int column) >   propertyMap,  
+                                                                        ITypeConverter< TIn, TOutType >                     typeConverter )
+        {
+            return ExcelImporter.GetEnumerable( sheetTable, propertyMap, typeConverter );
+        }
     }
 }
