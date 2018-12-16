@@ -12,6 +12,7 @@ using NpoiExcel.Attributes;
 using WorkSpeed;
 using WorkSpeed.Data;
 using WorkSpeed.FileModels;
+using WorkSpeed.FileModels.Converters;
 using WorkSpeed.Interfaces;
 using WorkSpeed.ProductivityCalculator;
 
@@ -20,12 +21,15 @@ namespace WorkSpeed
     public class Warehouse : IWarehouse
     {
         private readonly IWorkSpeedData _context;
+        private readonly IDataImporter _dataImporter;
+
         private readonly ITypeRepository _typeRepository;
         private readonly ProductivityObservableCollection _productivities;
 
-        public Warehouse( IWorkSpeedData context )
+        public Warehouse( IWorkSpeedData context, IDataImporter dataImporter )
         {
-            _context = context ?? throw new ArgumentNullException( nameof(context) );
+            _context = context ?? throw new ArgumentNullException( nameof( context ) );
+            _dataImporter = dataImporter ?? throw new ArgumentNullException( nameof( dataImporter ) );
 
             _typeRepository = new TypeRepository();
             AddTypesToRepository (_typeRepository);
@@ -60,7 +64,7 @@ namespace WorkSpeed
 
         public async Task<bool> ImportAsync< TImportModel > (string fileName) where TImportModel : ImportModel
         {
-            return await Task<bool>.Factory.StartNew (() => Import (fileName), TaskCreationOptions.LongRunning);
+            return await Task<bool>.Factory.StartNew (() => Import (fileName, typeof( TImportModel )), TaskCreationOptions.LongRunning);
         }
 
         public Task<bool> HasProductsAsync () => _context.HasProductsAsync();
@@ -76,7 +80,7 @@ namespace WorkSpeed
 
             if ( typeof( ProductImportModel ) == mappedType.type  ) {
 
-                ExcelImporter.GetEnumerable( sheetTable, mappedType, new ImportModelConverter( new ImportModelVisitor(  ) ) )
+                ExcelImporter.GetEnumerable( sheetTable, mappedType.propertyMap, new ImportModelConverter< ProductImportModel, Product >( new ImportModelVisitor() ) );
             }
             else if ( typeof( EmployeeImportModel ) == mappedType.type ) {
 
@@ -86,9 +90,6 @@ namespace WorkSpeed
             }
             else if ( typeof( WithProductActionImportModel ) == mappedType.type ) {
 
-                FillProductivityCollection( 
-                    ExcelImporter.GetEnumerable( sheetTable,  mappedType,  new ImportModelConverter( new ImportModelVisitor( _context ) ) )
-                );
             }
 
             return true;

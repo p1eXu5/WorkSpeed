@@ -61,7 +61,9 @@
     <Compile Include="Attributes\HiddenAttribute.cs" />
     <Compile Include="CellPoint.cs" />
     <Compile Include="CellValue.cs" />
+    <Compile Include="ExcelDataImporter.cs" />
     <Compile Include="ExcelImporter.cs" />
+    <Compile Include="IDataImporter.cs" />
     <Compile Include="TypeRepository.cs" />
     <Compile Include="ITypeConverter.cs" />
     <Compile Include="ITypeRepository.cs" />
