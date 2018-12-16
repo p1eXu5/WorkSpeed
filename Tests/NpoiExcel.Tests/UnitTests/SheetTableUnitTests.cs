@@ -43,11 +43,11 @@ namespace NpoiExcel.Tests.UnitTests
         }
 
         [TestCaseSource (typeof (MockedSheetFactory), nameof(MockedSheetFactory.HeaderTestCases), new object[] {5, 5})]
-        public void NormalizedHeadersGetter_NotEmptySheet_ReturnsNotEmptyCollection (ISheet sheet)
+        public void HeadersGetter_NotEmptySheet_ReturnsNotEmptyCollection (ISheet sheet)
         {
             var sheetTable = new SheetTable(sheet);
 
-            Assert.That (sheetTable.NormalizedHeaders.Any());
+            Assert.That (sheetTable.Headers.Any());
         }
 
         [TestCaseSource(typeof(MockedSheetFactory), nameof(MockedSheetFactory.HeaderTestCases), new object[] { 5, 5 })]

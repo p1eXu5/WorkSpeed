@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using WorkSpeed.Data.Models;
 using NpoiExcel;
 using NpoiExcel.Attributes;
@@ -80,7 +81,7 @@ namespace WorkSpeed
 
             if ( typeof( ProductImportModel ) == mappedType.type  ) {
 
-                ImportData(
+                ImportProducts(
                     _dataImporter.GetEnumerable( 
                         sheetTable,  
                         mappedType.propertyMap,  
@@ -90,7 +91,7 @@ namespace WorkSpeed
             }
             else if ( typeof( EmployeeImportModel ) == mappedType.type ) {
 
-                ImportData(
+                ImportEmployees(
                     _dataImporter.GetEnumerable( 
                         sheetTable,  
                         mappedType.propertyMap,  
@@ -100,7 +101,7 @@ namespace WorkSpeed
             }
             else if ( typeof( ShipmentImportModel ) == mappedType.type ) {
 
-                ImportData(
+                ImportShipmentActions(
                     _dataImporter.GetEnumerable( 
                         sheetTable,  
                         mappedType.propertyMap,  
@@ -110,7 +111,7 @@ namespace WorkSpeed
             }
             else if ( typeof( GatheringImportModel ) == mappedType.type ) {
 
-                ImportData(
+                ImportWithProductAction(
                     _dataImporter.GetEnumerable( 
                         sheetTable,  
                         mappedType.propertyMap,  
@@ -120,7 +121,7 @@ namespace WorkSpeed
             }
             else if ( typeof( ReceptionImportModel ) == mappedType.type ) {
 
-                ImportData(
+                ImportWithProductAction(
                     _dataImporter.GetEnumerable( 
                         sheetTable,  
                         mappedType.propertyMap,  
@@ -130,7 +131,7 @@ namespace WorkSpeed
             }
             else if ( typeof( InventoryImportModel ) == mappedType.type ) {
 
-                ImportData(
+                ImportWithProductAction(
                     _dataImporter.GetEnumerable( 
                         sheetTable,  
                         mappedType.propertyMap,  
@@ -140,7 +141,7 @@ namespace WorkSpeed
             }
             else if ( typeof( ProductivityImportModel ) == mappedType.type ) {
 
-                ImportData(
+                ImportProductivity(
                     _dataImporter.GetEnumerable( 
                         sheetTable,  
                         mappedType.propertyMap,  
@@ -152,27 +153,31 @@ namespace WorkSpeed
             return true;
         }
 
-        private void ImportData ( IEnumerable< Employee > products )
+        private void ImportEmployees ( IEnumerable< Employee > employees )
         {
 
         }
 
-        private void ImportData ( IEnumerable< Product > products )
+        private void ImportProducts ( IEnumerable< Product > products )
         {
 
         }
 
-        private void ImportData ( IEnumerable< WithProductAction > actions )
+        // ReSharper disable PossibleMultipleEnumeration
+        private void ImportProductivity ( IEnumerable< EmployeeAction > employeeActions )
+        {
+            ImportWithProductAction( employeeActions.Where( a => a is GatheringAction ).Cast< GatheringAction >() );
+            ImportWithProductAction( employeeActions.Where( a => a is ReceptionAction ).Cast< ReceptionAction >() );
+            ImportWithProductAction( employeeActions.Where( a => a is InventoryAction ).Cast< InventoryAction >() );
+            ImportShipmentActions( employeeActions.Where( a => a is ShipmentAction ).Cast< ShipmentAction >() );
+        }
+
+        private void ImportWithProductAction ( IEnumerable< WithProductAction > withProductActions )
         {
 
         }
 
-        private void ImportData ( IEnumerable< ShipmentAction > products )
-        {
-
-        }
-
-        private void ImportData ( IEnumerable< EmployeeAction > products )
+        private void ImportShipmentActions ( IEnumerable< ShipmentAction > shipmentActions )
         {
 
         }
