@@ -4,40 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using WorkSpeed.Data.DbContexts;
+using WorkSpeed.Data.DataContexts;
 using WorkSpeed.Data.Models;
 
-namespace WorkSpeed.Data
+namespace WorkSpeed.Data.BusinessContexts
 {
-    public class WorkSpeedData : IWorkSpeedData, IDisposable
+    public class WorkSpeedBusinessContext : IWorkSpeedBusinessContext, IDisposable
     {
+        private readonly WorkSpeedDataContext _dbContext;
         private bool _disposed;
-        private readonly WorkSpeedDbContext _dbContext;
 
-        public WorkSpeedData()
+
+        public WorkSpeedBusinessContext()
         {
-            _dbContext = new WorkSpeedDbContext();
+            _dbContext = new WorkSpeedDataContext();
         }
 
-        public IEnumerable<Employee> GetEmployees()
-        {
-            return _dbContext.Employees.OrderBy (e => e.Name);
-        }
-
-        public Employee GetEmployee (string id)
-        {
-            return _dbContext.Employees.FirstOrDefault(e => e.Id == id);
-        }
-
-        public IEnumerable<Document1C> GetDocuments()
-        {
-            return _dbContext.Documents.OrderBy (d => d.Date);
-        }
 
         public Task<bool> HasProductsAsync ()
         {
             return _dbContext.Products.AnyAsync();
         }
+
 
         #region IDisposable
 
@@ -58,7 +46,5 @@ namespace WorkSpeed.Data
         }
 
         #endregion
-
-
     }
 }

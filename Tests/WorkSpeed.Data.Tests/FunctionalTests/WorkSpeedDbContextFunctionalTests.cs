@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using WorkSpeed.Data.DbContexts;
+using WorkSpeed.Data.DataContexts;
 
 namespace WorkSpeed.Data.Tests.FunctionalTests
 {
@@ -10,7 +10,7 @@ namespace WorkSpeed.Data.Tests.FunctionalTests
         [Test]
         public void CanCreateDatabase()
         {
-            using (var context = new WorkSpeedDbContext()) {
+            using (var context = new WorkSpeedDataContext()) {
 
                 context.Database.Migrate();
             }
@@ -19,7 +19,7 @@ namespace WorkSpeed.Data.Tests.FunctionalTests
         [TearDown]
         public void DeleteDataBase()
         {
-            using (var context = new WorkSpeedDbContext()) {
+            using (var context = new WorkSpeedDataContext()) {
 
                 context.Database.EnsureDeleted();
             }

@@ -35,12 +35,12 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
                 if ( view.ShowDialog() != true ) {
 
-                    Exit();
+                    Exit( null );
                 }
             }
         }
 
-        private void Exit()
+        private void Exit( object obj )
         {
             System.Windows.Application.Current.Shutdown();
         }

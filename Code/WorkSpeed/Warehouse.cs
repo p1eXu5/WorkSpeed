@@ -12,6 +12,7 @@ using NpoiExcel;
 using NpoiExcel.Attributes;
 using WorkSpeed;
 using WorkSpeed.Data;
+using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.FileModels;
 using WorkSpeed.FileModels.Converters;
 using WorkSpeed.Interfaces;
@@ -21,13 +22,15 @@ namespace WorkSpeed
 {
     public class Warehouse : IWarehouse
     {
-        private readonly IWorkSpeedData _context;
+        private readonly IWorkSpeedBusinessContext _context;
         private readonly IDataImporter _dataImporter;
 
         private readonly ITypeRepository _typeRepository;
         private readonly ProductivityObservableCollection _productivities;
 
-        public Warehouse( IWorkSpeedData context, IDataImporter dataImporter )
+        #region Constructor
+
+        public Warehouse( IWorkSpeedBusinessContext context, IDataImporter dataImporter )
         {
             _context = context ?? throw new ArgumentNullException( nameof( context ) );
             _dataImporter = dataImporter ?? throw new ArgumentNullException( nameof( dataImporter ) );
@@ -37,6 +40,28 @@ namespace WorkSpeed
 
             _productivities = new ProductivityObservableCollection();
         }
+
+        #endregion
+
+        /// <summary>
+        /// Entities that don't contained in DB.
+        /// </summary>
+        public IWarehouseEntities NewData { get; }
+
+
+        public Task<bool> HasProductsAsync () => _context.HasProductsAsync();
+
+
+        public async Task<bool> ImportAsync (string fileName)
+        {
+            return await Task<bool>.Factory.StartNew (() => Import (fileName), TaskCreationOptions.LongRunning);
+        }
+
+        public async Task<bool> ImportAsync< TImportModel > (string fileName) where TImportModel : ImportModel
+        {
+            return await Task<bool>.Factory.StartNew (() => Import (fileName, typeof( TImportModel )), TaskCreationOptions.LongRunning);
+        }
+
 
         private void AddTypesToRepository ( ITypeRepository repo )
         {
@@ -53,22 +78,6 @@ namespace WorkSpeed
             repo.RegisterType< ProductivityImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
         }
 
-        /// <summary>
-        /// Entities that don't contained in DB.
-        /// </summary>
-        public IWarehouseEntities NewData { get; }
-
-        public async Task<bool> ImportAsync (string fileName)
-        {
-            return await Task<bool>.Factory.StartNew (() => Import (fileName), TaskCreationOptions.LongRunning);
-        }
-
-        public async Task<bool> ImportAsync< TImportModel > (string fileName) where TImportModel : ImportModel
-        {
-            return await Task<bool>.Factory.StartNew (() => Import (fileName, typeof( TImportModel )), TaskCreationOptions.LongRunning);
-        }
-
-        public Task<bool> HasProductsAsync () => _context.HasProductsAsync();
 
         private bool Import ( string fileName,  Type type = null )
         {
@@ -181,6 +190,7 @@ namespace WorkSpeed
         {
 
         }
+
 
     }
 }

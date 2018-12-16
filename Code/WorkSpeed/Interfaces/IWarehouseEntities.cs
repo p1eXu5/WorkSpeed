@@ -14,6 +14,5 @@ namespace WorkSpeed.Interfaces
         ReadOnlyObservableCollection<Employee> Employees { get; }
         ReadOnlyObservableCollection<Employee> Productivities { get; }
 
-        void Add (IEnumerable<ImportModel> model);
     }
 }

@@ -24,16 +24,6 @@ namespace WorkSpeed.ProductivityCalculator
 
             foreach (var employeeAction in employeeActions) {
 
-                if (prevOperations.ContainsKey(employeeAction.Employee)) {
-
-                    productivities[employeeAction.Employee] = new Productivity (employeeAction);
-                    prevOperations[employeeAction.Employee] = employeeAction;
-                    continue;
-                }
-
-                if (employeeAction.Operation.Equals (prevOperations[employeeAction.Employee].Operation)) {
-
-                }
             }
 
             return null;

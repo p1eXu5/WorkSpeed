@@ -14,6 +14,8 @@ namespace WorkSpeed.MvvmBaseLibrary
 
         public ViewRepository( Window owner )
         {
+            _owner = owner ?? throw new ArgumentNullException();
+
             _repository = new Dictionary<Type, Type>();
         }
 
@@ -34,19 +36,19 @@ namespace WorkSpeed.MvvmBaseLibrary
                 view.DataContext = viewModel;
                 view.Owner = _owner;
 
-                EventHandler<CloseRequestedEventArgs> onCloseDialogHandler = null;
-
-                onCloseDialogHandler = ( s, e ) =>
-                {
-                    viewModel.CloseRequested -= onCloseDialogHandler;
-
-                    (( IDialog )s ).DialogResult = e.DialogResult;
-                };
+                viewModel.CloseRequested += OnCloseDialogHandler;
 
                 return view;
             }
 
             return null;
+
+            void OnCloseDialogHandler ( object s, CloseRequestedEventArgs e )
+                {
+                    viewModel.CloseRequested -= OnCloseDialogHandler;
+
+                    ( ( IDialog )s ).DialogResult = e.DialogResult;
+                }
         }
     }
 }

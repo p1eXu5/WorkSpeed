@@ -11,7 +11,7 @@ using WorkSpeed.FileModels;
 
 namespace WorkSpeed.ProductivityCalculator
 {
-    public class ProductivityObservableCollection : ObservableCollection<Productivity>
+    public class ProductivityObservableCollection : ObservableCollection< Productivity >
     {
         private SortedSet<EmployeeAction> _actions;
 
@@ -29,7 +29,7 @@ namespace WorkSpeed.ProductivityCalculator
         /// <param name="employeeAction">Imported employeeAction.</param>
         public void Add(ActionImportModel employeeAction)
         {
-            _actions.Add (employeeAction.GetAction());
+
         }
 
         public void Calculate()

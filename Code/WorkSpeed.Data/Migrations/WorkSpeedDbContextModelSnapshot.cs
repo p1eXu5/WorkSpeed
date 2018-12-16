@@ -7,7 +7,7 @@ using WorkSpeed.Data.DataContexts;
 
 namespace WorkSpeed.Data.Migrations
 {
-    [DbContext(typeof(WorkSpeedDbContext))]
+    [DbContext(typeof(WorkSpeedDataContext))]
     partial class WorkSpeedDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

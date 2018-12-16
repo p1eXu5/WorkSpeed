@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using WorkSpeed.Data;
+using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.Data.Comparers;
 using WorkSpeed.Data.Models;
 using WorkSpeed.FileModels;
@@ -16,13 +17,13 @@ namespace WorkSpeed
 {
     public class WarehouseEntities : IWarehouseEntities
     {
-        private readonly IWorkSpeedData _dbContext;
+        private readonly IWorkSpeedBusinessContext _dbContext;
         //private readonly IProductivityCalculator _productivityCalculator;
 
         private readonly ObservableCollection<Employee> _employees;
         private readonly ObservableCollection<Productivity> _productivity;
 
-        public WarehouseEntities(IWorkSpeedData dbContext)
+        public WarehouseEntities(IWorkSpeedBusinessContext dbContext)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException();
             //_productivityCalculator = productivityCalculator ?? throw new ArgumentNullException();
@@ -38,22 +39,6 @@ namespace WorkSpeed
         public ReadOnlyObservableCollection<Employee> Productivities { get; }
 
 
-        public void Add (IEnumerable<ImportModel> importModels)
-        {
-            if (importModels == null) throw new ArgumentNullException();
-
-            var models = importModels.ToArray();
-
-            Clear();
-
-            var employees = models.Select (m => m.GetEmployee()).Distinct (new EmployeeComparer());
-
-            foreach (var employee in employees) {
-
-                _employees.Add (employee);
-
-            }
-        }
 
 
         private void Clear()

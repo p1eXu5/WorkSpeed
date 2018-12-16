@@ -8,7 +8,7 @@ using WorkSpeed.Data.DataContexts;
 
 namespace WorkSpeed.Data.Migrations
 {
-    [DbContext(typeof(WorkSpeedDbContext))]
+    [DbContext(typeof(WorkSpeedDataContext))]
     [Migration("20181122130858_InitialCreate")]
     partial class InitialCreate
     {

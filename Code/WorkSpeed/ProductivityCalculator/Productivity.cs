@@ -5,7 +5,6 @@ using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using WorkSpeed.Attributes;
 using WorkSpeed.Constraints;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Interfaces;
@@ -164,72 +163,74 @@ namespace WorkSpeed.ProductivityCalculator
 
         public void AddTime ( EmployeeAction employeeAction,  AddTimeOptions option = AddTimeOptions.Duration )
         {
-            switch ( employeeAction.Operation.OperationGroup ) {
+            switch ( employeeAction.Operation.Group.Name ) {
 
                 case OperationGroups.Gathering :
                 case OperationGroups.Packing :
 
-                    Times.GatheringTime += GetProductivityTimer( employeeAction, option, Times.GatheringTime );
+                    (( TimeIndicators )Times).GatheringTime += 
+                        GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).GatheringTime );
                     break;
 
                 case OperationGroups.ClientGathering :
                 case OperationGroups.ClientPacking :
 
-                    Times.ClientGatheringTime += GetProductivityTimer( employeeAction, option, Times.ClientGatheringTime );
+                    (( TimeIndicators )Times).ClientGatheringTime += 
+                        GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).ClientGatheringTime );
                     break;
 
                 case OperationGroups.ShopperGathering:
 
-                    Times.ShopperGatheringTime += GetProductivityTimer( employeeAction, option, Times.ShopperGatheringTime );
+                    (( TimeIndicators )Times).ShopperGatheringTime += 
+                        GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).ShopperGatheringTime );
                     break;
 
                 case OperationGroups.Scanning :
 
-                    Times.ScanningTime += GetProductivityTimer( employeeAction, option, Times.ScanningTime );
+                    (( TimeIndicators )Times).ScanningTime += 
+                        GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).ScanningTime );
                     break;
 
                 case OperationGroups.ClientScanning :
 
-                    Times.ClientScanningTime += GetProductivityTimer( employeeAction, option, Times.ClientScanningTime );
+                    (( TimeIndicators )Times).ClientScanningTime += 
+                        GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).ClientScanningTime );
                     break;
 
                 case OperationGroups.Defragmentation :
 
-                    Times.DefragmentationTime += GetProductivityTimer( employeeAction, option, Times.DefragmentationTime );
+                    (( TimeIndicators )Times).DefragmentationTime += 
+                        GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).DefragmentationTime );
                     break;
 
                 case OperationGroups.Placing :
 
-                    Times.PlacingTime += GetProductivityTimer( employeeAction, option, Times.PlacingTime );
+                    (( TimeIndicators )Times).PlacingTime += 
+                        GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).PlacingTime );
                     break;
 
                 case OperationGroups.Inventory :
 
-                    Times.InventoryTime += GetProductivityTimer( employeeAction, option, Times.InventoryTime );
+                    (( TimeIndicators )Times).InventoryTime += 
+                        GetProductivityTimer( employeeAction, option, (( TimeIndicators )Times).InventoryTime );
                     break;
 
                 case OperationGroups.Shipment :
 
-                    Times.ShipmentTime += GetProductivityTimer( employeeAction, option, Times.ShipmentTime );
+                    (( TimeIndicators )Times).ShipmentTime += 
+                        GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).ShipmentTime );
                     break;
 
                 default :
 
-                    Times.NonProductivTime += GetProductivityTimer( employeeAction, option, Times.NonProductivTime );
+                    (( TimeIndicators )Times).NonProductivTime += 
+                        GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).NonProductivTime );
                     break;
             }
         }
 
         public void AddActionDetails ( EmployeeAction employeeAction )
         {
-
-            switch ( employeeAction ) {
-
-                case GatheringAction gatheringAction :
-
-                    (()Gathered).AddQuantity( gatheringAction );
-                    break;
-            }
         }
 
         private ProductivityTime GetProductivityTimer ( EmployeeAction employeeAction,  AddTimeOptions option,  ProductivityTime timer )
