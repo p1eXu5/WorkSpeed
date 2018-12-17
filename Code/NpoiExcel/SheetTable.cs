@@ -21,7 +21,7 @@ namespace NpoiExcel
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly CellPoint _endCell;
 
-        private readonly HashSet<( string header, int column )> _headerMap;
+        private readonly HashSet<( string header, int column )> _headerMapSet;
         
         #endregion
 
@@ -52,7 +52,7 @@ namespace NpoiExcel
             RowCount = _endCell.Row - _startCell.Row - 1;
             ColumnCount = _endCell.Column - _startCell.Column;
 
-            _headerMap = GetHeaderMap (sheet, _startCell, _endCell);
+            _headerMapSet = GetHeaderMap (sheet, _startCell, _endCell);
         }
 
         #endregion
@@ -60,8 +60,8 @@ namespace NpoiExcel
 
         #region Properties
 
-        public IEnumerable<string> Headers => _headerMap.Select( h => h.header );
-        public IEnumerable<( string header, int column )> HeaderMap => _headerMap;
+        public IEnumerable<string> Headers => _headerMapSet.Select( h => h.header );
+        public IEnumerable<( string header, int column )> HeaderMapSet => _headerMapSet;
         
         #endregion
 
@@ -207,7 +207,7 @@ namespace NpoiExcel
         {
             if ( null == header ) throw new ArgumentNullException();
 
-            return _headerMap.Where( h => h.header.Equals( header ) ).Select( h => h.column ).ToArray();
+            return _headerMapSet.Where( h => h.header.Equals( header ) ).Select( h => h.column ).ToArray();
         }
 
         #endregion

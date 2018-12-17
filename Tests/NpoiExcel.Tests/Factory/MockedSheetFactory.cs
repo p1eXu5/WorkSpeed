@@ -323,22 +323,22 @@ namespace NpoiExcel.Tests.Factory
                                 .SetName($"Test case #9 ({firstColumn}, {firsrtRow});");
         }
 
-        public static ISheet GetMockedSheet (short firstColumn, int firsrtRow, int[,] area)
+        public static ISheet GetMockedSheet ( short firstColumn, int firsrtRow, int[,] area )
         {
             var rows = new Dictionary<int, HashSet<int>>();
 
-            for (int j = 0; j < area.GetLength (0); j++) {
-                for (short i = 0; i < area.GetLength (1); ++i) {
+            for ( int j = 0; j < area.GetLength( 0 ); j++ ) {
+                for ( short i = 0; i < area.GetLength( 1 ); ++i ) {
 
-                    if (area[j, i] != 0) {
+                    if ( area[ j, i ] != 0 ) {
 
                         var r = j + firsrtRow;
 
-                        if (!rows.Keys.Contains (r)) {
-                            rows[r] = new HashSet<int>();
+                        if ( !rows.Keys.Contains( r ) ) {
+                            rows[ r ] = new HashSet<int>();
                         }
 
-                        rows[r].Add (i + firstColumn);
+                        rows[ r ].Add( i + firstColumn );
                     }
                 }
             }
@@ -346,28 +346,29 @@ namespace NpoiExcel.Tests.Factory
             // см. типы передаваемых параметров, а не возвращаемых!
             var sheetMock = new Mock<ISheet>();
 
-            sheetMock.Setup (s => s.FirstRowNum).Returns (rows.Keys.Min());
-            sheetMock.Setup (s => s.LastRowNum).Returns (rows.Keys.Max());
+            sheetMock.Setup( s => s.FirstRowNum ).Returns( rows.Keys.Min() );
+            sheetMock.Setup( s => s.LastRowNum ).Returns( rows.Keys.Max() );
 
-            sheetMock.Setup (s => s.GetRow (It.Is<int> (r => rows.Keys.Contains (r))))
-                     .Returns ((int r) => {
-                                              var rowMock = new Mock<IRow>();
-                                              rowMock.Setup(s => s.FirstCellNum).Returns((short)rows[r].Min());
-                                              rowMock.Setup(s => s.LastCellNum).Returns((short)(rows[r].Max() + 1));
-                                              rowMock.Setup(row => row.GetCell(It.Is<int>(c => rows[r].Contains(c))))
-                                                     .Returns(ReturnMockedStringCell());
-                                              return rowMock.Object;
-                                          });
+            sheetMock.Setup( s => s.GetRow( It.Is<int>( r => rows.Keys.Contains( r ) ) ) )
+                     .Returns( ( int r ) =>
+                     {
+                         var rowMock = new Mock<IRow>();
+                         rowMock.Setup( s => s.FirstCellNum ).Returns( ( short )rows[ r ].Min() );
+                         rowMock.Setup( s => s.LastCellNum ).Returns( ( short )( rows[ r ].Max() + 1 ) );
+                         rowMock.Setup( row => row.GetCell( It.Is<int>( c => rows[ r ].Contains( c ) ) ) )
+                                .Returns( ReturnMockedStringCell() );
+                         return rowMock.Object;
+                     } );
 
             return sheetMock.Object;
         }
 
-        private static ICell ReturnMockedStringCell()
+        private static ICell ReturnMockedStringCell ()
         {
             var stringCellMock = new Mock<ICell>();
 
-            stringCellMock.Setup(c => c.CellType).Returns(CellType.String);
-            stringCellMock.Setup(c => c.StringCellValue).Returns("Test string");
+            stringCellMock.Setup( c => c.CellType ).Returns( CellType.String );
+            stringCellMock.Setup( c => c.StringCellValue ).Returns( "Test string" );
 
             return stringCellMock.Object;
         }

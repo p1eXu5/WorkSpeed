@@ -22,26 +22,37 @@ namespace NpoiExcel
         /// <param name="excludeAttribute"></param>
         public void RegisterType< TType >( Type includeAttribute = null, Type excludeAttribute = null )
         {
-            RegisterType( typeof( TType ), includeAttribute );
+            RegisterType( typeof( TType ), includeAttribute, excludeAttribute );
         }
 
         public IEnumerable< Type > GetRegistredTypes () => _typeDictionary.Keys;
 
+        public IEnumerable< string > GetPropertyNames ( Type type )
+        {
+            if ( type == null ) return new string[0];
+
+            if (!_typeDictionary.TryGetValue( type, out var propertiesMap )) return new string[0];
+
+            return propertiesMap.Values;
+        }
+
         /// <summary>
-        /// Registers type of type parameter.
+        /// Registers type of type parameter. If includeAttribute is setted then value of ToString() method of this
+        /// attribute will be considered in type searching by SheetTable.
         /// </summary>
         /// <param name="type"></param>
         /// <param name="includeAttribute"></param>
         /// <param name="excludeAttribute"></param>
         /// <exception cref="ArgumentNullException">When type is null.</exception>
-        public void RegisterType( Type type, Type includeAttribute, Type excludeAttribute = null )
+        public virtual void RegisterType( Type type, Type includeAttribute = null, Type excludeAttribute = null )
         {
             if ( type == null ) throw new ArgumentNullException();
 
             // Key in dictionary is a list of attribute values.
             var propertyMap = new Dictionary< string[], string >();
 
-            var propertyInfos = type.GetProperties( BindingFlags.Public | BindingFlags.SetProperty );
+            var propertyInfos = type.GetProperties( BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.SetProperty )
+                                    .Where( pi => pi.GetSetMethod( false ) != null );
 
             foreach ( var propertyInfo in propertyInfos ) {
 
@@ -68,25 +79,27 @@ namespace NpoiExcel
         /// </summary>
         /// <param name="sheetTable"><see cref="SheetTable"/></param>
         /// <returns>Tuple of Type and Dictionary&lt; propertyName, header &gt;</returns>
-        public (Type type, Dictionary< string, (string header, int column) > propertyMap) GetTypeWithMap( SheetTable sheetTable )
+        public virtual (Type type, Dictionary< string, (string header, int column) > propertyMap) GetTypeWithMap( SheetTable sheetTable )
         {
-            var headerMap = sheetTable.HeaderMap.ToArray();
-            var propertyMap = new Dictionary< string, (string header, int column) >();
+            var headerMapArray = sheetTable.HeaderMapSet.ToArray();
+            var propertyToSheetMap = new Dictionary< string, (string header, int column) >();
 
             foreach ( var type in _typeDictionary.Keys ) {
 
-                var propertyAttributes = _typeDictionary[ type ];
+                var propertyNamesMap = _typeDictionary[ type ];
                 bool found = false;
 
-                foreach ( var header in headerMap.ToArray() ) {
+                foreach ( var headerMap in headerMapArray.ToArray() ) {
 
-                    foreach ( var propertyIdentity in propertyAttributes.Keys.OrderBy( a => a.Length ) ) {
+                    foreach ( var propertyIdentity in propertyNamesMap.Keys.OrderBy( a => a.Length ) ) {
 
-                        if ( propertyIdentity.Contains( header.header ) ) {
+                        var checkedHeader = headerMap.header.RemoveWhitespaces().ToUpperInvariant();
+
+                        if ( propertyIdentity.Any( p => p.Equals( checkedHeader ) ) ) {
 
                             found = true;
-                            propertyMap[ propertyAttributes[ propertyIdentity ] ] = header;
-                            propertyAttributes.Remove( propertyIdentity );
+                            propertyToSheetMap[ propertyNamesMap[ propertyIdentity ] ] = headerMap;
+                            propertyNamesMap.Remove( propertyIdentity );
                             break;
                         }
                     }
@@ -94,7 +107,7 @@ namespace NpoiExcel
                     if (!found) break;
                 }
 
-                if ( found ) return (type, propertyMap);
+                if ( found ) return (type, propertyToSheetMap);
             }
 
             return (null, null);
