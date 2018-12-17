@@ -10,7 +10,7 @@ namespace WorkSpeed.FileModels
 {
     public abstract class ImportModel
     {
-        public object Convert ( IImportModelVisitor visitor )
+        public virtual object Convert ( IImportModelVisitor visitor )
         {
             return visitor.GetDbModel( this );
         }

@@ -91,9 +91,9 @@ namespace NpoiExcel
 
                 foreach ( var headerMap in headerMapArray.ToArray() ) {
 
-                    foreach ( var propertyIdentity in propertyNamesMap.Keys.OrderBy( a => a.Length ) ) {
+                    var checkedHeader = headerMap.header.RemoveWhitespaces().ToUpperInvariant();
 
-                        var checkedHeader = headerMap.header.RemoveWhitespaces().ToUpperInvariant();
+                    foreach ( var propertyIdentity in propertyNamesMap.Keys.OrderBy( a => a.Length ) ) {
 
                         if ( propertyIdentity.Any( p => p.Equals( checkedHeader ) ) ) {
 
@@ -104,7 +104,6 @@ namespace NpoiExcel
                         }
                     }
 
-                    if (!found) break;
                 }
 
                 if ( found ) return (type, propertyToSheetMap);

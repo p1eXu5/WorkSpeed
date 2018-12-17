@@ -75,7 +75,7 @@ namespace NpoiExcel
                 if (row < 0 || row >= RowCount) throw new IndexOutOfRangeException("Row was outside the bounds of sheet table.");
                 if (column < 0 || column >= ColumnCount) throw new IndexOutOfRangeException("Column was outside the bounds of sheet table.");
 
-                return new CellValue (_sheet.GetRow (_startCell.Row + row)?.GetCell (_startCell.Column + column + 1));
+                return new CellValue (_sheet.GetRow (_startCell.Row + row + 1)?.GetCell (_startCell.Column + column));
             }
         }
 

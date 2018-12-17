@@ -155,7 +155,9 @@ namespace NpoiExcel
 
         public static implicit operator int (CellValue value)
         {
-            return Convert.ToInt32 (value._doubleValue);
+            if ( value._doubleValue > int.MaxValue ) return int.MaxValue;
+            if ( value._doubleValue < int.MinValue ) return int.MinValue;
+            return Convert.ToInt32( value._doubleValue );
         }
 
         public static implicit operator double (CellValue value)
@@ -200,12 +202,4 @@ namespace NpoiExcel
         }
     }
 
-
-    class Foo
-    {
-        void Bar()
-        {
-            var c = new NPOI.SS.UserModel.CellValue("sd");
-        }
-    }
 }

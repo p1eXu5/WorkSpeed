@@ -83,7 +83,7 @@ namespace WorkSpeed
             var sheetTable = _dataImporter.ImportData (fileName, 0);
             var mappedType = _typeRepository.GetTypeWithMap ( sheetTable );
 
-            if ( type != null && !mappedType.type.IsAssignableFrom( type ) ) {
+            if ( type != null && mappedType.type != null && !mappedType.type.IsAssignableFrom( type ) ) {
                 return false;
             }
 
@@ -168,7 +168,9 @@ namespace WorkSpeed
 
         private void ImportProducts ( IEnumerable< Product > products )
         {
-
+            foreach ( var product in products ) {
+                _context.AddProduct( product );
+            }
         }
 
         // ReSharper disable PossibleMultipleEnumeration

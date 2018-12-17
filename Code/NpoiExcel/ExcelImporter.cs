@@ -125,6 +125,7 @@ namespace NpoiExcel
             return book.GetSheetAt(sheetIndex);
         }
 
+        [ SuppressMessage( "ReSharper", "PossibleNullReferenceException" ) ]
         private static ICollection FillModelCollection( SheetTable sheetTable,  Type type,  Dictionary< string, (string header, int column) > headersMap )
         {
             CheckType( type );
@@ -138,8 +139,24 @@ namespace NpoiExcel
 
                     var cell = sheetTable[ j, headersMap[ propertyName ].column ];
 
-                    // ReSharper disable once PossibleNullReferenceException
-                    type.GetProperty( propertyName ).SetValue( typeInstance, cell );
+                    Type propertyType = type.GetProperty( propertyName ).PropertyType;
+
+                    if ( propertyType == typeof( int ) ) {
+                        type.GetProperty( propertyName ).SetValue( typeInstance, (int)cell );
+                    }
+                    else if ( propertyType == typeof( double ) ) {
+                        type.GetProperty( propertyName ).SetValue( typeInstance, ( double )cell );
+                    }
+                    else if ( propertyType == typeof( string ) ) {
+                        type.GetProperty( propertyName ).SetValue( typeInstance, ( string )cell );
+                    }
+                    else if ( propertyType == typeof( bool ) ) {
+                        type.GetProperty( propertyName ).SetValue( typeInstance, ( bool )cell );
+                    }
+                    else if ( propertyType == typeof( DateTime ) ) {
+                        type.GetProperty( propertyName ).SetValue( typeInstance, ( DateTime )cell );
+                    }
+
                 }
 
                 typeInstanceCollection.Add(typeInstance);

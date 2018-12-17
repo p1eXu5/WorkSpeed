@@ -18,7 +18,7 @@ namespace WorkSpeed.FileModels.Converters
 
         public TDataBase Convert ( TImport obj )
         {
-            return ( TDataBase )obj.Convert( _visitor );
+            return ( TDataBase )(obj.Convert( _visitor ));
         }
     }
 }

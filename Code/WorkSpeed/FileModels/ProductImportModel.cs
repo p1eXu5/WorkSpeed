@@ -24,9 +24,9 @@ namespace WorkSpeed.FileModels
         [Header( "ВысотаЕд_см" )]         public double ItemHeight { get; set; }
 
 
-        public Product ToProduct( IImportModelVisitor visitor )
+        public override object Convert ( IImportModelVisitor visitor )
         {
-            return ( Product )visitor.GetDbModel( this );
+            return visitor.GetDbModel( this );
         }
     }
 }

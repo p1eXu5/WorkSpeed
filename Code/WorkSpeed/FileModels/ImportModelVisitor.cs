@@ -8,6 +8,7 @@ namespace WorkSpeed.FileModels
     {
         public object GetDbModel ( ImportModel importModel )
         {
+
             return new object();
         }
 
@@ -127,8 +128,6 @@ namespace WorkSpeed.FileModels
 
                 return GetDbModel( gatheringImportModel );
             }
-
-            return (EmployeeAction)new object();
         }
 
 
