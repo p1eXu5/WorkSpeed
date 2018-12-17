@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using NpoiExcel.Attributes;
-using WorkSpeed.ActionModels;
-using WorkSpeed.Data.Models;
+﻿using NpoiExcel.Attributes;
+using WorkSpeed.Interfaces;
 
 namespace WorkSpeed.FileModels
 {
@@ -9,5 +7,10 @@ namespace WorkSpeed.FileModels
     {
         [Header("Адрес-отправитель")]   public string AddressSender { get; set; }
         [Header("Адрес-получатель")]    public string AddressReceiver { get; set; }
+
+        public override object Convert ( IImportModelVisitor visitor )
+        {
+            return visitor.GetDbModel( this );
+        }
     }
 }

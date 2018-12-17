@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NpoiExcel.Attributes;
+﻿using NpoiExcel.Attributes;
+using WorkSpeed.Interfaces;
 
 namespace WorkSpeed.FileModels
 {
@@ -11,5 +7,10 @@ namespace WorkSpeed.FileModels
     {
         [Header( "Работает")]
         public bool IsActive { get; set; }
+
+        public override object Convert ( IImportModelVisitor visitor )
+        {
+            return visitor.GetDbModel( this );
+        }
     }
 }

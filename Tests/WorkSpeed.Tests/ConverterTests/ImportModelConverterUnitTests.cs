@@ -26,7 +26,6 @@ namespace WorkSpeed.Tests.ConverterTests
         [ Test ]
         public void Convert__ProductImportModelIn_ProductOut__ReturnsProduct ()
         {
-
             // Arrange:
             var converter = new ImportModelConverter< ProductImportModel, Product >( GetMockedVisitor() );
             var productImportModel = new ProductImportModel();
@@ -41,7 +40,6 @@ namespace WorkSpeed.Tests.ConverterTests
         [Test]
         public void Convert__GatheringImportModelIn_GatheringActionOut__ReturnsGatheringAction ()
         {
-
             // Arrange:
             var converter = new ImportModelConverter< GatheringImportModel, GatheringAction >( GetMockedVisitor() );
             var gatheringImportModel = new GatheringImportModel();
@@ -53,6 +51,19 @@ namespace WorkSpeed.Tests.ConverterTests
             Assert.That( gatheringAction.GetType().IsAssignableFrom( typeof( GatheringAction ) ) );
         }
 
+        [Test]
+        public void Convert__EmployeeImportModelIn_EmployeeOut__ReturnsEmployee ()
+        {
+            // Arrange:
+            var converter = new ImportModelConverter< EmployeeImportModel, Employee>( GetMockedVisitor() );
+            var employeeImportModel = new EmployeeImportModel();
+
+            // Action:
+            var employee = converter.Convert( employeeImportModel );
+
+            // Assert:
+            Assert.That( employee.GetType().IsAssignableFrom( typeof( Employee ) ) );
+        }
 
 
 
@@ -64,6 +75,7 @@ namespace WorkSpeed.Tests.ConverterTests
 
             visitor.Setup( v => v.GetDbModel( It.IsAny< ProductImportModel >() ) ).Returns( new Product() );
             visitor.Setup( v => v.GetDbModel( It.IsAny< GatheringImportModel >() ) ).Returns( new GatheringAction() );
+            visitor.Setup( v => v.GetDbModel( It.IsAny< EmployeeImportModel >() ) ).Returns( new Employee() );
 
             return visitor.Object;
         }
