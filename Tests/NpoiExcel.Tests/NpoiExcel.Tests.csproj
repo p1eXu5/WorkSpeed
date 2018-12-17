@@ -88,6 +88,7 @@
     <Compile Include="IntegrationalTests\CellValueIntegrationalTests.cs" />
     <Compile Include="UnitTests\ExcelImporterUnitTests.cs" />
     <Compile Include="UnitTests\SheetTableUnitTests.cs" />
+    <Compile Include="UnitTests\TypeRepositoryUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

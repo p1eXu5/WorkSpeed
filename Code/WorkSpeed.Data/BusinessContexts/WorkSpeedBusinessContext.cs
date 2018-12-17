@@ -21,9 +21,24 @@ namespace WorkSpeed.Data.BusinessContexts
         }
 
 
+        public bool HasProducts ()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<bool> HasProductsAsync ()
         {
             return _dbContext.Products.AnyAsync();
+        }
+
+        public IEnumerable< Product > GetProducts ()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddProduct ( Product product )
+        {
+            throw new NotImplementedException();
         }
 
 

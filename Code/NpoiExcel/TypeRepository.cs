@@ -25,6 +25,8 @@ namespace NpoiExcel
             RegisterType( typeof( TType ), includeAttribute );
         }
 
+        public IEnumerable< Type > GetRegistredTypes () => _typeDictionary.Keys;
+
         /// <summary>
         /// Registers type of type parameter.
         /// </summary>

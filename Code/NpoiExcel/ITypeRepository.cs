@@ -19,6 +19,12 @@ namespace NpoiExcel
         void RegisterType< TType >( Type includeAttribute = null, Type excludeAttribute = null );
 
         /// <summary>
+        /// Returns registred types.
+        /// </summary>
+        /// <returns><see cref="Type"/></returns>
+        IEnumerable< Type > GetRegistredTypes ();
+
+        /// <summary>
         /// Registers type of type parameter.
         /// </summary>
         /// <param name="type"></param>

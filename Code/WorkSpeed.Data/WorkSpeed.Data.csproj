@@ -169,7 +169,9 @@
     <None Include="packages.config" />
     <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\Выработка 28.11.2018 8.00 - 29.11.2018 8.00.xls" />
     <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\Инвентаризация товара 28.11.2018 8.00 - 29.11.2018 8.00.xls" />
-    <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\МГХ от 22.11.2018 %281 из 2%29.xlsx" />
+    <Content Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\МГХ от 22.11.2018 %281 из 2%29.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\МГХ от 22.11.2018 %282 из 2%29.xlsx" />
     <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\Отгрузка товара 28.11.2018 8.00 - 29.11.2018 8.00.xls" />
     <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\Приём товара 28.11.2018 8.00 - 29.11.2018 8.00.xls" />

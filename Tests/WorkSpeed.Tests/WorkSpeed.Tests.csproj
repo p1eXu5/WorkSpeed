@@ -47,14 +47,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Comparers\EmployeeComparerUnitTests.cs" />
+    <Compile Include="ComparersTests\EmployeeComparerUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WarehouseTests\IntegrationalTests\WarehouseIntegrationalTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <Content Include="WarehouseTests\TestFiles\products.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Code\Helpers\Helpers.csproj">
+      <Project>{12faa7bd-a5d4-48e3-80c4-6d7a72be99b0}</Project>
+      <Name>Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Code\NpoiExcel\NpoiExcel.csproj">
+      <Project>{47680bf8-c76a-44b9-bde3-694f1a73ccb1}</Project>
+      <Name>NpoiExcel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Code\WorkSpeed.Data\WorkSpeed.Data.csproj">
       <Project>{72e065c5-8769-4008-9529-11194be488e0}</Project>
       <Name>WorkSpeed.Data</Name>
@@ -64,6 +76,7 @@
       <Name>WorkSpeed</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

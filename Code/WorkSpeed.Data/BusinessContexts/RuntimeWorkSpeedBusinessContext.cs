@@ -119,9 +119,20 @@ namespace WorkSpeed.Data.BusinessContexts
             } );
         }
 
+        public bool HasProducts () => _products.Any();
+
         public Task< bool > HasProductsAsync ()
         {
             return Task.Factory.StartNew( () => _products.Any() );
+        }
+
+        public IEnumerable< Product > GetProducts () => _products;
+
+        public void AddProduct ( Product product )
+        {
+            if ( _products.All( p => p.Id != product.Id ) ) {
+                _products.Add( product );
+            }
         }
     }
 }

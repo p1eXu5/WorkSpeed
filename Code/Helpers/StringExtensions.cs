@@ -51,8 +51,7 @@ namespace Helpers
             bool IsValidForDirName (char c)
             {
                 switch (c) {
-                    case '\\':
-                    case '/':
+
                     case ':':
                     case '*':
                     case '?':

@@ -9,6 +9,10 @@ namespace WorkSpeed.Data.BusinessContexts
 {
     public interface IWorkSpeedBusinessContext
     {
+        bool HasProducts();
         Task<bool> HasProductsAsync ();
+
+        IEnumerable< Product > GetProducts();
+        void AddProduct ( Product product );
     }
 }
