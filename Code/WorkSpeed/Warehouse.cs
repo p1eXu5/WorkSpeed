@@ -161,6 +161,11 @@ namespace WorkSpeed
             return true;
         }
 
+        public (DateTime, DateTime) GetActionsPeriod ()
+        {
+            throw new NotImplementedException();
+        }
+
         private void ImportEmployees ( IEnumerable< Employee > employees )
         {
 
