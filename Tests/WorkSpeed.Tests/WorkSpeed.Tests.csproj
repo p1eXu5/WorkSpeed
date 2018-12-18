@@ -72,6 +72,9 @@
     <Content Include="WarehouseTests\TestFiles\products.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="WarehouseTests\TestFiles\gathering.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\Helpers\Helpers.csproj">

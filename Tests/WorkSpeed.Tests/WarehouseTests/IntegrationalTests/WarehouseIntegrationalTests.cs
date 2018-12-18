@@ -23,7 +23,7 @@ namespace WorkSpeed.Tests.WarehouseTests.IntegrationalTests
         }
 
         [ Test ]
-        public void HasProducts_HasNoProducts_ReturnsFalse ()
+        public void HasProducts_ContextDoesNotHaveProducts_ReturnsFalse ()
         {
             // Arrange:
             var businessContext = GetBusinessContext();

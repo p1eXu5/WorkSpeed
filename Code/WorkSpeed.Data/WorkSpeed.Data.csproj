@@ -132,7 +132,6 @@
     <Compile Include="Interfaces\IEntity.cs" />
     <Compile Include="BusinessContexts\IWorkSpeedBusinessContext.cs" />
     <Compile Include="DataContexts\WorkSpeedDataContext.cs" />
-    <Compile Include="Models\ClientGatheringAction.cs" />
     <Compile Include="Models\EmployeeAction.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Appointment.cs" />
@@ -147,7 +146,6 @@
     <Compile Include="Models\Operation.cs" />
     <Compile Include="Models\OperationGroup.cs" />
     <Compile Include="Models\OperationGroups.cs" />
-    <Compile Include="Models\PackingAction.cs" />
     <Compile Include="Models\PersonnelFileEntry.cs" />
     <Compile Include="Models\Position.cs" />
     <Compile Include="Models\Product.cs" />
