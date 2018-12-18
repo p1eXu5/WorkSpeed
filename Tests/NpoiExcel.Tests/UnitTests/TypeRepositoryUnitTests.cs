@@ -12,10 +12,10 @@ using NUnit.Framework;
 
 namespace NpoiExcel.Tests.UnitTests
 {
-    [TestFixture]
+    [ TestFixture ]
     public class TypeRepositoryUnitTests
     {
-        [SetUp]
+        [ SetUp ]
         public void SetupCulture ()
         {
             CultureInfo.CurrentUICulture = new CultureInfo( "en-us" );
@@ -36,7 +36,7 @@ namespace NpoiExcel.Tests.UnitTests
         }
 
 
-        [Test]
+        [ Test ]
         public void RegisterType_TypeIsNull_Throws ()
         {
             // Arrange:
@@ -62,7 +62,7 @@ namespace NpoiExcel.Tests.UnitTests
             Assert.That( typeRepository.GetRegistredTypes().Any() );
         }
 
-        [Test]
+        [ Test ]
         public void RegisterType__TypeNotNull_ElseParametersByDefault__AddsAllPublicPropertiesWithPublicSetter ()
         {
             // Arrange:
@@ -80,7 +80,7 @@ namespace NpoiExcel.Tests.UnitTests
             );
         }
 
-        [Test]
+        [ Test ]
         public void RegisterType__TypeNotNull_ElseParametersByDefault__DoNotAddPublicPropertiesWithPrivateSetter ()
         {
             // Arrange:
@@ -95,7 +95,7 @@ namespace NpoiExcel.Tests.UnitTests
             Assert.That( propertiNames, Has.No.Member( nameof( FakeTypeReposytory.IsAllParamsPassed ) ) );
         }
 
-        [Test]
+        [ Test ]
         public void RegisterType__TypeNotNull_IncludAttribute__AddsPublicPropertiesWithPublicSetter ()
         {
             // Arrange:
@@ -117,7 +117,7 @@ namespace NpoiExcel.Tests.UnitTests
             Assert.That( propertiNames, Is.EquivalentTo( expectedColl ) );
         }
 
-        [Test]
+        [ Test ]
         public void RegisterType__TypeNotNull_ExcludAttribute__AddsPublicPropertiesWithPublicSetterExceptPropertiesWithExcludettribute ()
         {
             // Arrange:
@@ -153,7 +153,7 @@ namespace NpoiExcel.Tests.UnitTests
             Assert.That( resTuple.Equals( (null, null) ) );
         }
 
-        [Test]
+        [ Test ]
         public void GetTypeWithMap_HasTypeCorrespondedSheetTableHeaders_ReturnsTuple ()
         {
             // Arrange:
@@ -169,6 +169,24 @@ namespace NpoiExcel.Tests.UnitTests
             Assert.That( testType == resTuple.type );
         }
 
+
+        [ Test ]
+        public void GetTypeWithMap_AllTypesCorrespondsSheetTableHeaders_ReturnsMoreFullCorrespondedType ()
+        {
+            // Arrange:
+            var repository = GetFakeTypeRepository();
+            repository.RegisterType( typeof( TestType ), typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            repository.RegisterType( typeof( TestType2 ), typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            repository.RegisterType( typeof( TestType3 ), typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+
+            var sheetTable = GetMockedSheetTable();
+
+            // Action:
+            var typeMap = repository.GetTypeWithMap( sheetTable );
+
+            // Assert:
+            Assert.That( typeMap.type.IsAssignableFrom( typeof( TestType3 ) ), $"It was {typeMap.type.Name}" );
+        }
 
         #region Factory
 
@@ -230,6 +248,45 @@ namespace NpoiExcel.Tests.UnitTests
 
             [ Hidden ]
             public Type SomeType { get; set; }
+        }
+
+        class TestType2
+        {
+            [ Header( "Имя" ) ]
+            [ Header( "Имя клиента" ) ]
+            public string Name { get; set; }
+
+            public string Address { get; set; }
+
+            [ Header( "Почтовый индекс " ) ]
+            public int PostCode { get; set; }
+
+            [ Hidden ]
+            public Type SomeType { get; set; }
+
+            [ Header( "№ чего-то там" ) ]
+            public string SomeProperty { get; set; }
+        }
+
+        class TestType3
+        {
+            [ Header( "Имя" ) ]
+            [ Header( "Имя клиента" ) ]
+            public string Name { get; set; }
+
+            public string Address { get; set; }
+
+            [ Header( "Почтовый индекс " ) ]
+            public int PostCode { get; set; }
+
+            [ Hidden ]
+            public Type SomeType { get; set; }
+
+            [ Header( "№ чего-то там" ) ]
+            public string SomeProperty { get; set; }
+
+            [ Header( "Какой-то столбец" ) ]
+            public string ElseOneSomeProperty { get; set; }
         }
 
         // ReSharper disable once UnusedAutoPropertyAccessor.Local

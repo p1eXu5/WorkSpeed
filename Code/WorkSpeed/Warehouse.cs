@@ -119,7 +119,7 @@ namespace WorkSpeed
             }
             else if ( typeof( GatheringImportModel ) == mappedType.type ) {
 
-                ImportWithProductAction(
+                ImportGatheringActions(
                     _dataImporter.GetEnumerable( 
                         sheetTable,  
                         mappedType.propertyMap,  
@@ -185,6 +185,13 @@ namespace WorkSpeed
         private void ImportWithProductAction ( IEnumerable< WithProductAction > withProductActions )
         {
 
+        }
+
+        private void ImportGatheringActions ( IEnumerable< GatheringAction > gatheringActions )
+        {
+            foreach ( var gatheringAction in gatheringActions ) {
+                _context.AddGatheringAction( gatheringAction );
+            }
         }
 
         private void ImportShipmentActions ( IEnumerable< ShipmentAction > shipmentActions )

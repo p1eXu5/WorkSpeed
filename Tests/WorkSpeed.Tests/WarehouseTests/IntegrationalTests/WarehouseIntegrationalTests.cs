@@ -56,6 +56,24 @@ namespace WorkSpeed.Tests.WarehouseTests.IntegrationalTests
             Assert.That( businessContext.GetProducts().Any );
         }
 
+        [ Test ]
+        public void ImportWithProduct_FileWithGatheringActions_AddsGatheringActionsToBusinessContext()
+        {
+            // Arrange:
+            var businessContext = GetBusinessContext();
+            var dataImporter = GetDataImporter();
+            var warehouse = GetWarehouse( businessContext, dataImporter );
+
+            var file = "gathering.xls".AppendAssemblyPath( "WarehouseTests\\TestFiles" );
+
+            // Action:
+            Task<bool> res = warehouse.ImportAsync< GatheringImportModel >( file );
+            res.Wait();
+
+            // Assert:
+            Assert.That( businessContext.GatheringActions.Any() );
+        }
+
 
         #region Factory
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Data.BusinessContexts
 {
-    public class WorkSpeedBusinessContext : IWorkSpeedBusinessContext, IDisposable
+    public class WorkSpeedBusinessContext : IDisposable
     {
         private readonly WorkSpeedDataContext _dbContext;
         private bool _disposed;
@@ -41,6 +42,7 @@ namespace WorkSpeed.Data.BusinessContexts
             throw new NotImplementedException();
         }
 
+        public ReadOnlyObservableCollection< GatheringAction > GatheringActions { get; }
 
         #region IDisposable
 

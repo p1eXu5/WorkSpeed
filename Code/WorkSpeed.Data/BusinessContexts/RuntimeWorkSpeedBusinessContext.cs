@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,10 +13,14 @@ namespace WorkSpeed.Data.BusinessContexts
         private readonly List< Product > _products = new List< Product >( 40_000 );
         private readonly List< OperationGroup > _operationGroups = new List< OperationGroup >();
         private readonly List< Operation > _operations = new List< Operation >();
+        private readonly ObservableCollection< GatheringAction > _gatheringAction;
 
         public RuntimeWorkSpeedBusinessContext ()
         {
             OnModelCreating();
+
+            _gatheringAction = new ObservableCollection< GatheringAction >();
+            GatheringActions = new ReadOnlyObservableCollection< GatheringAction >( _gatheringAction );
         }
 
         private void OnModelCreating ()
@@ -133,6 +138,13 @@ namespace WorkSpeed.Data.BusinessContexts
             if ( _products.All( p => p.Id != product.Id ) ) {
                 _products.Add( product );
             }
+        }
+
+        public ReadOnlyObservableCollection< GatheringAction > GatheringActions { get; }
+
+        public void AddGatheringAction ( GatheringAction gatheringAction )
+        {
+            _gatheringAction.Add( gatheringAction );
         }
     }
 }
