@@ -62,7 +62,14 @@
     <Compile Include="Attributes\SegmentAttribute.cs" />
     <Compile Include="ViewModels\EmployeeViewModel.cs" />
     <Compile Include="ViewModels\ImportDialogViewModel.cs" />
+    <Compile Include="Views\FileImportUserControl.xaml.cs">
+      <DependentUpon>FileImportUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WorkingTimeViewModel.cs" />
+    <Page Include="Views\FileImportUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ImportDataUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
