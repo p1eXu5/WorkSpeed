@@ -202,6 +202,20 @@ namespace NpoiExcel.Tests.UnitTests
             Assert.That( typeMap.type.IsAssignableFrom( typeof( TestType3 ) ), $"It was {typeMap.type.Name}" );
         }
 
+        [ Test ]
+        public void GetTypeWithMap_SheetHasLessColumnsThanTypeHasProperties_ReturnsTupleWithNulls ()
+        {
+            // Arrange:
+            var sheetTable = GetMockedSheetTable();
+            var repository = GetFakeTypeRepository();
+            repository.RegisterType( typeof( TestType4 ), typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+
+            // Action:
+            var typeMap = repository.GetTypeWithMap( sheetTable );
+
+            // Assert:
+            Assert.That( typeMap.Equals( (null, null) ) );
+        }
 
 
         #region Factory
@@ -303,6 +317,29 @@ namespace NpoiExcel.Tests.UnitTests
 
             [ Header( "Какой-то столбец" ) ]
             public string ElseOneSomeProperty { get; set; }
+        }
+
+        class TestType4
+        {
+            [ Header( "Имя" ) ]
+            [ Header( "Имя клиента" ) ]
+            public string Name { get; set; }
+
+            public string Address { get; set; }
+
+            [ Header( "Почтовый индекс " ) ]
+            public int PostCode { get; set; }
+
+            [ Hidden ]
+            public Type SomeType { get; set; }
+
+            [ Header( "№ чего-то там" ) ]
+            public string SomeProperty { get; set; }
+
+            [ Header( "Какой-то столбец" ) ]
+            public string ElseOneSomeProperty { get; set; }
+
+            public int ExcessProperty { get; set; }
         }
 
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
