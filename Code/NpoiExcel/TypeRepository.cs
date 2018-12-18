@@ -84,7 +84,7 @@ namespace NpoiExcel
             var headerMapArray = sheetTable.HeaderMapSet.ToArray();
             var propertyToSheetMap = new Dictionary< string, (string header, int column) >();
 
-            foreach ( var type in _typeDictionary.Keys ) {
+            foreach ( var type in _typeDictionary.OrderByDescending( t => t.Value.Count ).Select( t => t.Key ) ) {
 
                 var propertyNamesMap = _typeDictionary[ type ];
                 bool found = false;

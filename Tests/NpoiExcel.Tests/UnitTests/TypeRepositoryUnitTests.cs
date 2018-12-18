@@ -140,11 +140,26 @@ namespace NpoiExcel.Tests.UnitTests
 
 
         [ Test ]
+        public void GetTypeWithMap_HasNoTypesInTypeReposytory_ReturnsTupleWithNulls ()
+        {
+            // Arrange:
+            var sheetTable = GetMockedSheetTable();
+            var typeRepository = GetFakeTypeRepository();
+
+            // Action:
+            var resTuple = typeRepository.GetTypeWithMap( sheetTable );
+
+            // Assert:
+            Assert.That( resTuple.Equals( (null, null) ) );
+        }
+
+        [ Test ]
         public void GetTypeWithMap_HasNoTypeCorrespondedSheetTableHeaders_ReturnsTupleWithNulls ()
         {
             // Arrange:
             var sheetTable = GetMockedSheetTable();
             var typeRepository = GetFakeTypeRepository();
+            typeRepository.RegisterType( typeof( FakeTypeReposytory ) );
 
             // Action:
             var resTuple = typeRepository.GetTypeWithMap( sheetTable );
@@ -169,7 +184,6 @@ namespace NpoiExcel.Tests.UnitTests
             Assert.That( testType == resTuple.type );
         }
 
-
         [ Test ]
         public void GetTypeWithMap_AllTypesCorrespondsSheetTableHeaders_ReturnsMoreFullCorrespondedType ()
         {
@@ -187,6 +201,8 @@ namespace NpoiExcel.Tests.UnitTests
             // Assert:
             Assert.That( typeMap.type.IsAssignableFrom( typeof( TestType3 ) ), $"It was {typeMap.type.Name}" );
         }
+
+
 
         #region Factory
 
