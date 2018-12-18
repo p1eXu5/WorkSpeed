@@ -64,6 +64,7 @@
     <Compile Include="FileModels\Comparers\ActionImportModelComparer.cs" />
     <Compile Include="Constraints\IBreakConstraints.cs" />
     <Compile Include="Constraints\ICategoryConstraints.cs" />
+    <Compile Include="FileModels\EmployeeFullImportModel.cs" />
     <Compile Include="FileModels\EmployeeImportModel.cs" />
     <Compile Include="FileModels\Converters\ImportModelConverter.cs" />
     <Compile Include="FileModels\ImportModelVisitor.cs" />
