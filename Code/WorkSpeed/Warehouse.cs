@@ -176,7 +176,7 @@ namespace WorkSpeed
         // ReSharper disable PossibleMultipleEnumeration
         private void ImportProductivity ( IEnumerable< EmployeeAction > employeeActions )
         {
-            ImportWithProductAction( employeeActions.Where( a => a is GatheringAction ).Cast< GatheringAction >() );
+            ImportGatheringActions( employeeActions.Where( a => a is GatheringAction ).Cast< GatheringAction >() );
             ImportWithProductAction( employeeActions.Where( a => a is ReceptionAction ).Cast< ReceptionAction >() );
             ImportWithProductAction( employeeActions.Where( a => a is InventoryAction ).Cast< InventoryAction >() );
             ImportShipmentActions( employeeActions.Where( a => a is ShipmentAction ).Cast< ShipmentAction >() );

@@ -87,6 +87,8 @@ namespace NpoiExcel
             foreach ( var type in _typeDictionary.OrderByDescending( t => t.Value.Count ).Select( t => t.Key ) ) {
 
                 var propertyNamesMap = _typeDictionary[ type ];
+                if ( propertyNamesMap.Count > headerMapArray.Length ) continue;
+
                 bool found = false;
 
                 foreach ( var headerMap in headerMapArray.ToArray() ) {
