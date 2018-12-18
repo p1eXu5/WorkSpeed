@@ -1,8 +1,9 @@
 ﻿using System;
 using WorkSpeed.Data.Models;
+using WorkSpeed.FileModels.Converters;
 using WorkSpeed.Interfaces;
 
-namespace WorkSpeed.FileModels
+namespace WorkSpeed.FileModels.Converters
 {
     public class ImportModelVisitor : IImportModelVisitor
     {
@@ -38,6 +39,15 @@ namespace WorkSpeed.FileModels
         }
 
         public Employee GetDbModel ( EmployeeImportModel employeeImportModel )
+        {
+            return new Employee {
+
+                Id = employeeImportModel.EmployeeId,
+                Name = employeeImportModel.EmployeeName,
+            };
+        }
+
+        public Employee GetDbModel ( EmployeeFullImportModel employeeImportModel )
         {
             return new Employee {
 

@@ -7,7 +7,7 @@ using WorkSpeed.Interfaces;
 
 namespace WorkSpeed.FileModels
 {
-    class EmployeeFullImportModel : EmployeeImportModel
+    public class EmployeeFullImportModel : EmployeeImportModel
     {
         public override object Convert ( IImportModelVisitor visitor )
         {

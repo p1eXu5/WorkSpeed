@@ -67,10 +67,10 @@
     <Compile Include="FileModels\EmployeeFullImportModel.cs" />
     <Compile Include="FileModels\EmployeeImportModel.cs" />
     <Compile Include="FileModels\Converters\ImportModelConverter.cs" />
-    <Compile Include="FileModels\ImportModelVisitor.cs" />
+    <Compile Include="FileModels\Converters\ImportModelVisitor.cs" />
     <Compile Include="FileModels\ProductImportModel.cs" />
     <Compile Include="FileModels\WithEmployeeImportModel.cs" />
-    <Compile Include="Interfaces\IImportModelVisitor.cs" />
+    <Compile Include="FileModels\Converters\IImportModelVisitor.cs" />
     <Compile Include="ProductivityCalculator\AddTimeOptions.cs" />
     <Compile Include="ProductivityCalculator\ProductivityCalculator.cs" />
     <Compile Include="ProductivityCalculator\IProductivityCalculator.cs" />
