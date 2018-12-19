@@ -165,6 +165,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\12 - Декабрь 2018 - расчёты %28тариф 1%29.xlsx" />
     <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\Выработка 28.11.2018 8.00 - 29.11.2018 8.00.xls" />
     <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\Инвентаризация товара 28.11.2018 8.00 - 29.11.2018 8.00.xls" />
     <Content Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\МГХ от 22.11.2018 %281 из 2%29.xlsx">
