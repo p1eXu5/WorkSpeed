@@ -78,8 +78,6 @@ namespace WorkSpeed
         }
 
 
-
-
         private bool Import ( string fileName,  Type type = null )
         {
             var sheetTable = _dataImporter.ImportData (fileName, 0);
