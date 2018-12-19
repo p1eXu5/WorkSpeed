@@ -17,7 +17,7 @@ namespace WorkSpeed.DesktopClient
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            Window mainWindow = new MainWindow();
+            Window mainWindow = new WorkSpeedFastProductivity();
 
             mainWindow.Show();
         }

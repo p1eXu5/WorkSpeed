@@ -65,7 +65,22 @@
     <Compile Include="Views\FileImportUserControl.xaml.cs">
       <DependentUpon>FileImportUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\WorkSpeedFastProductivity.xaml.cs">
+      <DependentUpon>WorkSpeedFastProductivity.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WorkingTimeViewModel.cs" />
+    <Page Include="Resources\Colors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Glyphs.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Images.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\FileImportUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -92,6 +107,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\WorkSpeedFastProductivity.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -137,6 +156,9 @@
       <Project>{035d995a-6f8a-47c1-aebd-41b2cc5d6d7d}</Project>
       <Name>WorkSpeed</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\openfile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

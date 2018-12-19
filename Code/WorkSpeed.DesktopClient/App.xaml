@@ -4,6 +4,12 @@
              xmlns:local="clr-namespace:WorkSpeed.DesktopClient"
              >
     <Application.Resources>
-         
+         <ResourceDictionary>
+             <ResourceDictionary.MergedDictionaries>
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Colors.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Glyphs.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Images.xaml" />
+             </ResourceDictionary.MergedDictionaries>
+         </ResourceDictionary>
     </Application.Resources>
 </Application>

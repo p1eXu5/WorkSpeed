@@ -5,60 +5,112 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WorkSpeed.DesktopClient.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="400" d:DesignWidth="500">
+
     <Grid>
-        <Grid.ColumnDefinitions>
-            <!--<ColumnDefinition Width="200" />-->
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*" MinHeight="50" />
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <!--<ListBox ItemsSource="{Binding Stages}" />-->
+        <Border Margin="10,5" Height="Auto">
+            <TextBlock FontSize="26"
+                       FontWeight="DemiBold"
+                       Foreground="{StaticResource br_ListBoxBackground}"
+                       >Сотрудники</TextBlock>
+        </Border>
 
-        <ContentControl Grid.Column="0">
-            <Grid Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="3" />
-                    <RowDefinition Height="6*" />
-                </Grid.RowDefinitions>
+        <Grid Grid.Row="1" MaxWidth="300">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="3*" />
+            </Grid.RowDefinitions>
 
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
+            <!-- File -->
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        >
+                <Border BorderBrush="Blue" 
+                        BorderThickness="0,0,0,1" 
+                        SnapsToDevicePixels="True"
+                        >
+                    <TextBlock Text="{Binding FileName}"
+                               MinWidth="200"
+                               />
+                </Border>
+
+                <Button x:Name="m_OpenFileButton" Margin="10,0,0,0" 
+                        BorderThickness="0" 
+                        BorderBrush="Transparent"
+                        Background="Transparent"
+                        Height="30"
+                        >
+                    <Image Source="{DynamicResource im_OpenFile}" 
+                           RenderOptions.EdgeMode="Aliased"
+                           RenderOptions.BitmapScalingMode="Fant"
+                           />
+                </Button>
+            </StackPanel>
+
+            <TextBlock Grid.Row="2" Text="{Binding Info}" />
+
+            <Grid Grid.Row="3" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Button BorderBrush="Transparent" Background="Transparent"
+                        Command="{Binding BackwardCommand}"
+                        >
+                    <Grid>
+                        <Viewbox>
+                            <Path SnapsToDevicePixels="True" 
+                                  Stroke="{DynamicResource br_ListBoxBackground}"
+                                  StrokeThickness="1"
+                                  Stretch="None"
+                                  Fill="{DynamicResource br_Card}"
+                                  >
+                                <Path.Data>
+                                    <RectangleGeometry Rect="0,0,70,20"  RadiusX="3" RadiusY="3" />
+                                </Path.Data>
+                            </Path>
+                        </Viewbox>
+                        <Border>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Выход</TextBlock>
+                        </Border>
+                    </Grid>
+                </Button>
+
+                <Button Grid.Column="1" 
+                        BorderBrush="Transparent" Background="Transparent"
+                        Command="{Binding ForvardCommand}"
+                        >
+                    <Grid>
+                        <Viewbox>
+                            <Path SnapsToDevicePixels="True" 
+                                  Stroke="{DynamicResource br_ListBoxBackground}"
+                                  StrokeThickness="1"
+                                  Stretch="None"
+                                  Fill="{DynamicResource br_Card}"
                             >
-                    <Border BorderBrush="Blue" BorderThickness="0,0,0,1" 
-                            SnapsToDevicePixels="True">
-                        <TextBlock Text="{Binding FileName}"
-                                   MinWidth="200"
-                                   />
-                    </Border>
+                                <Path.Data>
+                                    <RectangleGeometry Rect="0,0,70,20"  RadiusX="3" RadiusY="3" />
+                                </Path.Data>
+                            </Path>
+                        </Viewbox>
+                        <Border>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Далее</TextBlock>
+                        </Border>
+                    </Grid>
+                </Button>
 
-                    <Button x:Name="m_OpenFileButton" Margin="10,0,0,0"
-
-                            >
-                        <Button.Content>
-                            <Border VerticalAlignment="Stretch" Padding="2">
-                                <TextBlock Text="Open" VerticalAlignment="Center"></TextBlock>
-                            </Border>
-                        </Button.Content>
-                    </Button>
-                </StackPanel>
-
-                <StackPanel Grid.Row="1">
-                    <Expander ExpandDirection="Down" Header="Table">
-                        <ScrollViewer Height="300" 
-                                      VerticalScrollBarVisibility="Auto"
-                                      HorizontalScrollBarVisibility="Auto"
-                                      >
-                            <DataGrid
-                              HorizontalAlignment="Stretch"
-                              VerticalAlignment="Stretch"
-                              ItemsSource="{Binding Operations}"
-                              />
-                        </ScrollViewer>
-                    </Expander>
-                </StackPanel>
             </Grid>
-        </ContentControl>
+        </Grid>
     </Grid>
 </UserControl>
