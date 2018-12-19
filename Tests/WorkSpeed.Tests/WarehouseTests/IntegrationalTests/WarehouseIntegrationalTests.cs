@@ -39,7 +39,7 @@ namespace WorkSpeed.Tests.WarehouseTests.IntegrationalTests
         }
 
         [ Test ]
-        public void ImportWithProduct_FileWithProducts_AddsProductsToBusinessContext()
+        public void ImportAsync_FileWithProducts_AddsProductsToBusinessContext()
         {
             // Arrange:
             var businessContext = GetBusinessContext();
@@ -57,7 +57,7 @@ namespace WorkSpeed.Tests.WarehouseTests.IntegrationalTests
         }
 
         [ Test ]
-        public void ImportWithProduct_FileWithGatheringActions_AddsGatheringActionsToBusinessContext()
+        public void ImportAsync_FileWithGatheringActions_AddsGatheringActionsToBusinessContext ()
         {
             // Arrange:
             var businessContext = GetBusinessContext();
@@ -71,9 +71,26 @@ namespace WorkSpeed.Tests.WarehouseTests.IntegrationalTests
             res.Wait();
 
             // Assert:
-            Assert.That( businessContext.GatheringActions.Any() );
+            Assert.That( businessContext.GetGatheringActions().Any() );
         }
 
+        [Test]
+        public void ImportAsync_FileWithEmployees_AddsEmployeesToBusinessContext ()
+        {
+            // Arrange:
+            var businessContext = GetBusinessContext();
+            var dataImporter = GetDataImporter();
+            var warehouse = GetWarehouse( businessContext, dataImporter );
+
+            var file = "employees.xlsx".AppendAssemblyPath( "WarehouseTests\\TestFiles" );
+
+            // Action:
+            Task<bool> res = warehouse.ImportAsync< EmployeeFullImportModel >( file );
+            res.Wait();
+
+            // Assert:
+            Assert.That( businessContext.GetEmployees().Any() );
+        }
 
         #region Factory
 

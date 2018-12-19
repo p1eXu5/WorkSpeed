@@ -6,8 +6,13 @@ namespace WorkSpeed.FileModels
 {
     public class GatheringImportModel : WithProductActionImportModel
     {
-        [Header("Адрес-отправитель")]   public string AddressSender { get; set; }
-        [Header("Адрес-получатель")]    public string AddressReceiver { get; set; }
+        [Header("Адрес-отправитель")]
+        [Header( "АдресОтправитель" )]
+        public string AddressSender { get; set; }
+
+        [Header("Адрес-получатель")]
+        [Header( "АдресПолучатель" )]
+        public string AddressReceiver { get; set; }
 
         public override object Convert ( IImportModelVisitor visitor )
         {

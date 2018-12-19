@@ -12,6 +12,7 @@ namespace WorkSpeed.FileModels
         [Header("Родитель 2")]          public string SecondProduct { get; set; }
 
         [Header("Количество")]
-        [Header("ФактическоеКоличество")]   public int ProductQuantity { get; set; }
+        [Header("ФактическоеКоличество")]
+        public int ProductQuantity { get; set; }
     }
 }

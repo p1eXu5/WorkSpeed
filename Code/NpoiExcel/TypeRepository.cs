@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -82,14 +83,12 @@ namespace NpoiExcel
         public virtual (Type type, Dictionary< string, (string header, int column) > propertyMap) GetTypeWithMap( SheetTable sheetTable )
         {
             var headerMapArray = sheetTable.HeaderMapSet.ToArray();
-            var propertyToSheetMap = new Dictionary< string, (string header, int column) >();
 
             foreach ( var type in _typeDictionary.OrderByDescending( t => t.Value.Count ).Select( t => t.Key ) ) {
 
+                var propertyToSheetMap = new Dictionary< string, (string header, int column) >();
                 var propertyNamesMap = _typeDictionary[ type ];
                 if ( propertyNamesMap.Count > headerMapArray.Length ) continue;
-
-                bool found = false;
 
                 foreach ( var headerMap in headerMapArray.ToArray() ) {
 
@@ -99,16 +98,14 @@ namespace NpoiExcel
 
                         if ( propertyIdentity.Any( p => p.Equals( checkedHeader ) ) ) {
 
-                            found = true;
                             propertyToSheetMap[ propertyNamesMap[ propertyIdentity ] ] = headerMap;
                             propertyNamesMap.Remove( propertyIdentity );
                             break;
                         }
                     }
-
                 }
 
-                if ( found ) return (type, propertyToSheetMap);
+                if ( 0 == propertyNamesMap.Count ) return (type, propertyToSheetMap);
             }
 
             return (null, null);

@@ -15,6 +15,9 @@ namespace WorkSpeed.FileModels
         [Header("Документ")]            public string DocumentName { get; set; }
 
         [Header("Операция")]                public string Operation { get; set; }
-        [Header("Время операции, сек.")]    public int OperationDuration { get; set; }
+
+        [Header("Время операции, сек.")]
+        [Header( "ВремяОперации_Сек" )]
+        public int OperationDuration { get; set; }
     }
 }

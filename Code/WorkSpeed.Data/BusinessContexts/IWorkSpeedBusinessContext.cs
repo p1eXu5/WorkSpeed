@@ -16,7 +16,10 @@ namespace WorkSpeed.Data.BusinessContexts
         IEnumerable< Product > GetProducts();
         void AddProduct ( Product product );
 
-        ReadOnlyObservableCollection< GatheringAction > GatheringActions { get; }
+        IEnumerable< GatheringAction > GetGatheringActions ();
         void AddGatheringAction ( GatheringAction gatheringAction );
+
+        IEnumerable< Employee > GetEmployees ();
+        void AddEmployee ( Employee employee );
     }
 }

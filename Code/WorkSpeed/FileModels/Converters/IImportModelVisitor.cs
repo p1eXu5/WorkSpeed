@@ -8,7 +8,7 @@ namespace WorkSpeed.FileModels.Converters
         object GetDbModel ( ImportModel importModel );
         Product GetDbModel ( ProductImportModel productImportModel );
         Employee GetDbModel ( EmployeeImportModel employeeImportModel );
-        Employee GetDbModel ( EmployeeFullImportModel employeeImportModel );
+        Employee GetDbModel ( EmployeeFullImportModel employeeFullImportModel );
         GatheringAction GetDbModel ( GatheringImportModel gatheringImportModel );
         ReceptionAction GetDbModel ( ReceptionImportModel receptionImportModel );
         InventoryAction GetDbModel ( InventoryImportModel inventoryImportModel );

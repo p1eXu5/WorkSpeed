@@ -40,6 +40,22 @@ namespace WorkSpeed
             _productivities = new ProductivityObservableCollection();
         }
 
+        private void AddTypesToRepository ( ITypeRepository repo )
+        {
+            repo.RegisterType< ProductImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+
+            repo.RegisterType< EmployeeImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            repo.RegisterType< EmployeeFullImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+
+            repo.RegisterType< ShipmentImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+
+            repo.RegisterType< GatheringImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            repo.RegisterType< InventoryImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            repo.RegisterType< ReceptionImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+
+            repo.RegisterType< ProductivityImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+        }
+
         #endregion
 
         /// <summary>
@@ -62,20 +78,6 @@ namespace WorkSpeed
         }
 
 
-        private void AddTypesToRepository ( ITypeRepository repo )
-        {
-            repo.RegisterType< ProductImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-
-            repo.RegisterType< EmployeeImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-
-            repo.RegisterType< ShipmentImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-
-            repo.RegisterType< GatheringImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-            repo.RegisterType< InventoryImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-            repo.RegisterType< ReceptionImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-
-            repo.RegisterType< ProductivityImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-        }
 
 
         private bool Import ( string fileName,  Type type = null )
@@ -104,6 +106,16 @@ namespace WorkSpeed
                         sheetTable,  
                         mappedType.propertyMap,  
                         new ImportModelConverter< EmployeeImportModel, Employee >( new ImportModelVisitor() ) 
+                    )
+                );
+            }
+            else if ( typeof( EmployeeFullImportModel ) == mappedType.type ) {
+
+                ImportEmployees(
+                    _dataImporter.GetEnumerable(
+                        sheetTable,
+                        mappedType.propertyMap,
+                        new ImportModelConverter< EmployeeFullImportModel, Employee >( new ImportModelVisitor() )
                     )
                 );
             }
@@ -168,7 +180,9 @@ namespace WorkSpeed
 
         private void ImportEmployees ( IEnumerable< Employee > employees )
         {
-
+            foreach ( var employee in employees ) {
+                _context.AddEmployee( employee );
+            }
         }
 
         private void ImportProducts ( IEnumerable< Product > products )

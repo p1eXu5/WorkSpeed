@@ -14,9 +14,17 @@ namespace WorkSpeed.FileModels
 
         [Header( "Вес ед" )]            public double Weight { get; set; }
 
-        [Header( "Длина коробки" )]     public double CartonLength { get; set; }
-        [Header( "Ширина коробки" )]    public double CartonWidth { get; set; }
-        [Header( "Высота коробки" )]    public double CartonHeight { get; set; }
+        [Header( "Длина коробки" )]
+        [Header( "ДлинаКоробки_см" )]
+                                        public double CartonLength { get; set; }
+
+        [Header( "Ширина коробки" )]
+        [Header( "ШиринаКоробки_см" )]
+                                        public double CartonWidth { get; set; }
+
+        [Header( "Высота коробки" )]
+        [Header( "ВысотаКоробки_см" )]
+                                        public double CartonHeight { get; set; }
 
         [Header( "ОбъемЕд_л" )]         public double Volume { get; set; }
 

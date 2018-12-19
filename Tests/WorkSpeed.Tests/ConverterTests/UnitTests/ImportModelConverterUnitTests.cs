@@ -12,7 +12,7 @@ using WorkSpeed.FileModels;
 using WorkSpeed.FileModels.Converters;
 using WorkSpeed.Interfaces;
 
-namespace WorkSpeed.Tests.ConverterTests
+namespace WorkSpeed.Tests.ConverterTests.UnitTests
 {
     [ TestFixture ]
     public class ImportModelConverterUnitTests
@@ -65,6 +65,19 @@ namespace WorkSpeed.Tests.ConverterTests
             Assert.That( employee.GetType().IsAssignableFrom( typeof( Employee ) ) );
         }
 
+        [Test]
+        public void Convert__EmployeeFullImportModelIn_EmployeeOut__ReturnsEmployee ()
+        {
+            // Arrange:
+            var converter = new ImportModelConverter<EmployeeFullImportModel, Employee>( GetMockedVisitor() );
+            var employeeFullImportModel = new EmployeeFullImportModel();
+
+            // Action:
+            var employee = converter.Convert( employeeFullImportModel );
+
+            // Assert:
+            Assert.That( employee.GetType().IsAssignableFrom( typeof( Employee ) ) );
+        }
 
 
         #region Factory
@@ -76,6 +89,7 @@ namespace WorkSpeed.Tests.ConverterTests
             visitor.Setup( v => v.GetDbModel( It.IsAny< ProductImportModel >() ) ).Returns( new Product() );
             visitor.Setup( v => v.GetDbModel( It.IsAny< GatheringImportModel >() ) ).Returns( new GatheringAction() );
             visitor.Setup( v => v.GetDbModel( It.IsAny< EmployeeImportModel >() ) ).Returns( new Employee() );
+            visitor.Setup( v => v.GetDbModel( It.IsAny< EmployeeFullImportModel >() ) ).Returns( new Employee() );
 
             return visitor.Object;
         }

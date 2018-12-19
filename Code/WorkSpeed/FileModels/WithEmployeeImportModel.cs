@@ -9,7 +9,12 @@ namespace WorkSpeed.FileModels
 {
     public abstract class WithEmployeeImportModel : ImportModel
     {
-        [ Header( "Код сотрудника" ) ] public string EmployeeId { get; set; }
-        [ Header( "Сотрудник" ) ]      public string EmployeeName { get; set; }
+        [ Header( "Код сотрудника" ) ]
+        [ Header( "Код" ) ]
+        public string EmployeeId { get; set; }
+
+        [ Header( "Сотрудник" ) ]
+        [ Header( "Кладовщик" ) ]
+        public string EmployeeName { get; set; }
     }
 }

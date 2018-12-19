@@ -37,5 +37,35 @@ namespace WorkSpeed.Tests.ConverterTests.IntegrationalTests
             Assert.That( product.Name.Equals( "Product A") );
             Assert.That( product.Weight.Equals( ( float )1.123 ) );
         }
+
+        [Test]
+        public void Convert__EmployeeFullImportModelIn_EmployeeOut__ReturnsEmployeeWithExpectedValues ()
+        {
+            // Arrange:
+            var converter = new ImportModelConverter< EmployeeFullImportModel, Employee >( new ImportModelVisitor() );
+
+            var employeeFullImportModel = new EmployeeFullImportModel()
+            {
+                EmployeeId = "AR12345",
+                EmployeeName = "Вася Пупкин",
+                IsActive = true,
+                Position = "пр",
+                Appointment = "кл",
+                Rank = 5,
+            };
+
+            // Action:
+            var employee = converter.Convert( employeeFullImportModel );
+
+            // Assert:
+            Assert.That( employee.GetType().IsAssignableFrom( typeof( Employee ) ) );
+            Assert.That( "AR12345".Equals( employee.Id ) );
+            Assert.That( "Вася Пупкин".Equals( employee.Name ) );
+            Assert.That( true == employee.IsActive );
+            Assert.That( "пр".Equals( employee.Position.Abbreviations ) );
+            Assert.That( "кл".Equals( employee.Appointment.Abbreviations ) );
+            Assert.That( 5 == employee.Rank.Number );
+           
+        }
     }
 }

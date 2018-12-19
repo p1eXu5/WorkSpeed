@@ -44,15 +44,27 @@ namespace WorkSpeed.FileModels.Converters
 
                 Id = employeeImportModel.EmployeeId,
                 Name = employeeImportModel.EmployeeName,
+                IsActive = employeeImportModel.IsActive,
             };
         }
 
-        public Employee GetDbModel ( EmployeeFullImportModel employeeImportModel )
+        public Employee GetDbModel ( EmployeeFullImportModel employeeFullImportModel )
         {
             return new Employee {
 
-                Id = employeeImportModel.EmployeeId,
-                Name = employeeImportModel.EmployeeName,
+                Id = employeeFullImportModel.EmployeeId,
+                Name = employeeFullImportModel.EmployeeName,
+                IsActive = employeeFullImportModel.IsActive,
+                Appointment = new Appointment {
+                    Abbreviations = employeeFullImportModel.Appointment
+                },
+                Rank = new Rank {
+                    Number = employeeFullImportModel.Rank
+                },
+
+                Position = new Position {
+                    Abbreviations = employeeFullImportModel.Position
+                },
             };
         }
 

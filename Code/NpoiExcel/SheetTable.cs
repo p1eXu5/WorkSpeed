@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NPOI.SS.UserModel;
 
@@ -195,7 +196,19 @@ namespace NpoiExcel
 
             for (int i = startPoint.Column; i < endPoint.Column; ++i) {
 
-                var header = sheet.GetRow (startPoint.Row).GetCell (i)?.StringCellValue ?? "";
+                string header = "";
+
+                switch ( sheet.GetRow( startPoint.Row ).GetCell( i )?.CellType ) {
+
+                    case CellType.String:
+                        header = sheet.GetRow( startPoint.Row ).GetCell( i ).StringCellValue ?? "";
+                        break;
+
+                    case CellType.Numeric:
+                        header = sheet.GetRow( startPoint.Row ).GetCell( i ).NumericCellValue.ToString(CultureInfo.CurrentCulture);
+                        break;
+                }
+
                 headerSet.Add( ( header, i - startPoint.Column ) );
             }
 

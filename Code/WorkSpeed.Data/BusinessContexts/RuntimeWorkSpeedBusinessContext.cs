@@ -15,7 +15,11 @@ namespace WorkSpeed.Data.BusinessContexts
         private readonly List< Operation > _operations = new List< Operation >();
         private readonly List< Appointment > _appointments = new List<Appointment>();
         private readonly List< Position > _positions = new List<Position>();
-        private readonly List< GatheringAction > _gatheringAction;
+        private readonly List< GatheringAction > _gatheringActions = new List< GatheringAction >();
+        private readonly List< Employee > _employees = new List< Employee >();
+
+
+        #region Constructor
 
         public RuntimeWorkSpeedBusinessContext ()
         {
@@ -282,6 +286,9 @@ namespace WorkSpeed.Data.BusinessContexts
             } );
         }
 
+        #endregion
+
+
         public bool HasProducts () => _products.Any();
 
         public Task< bool > HasProductsAsync ()
@@ -298,11 +305,18 @@ namespace WorkSpeed.Data.BusinessContexts
             }
         }
 
-        public ReadOnlyObservableCollection< GatheringAction > GatheringActions { get; }
+        public IEnumerable< GatheringAction > GetGatheringActions () => _gatheringActions;
 
         public void AddGatheringAction ( GatheringAction gatheringAction )
         {
-            _gatheringAction.Add( gatheringAction );
+            _gatheringActions.Add( gatheringAction );
+        }
+
+        public IEnumerable< Employee > GetEmployees () => _employees;
+
+        public void AddEmployee ( Employee employee )
+        {
+            _employees.Add( employee );
         }
     }
 }
