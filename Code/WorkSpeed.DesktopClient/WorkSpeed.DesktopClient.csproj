@@ -62,6 +62,7 @@
     <Compile Include="Attributes\SegmentAttribute.cs" />
     <Compile Include="ViewModels\EmployeeViewModel.cs" />
     <Compile Include="ViewModels\ImportDialogViewModel.cs" />
+    <Compile Include="ViewModels\IStageViewModel.cs" />
     <Compile Include="Views\FileImportUserControl.xaml.cs">
       <DependentUpon>FileImportUserControl.xaml</DependentUpon>
     </Compile>
@@ -69,6 +70,10 @@
       <DependentUpon>WorkSpeedFastProductivity.xaml</DependentUpon>
     </Compile>
     <Compile Include="WorkingTimeViewModel.cs" />
+    <Page Include="Resources\ButtonStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Colors.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -99,7 +104,7 @@
     </Compile>
     <Compile Include="ViewModels\ImportViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\ProductivityViewModel.cs" />
+    <Compile Include="ViewModels\FastProductivityViewModel.cs" />
     <Compile Include="Views\ImportDataUserControl.xaml.cs">
       <DependentUpon>ImportDataUserControl.xaml</DependentUpon>
     </Compile>
@@ -140,6 +145,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NpoiExcel\NpoiExcel.csproj">
+      <Project>{47680bf8-c76a-44b9-bde3-694f1a73ccb1}</Project>
+      <Name>NpoiExcel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WorkSpeed.Data\WorkSpeed.Data.csproj">
       <Project>{72e065c5-8769-4008-9529-11194be488e0}</Project>
       <Name>WorkSpeed.Data</Name>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using WorkSpeed.DesktopClient.ViewModels;
 using WorkSpeed.DesktopClient.Views;
 
 namespace WorkSpeed.DesktopClient
@@ -17,7 +18,9 @@ namespace WorkSpeed.DesktopClient
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            var vm = new FastProductivityViewModel();
             Window mainWindow = new WorkSpeedFastProductivity();
+            mainWindow.DataContext = vm;
 
             mainWindow.Show();
         }

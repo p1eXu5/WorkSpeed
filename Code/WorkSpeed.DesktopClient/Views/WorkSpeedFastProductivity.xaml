@@ -4,6 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkSpeed.DesktopClient.Views"
+
+        xmlns:vm="clr-namespace:WorkSpeed.DesktopClient.ViewModels"
+
+        d:DataContext="{d:DesignInstance vm:FastProductivityViewModel}"
+
         mc:Ignorable="d"
         Title="WorkSpeedFastProductivity" Height="450" Width="800"
         Background="{StaticResource br_Background}"
@@ -13,10 +18,20 @@
 
         <BooleanToVisibilityConverter x:Key="Converter" />
 
-        <!--<Style x:Key="{x:Type ListBoxItem}" TargetType="ListBoxItem">
+        <Storyboard x:Key="an_Appearance">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4" />
+        </Storyboard>
+
+        <Storyboard x:Key="an_Disappearance">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.4" />
+        </Storyboard>
+
+        <Style x:Key="{x:Type ListBoxItem}" TargetType="ListBoxItem">
             <Setter Property="SnapsToDevicePixels" Value="true" />
             <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="Foreground" Value="{DynamicResource br_InactiveListBoxItem}" />
+            <Setter Property="Foreground" Value="{StaticResource br_InactiveListBoxItem}" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Margin" Value="5.0" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
@@ -32,13 +47,13 @@
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
                                     <VisualState x:Name="Normal" />
-                                    <VisualState x:Name="MouseOver" >
+                                    <!--<VisualState x:Name="MouseOver" >
                                         <Storyboard>
                                             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(ListBoxItem.Foreground).(SolidColorBrush.Color)">
-                                                <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource col_ActiveListBoxItem}" />
+                                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource col_ActiveListBoxItem}" />
                                             </ColorAnimationUsingKeyFrames>
                                         </Storyboard>
-                                    </VisualState>
+                                    </VisualState>-->
                                 </VisualStateGroup>
                                 <VisualStateGroup x:Name="SelectionStates">
                                     <VisualState x:Name="Unselected" />
@@ -46,7 +61,7 @@
                                         <Storyboard>
                                             <ColorAnimationUsingKeyFrames 
                                                                           Storyboard.TargetProperty="(ListBoxItem.Foreground).(SolidColorBrush.Color)">
-                                                <EasingColorKeyFrame KeyTime="0" Value="{DynamicResource col_ActiveListBoxItem}" />
+                                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource col_ActiveListBoxItem}" />
                                             </ColorAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
@@ -59,7 +74,7 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>-->
+        </Style>
 
     </Window.Resources>
 
@@ -69,111 +84,118 @@
             <ColumnDefinition Width="2.7*" />
         </Grid.ColumnDefinitions>
 
+        <!-- Stages -->
         <ListBox Background="{StaticResource br_ListBoxBackground}" 
                  FontSize="14"
                  SnapsToDevicePixels="True" FontFamily="Arial Nova"
                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                 SelectedIndex="0"
+                 SelectedIndex="{Binding StageViewModel.StageNum}"
+                 SelectionMode="Single" IsHitTestVisible="False"
                  >
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="Foreground" Value="{StaticResource br_InactiveListBoxItem}" />
-                    <Setter Property="OverridesDefaultStyle" Value="True" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="ListBoxItem">
-                                <Border>
-                                    <ContentPresenter Content="{TemplateBinding Content}" />
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="{StaticResource br_ActiveListBoxItem}" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </ListBox.ItemContainerStyle>
 
-            <ListBoxItem x:Name="m_MMM" Margin="5,10,5,0" HorizontalAlignment="Left"
+            <ListBoxItem x:Name="m_MMM" Margin="5,10,5,0"
                          >
-                <TextBlock Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}">dfgdfg</TextBlock>
-                <!--<StackPanel Height="30" Orientation="Horizontal">
-                    --><!--<Path Data="{StaticResource g_ProductsIcon}" 
-                          Height="16" Width="24"
-                          Stretch="Uniform"
-                          VerticalAlignment="Center" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}, Path=Foreground}"
-                          />--><!--
-                    <TextBlock VerticalAlignment="Center"
-                               Margin="10,0"
-                               Text="Импорт номенклатуры"
-                               />
-                </StackPanel>-->
-            </ListBoxItem>
-            <ListBoxItem Margin="5,0" HorizontalAlignment="Left"
-                            >dsfsd
-                <!--<StackPanel Height="30" Orientation="Horizontal">
-                    --><!--<Path Data="{StaticResource g_EmployeesIcon}" 
+                <StackPanel Height="30" Orientation="Horizontal">
+                    <Path Data="{StaticResource g_ProductsIcon}" 
                           Height="16" Width="24"
                           Stretch="Uniform"
                           VerticalAlignment="Center" 
                           Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}, Path=Foreground}"
-                    />--><!--
+                          />
+                    <TextBlock VerticalAlignment="Center"
+                               Margin="10,0"
+                               Text="Импорт номенклатуры"
+                               />
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem>
+                <StackPanel Height="30" Orientation="Horizontal">
+                    <Path Data="{StaticResource g_EmployeesIcon}" 
+                          Height="16" Width="24"
+                          Stretch="Uniform"
+                          VerticalAlignment="Center" 
+                          Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}, Path=Foreground}"
+                    />
                     <TextBlock VerticalAlignment="Center"
                                Margin="10,0"
                                Text="Импорт сотрудников"
                     />
-                </StackPanel>-->
+                </StackPanel>
             </ListBoxItem>
-            <ListBoxItem Margin="5,0" HorizontalAlignment="Left">
-                <TextBlock>dfgdfg</TextBlock>
-                <!--<StackPanel Height="30" Orientation="Horizontal">
-                    --><!--<Path Data="{StaticResource g_EditIcon}" 
+            <ListBoxItem>
+                <StackPanel Height="30" Orientation="Horizontal">
+                    <Path Data="{StaticResource g_EditIcon}" 
                           Height="16" Width="24"
                           Stretch="Uniform"
-                          VerticalAlignment="Center" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}, Path=Foreground}"
-                    />--><!--
+                          VerticalAlignment="Center" 
+                          Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}, Path=Foreground}"
+                    />
                     <TextBlock VerticalAlignment="Center"
                                Margin="10,0"
                                Text="Проверка сотрудников"
                     />
-                </StackPanel>-->
+                </StackPanel>
             </ListBoxItem>
-            <ListBoxItem Margin="5,0" HorizontalAlignment="Left" >
-                <TextBlock>dfgdfg</TextBlock>
-                <!--<StackPanel Height="30" Orientation="Horizontal">
-                    --><!--<Path Data="{StaticResource g_ProductivityIcon}" 
+            <ListBoxItem>
+                <StackPanel Height="30" Orientation="Horizontal">
+                    <Path Data="{StaticResource g_ProductivityIcon}" 
                           Height="16" Width="24"
                           Stretch="Uniform"
-                          VerticalAlignment="Center" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}, Path=Foreground}"
-                    />--><!--
+                          VerticalAlignment="Center" 
+                          Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}, Path=Foreground}"
+                    />
                     <TextBlock VerticalAlignment="Center"
                                Margin="10,0"
                                Text="Выработка сотрудников"
                     />
-                </StackPanel>-->
+                </StackPanel>
             </ListBoxItem>
-        </ListBox> 
+        </ListBox>
 
+        <!-- Import Area -->
         <Grid Grid.Column="1">
 
-
-
+            <!-- Import Products -->
             <local:FileImportUserControl x:Name="m_Products" Grid.Column="0"
-                                         Visibility="Visible"
-                                         HorizontalAlignment="Stretch" 
-                                         VerticalAlignment="Stretch"
-                                         />
+                                         DataContext="{Binding}"
+                                         >
+                <local:FileImportUserControl.Style>
+                    <Style TargetType="UserControl">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding StageViewModel.StageNum}" Value="0">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource an_Appearance}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource an_Disappearance}"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </local:FileImportUserControl.Style>
+            </local:FileImportUserControl>
+
+            <!-- Import Employees -->
             <local:FileImportUserControl x:Name="m_Employees" Grid.Column="0"
-                                         Visibility="Hidden"
-                                         HorizontalAlignment="Center" 
-                                         VerticalAlignment="Center"
-                                         Margin="0,0,0,40"
-                                         />
+                                         DataContext="{Binding}"
+                                         >
+                <local:FileImportUserControl.Style>
+                    <Style TargetType="UserControl">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding StageViewModel.StageNum}" Value="1">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource an_Appearance}" />
+                                </DataTrigger.EnterActions>
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource an_Disappearance}"/>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </local:FileImportUserControl.Style>
+            </local:FileImportUserControl>
 
         </Grid>
-
 
     </Grid>
 </Window>

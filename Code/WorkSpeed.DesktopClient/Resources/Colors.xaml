@@ -10,7 +10,7 @@
 
     <SolidColorBrush x:Key="br_Background" Color="{StaticResource col_Background}" />
     <SolidColorBrush x:Key="br_ListBoxBackground" Color="{StaticResource col_ListBoxBackground}" />
-    <SolidColorBrush x:Key="br_InactiveListBoxItem" Color="{StaticResource col_InactiveListBoxItem}" />
+    <SolidColorBrush x:Key="br_InactiveListBoxItem" Color="{DynamicResource col_InactiveListBoxItem}" />
     <SolidColorBrush x:Key="br_ActiveListBoxItem" Color="{StaticResource col_ActiveListBoxItem}" />
     <SolidColorBrush x:Key="br_Card" Color="{StaticResource col_Card}" />
 

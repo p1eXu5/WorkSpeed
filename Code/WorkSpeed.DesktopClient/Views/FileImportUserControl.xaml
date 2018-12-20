@@ -5,7 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WorkSpeed.DesktopClient.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="500">
+             d:DesignHeight="400" d:DesignWidth="500"
+             HorizontalAlignment="Stretch" 
+             VerticalAlignment="Stretch"
+             >
 
     <Grid>
         <Grid.RowDefinitions>
@@ -49,6 +52,7 @@
                         BorderBrush="Transparent"
                         Background="Transparent"
                         Height="30"
+                        Style="{x:Null}"
                         >
                     <Image Source="{DynamicResource im_OpenFile}" 
                            RenderOptions.EdgeMode="Aliased"
@@ -59,55 +63,19 @@
 
             <TextBlock Grid.Row="2" Text="{Binding Info}" />
 
-            <Grid Grid.Row="3" >
+            <Grid Grid.Row="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <Button BorderBrush="Transparent" Background="Transparent"
+                <Button Content="Выход" Width="80"
                         Command="{Binding BackwardCommand}"
-                        >
-                    <Grid>
-                        <Viewbox>
-                            <Path SnapsToDevicePixels="True" 
-                                  Stroke="{DynamicResource br_ListBoxBackground}"
-                                  StrokeThickness="1"
-                                  Stretch="None"
-                                  Fill="{DynamicResource br_Card}"
-                                  >
-                                <Path.Data>
-                                    <RectangleGeometry Rect="0,0,70,20"  RadiusX="3" RadiusY="3" />
-                                </Path.Data>
-                            </Path>
-                        </Viewbox>
-                        <Border>
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Выход</TextBlock>
-                        </Border>
-                    </Grid>
-                </Button>
+                        />
 
-                <Button Grid.Column="1" 
-                        BorderBrush="Transparent" Background="Transparent"
+                <Button Grid.Column="1" Content="Далее" Width="80"
                         Command="{Binding ForvardCommand}"
                         >
-                    <Grid>
-                        <Viewbox>
-                            <Path SnapsToDevicePixels="True" 
-                                  Stroke="{DynamicResource br_ListBoxBackground}"
-                                  StrokeThickness="1"
-                                  Stretch="None"
-                                  Fill="{DynamicResource br_Card}"
-                            >
-                                <Path.Data>
-                                    <RectangleGeometry Rect="0,0,70,20"  RadiusX="3" RadiusY="3" />
-                                </Path.Data>
-                            </Path>
-                        </Viewbox>
-                        <Border>
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Далее</TextBlock>
-                        </Border>
-                    </Grid>
                 </Button>
 
             </Grid>

@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkSpeed.MvvmBaseLibrary;
 
 namespace WorkSpeed.DesktopClient.ViewModels
 {
-    public class ProductivityViewModel
+    public interface IStageViewModel
     {
-        //private readonly EmployeeViewModel _employee;
-
-        public WorkingTimeViewModel WorkTimeVm { get; }
+        int StageNum { get; }
     }
 }
