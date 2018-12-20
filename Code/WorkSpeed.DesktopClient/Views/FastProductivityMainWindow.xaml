@@ -156,10 +156,11 @@
         <Grid Grid.Column="1">
 
             <!-- Import Products -->
-            <local:FileImportUserControl x:Name="m_Products" Grid.Column="0"
-                                         DataContext="{Binding StageViewModel}"
-                                         >
-                <local:FileImportUserControl.Style>
+            <UserControl Grid.Column="0"
+                         DataContext="{Binding StageViewModel}"
+                         ContentTemplateSelector=""
+                         >
+                <UserControl.Style>
                     <Style TargetType="UserControl">
                         <Setter Property="Opacity" Value="0.0" />
                         <Style.Triggers>
@@ -175,8 +176,8 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </local:FileImportUserControl.Style>
-            </local:FileImportUserControl>
+                </UserControl.Style>
+            </UserControl>
 
             <!--Import Employees--> 
             <local:FileImportUserControl x:Name="m_Employees" Grid.Column="0"
