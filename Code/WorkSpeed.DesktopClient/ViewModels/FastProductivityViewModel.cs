@@ -26,10 +26,10 @@ namespace WorkSpeed.DesktopClient.ViewModels
                 new ProductivityStageViewModel( _warehouse ), 
             });
 
-            _stageViewModel = SetStageViewModel( queue );
+            SetStageViewModel( GetStageViewModel( queue ) );
         }
 
-        private IStageViewModel SetStageViewModel ( Queue< IStageViewModel > queue )
+        private IStageViewModel GetStageViewModel ( Queue< IStageViewModel > queue )
         {
             var stageViewModel = queue.Dequeue();
 
@@ -37,19 +37,23 @@ namespace WorkSpeed.DesktopClient.ViewModels
             moveNextEventHandler += ( e2, a2 ) =>
                                                {
                                                    stageViewModel.MoveNextRequested -= moveNextEventHandler;
-                                                   var newStageViewModel = SetStageViewModel( queue );
-                                                   if ( newStageViewModel.StageNum % 2 == 0 ) {
-                                                       StageViewModel2 = null;
-                                                       StageViewModel = newStageViewModel;
-                                                   }
-                                                   else {
-                                                       StageViewModel = null;
-                                                       StageViewModel2 = newStageViewModel;
-                                                   }
+                                                   SetStageViewModel( GetStageViewModel( queue ) );
                                                };
             stageViewModel.MoveNextRequested += moveNextEventHandler;
 
             return stageViewModel;
+        }
+
+        private void SetStageViewModel ( IStageViewModel newStageViewModel )
+        {
+            if ( newStageViewModel.StageNum % 2 == 0 ) {
+                StageViewModel2 = null;
+                StageViewModel = newStageViewModel;
+            }
+            else {
+                StageViewModel = null;
+                StageViewModel2 = newStageViewModel;
+            }
         }
 
         public IStageViewModel StageViewModel

@@ -160,7 +160,8 @@
 
             <!-- Import Products -->
             <ContentControl Grid.Column="0"
-                            DataContext="{Binding StageViewModel}"
+                            Content="{Binding StageViewModel}"
+                            
                             ContentTemplateSelector="{StaticResource dt_StageTemplateSelector}"
                             >
                 <ContentControl.Style>
@@ -184,7 +185,7 @@
 
             <!--Import Employees-->
             <ContentControl Grid.Column="0"
-                            DataContext="{Binding StageViewModel2}"
+                            Content="{Binding StageViewModel2}"
                             ContentTemplateSelector="{StaticResource dt_StageTemplateSelector}"
                             >
                 <ContentControl.Style>

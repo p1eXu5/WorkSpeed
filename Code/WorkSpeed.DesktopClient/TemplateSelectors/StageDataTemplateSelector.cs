@@ -15,7 +15,8 @@ namespace WorkSpeed.DesktopClient.TemplateSelectors
         {
             if ( container is FrameworkElement element ) {
                 if ( item is ImportStageViewModel ) {
-                    return element.FindResource( "dt_ImportStage" ) as DataTemplate;
+                    var o =  element.FindResource( "dt_ImportStage" ) as DataTemplate;
+                    return o;
                 }
             }
 

@@ -29,6 +29,27 @@
                          />
     </Storyboard>
 
+    <Storyboard x:Key="an_ScaleIncrement">
+        <DoubleAnimation Storyboard.TargetName="t_Scale" Storyboard.TargetProperty="ScaleX"
+                         To="1.05" Duration="0:0:0.02"
+        />
+        <DoubleAnimation Storyboard.TargetName="t_Scale" Storyboard.TargetProperty="ScaleY"
+                         To="01.05" Duration="0:0:0.02"
+        />
+    </Storyboard>
+    
+    <Storyboard x:Key="an_Blur">
+        <DoubleAnimation Storyboard.TargetName="ef_Blur" Storyboard.TargetProperty="Radius" 
+                         To="2" Duration="0:0:0.02"
+                         />
+    </Storyboard>
+
+    <Storyboard x:Key="an_HalfOpacity">
+        <DoubleAnimation Storyboard.TargetName="m_Rectangle" Storyboard.TargetProperty="Opacity" 
+                         To="0.5" Duration="0:0:0.02"
+        />
+    </Storyboard>
+
     <Storyboard x:Key="an_Pressed">
         <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(SolidColorBrush.Color)" 
                         To="{StaticResource col_Background}" Duration="0:0:0.02"
@@ -50,7 +71,7 @@
         <Setter Property="FontWeight" Value="DemiBold" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="RenderTransformOrigin" Value=".5,.5"></Setter>
+        <Setter Property="RenderTransformOrigin" Value=".5,.5" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -95,6 +116,47 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                     </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="st_ImageButton" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="FontWeight" Value="DemiBold" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="RenderTransformOrigin" Value=".5,.5" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid Height="{TemplateBinding Height}"
+                          RenderTransformOrigin="{TemplateBinding RenderTransformOrigin}"
+                          >
+                        <Grid.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform x:Name="t_Scale" />
+                                <TransformGroup x:Name ="t_Transform" />
+                            </TransformGroup>
+                        </Grid.RenderTransform>
+
+                        <ContentPresenter Content="{TemplateBinding Content}" />
+                        
+                        <Rectangle x:Name="m_Rectangle" Fill="{StaticResource br_Background}" Opacity="0.0" />
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition From="MouseOver" To="Pressed" GeneratedDuration="0:0:0.02"/>
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver" Storyboard="{StaticResource an_ScaleIncrement}" />
+                                <VisualState x:Name="Pressed" Storyboard="{StaticResource an_ScaleDecrement}" />
+                                <VisualState x:Name="Disabled" Storyboard="{StaticResource an_HalfOpacity}" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
