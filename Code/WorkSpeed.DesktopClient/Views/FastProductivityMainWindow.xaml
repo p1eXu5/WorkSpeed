@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:WorkSpeed.DesktopClient.Views"
 
         xmlns:vm="clr-namespace:WorkSpeed.DesktopClient.ViewModels"
+        xmlns:ts="clr-namespace:WorkSpeed.DesktopClient.TemplateSelectors"
 
         d:DataContext="{d:DesignInstance vm:FastProductivityViewModel}"
 
@@ -17,6 +18,8 @@
     <Window.Resources>
 
         <BooleanToVisibilityConverter x:Key="Converter" />
+
+        <ts:StageDataTemplateSelector x:Key="dt_StageTemplateSelector" />
 
         <Storyboard x:Key="an_Appearance">
             <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4" />
@@ -156,12 +159,12 @@
         <Grid Grid.Column="1">
 
             <!-- Import Products -->
-            <UserControl Grid.Column="0"
-                         DataContext="{Binding StageViewModel}"
-                         ContentTemplateSelector=""
-                         >
-                <UserControl.Style>
-                    <Style TargetType="UserControl">
+            <ContentControl Grid.Column="0"
+                            DataContext="{Binding StageViewModel}"
+                            ContentTemplateSelector="{StaticResource dt_StageTemplateSelector}"
+                            >
+                <ContentControl.Style>
+                    <Style TargetType="ContentControl">
                         <Setter Property="Opacity" Value="0.0" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, 
@@ -176,15 +179,16 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </UserControl.Style>
-            </UserControl>
+                </ContentControl.Style>
+            </ContentControl>
 
-            <!--Import Employees--> 
-            <local:FileImportUserControl x:Name="m_Employees" Grid.Column="0"
-                                         DataContext="{Binding StageViewModel}"
-                                         >
-                <local:FileImportUserControl.Style>
-                    <Style TargetType="UserControl">
+            <!--Import Employees-->
+            <ContentControl Grid.Column="0"
+                            DataContext="{Binding StageViewModel2}"
+                            ContentTemplateSelector="{StaticResource dt_StageTemplateSelector}"
+                            >
+                <ContentControl.Style>
+                    <Style TargetType="ContentControl">
                         <Setter Property="Opacity" Value="0.0" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, 
@@ -199,8 +203,8 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </local:FileImportUserControl.Style>
-            </local:FileImportUserControl>
+                </ContentControl.Style>
+            </ContentControl>
 
         </Grid>
 

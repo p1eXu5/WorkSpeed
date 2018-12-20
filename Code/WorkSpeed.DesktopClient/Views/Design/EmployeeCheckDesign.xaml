@@ -4,9 +4,129 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WorkSpeed.DesktopClient.Views.Design"
+             xmlns:vm="clr-namespace:WorkSpeed.DesktopClient.ViewModels"
+             xmlns:generic="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+             xmlns:models="clr-namespace:WorkSpeed.Data.Models;assembly=WorkSpeed.Data"
+             xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="1200">
+    <UserControl.Resources>
+
+        <collections:ArrayList x:Key="Employees">
+            <models:Employee Id="AR15045" Name="Петренко Василий Петрович" IsActive="False" >
+                <models:Employee.Appointment>
+                    <models:Appointment Id="1" InnerName="Кладовщик на РРЦ" />
+                </models:Employee.Appointment>
+                <models:Employee.Position>
+                    <models:Position Id="1" Name="Крупняк" />
+                </models:Employee.Position>
+                <models:Employee.Rank>
+                    <models:Rank Number="3" />
+                </models:Employee.Rank>
+            </models:Employee>
+
+            <models:Employee Id="AR30804" Name="Величко Александр Николаевич"  IsActive="True" >
+                <models:Employee.Appointment>
+                    <models:Appointment Id="1" InnerName="Кладовщик на РРЦ" />
+                </models:Employee.Appointment>
+                <models:Employee.Position>
+                    <models:Position Id="1" Name="Крупняк" />
+                </models:Employee.Position>
+                <models:Employee.Rank>
+                    <models:Rank Number="3" />
+                </models:Employee.Rank>
+            </models:Employee>
+
+            <models:Employee Id="AR47406" Name="Грузинов Александр Александрович"  IsActive="False" >
+                <models:Employee.Appointment>
+                    <models:Appointment Id="1" InnerName="Кладовщик на РРЦ" />
+                </models:Employee.Appointment>
+                <models:Employee.Position>
+                    <models:Position Id="1" Name="Крупняк" />
+                </models:Employee.Position>
+                <models:Employee.Rank>
+                    <models:Rank Number="3" />
+                </models:Employee.Rank>
+            </models:Employee>
+
+            <models:Employee Id="AR33365" Name="Козлов Владислав Эдуардович"  IsActive="False" >
+                <models:Employee.Appointment>
+                    <models:Appointment Id="1" InnerName="Кладовщик на РРЦ" />
+                </models:Employee.Appointment>
+                <models:Employee.Position>
+                    <models:Position Id="1" Name="Крупняк" />
+                </models:Employee.Position>
+                <models:Employee.Rank>
+                    <models:Rank Number="3" />
+                </models:Employee.Rank>
+            </models:Employee>
+
+            <models:Employee Id="AR65487" Name="Киндель Владислав Викторович" IsActive="False" >
+                <models:Employee.Appointment>
+                    <models:Appointment Id="1" InnerName="Кладовщик на РРЦ" />
+                </models:Employee.Appointment>
+                <models:Employee.Position>
+                    <models:Position Id="1" Name="Крупняк" />
+                </models:Employee.Position>
+                <models:Employee.Rank>
+                    <models:Rank Number="3" />
+                </models:Employee.Rank>
+            </models:Employee>
+
+            <models:Employee Id="AR02549" Name="Лапердин Дмитрий Анатольевич" IsActive="False" >
+                <models:Employee.Appointment>
+                    <models:Appointment Id="1" InnerName="Кладовщик на РРЦ" />
+                </models:Employee.Appointment>
+                <models:Employee.Position>
+                    <models:Position Id="1" Name="Крупняк" />
+                </models:Employee.Position>
+                <models:Employee.Rank>
+                    <models:Rank Number="3" />
+                </models:Employee.Rank>
+            </models:Employee>
+
+            <models:Employee Id="AR65841" Name="Метальников Олег Владимирович" IsActive="True" >
+                <models:Employee.Appointment>
+                    <models:Appointment Id="1" InnerName="Кладовщик на РРЦ" />
+                </models:Employee.Appointment>
+                <models:Employee.Position>
+                    <models:Position Id="1" Name="Крупняк" />
+                </models:Employee.Position>
+                <models:Employee.Rank>
+                    <models:Rank Number="3" />
+                </models:Employee.Rank>
+            </models:Employee>
+
+            <models:Employee Id="AR05043" Name="Ридный Максим Александрович" IsActive="False" >
+                <models:Employee.Appointment>
+                    <models:Appointment Id="1" InnerName="Кладовщик на РРЦ" />
+                </models:Employee.Appointment>
+                <models:Employee.Position>
+                    <models:Position Id="1" Name="Крупняк" />
+                </models:Employee.Position>
+                <models:Employee.Rank>
+                    <models:Rank Number="3" />
+                </models:Employee.Rank>
+            </models:Employee>
+        </collections:ArrayList>
+
+        <collections:ArrayList x:Key="Positions">
+            <models:Position Name="Мезонин, 1-й этаж." />
+            <models:Position Name="Мезонин, 2-й этаж." />
+            <models:Position Name="Мезонин, 3-й этаж." />
+        </collections:ArrayList>
+
+    </UserControl.Resources>
+
     <Grid>
-            
+        <DataGrid ItemsSource="{Binding Source={StaticResource Employees}}" >
+            <DataGrid.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding}"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </DataGrid.ItemTemplate>
+        </DataGrid>   
     </Grid>
 </UserControl>
