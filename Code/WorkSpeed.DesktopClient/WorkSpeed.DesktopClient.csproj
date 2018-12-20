@@ -60,14 +60,20 @@
     </ApplicationDefinition>
     <Compile Include="Attributes\DistanceAttribute.cs" />
     <Compile Include="Attributes\SegmentAttribute.cs" />
+    <Compile Include="ViewModels\CheckEmployeesStageViewModel.cs" />
+    <Compile Include="ViewModels\EmployeeImportStageViewModel.cs" />
     <Compile Include="ViewModels\EmployeeViewModel.cs" />
     <Compile Include="ViewModels\ImportDialogViewModel.cs" />
+    <Compile Include="ViewModels\ImportStageViewModel.cs" />
     <Compile Include="ViewModels\IStageViewModel.cs" />
+    <Compile Include="ViewModels\ProductImportStageViewModel.cs" />
+    <Compile Include="ViewModels\ProductivityStageViewModel.cs" />
+    <Compile Include="ViewModels\StageViewModel.cs" />
     <Compile Include="Views\FileImportUserControl.xaml.cs">
       <DependentUpon>FileImportUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\WorkSpeedFastProductivity.xaml.cs">
-      <DependentUpon>WorkSpeedFastProductivity.xaml</DependentUpon>
+    <Compile Include="Views\FastProductivityMainWindow.xaml.cs">
+      <DependentUpon>FastProductivityMainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WorkingTimeViewModel.cs" />
     <Page Include="Resources\ButtonStyles.xaml">
@@ -75,6 +81,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Colors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\DataTemplates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -112,7 +122,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\WorkSpeedFastProductivity.xaml">
+    <Page Include="Views\FastProductivityMainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

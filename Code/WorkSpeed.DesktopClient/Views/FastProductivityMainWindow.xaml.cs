@@ -17,9 +17,9 @@ namespace WorkSpeed.DesktopClient.Views
     /// <summary>
     /// Interaction logic for WorkSpeedFastProductivity.xaml
     /// </summary>
-    public partial class WorkSpeedFastProductivity : Window
+    public partial class FastProductivityMainWindow : Window
     {
-        public WorkSpeedFastProductivity ()
+        public FastProductivityMainWindow ()
         {
             InitializeComponent();
         }

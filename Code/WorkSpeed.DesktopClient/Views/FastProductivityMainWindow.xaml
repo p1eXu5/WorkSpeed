@@ -1,4 +1,4 @@
-﻿<Window x:Class="WorkSpeed.DesktopClient.Views.WorkSpeedFastProductivity"
+﻿<Window x:Class="WorkSpeed.DesktopClient.Views.FastProductivityMainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -89,7 +89,7 @@
                  FontSize="14"
                  SnapsToDevicePixels="True" FontFamily="Arial Nova"
                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                 SelectedIndex="{Binding StageViewModel.StageNum}"
+                 SelectedIndex="{Binding StageIndex, Mode=OneWay}"
                  SelectionMode="Single" IsHitTestVisible="False"
                  >
 
@@ -157,12 +157,15 @@
 
             <!-- Import Products -->
             <local:FileImportUserControl x:Name="m_Products" Grid.Column="0"
-                                         DataContext="{Binding}"
+                                         DataContext="{Binding StageViewModel}"
                                          >
                 <local:FileImportUserControl.Style>
                     <Style TargetType="UserControl">
+                        <Setter Property="Opacity" Value="0.0" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding StageViewModel.StageNum}" Value="0">
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, 
+                                                           Path=DataContext.StageIndex}" 
+                                         Value="0">
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard Storyboard="{StaticResource an_Appearance}" />
                                 </DataTrigger.EnterActions>
@@ -175,14 +178,17 @@
                 </local:FileImportUserControl.Style>
             </local:FileImportUserControl>
 
-            <!-- Import Employees -->
+            <!--Import Employees--> 
             <local:FileImportUserControl x:Name="m_Employees" Grid.Column="0"
-                                         DataContext="{Binding}"
+                                         DataContext="{Binding StageViewModel}"
                                          >
                 <local:FileImportUserControl.Style>
                     <Style TargetType="UserControl">
+                        <Setter Property="Opacity" Value="0.0" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding StageViewModel.StageNum}" Value="1">
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, 
+                                                           Path=DataContext.StageIndex}" 
+                                         Value="1">
                                 <DataTrigger.EnterActions>
                                     <BeginStoryboard Storyboard="{StaticResource an_Appearance}" />
                                 </DataTrigger.EnterActions>

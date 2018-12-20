@@ -19,7 +19,7 @@ namespace WorkSpeed.DesktopClient
         protected override void OnStartup(StartupEventArgs e)
         {
             var vm = new FastProductivityViewModel();
-            Window mainWindow = new WorkSpeedFastProductivity();
+            Window mainWindow = new FastProductivityMainWindow();
             mainWindow.DataContext = vm;
 
             mainWindow.Show();

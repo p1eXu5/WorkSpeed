@@ -17,10 +17,11 @@
         </Grid.RowDefinitions>
 
         <Border Margin="10,5" Height="Auto">
-            <TextBlock FontSize="26"
+            <TextBlock FontSize="24"
                        FontWeight="DemiBold"
                        Foreground="{StaticResource br_ListBoxBackground}"
-                       >Сотрудники</TextBlock>
+                       Text="{Binding Header}"
+                       ></TextBlock>
         </Border>
 
         <Grid Grid.Row="1" MaxWidth="300">
@@ -53,6 +54,7 @@
                         Background="Transparent"
                         Height="30"
                         Style="{x:Null}"
+                        Command="{Binding OpenCommand}"
                         >
                     <Image Source="{DynamicResource im_OpenFile}" 
                            RenderOptions.EdgeMode="Aliased"
@@ -74,7 +76,7 @@
                         />
 
                 <Button Grid.Column="1" Content="Далее" Width="80"
-                        Command="{Binding ForvardCommand}"
+                        Command="{Binding ForwardCommand}"
                         >
                 </Button>
 

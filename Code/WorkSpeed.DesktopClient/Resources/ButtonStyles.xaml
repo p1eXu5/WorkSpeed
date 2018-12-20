@@ -11,6 +11,15 @@
                         />
     </Storyboard>
 
+    <Storyboard x:Key="an_Disabled">
+        <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(SolidColorBrush.Color)" 
+                        To="{StaticResource col_Background}" Duration="0:0:0.02"
+        />
+        <ColorAnimation Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" 
+                        To="{StaticResource col_Card}" Duration="0:0:0.02"
+        />
+    </Storyboard>
+
     <Storyboard x:Key="an_ScaleDecrement">
         <DoubleAnimation Storyboard.TargetName="t_Scale" Storyboard.TargetProperty="ScaleX"
                          To=".95" Duration="0:0:0.02"
@@ -82,6 +91,7 @@
                                 <VisualState x:Name="Normal" />
                                 <VisualState x:Name="MouseOver" Storyboard="{StaticResource an_MouseOver}" />
                                 <VisualState x:Name="Pressed" Storyboard="{StaticResource an_Pressed}" />
+                                <VisualState x:Name="Disabled" Storyboard="{StaticResource an_Disabled}" />
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                     </Border>
