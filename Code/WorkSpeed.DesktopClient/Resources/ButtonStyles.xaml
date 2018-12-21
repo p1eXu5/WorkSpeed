@@ -4,7 +4,7 @@
 
     <Storyboard x:Key="an_MouseOver">
         <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(SolidColorBrush.Color)" 
-                        To="{StaticResource col_Card}" Duration="0:0:0.02"
+                        To="{StaticResource col_OddRow}" Duration="0:0:0.02"
                         />
         <ColorAnimation Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" 
                         To="{StaticResource col_InactiveListBoxItem}" Duration="0:0:0.02"
@@ -16,7 +16,7 @@
                         To="{StaticResource col_Background}" Duration="0:0:0.02"
         />
         <ColorAnimation Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" 
-                        To="{StaticResource col_Card}" Duration="0:0:0.02"
+                        To="{StaticResource col_OddRow}" Duration="0:0:0.02"
         />
     </Storyboard>
 

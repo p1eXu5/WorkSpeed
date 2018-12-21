@@ -8,6 +8,8 @@
         xmlns:vm="clr-namespace:WorkSpeed.DesktopClient.ViewModels"
         xmlns:ts="clr-namespace:WorkSpeed.DesktopClient.TemplateSelectors"
 
+        xmlns:tmp="clr-namespace:WorkSpeed.DesktopClient.Views.Design"
+
         d:DataContext="{d:DesignInstance vm:FastProductivityViewModel}"
 
         mc:Ignorable="d"
@@ -32,7 +34,7 @@
         <Style x:Key="{x:Type ListBoxItem}" TargetType="ListBoxItem">
             <Setter Property="SnapsToDevicePixels" Value="true" />
             <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="Foreground" Value="{StaticResource br_InactiveListBoxItem}" />
+            <Setter Property="Foreground" Value="{StaticResource brd_InactiveListBoxItem}" />
             <Setter Property="HorizontalAlignment" Value="Left" />
             <Setter Property="Margin" Value="5.0" />
             <Setter Property="Template">
@@ -83,7 +85,7 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="212" />
             <ColumnDefinition Width="2.7*" />
         </Grid.ColumnDefinitions>
 
@@ -159,7 +161,7 @@
         <Grid Grid.Column="1">
 
             <!-- Import Products -->
-            <ContentControl Grid.Column="0"
+            <!--<ContentControl Grid.Column="0"
                             Content="{Binding StageViewModel}"
                             
                             ContentTemplateSelector="{StaticResource dt_StageTemplateSelector}"
@@ -181,10 +183,10 @@
                         </Style.Triggers>
                     </Style>
                 </ContentControl.Style>
-            </ContentControl>
+            </ContentControl>-->
 
             <!--Import Employees-->
-            <ContentControl Grid.Column="0"
+            <!--<ContentControl Grid.Column="0"
                             Content="{Binding StageViewModel2}"
                             ContentTemplateSelector="{StaticResource dt_StageTemplateSelector}"
                             >
@@ -205,7 +207,9 @@
                         </Style.Triggers>
                     </Style>
                 </ContentControl.Style>
-            </ContentControl>
+            </ContentControl>-->
+
+            <tmp:EmployeeCheckDesign />
 
         </Grid>
 

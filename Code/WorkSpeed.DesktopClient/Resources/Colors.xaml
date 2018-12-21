@@ -6,12 +6,15 @@
     <Color x:Key="col_ListBoxBackground">#294966</Color>
     <Color x:Key="col_InactiveListBoxItem">#1780ac</Color>
     <Color x:Key="col_ActiveListBoxItem">#a2bddb</Color>
-    <Color x:Key="col_Card">#c6cdda</Color>
+    <Color x:Key="col_OddRow">#c6cdda</Color>
+    <Color x:Key="col_EvenRow">#dce1e9</Color>
 
     <SolidColorBrush x:Key="br_Background" Color="{StaticResource col_Background}" />
     <SolidColorBrush x:Key="br_ListBoxBackground" Color="{StaticResource col_ListBoxBackground}" />
-    <SolidColorBrush x:Key="br_InactiveListBoxItem" Color="{DynamicResource col_InactiveListBoxItem}" />
+    <SolidColorBrush x:Key="br_InactiveListBoxItem" Color="{StaticResource col_InactiveListBoxItem}" />
+    <SolidColorBrush x:Key="brd_InactiveListBoxItem" Color="{DynamicResource col_InactiveListBoxItem}" />
     <SolidColorBrush x:Key="br_ActiveListBoxItem" Color="{StaticResource col_ActiveListBoxItem}" />
-    <SolidColorBrush x:Key="br_Card" Color="{StaticResource col_Card}" />
+    <SolidColorBrush x:Key="br_OddRow" Color="{StaticResource col_OddRow}" />
+    <SolidColorBrush x:Key="br_EvenRow" Color="{StaticResource col_EvenRow}" />
 
 </ResourceDictionary>

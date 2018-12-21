@@ -73,6 +73,7 @@
     <Compile Include="Views\Design\EmployeeCheckDesign.xaml.cs">
       <DependentUpon>EmployeeCheckDesign.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Design\EmployeeViewModelCollection.cs" />
     <Compile Include="Views\FileImportUserControl.xaml.cs">
       <DependentUpon>FileImportUserControl.xaml</DependentUpon>
     </Compile>
