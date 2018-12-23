@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using Helpers;
 using NpoiExcel;
 using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.DesktopClient.ViewModels.StageViewModels;
@@ -14,21 +16,21 @@ namespace WorkSpeed.DesktopClient.ViewModels
 {
     public class FastProductivityViewModel : ViewModel, IFastProductivityViewModel
     {
+        private readonly TwoDirectionQueue< IStageViewModel > _stageQueue;
         private IStageViewModel _stageViewModel;
         private IStageViewModel _stageViewModel2;
         private readonly Warehouse _warehouse = new Warehouse( new RuntimeWorkSpeedBusinessContext(), new ExcelDataImporter() );
 
         public FastProductivityViewModel ()
         {
-            var queue = new Queue< IStageViewModel >(new IStageViewModel[] {
+            _stageQueue = new TwoDirectionQueue< IStageViewModel >();
 
-                new ProductImportStageViewModel( this ),
-                new EmployeeImportStageViewModel( this ), 
-                new CheckEmployeesStageViewModel( this ),
-                new ProductivityStageViewModel( this ), 
-            });
+            _stageQueue.Enqueue( new ProductImportStageViewModel( this ) );
+            _stageQueue.Enqueue( new EmployeeImportStageViewModel( this ) );
+            _stageQueue.Enqueue( new CheckEmployeesStageViewModel( this ) );
+            _stageQueue.Enqueue( new ProductivityStageViewModel( this ) );
 
-            SetStageViewModel( GetStageViewModel( queue ) );
+            SetStageViewModel( GetNextStageViewModel( _stageQueue ) );
         }
 
 
@@ -72,18 +74,33 @@ namespace WorkSpeed.DesktopClient.ViewModels
             }
         }
 
-        private IStageViewModel GetStageViewModel ( Queue< IStageViewModel > queue )
+        private IStageViewModel GetNextStageViewModel ( TwoDirectionQueue< IStageViewModel > queue )
         {
             var stageViewModel = queue.Dequeue();
 
-            stageViewModel.MoveNextRequested += OnMoveNextEventHandler;
+            stageViewModel.MoveRequested += OnMoveRequestedEventHandler;
             return stageViewModel;
 
-            void OnMoveNextEventHandler ( object e2, EventArgs a2 )
-            {
-                stageViewModel.MoveNextRequested -= OnMoveNextEventHandler;
-                SetStageViewModel( GetStageViewModel( queue ) );
+        }
+
+        private void OnMoveRequestedEventHandler ( object sender, MoveRequestedEventArgs args )
+        {
+            var stageViewModel = (sender as IStageViewModel) ?? throw new ArgumentException();
+            stageViewModel.MoveRequested -= OnMoveRequestedEventHandler;
+
+            if ( sender.GetType() == typeof( ProductImportStageViewModel ) ) {
+
+                if ( args.Direction < 0 ) {
+                    Exit( null );
+                }
             }
+
+            SetStageViewModel( GetNextStageViewModel( _stageQueue ) );
+        }
+
+        private void Exit ( object obj )
+        {
+            Application.Current.Shutdown();
         }
     }
 }

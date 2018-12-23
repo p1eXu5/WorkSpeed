@@ -5,7 +5,7 @@
     <!-- Animations -->
     <Storyboard x:Key="an_MouseOver">
         <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(SolidColorBrush.Color)" 
-                        To="{StaticResource col_DataGrid.OddRow}" Duration="0:0:0.02"
+                        To="{StaticResource col_MainWindow.ForegroundLight}" Duration="0:0:0.02"
                         />
         <ColorAnimation Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" 
                         To="{StaticResource col_MainWindow.ForegroundAlternative}" Duration="0:0:0.02"
@@ -17,7 +17,7 @@
                         To="{StaticResource col_MainWindow.Background}" Duration="0:0:0.02"
         />
         <ColorAnimation Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" 
-                        To="{StaticResource col_DataGrid.OddRow}" Duration="0:0:0.02"
+                        To="{StaticResource col_MainWindow.ForegroundLight}" Duration="0:0:0.02"
         />
     </Storyboard>
 

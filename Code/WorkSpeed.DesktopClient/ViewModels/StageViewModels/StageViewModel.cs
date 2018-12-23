@@ -38,8 +38,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
         public ICommand ForwardCommand { get; }
         public ICommand BackwardCommand => new MvvmCommand(Backward);
-        public event EventHandler<EventArgs> MoveNextRequested;
-        public event EventHandler<EventArgs> MoveBackRequested;
+        public event EventHandler< MoveRequestedEventArgs > MoveRequested;
 
         public bool CanMoveNext
         {
@@ -59,7 +58,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
         protected virtual void Forward ( object obj )
         {
-            MoveNextRequested?.Invoke( this, EventArgs.Empty );
+            MoveRequested?.Invoke( this, new MoveRequestedEventArgs( Directions.Forward ) );
         }
 
         protected virtual bool CanForward ( object obj ) => CanMoveNext;
@@ -71,7 +70,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
         protected virtual void Backward ( object obj )
         {
-            MoveBackRequested?.Invoke( this, EventArgs.Empty );
+            MoveRequested?.Invoke( this, new MoveRequestedEventArgs( Directions.Backward ) );
         }
 
         #endregion

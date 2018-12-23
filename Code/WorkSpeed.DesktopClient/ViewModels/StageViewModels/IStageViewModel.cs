@@ -17,7 +17,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
         ICommand ForwardCommand { get; }
         ICommand BackwardCommand { get; }
 
-        event EventHandler< EventArgs > MoveNextRequested;
-        event EventHandler< EventArgs > MoveBackRequested;
+        event EventHandler< MoveRequestedEventArgs > MoveRequested;
     }
 }

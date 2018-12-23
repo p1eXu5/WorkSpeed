@@ -8,6 +8,7 @@
 
     <Color x:Key="col_MainWindow.Foreground">#a2bddb</Color>
     <Color x:Key="col_MainWindow.ForegroundAlternative">#1780ac</Color>
+    <Color x:Key="col_MainWindow.ForegroundLight">#c6cdda</Color>
 
     <SolidColorBrush x:Key="br_MainWindow.Background" Color="{StaticResource col_MainWindow.Background}" />
     <SolidColorBrush x:Key="br_MainWindow.BackgroundAlternative" Color="{StaticResource col_MainWindow.BackgroundAlternative}" />
