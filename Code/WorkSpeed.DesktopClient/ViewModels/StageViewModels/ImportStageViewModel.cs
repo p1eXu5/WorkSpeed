@@ -30,6 +30,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
         protected ImportStageViewModel ( IFastProductivityViewModel fastProductivityViewModel ) : base( fastProductivityViewModel )
         {
             OpenCommand = new MvvmCommand( Open );
+            _message = "Выберите файл, нажав на кнопку выше.";
         }
 
         #endregion

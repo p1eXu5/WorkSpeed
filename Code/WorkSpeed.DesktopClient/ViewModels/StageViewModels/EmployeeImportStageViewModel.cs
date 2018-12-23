@@ -35,13 +35,17 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
             var cancellationToken = GetCancellationToken();
             var progress = new Progress<double>( ( d ) => ProgressCounter = d );
 
-            bool areProductsAdded = await Warehouse.ImportAsync< EmployeeImportModel >( fileName, cancellationToken, progress );
+            bool areEmployeesAdded = await Warehouse.ImportAsync< EmployeeImportModel >( fileName, cancellationToken, progress );
 
-            if ( areProductsAdded )
-            {
+            if ( areEmployeesAdded ) {
 
                 Message = $"Добавлено { Warehouse.Employees.Count() - productsLastCount } сотрудников";
                 UpdateCanForward();
+            }
+            else {
+
+                IsInProgress = false;
+                Message = "Файл не содержит позиций номенклатуры.";
             }
         }
 

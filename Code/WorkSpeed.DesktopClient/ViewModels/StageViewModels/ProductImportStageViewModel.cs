@@ -43,6 +43,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
                 Message = $"Добавлено { Warehouse.Products.Count() - productsLastCount } SKU";
                 UpdateCanForward();
             }
+            else {
+
+                IsInProgress = false;
+                Message = "Файл не содержит позиций номенклатуры.";
+            }
         }
 
         protected override bool CanForward ( object obj )

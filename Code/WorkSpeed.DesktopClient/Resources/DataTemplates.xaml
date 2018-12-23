@@ -23,7 +23,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="60" />
+                    <RowDefinition Height="90" />
                     <RowDefinition Height="26"/>
                     <RowDefinition Height="3*" />
                 </Grid.RowDefinitions>
@@ -57,43 +57,46 @@
                 <Grid Grid.Row="2" Margin="20, 2" >
                     <StackPanel Orientation="Vertical"
                                 VerticalAlignment="Center"
-                                Opacity="0.0"
                             >
                         <ProgressBar Height="20" Background="{StaticResource br_MainWindow.Background}" 
                                      Value="{Binding ProgressCounter}"
                                      Minimum="0"
                                      Maximum="1"
-                                     />
+                                     Opacity="0.0"
+                                     >
+
+                            <ProgressBar.Style>
+                                <Style TargetType="ProgressBar">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsInProgress}" 
+                                                 Value="True">
+                                            <DataTrigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.EnterActions>
+                                            <DataTrigger.ExitActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.4"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.ExitActions>
+                                        </DataTrigger>
+
+                                    </Style.Triggers>
+                                </Style>
+                            </ProgressBar.Style>
+                        </ProgressBar>
+
                         <Border Margin="0">
-                            <TextBlock Text="{Binding Message}" VerticalAlignment="Top" />
+                            <TextBlock Text="{Binding Message}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Top" />
                         </Border>
-
-                        <StackPanel.Style>
-                            <Style TargetType="StackPanel">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsInProgress}" 
-                                             Value="True">
-                                        <DataTrigger.EnterActions>
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4"/>
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </DataTrigger.EnterActions>
-                                        <DataTrigger.ExitActions>
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.4"/>
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </DataTrigger.ExitActions>
-                                    </DataTrigger>
-
-                                </Style.Triggers>
-                            </Style>
-                        </StackPanel.Style>
                     </StackPanel>
-
                 </Grid>
 
                 <!-- Buttons -->
