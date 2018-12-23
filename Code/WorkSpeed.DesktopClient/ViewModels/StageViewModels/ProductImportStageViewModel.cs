@@ -23,6 +23,9 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
         protected override async void Open ( object obj )
         {
             var fileName = base.OpenExcelFile();
+
+            if ( String.IsNullOrWhiteSpace( fileName ) ) return;
+
             var productsLastCount = Warehouse.Products.Count();
             bool areProductsAdded = await Warehouse.ImportAsync< ProductImportModel >( fileName );
 

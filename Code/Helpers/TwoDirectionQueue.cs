@@ -25,6 +25,7 @@ namespace Helpers
             if ( !_list.Any() ) throw new InvalidOperationException();
 
             var elem = _list.First;
+            _list.Remove( elem );
             _list.AddLast( elem );
 
             return elem.Value;
@@ -47,6 +48,7 @@ namespace Helpers
             if ( !_list.Any() ) throw new InvalidOperationException();
 
             var elem = _list.Last;
+            _list.Remove( elem );
             _list.AddLast( elem );
 
             return elem.Value;

@@ -12,12 +12,45 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 {
     public abstract class ImportStageViewModel : StageViewModel
     {
+        #region Fields
+
+        private bool _isInProgress;
+
+        #endregion
+
+
+        #region Ctor
+
         protected ImportStageViewModel ( IFastProductivityViewModel fastProductivityViewModel ) : base( fastProductivityViewModel )
         {
             OpenCommand = new MvvmCommand( Open );
         }
 
+        #endregion
+
+
+        #region Properties
+
+        public bool IsInProgress
+        {
+            get => _isInProgress;
+            set {
+                _isInProgress = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+
+        #region Commands
+
         public ICommand OpenCommand { get; }
+
+        #endregion
+
+
+        #region Methods
 
         protected abstract void Open ( object obj );            
 
@@ -37,5 +70,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
             return null;
         }
+
+        #endregion
     }
 }
