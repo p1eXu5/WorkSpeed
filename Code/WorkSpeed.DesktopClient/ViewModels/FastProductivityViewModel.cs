@@ -31,18 +31,6 @@ namespace WorkSpeed.DesktopClient.ViewModels
             SetStageViewModel( GetStageViewModel( queue ) );
         }
 
-        private void SetStageViewModel ( IStageViewModel newStageViewModel )
-        {
-            if ( newStageViewModel.StageNum % 2 == 0 ) {
-
-                StageViewModel2 = null;
-                StageViewModel = newStageViewModel;
-            }
-            else {
-                StageViewModel = null;
-                StageViewModel2 = newStageViewModel;
-            }
-        }
 
         public IStageViewModel StageViewModel
         {
@@ -71,6 +59,17 @@ namespace WorkSpeed.DesktopClient.ViewModels
         public bool CheckStage ( IStageViewModel stageViewModel )
         {
             throw new NotImplementedException();
+        }
+
+        private void SetStageViewModel ( IStageViewModel newStageViewModel )
+        {
+            if ( newStageViewModel.StageNum % 2 == 0 ) {
+
+                StageViewModel = newStageViewModel;
+            }
+            else {
+                StageViewModel2 = newStageViewModel;
+            }
         }
 
         private IStageViewModel GetStageViewModel ( Queue< IStageViewModel > queue )

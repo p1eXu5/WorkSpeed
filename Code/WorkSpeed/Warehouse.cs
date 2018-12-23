@@ -58,6 +58,11 @@ namespace WorkSpeed
 
         #endregion
 
+
+        #region Properties
+
+        public IEnumerable< Product > Products => _context.GetProducts();
+        
         /// <summary>
         /// Entities that don't contained in DB.
         /// </summary>
@@ -66,6 +71,7 @@ namespace WorkSpeed
 
         public Task<bool> HasProductsAsync () => _context.HasProductsAsync();
 
+        #endregion
 
         public async Task<bool> ImportAsync (string fileName)
         {

@@ -16,5 +16,7 @@ namespace WorkSpeed.Interfaces
         Task<bool> ImportAsync (string fileName);
         Task<bool> ImportAsync< TImportModel > ( string fileName ) where TImportModel : ImportModel;
         Task<bool> HasProductsAsync ();
+
+        IEnumerable<Product> Products { get; }
     }
 }

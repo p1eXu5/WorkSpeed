@@ -11,8 +11,15 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 {
     public abstract class StageViewModel : ViewModel, IStageViewModel
     {
+        #region Fields
+
         protected readonly IFastProductivityViewModel FastProductivityViewModel;
         private bool _canMoveNext;
+
+        #endregion
+
+
+        #region Ctor
 
         protected StageViewModel ( IFastProductivityViewModel fastProductivityViewModel )
         {
@@ -20,8 +27,14 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
             ForwardCommand = new MvvmCommand( Forward, CanForward );
         }
 
-        public abstract string Header { get; }
+        #endregion
+
+
+        #region Properties
+
         public abstract int StageNum { get; }
+        public abstract string Header { get; }
+        public abstract string Message { get; protected set; }
 
         public ICommand ForwardCommand { get; }
         public ICommand BackwardCommand => new MvvmCommand(Backward);
@@ -37,7 +50,12 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
             }
         }
 
-        
+        protected IWarehouse Warehouse => FastProductivityViewModel.Warehouse;
+
+        #endregion
+
+
+        #region Methods
 
         protected virtual void Forward ( object obj )
         {
@@ -46,9 +64,16 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
         protected virtual bool CanForward ( object obj ) => CanMoveNext;
 
+        protected void UpdateCanForward ()
+        {
+            ((MvvmCommand)ForwardCommand).RaiseCanExecuteChanged();
+        }
+
         protected virtual void Backward ( object obj )
         {
             MoveBackRequested?.Invoke( this, EventArgs.Empty );
         }
+
+        #endregion
     }
 }

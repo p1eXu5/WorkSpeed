@@ -13,6 +13,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
     {
         public EmployeeImportStageViewModel ( IFastProductivityViewModel fastProductivityViewModel ) : base( fastProductivityViewModel ) { }
         public override string Header { get; } = "Сотрудники. Импорт.";
+        public override string Message { get; protected set; }
         public override int StageNum { get; } = 1;
 
         protected override void Open ( object obj )

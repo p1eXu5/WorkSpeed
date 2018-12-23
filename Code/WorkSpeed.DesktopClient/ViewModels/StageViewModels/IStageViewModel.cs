@@ -10,8 +10,9 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 {
     public interface IStageViewModel
     {
-        string Header { get; }
         int StageNum { get; }
+        string Header { get; }
+        string Message { get; }
         
         ICommand ForwardCommand { get; }
         ICommand BackwardCommand { get; }

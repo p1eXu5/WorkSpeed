@@ -11,6 +11,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
     {
         public ProductivityStageViewModel ( IFastProductivityViewModel fastProductivityViewModel ) : base( fastProductivityViewModel ) { }
         public override string Header { get; } = "Выработка.";
+        public override string Message { get; protected set; }
         public override int StageNum { get; } = 4;
     }
 }

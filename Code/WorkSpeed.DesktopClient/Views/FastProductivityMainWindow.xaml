@@ -162,7 +162,7 @@
         <Grid Grid.Column="1">
 
             <!-- Import Products -->
-            <!--<ContentControl Grid.Column="0"
+            <ContentControl Grid.Column="0"
                             Content="{Binding StageViewModel}"
                             
                             ContentTemplateSelector="{StaticResource dt_StageTemplateSelector}"
@@ -184,10 +184,10 @@
                         </Style.Triggers>
                     </Style>
                 </ContentControl.Style>
-            </ContentControl>-->
+            </ContentControl>
 
             <!--Import Employees-->
-            <!--<ContentControl Grid.Column="0"
+            <ContentControl Grid.Column="0"
                             Content="{Binding StageViewModel2}"
                             ContentTemplateSelector="{StaticResource dt_StageTemplateSelector}"
                             >
@@ -208,9 +208,7 @@
                         </Style.Triggers>
                     </Style>
                 </ContentControl.Style>
-            </ContentControl>-->
-
-            <tmp:EmployeeCheckDesign />
+            </ContentControl>
             
         </Grid>
 
