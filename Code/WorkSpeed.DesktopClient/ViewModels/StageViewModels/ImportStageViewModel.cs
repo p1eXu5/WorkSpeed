@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Win32;
@@ -18,6 +19,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
         private string _fileName;
         private double _progressCounter;
         private string _message;
+
+        protected CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
 
         #endregion
 
@@ -99,6 +102,14 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
             }
 
             return null;
+        }
+
+        protected CancellationToken GetCancellationToken ()
+        {
+            CancellationTokenSource.Cancel();
+            CancellationTokenSource = new CancellationTokenSource();
+
+            return CancellationTokenSource.Token;
         }
 
         #endregion

@@ -13,12 +13,9 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 {
     class ProductImportStageViewModel : ImportStageViewModel, IStageViewModel
     {
-        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-
         public ProductImportStageViewModel ( IFastProductivityViewModel fastProductivityViewModel ) :
             base( fastProductivityViewModel )
         { }
-
 
         public override int StageNum { get; } = 0;
         public override string Header { get; } = "Номенклатура. Импорт.";
@@ -36,10 +33,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
             var productsLastCount = Warehouse.Products.Count();
 
-            _cancellationTokenSource.Cancel();
-            _cancellationTokenSource = new CancellationTokenSource();
-
-            var cancellationToken = _cancellationTokenSource.Token;
+            var cancellationToken = GetCancellationToken();
             var progress = new Progress< double >( (d) => ProgressCounter = d );
 
             bool areProductsAdded = await Warehouse.ImportAsync< ProductImportModel >( fileName, cancellationToken, progress );
