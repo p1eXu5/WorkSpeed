@@ -60,8 +60,8 @@
     <Grid Width="Auto" Height="Auto">
 
         <DataGrid ItemsSource="{Binding Source={StaticResource EmployeeCollection}}"
-                  AlternatingRowBackground="{StaticResource br_EvenRow}"
-                  RowBackground="{StaticResource br_OddRow}"
+                  AlternatingRowBackground="{StaticResource br_DataGrid.EvenRow}"
+                  RowBackground="{StaticResource br_DataGrid.OddRow}"
                   HorizontalGridLinesBrush="{StaticResource br_MainWindow.Background}"
                   VerticalGridLinesBrush="{StaticResource br_MainWindow.Background}"
                   AutoGenerateColumns="False"

@@ -2,6 +2,14 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     >
 
+    <!-- DataGrid Colors And Brushes -->
+    <Color x:Key="col_DataGrid.OddRow">#c6cdda</Color>
+    <Color x:Key="col_DataGrid.EvenRow">#dce1e9</Color>
+
+    <SolidColorBrush x:Key="br_DataGrid.OddRow" Color="{StaticResource col_DataGrid.OddRow}" />
+    <SolidColorBrush x:Key="br_DataGrid.EvenRow" Color="{StaticResource col_DataGrid.EvenRow}" />
+
+    <!--DataGrid Styles -->
     <Style TargetType="{x:Type DataGridCell}">
         <Setter Property="OverridesDefaultStyle" Value="True"></Setter>
         <Setter Property="Template">
@@ -20,7 +28,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="st_CenteredCell" TargetType="DataGridCell">
+    <Style TargetType="DataGridCell" x:Key="st_CenteredCell">
         <Setter Property="Height" Value="24" />
         <Setter Property="Template">
             <Setter.Value>
@@ -35,7 +43,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="st_VerticalCenteredCell" TargetType="DataGridCell">
+    <Style TargetType="DataGridCell" x:Key="st_VerticalCenteredCell">
         <Setter Property="Height" Value="24" />
         <Setter Property="Template">
             <Setter.Value>
@@ -52,20 +60,37 @@
     </Style>
 
     <Style TargetType="DataGridColumnHeader">
-        <Setter Property="Foreground" Value="{StaticResource br_ActiveListBoxItem}" />
+        <Setter Property="Foreground" Value="{StaticResource br_MainWindow.Foreground}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="BorderThickness" Value="0,0,1,1" />
         <Setter Property="BorderBrush" Value="{StaticResource br_MainWindow.Background}"></Setter>
-        <Setter Property="Background" Value="{StaticResource br_ListBoxBackground}" />
+        <Setter Property="Background" Value="{StaticResource br_MainWindow.BackgroundAlternative}" />
         <Setter Property="FontWeight" Value="DemiBold" />
         <Setter Property="SeparatorBrush" Value="{StaticResource br_MainWindow.Background}" />
         <Setter Property="Height" Value="24"></Setter>
     </Style>
 
+    <Style TargetType="DataGrid">
+        <Setter Property="AlternatingRowBackground" Value="{StaticResource br_DataGrid.EvenRow}" />
+        <Setter Property="RowBackground" Value="{StaticResource br_DataGrid.OddRow}" />
+        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource br_MainWindow.Background}" />
+        <Setter Property="VerticalGridLinesBrush" Value="{StaticResource br_MainWindow.Background}" />
+        <Setter Property="AutoGenerateColumns" Value="False" />
+        <Setter Property="Width" Value="Auto"  />
+        <Setter Property="Height" Value="Auto" />
+        <Setter Property="VerticalAlignment" Value="Center"  />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="HeadersVisibility" Value="Column" />
+        <Setter Property="SelectionMode" Value="Extended"  />
+        <Setter Property="SelectionUnit" Value="CellOrRowHeader" />
+    </Style>
+
+    <!-- DataGridTemplateColumn Control Styles -->
     <Style TargetType="CheckBox" x:Key="st_TableCheckBox" BasedOn="{StaticResource {x:Type CheckBox}}" >
-        <Setter Property="Foreground" Value="{StaticResource br_ListBoxBackground}" />
+        <Setter Property="Foreground" Value="{StaticResource br_MainWindow.BackgroundAlternative}" />
         <Setter Property="BorderBrush" Value="{StaticResource br_MainWindow.Background}" />
         <Setter Property="Width" Value="14" />
         <Setter Property="Height" Value="14" />

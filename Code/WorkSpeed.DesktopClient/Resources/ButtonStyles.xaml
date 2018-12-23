@@ -2,12 +2,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     >
 
+    <!-- Animations -->
     <Storyboard x:Key="an_MouseOver">
         <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(SolidColorBrush.Color)" 
-                        To="{StaticResource col_OddRow}" Duration="0:0:0.02"
+                        To="{StaticResource col_DataGrid.OddRow}" Duration="0:0:0.02"
                         />
         <ColorAnimation Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" 
-                        To="{StaticResource col_InactiveListBoxItem}" Duration="0:0:0.02"
+                        To="{StaticResource col_MainWindow.ForegroundAlternative}" Duration="0:0:0.02"
                         />
     </Storyboard>
 
@@ -16,7 +17,7 @@
                         To="{StaticResource col_MainWindow.Background}" Duration="0:0:0.02"
         />
         <ColorAnimation Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" 
-                        To="{StaticResource col_OddRow}" Duration="0:0:0.02"
+                        To="{StaticResource col_DataGrid.OddRow}" Duration="0:0:0.02"
         />
     </Storyboard>
 
@@ -55,7 +56,7 @@
                         To="{StaticResource col_MainWindow.Background}" Duration="0:0:0.02"
         />
         <ColorAnimation Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" 
-                        To="{StaticResource col_InactiveListBoxItem}" Duration="0:0:0.02"
+                        To="{StaticResource col_MainWindow.ForegroundAlternative}" Duration="0:0:0.02"
         />
         <Storyboard >
             <StaticResource ResourceKey="an_ScaleDecrement" />
@@ -64,10 +65,14 @@
                          To="1.4" Duration="0"/>
     </Storyboard>
     
+
+
+
+    <!-- Styles -->
     <Style TargetType="Button">
         <Setter Property="OverridesDefaultStyle" Value="True" />
-        <Setter Property="Foreground" Value="{StaticResource br_ListBoxBackground}" />
-        <Setter Property="Background" Value="{StaticResource br_ActiveListBoxItem}" />
+        <Setter Property="Foreground" Value="{StaticResource br_MainWindow.BackgroundAlternative}" />
+        <Setter Property="Background" Value="{StaticResource br_MainWindow.Foreground}" />
         <Setter Property="FontWeight" Value="DemiBold" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -77,7 +82,7 @@
                 <ControlTemplate TargetType="Button">
                     <Border CornerRadius="4" 
                             BorderThickness="1" 
-                            BorderBrush="{StaticResource br_ListBoxBackground}"
+                            BorderBrush="{StaticResource br_MainWindow.BackgroundAlternative}"
                             Background="{TemplateBinding Background}"
                             SnapsToDevicePixels="True"
                             RenderTransformOrigin="{TemplateBinding RenderTransformOrigin}"
@@ -161,5 +166,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+
 
 </ResourceDictionary>

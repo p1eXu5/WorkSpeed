@@ -19,7 +19,7 @@
         <Border Margin="10,5" Height="Auto">
             <TextBlock FontSize="24"
                        FontWeight="DemiBold"
-                       Foreground="{StaticResource br_ListBoxBackground}"
+                       Foreground="{StaticResource br_MainWindow.BackgroundAlternative}"
                        Text="{Binding Header}"
                        ></TextBlock>
         </Border>

@@ -35,7 +35,7 @@
         <Style x:Key="{x:Type ListBoxItem}" TargetType="ListBoxItem">
             <Setter Property="SnapsToDevicePixels" Value="true" />
             <Setter Property="OverridesDefaultStyle" Value="true" />
-            <Setter Property="Foreground" Value="{StaticResource brd_InactiveListBoxItem}" />
+            <Setter Property="Foreground" Value="{StaticResource brd_MainWindow.ForegroundAlternative}" />
             <Setter Property="HorizontalAlignment" Value="Left" />
             <Setter Property="Margin" Value="5.0" />
             <Setter Property="Template">
@@ -67,7 +67,7 @@
                                         <Storyboard>
                                             <ColorAnimationUsingKeyFrames 
                                                                           Storyboard.TargetProperty="(ListBoxItem.Foreground).(SolidColorBrush.Color)">
-                                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource col_ActiveListBoxItem}" />
+                                                <EasingColorKeyFrame KeyTime="0" Value="{StaticResource col_MainWindow.Foreground}" />
                                             </ColorAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
@@ -91,7 +91,7 @@
         </Grid.ColumnDefinitions>
 
         <!-- Stages -->
-        <ListBox Background="{StaticResource br_ListBoxBackground}" 
+        <ListBox Background="{StaticResource br_MainWindow.BackgroundAlternative}" 
                  FontSize="14"
                  SnapsToDevicePixels="True" FontFamily="Arial Nova"
                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
