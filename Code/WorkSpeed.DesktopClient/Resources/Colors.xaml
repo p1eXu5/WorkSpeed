@@ -2,14 +2,14 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     >
     
-    <Color x:Key="col_Background">#f2f2f4</Color>
+    <Color x:Key="col_MainWindow.Background">#f2f2f4</Color>
     <Color x:Key="col_ListBoxBackground">#294966</Color>
     <Color x:Key="col_InactiveListBoxItem">#1780ac</Color>
     <Color x:Key="col_ActiveListBoxItem">#a2bddb</Color>
     <Color x:Key="col_OddRow">#c6cdda</Color>
     <Color x:Key="col_EvenRow">#dce1e9</Color>
 
-    <SolidColorBrush x:Key="br_Background" Color="{StaticResource col_Background}" />
+    <SolidColorBrush x:Key="br_MainWindow.Background" Color="{StaticResource col_MainWindow.Background}" />
     <SolidColorBrush x:Key="br_ListBoxBackground" Color="{StaticResource col_ListBoxBackground}" />
     <SolidColorBrush x:Key="br_InactiveListBoxItem" Color="{StaticResource col_InactiveListBoxItem}" />
     <SolidColorBrush x:Key="brd_InactiveListBoxItem" Color="{DynamicResource col_InactiveListBoxItem}" />

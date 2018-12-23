@@ -9,7 +9,7 @@
              xmlns:models="clr-namespace:WorkSpeed.Data.Models;assembly=WorkSpeed.Data"
              xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib"
              mc:Ignorable="d" 
-             Background="{StaticResource br_Background}"
+             Background="{StaticResource br_MainWindow.Background}"
              d:DesignHeight="450" d:DesignWidth="1200">
     <UserControl.Resources>
 
@@ -93,16 +93,16 @@
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="BorderThickness" Value="0,0,1,1" />
-            <Setter Property="BorderBrush" Value="{StaticResource br_Background}"></Setter>
+            <Setter Property="BorderBrush" Value="{StaticResource br_MainWindow.Background}"></Setter>
             <Setter Property="Background" Value="{StaticResource br_ListBoxBackground}" />
             <Setter Property="FontWeight" Value="DemiBold" />
-            <Setter Property="SeparatorBrush" Value="{StaticResource br_Background}" />
+            <Setter Property="SeparatorBrush" Value="{StaticResource br_MainWindow.Background}" />
             <Setter Property="Height" Value="24"></Setter>
         </Style>
 
         <Style TargetType="CheckBox" x:Key="st_TableCheckBox" BasedOn="{StaticResource {x:Type CheckBox}}" >
             <Setter Property="Foreground" Value="{StaticResource br_ListBoxBackground}" />
-            <Setter Property="BorderBrush" Value="{StaticResource br_Background}" />
+            <Setter Property="BorderBrush" Value="{StaticResource br_MainWindow.Background}" />
             <Setter Property="Width" Value="14" />
             <Setter Property="Height" Value="14" />
         </Style>
@@ -120,7 +120,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="dt_ComboBoxCell">
-            <ComboBox></ComboBox>
+            <ComboBox ></ComboBox>
         </DataTemplate>
 
     </UserControl.Resources>
@@ -130,8 +130,8 @@
         <DataGrid ItemsSource="{Binding Source={StaticResource EmployeeCollection}}"
                   AlternatingRowBackground="{StaticResource br_EvenRow}"
                   RowBackground="{StaticResource br_OddRow}"
-                  HorizontalGridLinesBrush="{StaticResource br_Background}"
-                  VerticalGridLinesBrush="{StaticResource br_Background}"
+                  HorizontalGridLinesBrush="{StaticResource br_MainWindow.Background}"
+                  VerticalGridLinesBrush="{StaticResource br_MainWindow.Background}"
                   AutoGenerateColumns="False"
                   Width="Auto" Height="Auto"
                   VerticalAlignment="Center" HorizontalAlignment="Center"

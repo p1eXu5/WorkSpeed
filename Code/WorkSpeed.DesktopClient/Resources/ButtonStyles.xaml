@@ -13,7 +13,7 @@
 
     <Storyboard x:Key="an_Disabled">
         <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(SolidColorBrush.Color)" 
-                        To="{StaticResource col_Background}" Duration="0:0:0.02"
+                        To="{StaticResource col_MainWindow.Background}" Duration="0:0:0.02"
         />
         <ColorAnimation Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" 
                         To="{StaticResource col_OddRow}" Duration="0:0:0.02"
@@ -52,7 +52,7 @@
 
     <Storyboard x:Key="an_Pressed">
         <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(SolidColorBrush.Color)" 
-                        To="{StaticResource col_Background}" Duration="0:0:0.02"
+                        To="{StaticResource col_MainWindow.Background}" Duration="0:0:0.02"
         />
         <ColorAnimation Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" 
                         To="{StaticResource col_InactiveListBoxItem}" Duration="0:0:0.02"
@@ -143,7 +143,7 @@
 
                         <ContentPresenter Content="{TemplateBinding Content}" />
                         
-                        <Rectangle x:Name="m_Rectangle" Fill="{StaticResource br_Background}" Opacity="0.0" />
+                        <Rectangle x:Name="m_Rectangle" Fill="{StaticResource br_MainWindow.Background}" Opacity="0.0" />
 
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
