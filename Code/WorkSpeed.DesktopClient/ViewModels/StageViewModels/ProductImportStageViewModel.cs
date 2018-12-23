@@ -29,6 +29,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
             if ( String.IsNullOrWhiteSpace( fileName ) ) return;
 
+            FileName = fileName;
+
             IsInProgress = true;
             ProgressCounter = 0;
 
@@ -44,9 +46,14 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
             if ( areProductsAdded ) {
 
-                Message = $"Было добавлено { Warehouse.Products.Count() - productsLastCount } SKU";
+                Message = $"Добавлено { Warehouse.Products.Count() - productsLastCount } SKU";
                 UpdateCanForward();
             }
+        }
+
+        protected override bool CanForward ( object obj )
+        {
+            return Warehouse.Products.Any();
         }
     }
 }

@@ -16,10 +16,19 @@ namespace WorkSpeed.DesktopClient.ViewModels
 {
     public class FastProductivityViewModel : ViewModel, IFastProductivityViewModel
     {
+        #region Fields
+
         private readonly TwoDirectionQueue< IStageViewModel > _stageQueue;
         private IStageViewModel _stageViewModel;
         private IStageViewModel _stageViewModel2;
         private readonly Warehouse _warehouse = new Warehouse( new RuntimeWorkSpeedBusinessContext(), new ExcelDataImporter() );
+
+        private int _stageIndex;
+
+        #endregion
+
+
+        #region Ctor
 
         public FastProductivityViewModel ()
         {
@@ -33,13 +42,19 @@ namespace WorkSpeed.DesktopClient.ViewModels
             SetStageViewModel( GetNextStageViewModel( _stageQueue ) );
         }
 
+        #endregion
+
+
+        #region Properties
+
+        public IWarehouse Warehouse => _warehouse;
 
         public IStageViewModel StageViewModel
         {
             get => _stageViewModel;
             set {
                 _stageViewModel = value;
-                if ( _stageViewModel != null ) OnPropertyChanged( nameof( StageIndex ) );
+                if ( _stageViewModel != null ) StageIndex = _stageViewModel.StageNum;
                 OnPropertyChanged();
             }
         }
@@ -49,14 +64,24 @@ namespace WorkSpeed.DesktopClient.ViewModels
             get => _stageViewModel2;
             set {
                 _stageViewModel2 = value;
-                if ( _stageViewModel2 != null ) OnPropertyChanged( nameof( StageIndex ) );
+                if ( _stageViewModel2 != null ) StageIndex = _stageViewModel2.StageNum;
                 OnPropertyChanged();
             }
         }
 
-        public int StageIndex => StageViewModel?.StageNum ?? StageViewModel2.StageNum;
+        public int StageIndex
+        {
+            get => _stageIndex;
+            set {
+                _stageIndex = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public IWarehouse Warehouse => _warehouse;
+        #endregion
+
+
+        #region Methods
 
         public bool CheckStage ( IStageViewModel stageViewModel )
         {
@@ -102,5 +127,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
         {
             Application.Current.Shutdown();
         }
+
+        #endregion
     }
 }
