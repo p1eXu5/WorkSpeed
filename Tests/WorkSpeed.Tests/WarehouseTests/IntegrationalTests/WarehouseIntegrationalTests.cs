@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Helpers;
 using NpoiExcel;
@@ -49,7 +50,7 @@ namespace WorkSpeed.Tests.WarehouseTests.IntegrationalTests
             var file = "products.xlsx".AppendAssemblyPath( "WarehouseTests\\TestFiles" );
 
             // Action:
-            Task<bool> res = warehouse.ImportAsync< ProductImportModel >( file );
+            Task<bool> res = warehouse.ImportAsync< ProductImportModel >( file, new CancellationToken() );
             res.Wait();
 
             // Assert:
@@ -67,7 +68,7 @@ namespace WorkSpeed.Tests.WarehouseTests.IntegrationalTests
             var file = "gathering.xls".AppendAssemblyPath( "WarehouseTests\\TestFiles" );
 
             // Action:
-            Task<bool> res = warehouse.ImportAsync< GatheringImportModel >( file );
+            Task<bool> res = warehouse.ImportAsync< GatheringImportModel >( file, new CancellationToken() );
             res.Wait();
 
             // Assert:
@@ -85,7 +86,7 @@ namespace WorkSpeed.Tests.WarehouseTests.IntegrationalTests
             var file = "employees.xlsx".AppendAssemblyPath( "WarehouseTests\\TestFiles" );
 
             // Action:
-            Task<bool> res = warehouse.ImportAsync< EmployeeFullImportModel >( file );
+            Task<bool> res = warehouse.ImportAsync< EmployeeFullImportModel >( file, new CancellationToken() );
             res.Wait();
 
             // Assert:
