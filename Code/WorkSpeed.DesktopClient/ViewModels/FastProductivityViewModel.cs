@@ -34,10 +34,11 @@ namespace WorkSpeed.DesktopClient.ViewModels
         {
             _stageQueue = new TwoDirectionQueue< Func< IStageViewModel >>();
 
-            _stageQueue.Enqueue( () => new ProductImportStageViewModel( this ) );
-            _stageQueue.Enqueue( () => new EmployeeImportStageViewModel( this ) );
-            _stageQueue.Enqueue( () => new CheckEmployeesStageViewModel( this ) );
-            _stageQueue.Enqueue( () => new ProductivityStageViewModel( this ) );
+            _stageQueue.Enqueue( () => new ProductsImportStageViewModel( this, 0 ) );
+            _stageQueue.Enqueue( () => new EmployeesImportStageViewModel( this, 1 ) );
+            _stageQueue.Enqueue( () => new CheckEmployeesStageViewModel( this, 2 ) );
+            _stageQueue.Enqueue( () => new ActionsImportStageViewModel( this, 3 ) );
+            _stageQueue.Enqueue( () => new ProductivityStageViewModel( this, 4 ) );
 
             SetStageViewModel( GetNextStageViewModel( _stageQueue ) );
         }
@@ -113,7 +114,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
             var stageViewModel = (sender as IStageViewModel) ?? throw new ArgumentException();
             stageViewModel.MoveRequested -= OnMoveRequestedEventHandler;
 
-            if ( sender.GetType() == typeof( ProductImportStageViewModel ) ) {
+            if ( sender.GetType() == typeof( ProductsImportStageViewModel ) ) {
 
                 if ( args.Direction < 0 ) {
                     Exit( null );

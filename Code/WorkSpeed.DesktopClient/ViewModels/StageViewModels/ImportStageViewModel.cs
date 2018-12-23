@@ -27,7 +27,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
         #region Ctor
 
-        protected ImportStageViewModel ( IFastProductivityViewModel fastProductivityViewModel ) : base( fastProductivityViewModel )
+        protected ImportStageViewModel ( IFastProductivityViewModel fastProductivityViewModel, int stageNum ) 
+            : base( fastProductivityViewModel, stageNum )
         {
             OpenCommand = new MvvmCommand( Open );
             _message = "Выберите файл, нажав на кнопку выше.";

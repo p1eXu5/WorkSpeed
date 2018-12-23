@@ -10,8 +10,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
     {
         private readonly ObservableCollection< EmployeeViewModel > _employees;
 
-        public CheckEmployeesStageViewModel ( IFastProductivityViewModel fastProductivityViewModel ) 
-            : base( fastProductivityViewModel )
+        public CheckEmployeesStageViewModel ( IFastProductivityViewModel fastProductivityViewModel, int stageNum ) 
+            : base( fastProductivityViewModel, stageNum )
         {
             _employees = new ObservableCollection< EmployeeViewModel >( Warehouse.GetEmployees().Select( e => new EmployeeViewModel( e ) ) );
             Employees = new ReadOnlyObservableCollection< EmployeeViewModel >( _employees );
@@ -23,7 +23,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
             _canMoveNext = true;
         }
 
-        public override int StageNum { get; } = 3;
         public override string Header { get; } = "Проверка сотрудников.";
 
         public override string Message { get; protected set; }

@@ -21,10 +21,12 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
         #region Ctor
 
-        protected StageViewModel ( IFastProductivityViewModel fastProductivityViewModel )
+        protected StageViewModel ( IFastProductivityViewModel fastProductivityViewModel, int stageNum )
         {
             FastProductivityViewModel = fastProductivityViewModel ?? throw new ArgumentNullException();
             ForwardCommand = new MvvmCommand( Forward, CanForward );
+
+            StageNum = stageNum;
         }
 
         #endregion
@@ -32,8 +34,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
         #region Properties
 
-        public abstract int StageNum { get; }
         public abstract string Header { get; }
+        public int StageNum { get; }
 
         public abstract string Message { get; protected set; }
 

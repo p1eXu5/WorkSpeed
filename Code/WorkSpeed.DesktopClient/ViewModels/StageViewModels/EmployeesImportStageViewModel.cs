@@ -10,13 +10,12 @@ using WorkSpeed.MvvmBaseLibrary;
 
 namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 {
-    class EmployeeImportStageViewModel : ImportStageViewModel
+    class EmployeesImportStageViewModel : ImportStageViewModel
     {
-        public EmployeeImportStageViewModel ( IFastProductivityViewModel fastProductivityViewModel ) 
-            : base( fastProductivityViewModel )
+        public EmployeesImportStageViewModel ( IFastProductivityViewModel fastProductivityViewModel, int stageNum ) 
+            : base( fastProductivityViewModel, stageNum )
         { }
 
-        public override int StageNum { get; } = 1;
         public override string Header { get; } = "Сотрудники. Импорт.";
 
         protected override async void Open ( object obj )
