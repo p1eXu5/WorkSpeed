@@ -74,10 +74,9 @@
     <Compile Include="ViewModels\StageViewModels\ProductImportStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ProductivityStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\StageViewModel.cs" />
-    <Compile Include="Views\Design\EmployeeCheckDesign.xaml.cs">
-      <DependentUpon>EmployeeCheckDesign.xaml</DependentUpon>
+    <Compile Include="Views\Design\DesignWindow.xaml.cs">
+      <DependentUpon>DesignWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Design\EmployeeViewModelCollection.cs" />
     <Compile Include="Views\FileImportUserControl.xaml.cs">
       <DependentUpon>FileImportUserControl.xaml</DependentUpon>
     </Compile>
@@ -117,7 +116,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Design\EmployeeCheckDesign.xaml">
+    <Page Include="Views\Design\DesignWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

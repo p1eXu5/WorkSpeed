@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace WorkSpeed.DesktopClient.Views.Design
 {
     /// <summary>
-    /// Interaction logic for EmployeeCheckDesign.xaml
+    /// Interaction logic for DesignWindow.xaml
     /// </summary>
-    public partial class EmployeeCheckDesign : UserControl
+    public partial class DesignWindow : Window
     {
-        public EmployeeCheckDesign()
+        public DesignWindow ()
         {
             InitializeComponent();
         }

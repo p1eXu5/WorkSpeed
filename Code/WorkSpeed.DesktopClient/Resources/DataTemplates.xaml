@@ -53,8 +53,45 @@
                     </Button>
                 </StackPanel>
 
-                <TextBlock Grid.Row="2" Text="{Binding Info}" />
+                <Grid Grid.Row="2" Margin="20, 2" >
+                    <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center"
+                            >
+                        <ProgressBar Height="20" Background="{StaticResource br_MainWindow.Background}"></ProgressBar>
+                        <Border Margin="0">
+                            <TextBlock Text="{Binding Message}" VerticalAlignment="Top" />
+                        </Border>
+                    </StackPanel>
 
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Style.Triggers>
+
+                                <DataTrigger Binding="{Binding Path=DataContext.IsInProgress, 
+                                                    RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" 
+                                         Value="True">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.4"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.ExitActions>
+                                </DataTrigger>
+
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                </Grid>
+
+                <!-- Buttons -->
                 <Grid Grid.Row="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
