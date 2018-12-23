@@ -21,11 +21,16 @@ namespace WorkSpeed
 {
     public class Warehouse : IWarehouse
     {
+        #region Fields
+
         private readonly IWorkSpeedBusinessContext _context;
         private readonly IDataImporter _dataImporter;
 
         private readonly ITypeRepository _typeRepository;
         private readonly ProductivityObservableCollection _productivities;
+
+        #endregion
+
 
         #region Constructor
 
@@ -73,14 +78,17 @@ namespace WorkSpeed
 
         #endregion
 
+
+        #region Methods
+
+        public async Task<bool> ImportAsync< TImportModel > (string fileName, CancellationToken cancellationToken, IProgress<double> progress = null ) where TImportModel : ImportModel
+        {
+            return await Task.Run ( () => Import (fileName, typeof( TImportModel )), cancellationToken);
+        }
+
         public async Task<bool> ImportAsync (string fileName)
         {
             return await Task<bool>.Factory.StartNew (() => Import (fileName), TaskCreationOptions.LongRunning);
-        }
-
-        public async Task<bool> ImportAsync< TImportModel > (string fileName) where TImportModel : ImportModel
-        {
-            return await Task<bool>.Factory.StartNew (() => Import (fileName, typeof( TImportModel )), TaskCreationOptions.LongRunning);
         }
 
 
@@ -222,6 +230,6 @@ namespace WorkSpeed
 
         }
 
-
+        #endregion
     }
 }

@@ -55,40 +55,44 @@
 
                 <Grid Grid.Row="2" Margin="20, 2" >
                     <StackPanel Orientation="Vertical"
-                            VerticalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Opacity="0.0"
                             >
-                        <ProgressBar Height="20" Background="{StaticResource br_MainWindow.Background}"></ProgressBar>
+                        <ProgressBar Height="20" Background="{StaticResource br_MainWindow.Background}" 
+                                     Value="{Binding ProgressCounter}"
+                                     Minimum="0"
+                                     Maximum="1"
+                                     />
                         <Border Margin="0">
                             <TextBlock Text="{Binding Message}" VerticalAlignment="Top" />
                         </Border>
+
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsInProgress}" 
+                                             Value="True">
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                        <DataTrigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.4"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </DataTrigger.ExitActions>
+                                    </DataTrigger>
+
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
                     </StackPanel>
 
-                    <Grid.Style>
-                        <Style TargetType="Grid">
-                            <Style.Triggers>
-
-                                <DataTrigger Binding="{Binding Path=DataContext.IsInProgress, 
-                                                    RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" 
-                                         Value="True">
-                                    <DataTrigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </DataTrigger.EnterActions>
-                                    <DataTrigger.ExitActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.4"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </DataTrigger.ExitActions>
-                                </DataTrigger>
-
-                            </Style.Triggers>
-                        </Style>
-                    </Grid.Style>
                 </Grid>
 
                 <!-- Buttons -->
