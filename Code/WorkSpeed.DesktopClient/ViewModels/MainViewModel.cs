@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using WorkSpeed.DesktopClient.ViewModels.DialogViewModels;
 using WorkSpeed.FileModels;
 using WorkSpeed.Interfaces;
 using WorkSpeed.MvvmBaseLibrary;
@@ -25,21 +24,6 @@ namespace WorkSpeed.DesktopClient.ViewModels
         public ImportViewModel ImportVm { get; set; }
 
         public ICommand ExitCommand => new MvvmCommand( Exit );
-        public ICommand LoadedCommand => new MvvmCommand( LoadedAsync );
-
-        private async void LoadedAsync( object obj )
-        {
-            if ( !await _warehouse.HasProductsAsync() ) {
-
-                var vmodel = new ImportDialogViewModel< ProductImportModel >( _warehouse );
-                var view = _viewRepository.GetView( vmodel );
-
-                if ( view.ShowDialog() != true ) {
-
-                    Exit( null );
-                }
-            }
-        }
 
         private void Exit( object obj )
         {
