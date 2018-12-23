@@ -60,6 +60,7 @@
     </ApplicationDefinition>
     <Compile Include="Attributes\DistanceAttribute.cs" />
     <Compile Include="Attributes\SegmentAttribute.cs" />
+    <Compile Include="Converters\BorderThicknessToStrokeThicknessConverter.cs" />
     <Compile Include="TemplateSelectors\StageDataTemplateSelector.cs" />
     <Compile Include="ViewModels\CheckEmployeesStageViewModel.cs" />
     <Compile Include="ViewModels\EmployeeImportStageViewModel.cs" />
@@ -82,6 +83,10 @@
     </Compile>
     <Compile Include="WorkingTimeViewModel.cs" />
     <Page Include="Resources\ButtonStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\CheckBoxStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

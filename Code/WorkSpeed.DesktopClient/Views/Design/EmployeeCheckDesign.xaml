@@ -38,6 +38,23 @@
 
         <ObjectDataProvider x:Key="Collection" ObjectInstance="{StaticResource EmployeeCollection}" />
 
+        <Style TargetType="{x:Type DataGridCell}">
+            <Setter Property="OverridesDefaultStyle" Value="True"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                        <Border x:Name="border"
+                                BorderBrush="Transparent"
+                                BorderThickness="1"
+                                Background="Transparent"
+                                SnapsToDevicePixels="True">
+
+                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
         <Style x:Key="st_CenteredCell" TargetType="DataGridCell">
             <Setter Property="Height" Value="24" />
@@ -83,11 +100,33 @@
             <Setter Property="Height" Value="24"></Setter>
         </Style>
 
+        <Style TargetType="CheckBox" x:Key="st_TableCheckBox" BasedOn="{StaticResource {x:Type CheckBox}}" >
+            <Setter Property="Foreground" Value="{StaticResource br_ListBoxBackground}" />
+            <Setter Property="BorderBrush" Value="{StaticResource br_Background}" />
+            <Setter Property="Width" Value="14" />
+            <Setter Property="Height" Value="14" />
+        </Style>
+
+        <DataTemplate x:Key="dt_IsActive">
+            <CheckBox IsChecked="{Binding IsActive}" 
+                      Style="{StaticResource st_TableCheckBox}"
+                      />
+        </DataTemplate>
+
+        <DataTemplate x:Key="dt_IsSmoker">
+            <CheckBox IsChecked="{Binding IsSmoker}" 
+                      Style="{StaticResource st_TableCheckBox}"
+                      />
+        </DataTemplate>
+
+
+        <DataTemplate x:Key="dt_ComboBoxCell">
+            <ComboBox></ComboBox>
+        </DataTemplate>
+
     </UserControl.Resources>
 
     <Grid Width="Auto" Height="Auto">
-
-        <ComboBox x:Name="Box" Visibility="Collapsed" ItemsSource="{Binding EmployeeCollection.Appointments}"></ComboBox>
 
         <DataGrid ItemsSource="{Binding Source={StaticResource EmployeeCollection}}"
                   AlternatingRowBackground="{StaticResource br_EvenRow}"
@@ -99,12 +138,15 @@
                   VerticalAlignment="Center" HorizontalAlignment="Center"
                   BorderBrush="Transparent"
                   HeadersVisibility="Column"
+                  SelectionMode="Extended" SelectionUnit="CellOrRowHeader"
                   >
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Id}" Width="80" 
+                <DataGridTextColumn Header="Код" 
+                                    Width="80" 
+                                    Binding="{Binding Id}"
                                     CanUserResize="False"
                                     CellStyle="{StaticResource st_CenteredCell}"
-                                    Header="Код"
+                                    IsReadOnly="True"
                                     />
                 <DataGridComboBoxColumn Header="Должность" 
                                         ItemsSource="{Binding Source={StaticResource Appointments}}"     
@@ -119,9 +161,12 @@
                                     CellStyle="{StaticResource st_VerticalCenteredCell}"
                                     IsReadOnly="True"
                                     />
-                <DataGridCheckBoxColumn Header="Работает" Width="70"
-                                        Binding="{Binding IsActive}"
+                <DataGridTemplateColumn Header="Работает" 
+                                        Width="70"
+                                        CellTemplate="{StaticResource dt_IsActive}"
                                         CellStyle="{StaticResource st_CenteredCell}"
+                                        CanUserSort="True"
+                                        SortMemberPath="IsActive"
                                         />
                 <DataGridComboBoxColumn Header="Зона ответственности"
                                         ItemsSource="{Binding Source={StaticResource Positions}}"     
@@ -137,9 +182,11 @@
                                         MinWidth="180" 
                                         IsReadOnly="False" 
                                         />
-                <DataGridCheckBoxColumn Header="Курит" Width="70"
-                                        Binding="{Binding IsSmoker}"
+                <DataGridTemplateColumn Header="Курит" Width="70"
+                                        CellTemplate="{StaticResource dt_IsSmoker}"
                                         CellStyle="{StaticResource st_CenteredCell}"
+                                        CanUserSort="True"
+                                        SortMemberPath="IsSmoker"
                                         />
             </DataGrid.Columns>
         </DataGrid>   

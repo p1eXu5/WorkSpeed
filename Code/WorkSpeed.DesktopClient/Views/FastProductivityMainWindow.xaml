@@ -9,6 +9,7 @@
         xmlns:ts="clr-namespace:WorkSpeed.DesktopClient.TemplateSelectors"
 
         xmlns:tmp="clr-namespace:WorkSpeed.DesktopClient.Views.Design"
+        xmlns:conv="clr-namespace:WorkSpeed.DesktopClient.Converters"
 
         d:DataContext="{d:DesignInstance vm:FastProductivityViewModel}"
 
@@ -210,7 +211,7 @@
             </ContentControl>-->
 
             <tmp:EmployeeCheckDesign />
-
+            
         </Grid>
 
     </Grid>
