@@ -402,6 +402,23 @@ namespace WorkSpeed.Data.BusinessContexts
 
         public void AddEmployee ( Employee employee )
         {
+            if ( employee == null || employee.Id.Length != 7 || _employees.Contains( employee ) ) return;
+
+            if ( employee.Appointment == null || String.IsNullOrWhiteSpace( employee.Appointment.Abbreviations ) ) return;
+            var appointment = _appointments.FirstOrDefault( a => a.Abbreviations.Contains( employee.Appointment.Abbreviations ) );
+            if (appointment == null) return;
+            employee.Appointment = appointment;
+
+            if ( employee.Position == null || String.IsNullOrWhiteSpace(employee.Position.Abbreviations) ) return;
+            var position = _positions.FirstOrDefault( p => p.Abbreviations.Contains( employee.Position.Abbreviations ) );
+            if ( position == null ) return;
+            employee.Position = position;
+
+            if ( employee.Rank == null || employee.Rank.Number <= 0 || employee.Rank.Number > _ranks.Max( r => r.Number ) ) return;
+            var rank = _ranks.FirstOrDefault( r => r.Number == employee.Rank.Number );
+            if ( rank == null ) return;
+            employee.Rank = rank;
+
             _employees.Add( employee );
         }
 

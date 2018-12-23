@@ -229,7 +229,7 @@
                                   Style="{x:Null}"
                                   >
                                 <Path.RenderTransform>
-                                    <ScaleTransform x:Name="ScaleTransform" CenterX="4" CenterY="4" ScaleX=".9" ScaleY=".9" />
+                                    <ScaleTransform x:Name="ScaleTransform" CenterX="4" CenterY="4" ScaleX=".5" ScaleY=".5" />
                                 </Path.RenderTransform>
                             </Path>
                         </Viewbox>
@@ -261,9 +261,9 @@
                                 <VisualState x:Name="Pressed">
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetProperty="ScaleX" Storyboard.TargetName="ScaleTransform"
-                                                                                                    To=".9" Duration="0" />
+                                                                                                    To=".7" Duration="0" />
                                         <DoubleAnimation Storyboard.TargetProperty="ScaleY" Storyboard.TargetName="ScaleTransform"
-                                                                                                    To=".9" Duration="0" />
+                                                                                                    To=".7" Duration="0" />
                                         <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"
                                                                                                 To="{DynamicResource col_ComboBox.ToggleButton.Pressed0}" Duration="0" />
                                         <ColorAnimation Storyboard.TargetProperty="(Control.Foreground).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)"

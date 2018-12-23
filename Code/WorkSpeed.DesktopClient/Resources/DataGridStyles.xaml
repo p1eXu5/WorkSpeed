@@ -11,7 +11,7 @@
 
     <!--DataGrid Styles -->
     <Style TargetType="{x:Type DataGridCell}">
-        <Setter Property="OverridesDefaultStyle" Value="True"></Setter>
+        <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridCell}">
@@ -28,7 +28,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="DataGridCell" x:Key="st_CenteredCell">
+    <Style TargetType="DataGridCell" x:Key="st_CenteredCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
         <Setter Property="Height" Value="24" />
         <Setter Property="Template">
             <Setter.Value>
@@ -43,7 +43,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="DataGridCell" x:Key="st_VerticalCenteredCell">
+    <Style TargetType="DataGridCell" x:Key="st_VerticalCenteredCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
         <Setter Property="Height" Value="24" />
         <Setter Property="Template">
             <Setter.Value>
@@ -72,6 +72,7 @@
         <Setter Property="Height" Value="24"></Setter>
     </Style>
 
+
     <Style TargetType="DataGrid">
         <Setter Property="AlternatingRowBackground" Value="{StaticResource br_DataGrid.EvenRow}" />
         <Setter Property="RowBackground" Value="{StaticResource br_DataGrid.OddRow}" />
@@ -94,6 +95,13 @@
         <Setter Property="BorderBrush" Value="{StaticResource br_MainWindow.Background}" />
         <Setter Property="Width" Value="14" />
         <Setter Property="Height" Value="14" />
+    </Style>
+
+    <Style TargetType="ComboBox" x:Key="st_TableComboBox" BasedOn="{StaticResource {x:Type ComboBox}}" >
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="4, 0" />
     </Style>
 
 

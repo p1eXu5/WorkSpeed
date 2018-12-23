@@ -136,17 +136,29 @@
                   />
     </DataTemplate>
 
-    <!-- CheckBoxes -->
+    <!-- ComboBoxes -->
     <DataTemplate x:Key="dt_ComboBox.Appointments">
-        <ComboBox ItemsSource="{Binding Appointments}" SelectedItem="{Binding Appointment}" />
+        <ComboBox ItemsSource="{Binding Content.Appointments, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=4}}"
+                  DisplayMemberPath="InnerName"
+                  SelectedItem="{Binding Appointment}" 
+                  Style="{StaticResource st_TableComboBox}"
+                  />
     </DataTemplate>
 
     <DataTemplate x:Key="dt_ComboBox.Positions">
-        <ComboBox ItemsSource="{Binding Positions}" SelectedItem="{Binding Position}" />
+        <ComboBox ItemsSource="{Binding Content.Positions, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=4}}" 
+                  DisplayMemberPath="Name"
+                  SelectedItem="{Binding Position}"
+                  Style="{StaticResource st_TableComboBox}"
+                  />
     </DataTemplate>
 
     <DataTemplate x:Key="dt_ComboBox.Ranks">
-        <ComboBox ItemsSource="{Binding Ranks}" SelectedItem="{Binding Rank}" />
+        <ComboBox ItemsSource="{Binding Content.Ranks, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=4}}"
+                  DisplayMemberPath="Number"
+                  SelectedItem="{Binding Rank}"
+                  Style="{StaticResource st_TableComboBox}"
+                  />
     </DataTemplate>
 
     <!-- DataGrid -->
@@ -156,10 +168,20 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="5*" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="1" >
-                <ScrollViewer MinHeight="200" >
+            <Border Margin="10,5" Height="Auto">
+                <TextBlock FontSize="24"
+                           HorizontalAlignment="Center"
+                           FontWeight="DemiBold"
+                           Foreground="{StaticResource br_MainWindow.BackgroundAlternative}"
+                           Text="{Binding Header}"
+                />
+            </Border>
+
+            <ScrollViewer Grid.Row="1">
+                <Grid>
                     <DataGrid ItemsSource="{Binding Employees}"
                       VerticalAlignment="Top"
                       >
@@ -210,27 +232,27 @@
                                         />
                         </DataGrid.Columns>
                     </DataGrid>
-                </ScrollViewer>
-
-                <Grid Height="60">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-
-                    <Button Content="Выход" Width="80" Height="26"
-                        Command="{Binding BackwardCommand}"
-                        HorizontalAlignment="Left"
-                        Margin="80,0"
-                        />
-
-                    <Button Grid.Column="1" Content="Далее" Width="80" Height="26"
-                        Command="{Binding ForwardCommand}"
-                        HorizontalAlignment="Right"
-                        Margin="80,0"
-                        />
                 </Grid>
-            </StackPanel>
+            </ScrollViewer>
+
+            <Grid Height="60" Grid.Row="2" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Button Content="Выход" Width="80" Height="26"
+                    Command="{Binding BackwardCommand}"
+                    HorizontalAlignment="Left"
+                    Margin="80,0"
+                    />
+
+                <Button Grid.Column="1" Content="Далее" Width="80" Height="26"
+                    Command="{Binding ForwardCommand}"
+                    HorizontalAlignment="Right"
+                    Margin="80,0"
+                    />
+            </Grid>
         </Grid>
     </DataTemplate>
 

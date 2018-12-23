@@ -12,6 +12,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="5*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="1" >
@@ -71,7 +72,8 @@
                 </DataGrid>
             </ScrollViewer>
 
-            <Grid Height="60">
+        </StackPanel>
+            <Grid Height="60" Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
@@ -89,6 +91,5 @@
                         Margin="80,0"
                         />
             </Grid>
-        </StackPanel>
     </Grid>
 </Window>

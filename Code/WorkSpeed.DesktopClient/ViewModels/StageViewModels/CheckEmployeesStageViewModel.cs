@@ -16,6 +16,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
             _employees = new ObservableCollection< EmployeeViewModel >( Warehouse.GetEmployees().Select( e => new EmployeeViewModel( e ) ) );
             Employees = new ReadOnlyObservableCollection< EmployeeViewModel >( _employees );
 
+            Appointments = new List< Appointment >( Warehouse.GetAppointments() );
+            Positions = new List< Position >( Warehouse.GetPositions() );
+            Ranks = new List< Rank >( Warehouse.GetRanks() );
+
             _canMoveNext = true;
         }
 
@@ -26,9 +30,9 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
         public ReadOnlyObservableCollection< EmployeeViewModel > Employees { get; }
 
-        public IEnumerable< Appointment > GetAppointments => Warehouse.GetAppointments();
-        public IEnumerable< Position > GetPositions => Warehouse.GetPositions();
-        public IEnumerable< Rank > GetRanks => Warehouse.GetRanks();
+        public List< Appointment > Appointments { get; set; }
+        public List< Position > Positions { get; set; }
+        public List< Rank > Ranks { get; set; }
 
     }
 }
