@@ -13,8 +13,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 {
     class ProductImportStageViewModel : ImportStageViewModel, IStageViewModel
     {
-        public ProductImportStageViewModel ( IFastProductivityViewModel fastProductivityViewModel ) :
-            base( fastProductivityViewModel )
+        public ProductImportStageViewModel ( IFastProductivityViewModel fastProductivityViewModel ) 
+            : base( fastProductivityViewModel )
         { }
 
         public override int StageNum { get; } = 0;
