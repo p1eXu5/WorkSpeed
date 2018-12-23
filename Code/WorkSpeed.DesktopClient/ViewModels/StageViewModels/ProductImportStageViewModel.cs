@@ -13,7 +13,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 {
     class ProductImportStageViewModel : ImportStageViewModel, IStageViewModel
     {
-        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         public ProductImportStageViewModel ( IFastProductivityViewModel fastProductivityViewModel ) :
             base( fastProductivityViewModel )
@@ -23,18 +23,20 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
         public override int StageNum { get; } = 0;
         public override string Header { get; } = "Номенклатура. Импорт.";
 
-        public override string Message { get; protected set; } = "xcxc";
-
-
         protected override async void Open ( object obj )
         {
             var fileName = base.OpenExcelFile();
 
             if ( String.IsNullOrWhiteSpace( fileName ) ) return;
 
+            IsInProgress = true;
+            ProgressCounter = 0;
+
             var productsLastCount = Warehouse.Products.Count();
 
             _cancellationTokenSource.Cancel();
+            _cancellationTokenSource = new CancellationTokenSource();
+
             var cancellationToken = _cancellationTokenSource.Token;
             var progress = new Progress< double >( (d) => ProgressCounter = d );
 

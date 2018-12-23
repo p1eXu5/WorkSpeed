@@ -17,6 +17,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
         private bool _isInProgress;
         private string _fileName;
         private double _progressCounter;
+        private string _message;
 
         #endregion
 
@@ -32,6 +33,15 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
 
         #region Properties
+
+        public override string Message
+        {
+            get => _message;
+            protected set {
+                _message = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string FileName
         {

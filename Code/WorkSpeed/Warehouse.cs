@@ -83,7 +83,22 @@ namespace WorkSpeed
 
         public async Task<bool> ImportAsync< TImportModel > (string fileName, CancellationToken cancellationToken, IProgress<double> progress = null ) where TImportModel : ImportModel
         {
-            return await Task.Run ( () => Import (fileName, typeof( TImportModel )), cancellationToken);
+            if ( progress != null ) {
+                _dataImporter.ProgressChangedEvent += OnProgressChanged;
+            }
+
+            var res = await Task.Run ( () => Import (fileName, typeof( TImportModel )), cancellationToken);
+
+            if ( progress != null ) {
+                _dataImporter.ProgressChangedEvent -= OnProgressChanged;
+            }
+
+            return res;
+
+            void OnProgressChanged ( object sender, ProgressChangedEventArgs args )
+            {
+                progress.Report( args.Progress );
+            }
         }
 
         public async Task<bool> ImportAsync (string fileName)
@@ -100,6 +115,7 @@ namespace WorkSpeed
             if ( type != null && mappedType.type != null && !mappedType.type.IsAssignableFrom( type ) ) {
                 return false;
             }
+
 
             if ( typeof( ProductImportModel ) == mappedType.type  ) {
 

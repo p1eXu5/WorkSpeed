@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -87,6 +88,7 @@ namespace NpoiExcel
         /// <param name="sheetTable"><see cref="SheetTable"/></param>
         /// <param name="propertyMap">Dictionary&lt; propertyName, header &gt;</param>
         /// <param name="typeConverter">Type typeConverter</param>
+        /// <param name="progressFunc"></param>
         /// <returns></returns>
         public static IEnumerable< TOutType > GetEnumerable< TIn, TOutType>( SheetTable sheetTable,
                                                                              Dictionary< string, (string header, int column) > propertyMap,  
@@ -126,10 +128,16 @@ namespace NpoiExcel
         }
 
         [ SuppressMessage( "ReSharper", "PossibleNullReferenceException" ) ]
-        private static ICollection FillModelCollection( SheetTable sheetTable,  Type type,  Dictionary< string, (string header, int column) > headersMap )
+        private static ICollection FillModelCollection( SheetTable sheetTable,  
+                                                        Type type,  
+                                                        Dictionary< string, (string header, int column) > headersMap )
         {
             CheckType( type );
-            ArrayList typeInstanceCollection = new ArrayList(sheetTable.RowCount);
+            ArrayList typeInstanceCollection = new ArrayList( sheetTable.RowCount );
+
+            double progress = 0.0;
+            double percent = sheetTable.RowCount / 100.0;
+            OnProgressChanged( progress );
 
             for (var j = 0; j < sheetTable.RowCount; ++j) {
 
@@ -160,9 +168,29 @@ namespace NpoiExcel
                 }
 
                 typeInstanceCollection.Add(typeInstance);
+
+                progress += percent;
+                OnProgressChanged( progress );
             }
 
             return typeInstanceCollection;
         }
+
+        public static event EventHandler< ProgressChangedEventArgs > ProgressChangedEvent;
+
+        private static void OnProgressChanged ( double progress )
+        {
+            ProgressChangedEvent?.Invoke( null, new ProgressChangedEventArgs( progress ) );
+        }
+    }
+
+    public class ProgressChangedEventArgs : EventArgs
+    {
+        public ProgressChangedEventArgs ( double progress )
+        {
+            Progress = progress;
+        }
+
+        public double Progress { get; }
     }
 }

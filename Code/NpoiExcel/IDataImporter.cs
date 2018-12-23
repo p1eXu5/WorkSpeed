@@ -16,5 +16,7 @@ namespace NpoiExcel
             Dictionary< string, (string header, int column) > propertyMap,
             ITypeConverter< TIn, TOutType >                   typeConverter 
         );
+
+        event EventHandler< ProgressChangedEventArgs > ProgressChangedEvent;
     }
 }
