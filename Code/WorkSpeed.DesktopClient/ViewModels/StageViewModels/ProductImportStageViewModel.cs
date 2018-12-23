@@ -19,6 +19,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
         {
             var fileName = base.OpenExcelFile();
 
+            
 
         }
     }

@@ -11,8 +11,13 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 {
     class EmployeeImportStageViewModel : ImportStageViewModel
     {
-        public EmployeeImportStageViewModel ( IWarehouse warehouse ) : base( warehouse ) { }
+        public EmployeeImportStageViewModel ( IFastProductivityViewModel fastProductivityViewModel ) : base( fastProductivityViewModel ) { }
         public override string Header { get; } = "Сотрудники. Импорт.";
         public override int StageNum { get; } = 1;
+
+        protected override void Open ( object obj )
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using WorkSpeed.DesktopClient.ViewModels;
+using WorkSpeed.DesktopClient.ViewModels.StageViewModels;
 
 namespace WorkSpeed.DesktopClient.TemplateSelectors
 {

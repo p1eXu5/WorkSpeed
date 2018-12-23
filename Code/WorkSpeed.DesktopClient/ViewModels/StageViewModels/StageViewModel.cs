@@ -11,12 +11,12 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 {
     public abstract class StageViewModel : ViewModel, IStageViewModel
     {
-        protected readonly IWarehouse Warehouse;
+        protected readonly IFastProductivityViewModel FastProductivityViewModel;
         private bool _canMoveNext;
 
-        protected StageViewModel ( IWarehouse warehouse )
+        protected StageViewModel ( IFastProductivityViewModel fastProductivityViewModel )
         {
-            Warehouse = warehouse ?? throw new ArgumentNullException();
+            FastProductivityViewModel = fastProductivityViewModel ?? throw new ArgumentNullException();
             ForwardCommand = new MvvmCommand( Forward, CanForward );
         }
 

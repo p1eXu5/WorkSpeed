@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels;
+using WorkSpeed.DesktopClient.ViewModels.EntityViewModels;
 
 namespace WorkSpeed.DesktopClient.Views.Design
 {

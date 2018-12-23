@@ -12,7 +12,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 {
     public abstract class ImportStageViewModel : StageViewModel
     {
-        protected ImportStageViewModel ( IWarehouse warehouse ) : base( warehouse )
+        protected ImportStageViewModel ( IFastProductivityViewModel fastProductivityViewModel ) : base( fastProductivityViewModel )
         {
             OpenCommand = new MvvmCommand( Open );
         }

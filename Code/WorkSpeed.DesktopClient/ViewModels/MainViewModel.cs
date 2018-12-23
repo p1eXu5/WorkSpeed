@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WorkSpeed.DesktopClient.ViewModels.DialogViewModels;
 using WorkSpeed.FileModels;
 using WorkSpeed.Interfaces;
 using WorkSpeed.MvvmBaseLibrary;

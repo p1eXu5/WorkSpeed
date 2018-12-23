@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Input;
 using Microsoft.Win32;
+using WorkSpeed.DesktopClient.ViewModels.EntityViewModels;
 using WorkSpeed.Interfaces;
 using WorkSpeed.MvvmBaseLibrary;
 
@@ -12,7 +13,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
     public class ImportViewModel : ViewModel
     {
         private readonly IWarehouse _warehouse;
-        private readonly ObservableCollection<EmployeeViewModel> _unknownVmCollection;
+        private readonly ObservableCollection< EmployeeViewModel > _unknownVmCollection;
 
         private bool _isFileProcessing;
 

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NpoiExcel;
 using WorkSpeed.Data.BusinessContexts;
+using WorkSpeed.DesktopClient.ViewModels.StageViewModels;
 using WorkSpeed.Interfaces;
 using WorkSpeed.MvvmBaseLibrary;
 
@@ -21,10 +22,10 @@ namespace WorkSpeed.DesktopClient.ViewModels
         {
             var queue = new Queue< IStageViewModel >(new IStageViewModel[] {
 
-                new ProductImportStageViewModel( _warehouse ),
-                new EmployeeImportStageViewModel( _warehouse ), 
-                new CheckEmployeesStageViewModel( _warehouse ),
-                new ProductivityStageViewModel( _warehouse ), 
+                new ProductImportStageViewModel( this ),
+                new EmployeeImportStageViewModel( this ), 
+                new CheckEmployeesStageViewModel( this ),
+                new ProductivityStageViewModel( this ), 
             });
 
             SetStageViewModel( GetStageViewModel( queue ) );

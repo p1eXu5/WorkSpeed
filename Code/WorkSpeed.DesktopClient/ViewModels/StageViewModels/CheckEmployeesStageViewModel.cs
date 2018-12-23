@@ -9,7 +9,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 {
     public class CheckEmployeesStageViewModel : StageViewModel
     {
-        public CheckEmployeesStageViewModel ( IWarehouse warehouse ) : base( warehouse ) { }
+        public CheckEmployeesStageViewModel ( IFastProductivityViewModel fastProductivityViewModel ) : base( fastProductivityViewModel ) { }
         public override string Header { get; } = "Проверка сотрудников.";
         public override int StageNum { get; } = 3;
     }
