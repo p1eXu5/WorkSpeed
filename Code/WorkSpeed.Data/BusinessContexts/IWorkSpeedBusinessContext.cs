@@ -21,5 +21,11 @@ namespace WorkSpeed.Data.BusinessContexts
 
         IEnumerable< Employee > GetEmployees ();
         void AddEmployee ( Employee employee );
+
+        IEnumerable< Appointment > GetAppointments ();
+
+        IEnumerable< Position > GetPositions ();
+
+        IEnumerable< Rank > GetRanks ();
     }
 }

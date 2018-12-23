@@ -18,7 +18,10 @@ namespace WorkSpeed.Interfaces
         Task<bool> ImportAsync< TImportModel > ( string fileName, CancellationToken cancellationToken, IProgress<double> progress = null ) where TImportModel : ImportModel;
         Task<bool> HasProductsAsync ();
 
-        IEnumerable <Product > Products { get; }
-        IEnumerable< Employee > Employees { get; }
+        IEnumerable< Product > GetProducts ();
+        IEnumerable< Employee > GetEmployees ();
+        IEnumerable<Appointment> GetAppointments ();
+        IEnumerable<Position> GetPositions ();
+        IEnumerable<Rank> GetRanks ();
     }
 }

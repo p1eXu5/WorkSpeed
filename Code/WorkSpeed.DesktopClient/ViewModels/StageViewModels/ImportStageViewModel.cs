@@ -113,6 +113,12 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
             return CancellationTokenSource.Token;
         }
 
+        protected override void Backward ( object obj )
+        {
+            CancellationTokenSource.Cancel();
+            base.Backward( null );
+        }
+
         #endregion
     }
 }

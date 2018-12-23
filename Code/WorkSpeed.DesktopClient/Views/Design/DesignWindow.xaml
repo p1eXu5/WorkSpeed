@@ -7,119 +7,88 @@
         mc:Ignorable="d"
         Title="DesignWindow" Height="450" Width="800">
 
-    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+    <Grid Width="Auto" Height="Auto" Margin="5">
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.1*" MinHeight="50" />
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="5*" />
         </Grid.RowDefinitions>
 
-        <Border Margin="10,5" Height="Auto">
-            <TextBlock FontSize="24"
-                       HorizontalAlignment="Center"
-                       FontWeight="DemiBold"
-                       Foreground="{StaticResource br_MainWindow.BackgroundAlternative}"
-                       Text="{}}{Binding Header}"
-                       ></TextBlock>
-        </Border>
+        <StackPanel Grid.Row="1" >
+            <ScrollViewer MinHeight="200" >
+                <DataGrid ItemsSource="{Binding Source={StaticResource EmployeeCollection}}"
+                      VerticalAlignment="Top"
+                      >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Код" 
+                                    Width="80" 
+                                    Binding="{Binding Id}"
+                                    CanUserResize="False"
+                                    CellStyle="{StaticResource st_CenteredCell}"
+                                    IsReadOnly="True"
+                                    />
+                        <DataGridComboBoxColumn Header="Должность" 
+                                        ItemsSource="{Binding Source={StaticResource Appointments}}"     
+                                        SelectedItemBinding="{Binding Appointment}"
+                                        DisplayMemberPath="InnerName"
+                                        MinWidth="180"
+                                        IsReadOnly="False" 
+                                        />
+                        <DataGridTextColumn Header="Сотрудник"  
+                                    MinWidth="240"
+                                    Binding="{Binding Name}" 
+                                    CellStyle="{StaticResource st_VerticalCenteredCell}"
+                                    IsReadOnly="True"
+                                    />
+                        <DataGridTemplateColumn Header="Работает" 
+                                        Width="70"
+                                        CellTemplate="{StaticResource dt_IsActive}"
+                                        CellStyle="{StaticResource st_CenteredCell}"
+                                        CanUserSort="True"
+                                        SortMemberPath="IsActive"
+                                        />
+                        <DataGridComboBoxColumn Header="Зона ответственности"
+                                        ItemsSource="{Binding Source={StaticResource Positions}}"     
+                                        SelectedItemBinding="{Binding Appointment}"
+                                        DisplayMemberPath="InnerName"
+                                        MinWidth="180" 
+                                        IsReadOnly="False" 
+                                        />
+                        <DataGridComboBoxColumn Header="Ранг" 
+                                        ItemsSource="{Binding Source={StaticResource Ranks}}"     
+                                        SelectedItemBinding="{Binding Rank}"
+                                        DisplayMemberPath="InnerName"
+                                        MinWidth="180" 
+                                        IsReadOnly="False" 
+                                        />
+                        <DataGridTemplateColumn Header="Курит" Width="70"
+                                        CellTemplate="{StaticResource dt_IsSmoker}"
+                                        CellStyle="{StaticResource st_CenteredCell}"
+                                        CanUserSort="True"
+                                        SortMemberPath="IsSmoker"
+                                        />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
 
-        <Grid Grid.Row="1" MaxWidth="300">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="90" />
-                <RowDefinition Height="26"/>
-                <RowDefinition Height="3*" />
-            </Grid.RowDefinitions>
-
-            <!-- File -->
-            <StackPanel Grid.Row="1"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        >
-                <Border BorderBrush="Blue" 
-                        BorderThickness="0,0,0,1" 
-                        SnapsToDevicePixels="True"
-                        >
-                    <TextBlock Text="{Binding FileName}"
-                               MinWidth="200"
-                               />
-                </Border>
-
-                <Button x:Name="m_OpenFileButton" Margin="10,0,0,0" 
-                        Style="{StaticResource st_ImageButton}"
-                        Command="{Binding OpenCommand}"
-                        >
-                    <Image Source="{DynamicResource im_OpenFile}" 
-                           RenderOptions.EdgeMode="Aliased"
-                           RenderOptions.BitmapScalingMode="Fant"
-                           />
-                </Button>
-            </StackPanel>
-
-            <Grid Grid.Row="2" Margin="20, 2" >
-                <StackPanel Orientation="Vertical"
-                            VerticalAlignment="Center"
-                            >
-                    <ProgressBar Height="20" 
-                                 Background="{StaticResource br_MainWindow.Background}"
-                                 Opacity="0"
-                                 >
-                                
-                    </ProgressBar>
-                    <Border Margin="0">
-                        <TextBlock Text="{}}{Binding Message}" 
-                                   VerticalAlignment="Top"
-                                   HorizontalAlignment="Center"
-                                   />
-                    </Border>
-                </StackPanel>
-
-                <Grid.Style>
-                    <Style TargetType="Grid">
-                        <Style.Triggers>
-
-                            <DataTrigger Binding="{Binding Path=DataContext.IsInProgress, 
-                                                    RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" 
-                                         Value="True">
-                                <DataTrigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </DataTrigger.EnterActions>
-                                <DataTrigger.ExitActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.4"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </DataTrigger.ExitActions>
-                            </DataTrigger>
-
-                    </Style.Triggers>
-                    </Style>
-                </Grid.Style>
-            </Grid>
-
-            <!-- Buttons -->
-            <Grid Grid.Row="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+            <Grid Height="60">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <Button Content="Выход" Width="80"
+                <Button Content="Выход" Width="80" Height="26"
                         Command="{Binding BackwardCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="80,0"
                         />
 
-                <Button Grid.Column="1" Content="Далее" Width="80"
+                <Button Grid.Column="1" Content="Далее" Width="80" Height="26"
                         Command="{Binding ForwardCommand}"
-                        >
-                </Button>
-
+                        HorizontalAlignment="Right"
+                        Margin="80,0"
+                        />
             </Grid>
-        </Grid>
+        </StackPanel>
     </Grid>
 </Window>

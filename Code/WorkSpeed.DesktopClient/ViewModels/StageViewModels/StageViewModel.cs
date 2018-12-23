@@ -14,7 +14,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
         #region Fields
 
         protected readonly IFastProductivityViewModel FastProductivityViewModel;
-        private bool _canMoveNext;
+        protected bool _canMoveNext;
 
         #endregion
 
@@ -34,6 +34,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
         public abstract int StageNum { get; }
         public abstract string Header { get; }
+
         public abstract string Message { get; protected set; }
 
         public ICommand ForwardCommand { get; }

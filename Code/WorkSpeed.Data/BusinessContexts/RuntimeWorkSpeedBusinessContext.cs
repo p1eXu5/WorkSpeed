@@ -11,12 +11,13 @@ namespace WorkSpeed.Data.BusinessContexts
     public class RuntimeWorkSpeedBusinessContext : IWorkSpeedBusinessContext
     {
         private readonly List< Product > _products = new List< Product >( 40_000 );
+        private readonly List< Employee > _employees = new List< Employee >();
+        private readonly List< GatheringAction > _gatheringActions = new List< GatheringAction >();
         private readonly List< OperationGroup > _operationGroups = new List< OperationGroup >();
         private readonly List< Operation > _operations = new List< Operation >();
-        private readonly List< Appointment > _appointments = new List<Appointment>();
-        private readonly List< Position > _positions = new List<Position>();
-        private readonly List< GatheringAction > _gatheringActions = new List< GatheringAction >();
-        private readonly List< Employee > _employees = new List< Employee >();
+        private readonly List< Appointment > _appointments = new List< Appointment >();
+        private readonly List< Position > _positions = new List< Position >();
+        private readonly List< Rank > _ranks = new List< Rank >();
 
 
         #region Constructor
@@ -32,6 +33,7 @@ namespace WorkSpeed.Data.BusinessContexts
             SeedOperations();
             SeedAppointments();
             SeedPositions();
+            SeedRanks();
         }
 
         private void SeedOperations ()
@@ -286,6 +288,90 @@ namespace WorkSpeed.Data.BusinessContexts
             } );
         }
 
+        private void SeedRanks ()
+        {
+            _ranks.AddRange( new[] {
+
+                new Rank {
+
+                    Number = 2,
+                    OneHourCost = 163m
+                },
+
+                new Rank {
+
+                    Number = 3,
+                    OneHourCost = 180m
+                },
+
+                new Rank {
+
+                    Number = 4,
+                    OneHourCost = 200m
+                },
+
+                new Rank {
+
+                    Number = 5,
+                    OneHourCost = 220m
+                },
+
+                new Rank {
+
+                    Number = 6,
+                    OneHourCost = 242.42m
+                },
+
+                new Rank {
+
+                    Number = 7,
+                    OneHourCost = 266.67m
+                },
+
+                new Rank {
+
+                    Number = 8,
+                    OneHourCost = 300m
+                },
+
+                new Rank {
+
+                    Number = 9,
+                    OneHourCost = 342.42m
+                },
+
+                new Rank {
+
+                    Number = 10,
+                    OneHourCost = 366.66m
+                },
+
+                new Rank {
+
+                    Number = 11,
+                    OneHourCost = 400m
+                },
+
+                new Rank {
+
+                    Number = 12,
+                    OneHourCost = 442.42m
+                },
+
+                new Rank {
+
+                    Number = 13,
+                    OneHourCost = 466.66m
+                },
+
+                new Rank {
+
+                    Number = 14,
+                    OneHourCost = 533.33m
+                },
+            } );
+        }
+
         #endregion
 
 
@@ -317,6 +403,21 @@ namespace WorkSpeed.Data.BusinessContexts
         public void AddEmployee ( Employee employee )
         {
             _employees.Add( employee );
+        }
+
+        public IEnumerable< Appointment > GetAppointments ()
+        {
+            return _appointments;
+        }
+
+        public IEnumerable< Position > GetPositions ()
+        {
+            return _positions;
+        }
+
+        public IEnumerable< Rank > GetRanks ()
+        {
+            return _ranks;
         }
     }
 }

@@ -30,8 +30,9 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
             IsInProgress = true;
             ProgressCounter = 0;
+            Message = "Загрузка...";
 
-            var productsLastCount = Warehouse.Products.Count();
+            var productsLastCount = Warehouse.GetProducts().Count();
 
             var cancellationToken = GetCancellationToken();
             var progress = new Progress< double >( (d) => ProgressCounter = d );
@@ -40,7 +41,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
             if ( areProductsAdded ) {
 
-                Message = $"Добавлено { Warehouse.Products.Count() - productsLastCount } SKU";
+                Message = $"Добавлено { Warehouse.GetProducts().Count() - productsLastCount } SKU";
                 UpdateCanForward();
             }
             else {
@@ -52,7 +53,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
         protected override bool CanForward ( object obj )
         {
-            return Warehouse.Products.Any();
+            return Warehouse.GetProducts().Any();
         }
     }
 }

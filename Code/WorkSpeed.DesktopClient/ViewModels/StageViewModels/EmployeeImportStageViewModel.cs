@@ -29,17 +29,22 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
             IsInProgress = true;
             ProgressCounter = 0;
+            Message = "Загрузка...";
 
-            var productsLastCount = Warehouse.Employees.Count();
+            var productsLastCount = Warehouse.GetEmployees().Count();
 
             var cancellationToken = GetCancellationToken();
             var progress = new Progress<double>( ( d ) => ProgressCounter = d );
 
-            bool areEmployeesAdded = await Warehouse.ImportAsync< EmployeeImportModel >( fileName, cancellationToken, progress );
+            bool areEmployeesAdded = await Warehouse.ImportAsync< EmployeeFullImportModel >( fileName, cancellationToken, progress );
+
+            if ( !areEmployeesAdded ) {
+                areEmployeesAdded = await Warehouse.ImportAsync<EmployeeImportModel>( fileName, cancellationToken, progress );
+            }
 
             if ( areEmployeesAdded ) {
 
-                Message = $"Добавлено { Warehouse.Employees.Count() - productsLastCount } сотрудников";
+                Message = $"Добавлено { Warehouse.GetEmployees().Count() - productsLastCount } сотрудников";
                 UpdateCanForward();
             }
             else {
@@ -51,7 +56,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
         protected override bool CanForward ( object obj )
         {
-            return Warehouse.Employees.Any();
+            return Warehouse.GetEmployees().Any();
         }
     }
 }
