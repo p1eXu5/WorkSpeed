@@ -18,7 +18,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
     {
         #region Fields
 
-        private readonly TwoDirectionQueue< IStageViewModel > _stageQueue;
+        private readonly TwoDirectionQueue<Func<IStageViewModel>> _stageQueue;
         private IStageViewModel _stageViewModel;
         private IStageViewModel _stageViewModel2;
         private readonly Warehouse _warehouse = new Warehouse( new RuntimeWorkSpeedBusinessContext(), new ExcelDataImporter() );
@@ -32,12 +32,12 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
         public FastProductivityViewModel ()
         {
-            _stageQueue = new TwoDirectionQueue< IStageViewModel >();
+            _stageQueue = new TwoDirectionQueue< Func< IStageViewModel >>();
 
-            _stageQueue.Enqueue( new ProductImportStageViewModel( this ) );
-            _stageQueue.Enqueue( new EmployeeImportStageViewModel( this ) );
-            _stageQueue.Enqueue( new CheckEmployeesStageViewModel( this ) );
-            _stageQueue.Enqueue( new ProductivityStageViewModel( this ) );
+            _stageQueue.Enqueue( () => new ProductImportStageViewModel( this ) );
+            _stageQueue.Enqueue( () => new EmployeeImportStageViewModel( this ) );
+            _stageQueue.Enqueue( () => new CheckEmployeesStageViewModel( this ) );
+            _stageQueue.Enqueue( () => new ProductivityStageViewModel( this ) );
 
             SetStageViewModel( GetNextStageViewModel( _stageQueue ) );
         }
@@ -99,9 +99,9 @@ namespace WorkSpeed.DesktopClient.ViewModels
             }
         }
 
-        private IStageViewModel GetNextStageViewModel ( TwoDirectionQueue< IStageViewModel > queue )
+        private IStageViewModel GetNextStageViewModel ( TwoDirectionQueue< Func<IStageViewModel>> queue )
         {
-            var stageViewModel = queue.Dequeue();
+            var stageViewModel = queue.Dequeue()();
 
             stageViewModel.MoveRequested += OnMoveRequestedEventHandler;
             return stageViewModel;

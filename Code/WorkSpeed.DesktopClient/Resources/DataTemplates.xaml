@@ -160,7 +160,7 @@
 
             <StackPanel Grid.Row="1" >
                 <ScrollViewer MinHeight="200" >
-                    <DataGrid ItemsSource="{Binding Source={StaticResource Employees}}"
+                    <DataGrid ItemsSource="{Binding Employees}"
                       VerticalAlignment="Top"
                       >
                         <DataGrid.Columns>
