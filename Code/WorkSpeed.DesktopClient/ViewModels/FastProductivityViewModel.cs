@@ -6,11 +6,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using NpoiExcel;
 using WorkSpeed.Data.BusinessContexts;
+using WorkSpeed.Interfaces;
 using WorkSpeed.MvvmBaseLibrary;
 
 namespace WorkSpeed.DesktopClient.ViewModels
 {
-    public class FastProductivityViewModel : ViewModel
+    public class FastProductivityViewModel : ViewModel, IFastProductivityViewModel
     {
         private IStageViewModel _stageViewModel;
         private IStageViewModel _stageViewModel2;
@@ -29,24 +30,10 @@ namespace WorkSpeed.DesktopClient.ViewModels
             SetStageViewModel( GetStageViewModel( queue ) );
         }
 
-        private IStageViewModel GetStageViewModel ( Queue< IStageViewModel > queue )
-        {
-            var stageViewModel = queue.Dequeue();
-
-            EventHandler< EventArgs > moveNextEventHandler = null;
-            moveNextEventHandler += ( e2, a2 ) =>
-                                               {
-                                                   stageViewModel.MoveNextRequested -= moveNextEventHandler;
-                                                   SetStageViewModel( GetStageViewModel( queue ) );
-                                               };
-            stageViewModel.MoveNextRequested += moveNextEventHandler;
-
-            return stageViewModel;
-        }
-
         private void SetStageViewModel ( IStageViewModel newStageViewModel )
         {
             if ( newStageViewModel.StageNum % 2 == 0 ) {
+
                 StageViewModel2 = null;
                 StageViewModel = newStageViewModel;
             }
@@ -77,5 +64,26 @@ namespace WorkSpeed.DesktopClient.ViewModels
         }
 
         public int StageIndex => StageViewModel?.StageNum ?? StageViewModel2.StageNum;
+
+        public IWarehouse Warehouse => _warehouse;
+
+        public bool CheckStage ( IStageViewModel stageViewModel )
+        {
+            throw new NotImplementedException();
+        }
+
+        private IStageViewModel GetStageViewModel ( Queue< IStageViewModel > queue )
+        {
+            var stageViewModel = queue.Dequeue();
+
+            stageViewModel.MoveNextRequested += OnMoveNextEventHandler;
+            return stageViewModel;
+
+            void OnMoveNextEventHandler ( object e2, EventArgs a2 )
+            {
+                stageViewModel.MoveNextRequested -= OnMoveNextEventHandler;
+                SetStageViewModel( GetStageViewModel( queue ) );
+            }
+        }
     }
 }

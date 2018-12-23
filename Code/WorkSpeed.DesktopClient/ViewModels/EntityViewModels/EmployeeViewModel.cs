@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
 using WorkSpeed.MvvmBaseLibrary;
 
-namespace WorkSpeed.DesktopClient.ViewModels
+namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
 {
     public class EmployeeViewModel : ViewModel
     {

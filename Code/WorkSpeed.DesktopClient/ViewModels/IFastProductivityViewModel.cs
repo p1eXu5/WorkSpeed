@@ -7,8 +7,9 @@ using WorkSpeed.Interfaces;
 
 namespace WorkSpeed.DesktopClient.ViewModels
 {
-    public abstract class ImportStageViewModel : StageViewModel
+    public interface IFastProductivityViewModel
     {
-        protected ImportStageViewModel ( IWarehouse warehouse ) : base( warehouse ) { }
+        IWarehouse Warehouse { get; }
+        bool CheckStage ( IStageViewModel stageViewModel );
     }
 }

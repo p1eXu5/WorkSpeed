@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WorkSpeed.MvvmBaseLibrary;
 
-namespace WorkSpeed.DesktopClient.ViewModels
+namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 {
     public interface IStageViewModel
     {
         string Header { get; }
         int StageNum { get; }
-        ICommand OpenCommand { get; }
+        
         ICommand ForwardCommand { get; }
         ICommand BackwardCommand { get; }
 

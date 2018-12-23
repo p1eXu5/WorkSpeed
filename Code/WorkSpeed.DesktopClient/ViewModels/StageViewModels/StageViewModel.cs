@@ -7,7 +7,7 @@ using System.Windows.Input;
 using WorkSpeed.Interfaces;
 using WorkSpeed.MvvmBaseLibrary;
 
-namespace WorkSpeed.DesktopClient.ViewModels
+namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 {
     public abstract class StageViewModel : ViewModel, IStageViewModel
     {
@@ -23,9 +23,8 @@ namespace WorkSpeed.DesktopClient.ViewModels
         public abstract string Header { get; }
         public abstract int StageNum { get; }
 
-        public ICommand OpenCommand => new MvvmCommand( Open );
         public ICommand ForwardCommand { get; }
-        public ICommand BackwardCommand => new MvvmCommand( Backward );
+        public ICommand BackwardCommand => new MvvmCommand(Backward);
         public event EventHandler<EventArgs> MoveNextRequested;
         public event EventHandler<EventArgs> MoveBackRequested;
 
@@ -38,10 +37,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
             }
         }
 
-        protected virtual void Open ( object obj )
-        {
-            CanMoveNext = true;
-        }
+        
 
         protected virtual void Forward ( object obj )
         {

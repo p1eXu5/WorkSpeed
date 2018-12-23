@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Interfaces;
 
-namespace WorkSpeed.DesktopClient.ViewModels
+namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 {
     public class ProductivityStageViewModel : StageViewModel
     {

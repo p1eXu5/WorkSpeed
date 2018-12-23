@@ -9,7 +9,7 @@ using WorkSpeed.FileModels;
 using WorkSpeed.Interfaces;
 using WorkSpeed.MvvmBaseLibrary;
 
-namespace WorkSpeed.DesktopClient.ViewModels
+namespace WorkSpeed.DesktopClient.ViewModels.DialogViewModels
 {
     public class ImportDialogViewModel< TImportModel > : ViewModel, IDialogCloseRequested
         where TImportModel : ImportModel

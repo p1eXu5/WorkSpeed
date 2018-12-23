@@ -7,7 +7,7 @@ using System.Windows.Input;
 using WorkSpeed.Interfaces;
 using WorkSpeed.MvvmBaseLibrary;
 
-namespace WorkSpeed.DesktopClient.ViewModels
+namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 {
     class EmployeeImportStageViewModel : ImportStageViewModel
     {

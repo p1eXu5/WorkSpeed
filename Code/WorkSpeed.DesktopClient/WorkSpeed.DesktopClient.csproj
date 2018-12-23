@@ -62,15 +62,16 @@
     <Compile Include="Attributes\SegmentAttribute.cs" />
     <Compile Include="Converters\BorderThicknessToStrokeThicknessConverter.cs" />
     <Compile Include="TemplateSelectors\StageDataTemplateSelector.cs" />
-    <Compile Include="ViewModels\CheckEmployeesStageViewModel.cs" />
-    <Compile Include="ViewModels\EmployeeImportStageViewModel.cs" />
-    <Compile Include="ViewModels\EmployeeViewModel.cs" />
-    <Compile Include="ViewModels\ImportDialogViewModel.cs" />
-    <Compile Include="ViewModels\ImportStageViewModel.cs" />
-    <Compile Include="ViewModels\IStageViewModel.cs" />
-    <Compile Include="ViewModels\ProductImportStageViewModel.cs" />
-    <Compile Include="ViewModels\ProductivityStageViewModel.cs" />
-    <Compile Include="ViewModels\StageViewModel.cs" />
+    <Compile Include="ViewModels\StageViewModels\CheckEmployeesStageViewModel.cs" />
+    <Compile Include="ViewModels\StageViewModels\EmployeeImportStageViewModel.cs" />
+    <Compile Include="ViewModels\EntityViewModels\EmployeeViewModel.cs" />
+    <Compile Include="ViewModels\IFastProductivityViewModel.cs" />
+    <Compile Include="ViewModels\DialogViewModels\ImportDialogViewModel.cs" />
+    <Compile Include="ViewModels\StageViewModels\ImportStageViewModel.cs" />
+    <Compile Include="ViewModels\StageViewModels\IStageViewModel.cs" />
+    <Compile Include="ViewModels\StageViewModels\ProductImportStageViewModel.cs" />
+    <Compile Include="ViewModels\StageViewModels\ProductivityStageViewModel.cs" />
+    <Compile Include="ViewModels\StageViewModels\StageViewModel.cs" />
     <Compile Include="Views\Design\EmployeeCheckDesign.xaml.cs">
       <DependentUpon>EmployeeCheckDesign.xaml</DependentUpon>
     </Compile>
