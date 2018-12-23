@@ -67,6 +67,7 @@ namespace WorkSpeed
         #region Properties
 
         public IEnumerable< Product > Products => _context.GetProducts();
+        public IEnumerable< Employee > Employees => _context.GetEmployees();
         
         /// <summary>
         /// Entities that don't contained in DB.

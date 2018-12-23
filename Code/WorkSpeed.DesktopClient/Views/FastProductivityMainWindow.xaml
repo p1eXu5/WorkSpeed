@@ -21,6 +21,7 @@
     <Window.Resources>
 
         <BooleanToVisibilityConverter x:Key="Converter" />
+        <conv:EvenOddToZeroOneConverter x:Key="conv_EvenOddToZeroOne" />
 
         <ts:StageDataTemplateSelector x:Key="dt_StageTemplateSelector" />
 
@@ -171,7 +172,8 @@
                     <Style TargetType="ContentControl">
                         <Setter Property="Opacity" Value="0.0" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, 
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window},
+                                                           Converter={StaticResource conv_EvenOddToZeroOne},
                                                            Path=DataContext.StageIndex}" 
                                          Value="0">
                                 <DataTrigger.EnterActions>
@@ -195,7 +197,8 @@
                     <Style TargetType="ContentControl">
                         <Setter Property="Opacity" Value="0.0" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, 
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window},
+                                                           Converter={StaticResource conv_EvenOddToZeroOne},
                                                            Path=DataContext.StageIndex}" 
                                          Value="1">
                                 <DataTrigger.EnterActions>

@@ -84,7 +84,7 @@
     <Compile Include="FileModels\ProductivityImportModel.cs" />
     <Compile Include="FileModels\ReceptionImportModel.cs" />
     <Compile Include="FileModels\ShipmentImportModel.cs" />
-    <Compile Include="Interfaces\IWarehouse.cs" />
+    <Compile Include="IWarehouse.cs" />
     <Compile Include="Interfaces\IWarehouseEntities.cs" />
     <Compile Include="ProductivityCalculator\ProductivityObservableCollection.cs" />
     <Compile Include="ProductivityIndicatorsModels\CargoIndicators.cs" />

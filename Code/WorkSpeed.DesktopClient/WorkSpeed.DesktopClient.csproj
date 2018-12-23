@@ -61,6 +61,7 @@
     <Compile Include="Attributes\DistanceAttribute.cs" />
     <Compile Include="Attributes\SegmentAttribute.cs" />
     <Compile Include="Converters\BorderThicknessToStrokeThicknessConverter.cs" />
+    <Compile Include="Converters\EvenOddToZeroOneConverter.cs" />
     <Compile Include="TemplateSelectors\StageDataTemplateSelector.cs" />
     <Compile Include="ViewModels\StageViewModels\CheckEmployeesStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\Directions.cs" />
