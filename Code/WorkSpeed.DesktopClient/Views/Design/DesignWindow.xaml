@@ -15,9 +15,10 @@
 
         <Border Margin="10,5" Height="Auto">
             <TextBlock FontSize="24"
+                       HorizontalAlignment="Center"
                        FontWeight="DemiBold"
                        Foreground="{StaticResource br_MainWindow.BackgroundAlternative}"
-                       Text="{Binding Header}"
+                       Text="{}}{Binding Header}"
                        ></TextBlock>
         </Border>
 

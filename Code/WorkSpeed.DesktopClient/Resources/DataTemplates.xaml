@@ -12,10 +12,11 @@
 
             <Border Margin="10,5" Height="Auto">
                 <TextBlock FontSize="24"
-                       FontWeight="DemiBold"
-                       Foreground="{StaticResource br_MainWindow.BackgroundAlternative}"
-                       Text="{Binding Header}"
-                       ></TextBlock>
+                           HorizontalAlignment="Center"
+                           FontWeight="DemiBold"
+                           Foreground="{StaticResource br_MainWindow.BackgroundAlternative}"
+                           Text="{Binding Header}"
+                           />
             </Border>
 
             <Grid Grid.Row="1" MaxWidth="300">
