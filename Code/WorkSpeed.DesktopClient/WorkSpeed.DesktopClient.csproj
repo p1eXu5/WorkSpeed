@@ -67,7 +67,6 @@
     <Compile Include="ViewModels\StageViewModels\EmployeeImportStageViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\EmployeeViewModel.cs" />
     <Compile Include="ViewModels\IFastProductivityViewModel.cs" />
-    <Compile Include="ViewModels\DialogViewModels\ImportDialogViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ImportStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\IStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\MoveRequestedEventArgs.cs" />
@@ -206,6 +205,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\openfile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\DialogViewModels\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
