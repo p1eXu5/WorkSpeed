@@ -8,16 +8,16 @@ namespace WorkSpeed
 {
     public struct Period
     {
-        public Period (DateTime start, DateTime end)
+        public Period ( TimeSpan start, TimeSpan end )
         {
             Start = start;
             End = end;
         }
 
-        public DateTime Start { get; set; }
-        public DateTime End { get; set; }
+        public TimeSpan Start { get; }
+        public TimeSpan End { get; }
 
-        public Period Zero => new Period(new DateTime(0), new DateTime(0));
+        public Period Zero => new Period(new TimeSpan( 0 ), new TimeSpan( 0 ));
 
         public bool Contains ( Period period )
         {

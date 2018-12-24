@@ -132,6 +132,7 @@
     <Compile Include="Interfaces\IEntity.cs" />
     <Compile Include="BusinessContexts\IWorkSpeedBusinessContext.cs" />
     <Compile Include="DataContexts\WorkSpeedDataContext.cs" />
+    <Compile Include="ModelExtansions.cs" />
     <Compile Include="Models\EmployeeAction.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Appointment.cs" />

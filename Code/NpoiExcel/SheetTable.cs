@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using NPOI.SS.UserModel;
 
 namespace NpoiExcel
@@ -76,7 +78,14 @@ namespace NpoiExcel
                 if (row < 0 || row >= RowCount) throw new IndexOutOfRangeException("Row was outside the bounds of sheet table.");
                 if (column < 0 || column >= ColumnCount) throw new IndexOutOfRangeException("Column was outside the bounds of sheet table.");
 
-                return new CellValue (_sheet.GetRow (_startCell.Row + row + 1)?.GetCell (_startCell.Column + column));
+                var sw = new Stopwatch();
+                sw.Start();
+
+                var cv = new CellValue (_sheet.GetRow (_startCell.Row + row + 1)?.GetCell (_startCell.Column + column));
+
+                Debug.WriteLine( sw.Elapsed );
+
+                return cv;
             }
         }
 

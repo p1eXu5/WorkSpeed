@@ -513,10 +513,10 @@ namespace NpoiExcel.Tests.IntegrationalTests
             Assert.That (actual, Is.EqualTo (default(DateTime)));
         }
 
-        [TestCase ("11.12.2015")]
-        [TestCase ("01.01.1900")]
+        //[TestCase ("11.12.2015")]
+        //[TestCase ("01.01.1900")]
         [TestCase ("25.07.2541 0:34:12")]
-        [TestCase ("13.03.1346")]
+        //[TestCase ("13.03.1346")]
         public void DateTimeImplicit_CellIsDateTimeNotDefault_ReturnsNotDefaultValue(string value)
         {
             // Arrange:
