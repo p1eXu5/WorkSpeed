@@ -74,16 +74,14 @@ namespace NpoiExcel
         public CellValue this [int row, int column]
         {
             get {
+
                 if ((row | RowCount) == 0) throw new InvalidOperationException("Sheet has only headers.");
                 if (row < 0 || row >= RowCount) throw new IndexOutOfRangeException("Row was outside the bounds of sheet table.");
                 if (column < 0 || column >= ColumnCount) throw new IndexOutOfRangeException("Column was outside the bounds of sheet table.");
 
-                var sw = new Stopwatch();
-                sw.Start();
-
                 var cv = new CellValue (_sheet.GetRow (_startCell.Row + row + 1)?.GetCell (_startCell.Column + column));
 
-                Debug.WriteLine( sw.Elapsed );
+                //Debug.WriteLine( $"CellValue this [int row, int column] - {sw.Elapsed}" ); // 0000798
 
                 return cv;
             }

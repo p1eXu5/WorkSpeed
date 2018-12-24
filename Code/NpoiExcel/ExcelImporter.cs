@@ -142,27 +142,20 @@ namespace NpoiExcel
             double percent = 1.0 / sheetTable.RowCount;
             OnProgressChanged( progress );
 
-            //Parallel.For( 0, sheetTable.RowCount, j =>
-            //{
+            Parallel.For( 0, sheetTable.RowCount, j =>
+            {
 
                 object typeInstance = Activator.CreateInstance(type);
 
-            //Debug.WriteLine( sw.Elapsed ); 0000196
+                //Debug.WriteLine( sw.Elapsed ); 0000196
 
                 foreach (var propertyName in headersMap.Keys) {
 
-                    var sw = new Stopwatch();
-                    sw.Start();
+                    var cell = sheetTable[ j, headersMap[ propertyName ].column ];
 
-                    var cell = sheetTable[ 0, headersMap[ propertyName ].column ];
+                    Type propertyType = type.GetProperty( propertyName ).PropertyType;
 
-                    Debug.WriteLine( sw.Elapsed );
-
-                Type propertyType = type.GetProperty( propertyName ).PropertyType;
-
-                    Debug.WriteLine( sw.Elapsed );
-
-                if ( propertyType == typeof( int ) ) {
+                    if ( propertyType == typeof( int ) ) {
                         type.GetProperty( propertyName ).SetValue( typeInstance, (int)cell );
                     }
                     else if ( propertyType == typeof( double ) ) {
@@ -179,12 +172,10 @@ namespace NpoiExcel
                     }
                 }
 
-            //Debug.WriteLine( sw.Elapsed );
-
-            typeInstanceCollection[ 0 ] = typeInstance;
+                typeInstanceCollection[ j ] = typeInstance;
 
                 OnProgressChanged( percent );
-            //} );
+            } );
 
             return typeInstanceCollection;
         }
