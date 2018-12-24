@@ -110,10 +110,11 @@ namespace WorkSpeed
 
             if ( _lastAction.OperationGroup() == OperationGroups.Shipment ) return Period.Zero;
 
-            var breaks = isSmoker ? _smokeBreaks : _unsmokeBreaks;
+            var breaks = isSmoker ? _smokeBreaks: _unsmokeBreaks;
 
             foreach ( var breakElem in breaks ) {
 
+                // по времени без даты
                 if ( breakElem < pause) continue;
                 if ( breakElem > pause) break;
                 pause -= breakElem;

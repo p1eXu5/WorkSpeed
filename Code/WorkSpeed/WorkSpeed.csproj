@@ -64,6 +64,7 @@
     <Compile Include="Constraints\DefaultTimeConstraints.cs" />
     <Compile Include="Constraints\ITimeConstraints.cs" />
     <Compile Include="Constraints\ITimeConstraintFactory.cs" />
+    <Compile Include="DayPeriod.cs" />
     <Compile Include="FileModels\Comparers\ActionImportModelComparer.cs" />
     <Compile Include="Constraints\IBreakConstraints.cs" />
     <Compile Include="Constraints\ICategoryConstraints.cs" />
