@@ -34,9 +34,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
             var productsLastCount = Warehouse.GetProducts().Count();
 
             var cancellationToken = GetCancellationToken();
-            var progress = new Progress< double >( (d) => ProgressCounter = d );
 
-            bool areProductsAdded = await Warehouse.ImportAsync< ProductImportModel >( fileName, cancellationToken, progress );
+            bool areProductsAdded = await Warehouse.ImportAsync< ProductImportModel >( fileName, cancellationToken, Progress );
 
             if ( areProductsAdded ) {
 

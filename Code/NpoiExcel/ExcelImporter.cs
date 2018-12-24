@@ -8,6 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using NpoiExcel.Attributes;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
@@ -135,13 +136,14 @@ namespace NpoiExcel
                                                         Dictionary< string, (string header, int column) > headersMap )
         {
             CheckType( type );
-            ArrayList typeInstanceCollection = new ArrayList( sheetTable.RowCount );
+            object[] typeInstanceCollection = new object[ sheetTable.RowCount ];
 
             double progress = 0.0;
             double percent = 1.0 / sheetTable.RowCount;
             OnProgressChanged( progress );
 
-            for (var j = 0; j < sheetTable.RowCount; ++j) {
+            Parallel.For( 0, sheetTable.RowCount, j =>
+            {
 
                 object typeInstance = Activator.CreateInstance(type);
 
@@ -166,14 +168,12 @@ namespace NpoiExcel
                     else if ( propertyType == typeof( DateTime ) ) {
                         type.GetProperty( propertyName ).SetValue( typeInstance, ( DateTime )cell );
                     }
-
                 }
 
-                typeInstanceCollection.Add(typeInstance);
+                typeInstanceCollection[ j ] = typeInstance;
 
-                progress += percent;
-                OnProgressChanged( progress );
-            }
+                OnProgressChanged( percent );
+            } );
 
             return typeInstanceCollection;
         }

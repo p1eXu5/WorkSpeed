@@ -16,8 +16,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
         public ProductivityStageViewModel ( IFastProductivityViewModel fastProductivityViewModel, int stageNum )
             : base( fastProductivityViewModel, stageNum )
         {
-            _productivities = new ObservableCollection< ProductivityViewModel >( Warehouse.GetEmployees().Select( e => Warehouse.GetProductivity( e ) ).Where( p => p != null ) );
-            Productivities = new ReadOnlyObservableCollection< ProductivityViewModel >( _productivities );
+            //_productivities = new ObservableCollection< ProductivityViewModel >( Warehouse.GetEmployees().Select( e => Warehouse.GetProductivity( e ) ).Where( p => p != null ) );
+            //Productivities = new ReadOnlyObservableCollection< ProductivityViewModel >( _productivities );
         }
 
         public override string Header { get; } = "Выработка.";

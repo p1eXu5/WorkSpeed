@@ -111,6 +111,13 @@ namespace WorkSpeed
             return await Task<bool>.Factory.StartNew (() => Import (fileName), TaskCreationOptions.LongRunning);
         }
 
+ 
+
+        public (DateTime, DateTime) GetActionsPeriod ()
+        {
+            throw new NotImplementedException();
+        }
+
 
         private bool Import ( string fileName,  Type type = null )
         {
@@ -204,11 +211,6 @@ namespace WorkSpeed
             }
 
             return true;
-        }
-
-        public (DateTime, DateTime) GetActionsPeriod ()
-        {
-            throw new NotImplementedException();
         }
 
         private void ImportEmployees ( IEnumerable< Employee > employees )

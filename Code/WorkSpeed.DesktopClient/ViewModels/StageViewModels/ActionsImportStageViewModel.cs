@@ -32,9 +32,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
             var actionsLastCount = Warehouse.GetGatheringActions().Count();
 
             var cancellationToken = GetCancellationToken();
-            var progress = new Progress<double>( ( d ) => ProgressCounter = d );
 
-            bool areActionsAdded = await Warehouse.ImportAsync< GatheringImportModel >( fileName, cancellationToken, progress );
+            bool areActionsAdded = await Warehouse.ImportAsync< GatheringImportModel >( fileName, cancellationToken, Progress );
 
             if ( areActionsAdded )
             {

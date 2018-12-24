@@ -21,6 +21,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
         
 
         protected CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
+        protected Progress< double > Progress;
 
         #endregion
 
@@ -32,6 +33,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
         {
             OpenCommand = new MvvmCommand( Open );
             _message = "Выберите файл, нажав на кнопку выше.";
+
+            Progress = new Progress<double>( ( d ) => ProgressCounter += d );
         }
 
         #endregion

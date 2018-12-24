@@ -33,12 +33,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
             var productsLastCount = Warehouse.GetEmployees().Count();
 
             var cancellationToken = GetCancellationToken();
-            var progress = new Progress<double>( ( d ) => ProgressCounter = d );
 
-            bool areEmployeesAdded = await Warehouse.ImportAsync< EmployeeFullImportModel >( fileName, cancellationToken, progress );
+            bool areEmployeesAdded = await Warehouse.ImportAsync< EmployeeFullImportModel >( fileName, cancellationToken, Progress );
 
             if ( !areEmployeesAdded ) {
-                areEmployeesAdded = await Warehouse.ImportAsync<EmployeeImportModel>( fileName, cancellationToken, progress );
+                areEmployeesAdded = await Warehouse.ImportAsync<EmployeeImportModel>( fileName, cancellationToken, Progress );
             }
 
             if ( areEmployeesAdded ) {
