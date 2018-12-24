@@ -20,5 +20,10 @@ namespace WorkSpeed.Data.Models
 
         public ICollection<PersonnelFileEntry> PersonnelFileEntryCollection { get; set; }
         public ICollection<EmployeeAction> Actions { get; set; }
+
+        public override string ToString ()
+        {
+            return $"{Id} {Name}";
+        }
     }
 }

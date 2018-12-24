@@ -285,6 +285,29 @@ namespace WorkSpeed.Data.BusinessContexts
                     Complexity = 1.0f,
                 },
 
+                new Position {
+
+                    Id = 9,
+                    Name = "Расстановка",
+                    Abbreviations = "расстановка;рас;рас.;",
+                    Complexity = 1.0f,
+                },
+
+                new Position {
+
+                    Id = 10,
+                    Name = "Старший смены, мезонин",
+                    Abbreviations = "ссммез;",
+                    Complexity = 1.0f,
+                },
+
+                new Position {
+
+                    Id = 11,
+                    Name = "Старший смены, крупняк",
+                    Abbreviations = "ссмкр;",
+                    Complexity = 1.0f,
+                },
             } );
         }
 
@@ -395,6 +418,29 @@ namespace WorkSpeed.Data.BusinessContexts
 
         public void AddGatheringAction ( GatheringAction gatheringAction )
         {
+            if ( gatheringAction == null
+                 || gatheringAction.Operation == null
+                 || String.IsNullOrEmpty( gatheringAction.Operation.Name )
+                 || _gatheringActions.Contains( gatheringAction )
+                 || gatheringAction.Product == null
+                 || gatheringAction.Employee == null) {
+
+                return;
+            }
+
+            var employee = _employees.FirstOrDefault( e => e.Id.Equals( gatheringAction.Employee.Id ) );
+            if ( employee == null ) return;
+            gatheringAction.Employee = employee;
+
+            var operation = _operations.FirstOrDefault( o => o.Name.Equals( gatheringAction.Operation.Name ) );
+            if (operation == null) return;
+            gatheringAction.Operation = operation;
+
+            var product = _products.FirstOrDefault( p => p.Id == gatheringAction.Product.Id ) ?? gatheringAction.Product;
+            if ( product.Parent == null ) {
+                product.Parent = _products.FirstOrDefault( p => p.Id == gatheringAction.Product.Parent.Id ) ?? gatheringAction.Product.Parent;
+            }
+
             _gatheringActions.Add( gatheringAction );
         }
 

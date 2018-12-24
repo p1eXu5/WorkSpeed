@@ -153,6 +153,20 @@
                     />
                     <TextBlock VerticalAlignment="Center"
                                Margin="10,0"
+                               Text="Импорт действий"
+                    />
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem>
+                <StackPanel Height="30" Orientation="Horizontal">
+                    <Path Data="{StaticResource g_ProductivityIcon}" 
+                          Height="16" Width="24"
+                          Stretch="Uniform"
+                          VerticalAlignment="Center" 
+                          Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}, Path=Foreground}"
+                    />
+                    <TextBlock VerticalAlignment="Center"
+                               Margin="10,0"
                                Text="Выработка сотрудников"
                     />
                 </StackPanel>
@@ -166,7 +180,7 @@
             <ContentControl Grid.Column="0"
                             Content="{Binding StageViewModel}"
                             
-                            ContentTemplateSelector="{StaticResource dt_StageTemplateSelector}"
+                            ContentTemplateSelector="{DynamicResource dt_StageTemplateSelector}"
                             >
                 <ContentControl.Style>
                     <Style TargetType="ContentControl">
@@ -191,7 +205,7 @@
             <!--Import Employees-->
             <ContentControl Grid.Column="0"
                             Content="{Binding StageViewModel2}"
-                            ContentTemplateSelector="{StaticResource dt_StageTemplateSelector}"
+                            ContentTemplateSelector="{DynamicResource dt_StageTemplateSelector}"
                             >
                 <ContentControl.Style>
                     <Style TargetType="ContentControl">

@@ -49,7 +49,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
             else {
 
                 IsInProgress = false;
-                Message = "Файл не содержит позиций номенклатуры.";
+                Message = "Файл не содержит списка сотрудников.";
             }
         }
 

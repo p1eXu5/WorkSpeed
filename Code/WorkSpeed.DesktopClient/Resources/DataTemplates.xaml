@@ -3,7 +3,7 @@
                     >
 
     <!-- ImportFile -->
-    <DataTemplate x:Key="dt_ImportFile">
+    <DataTemplate x:Key="dt_ImportFile" x:Shared="true">
         <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.1*" MinHeight="50" />
@@ -138,7 +138,7 @@
 
     <!-- ComboBoxes -->
     <DataTemplate x:Key="dt_ComboBox.Appointments">
-        <ComboBox ItemsSource="{Binding Content.Appointments, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=4}}"
+        <ComboBox ItemsSource="{Binding Content.Appointments, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=3}}"
                   DisplayMemberPath="InnerName"
                   SelectedItem="{Binding Appointment}" 
                   Style="{StaticResource st_TableComboBox}"
@@ -146,7 +146,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="dt_ComboBox.Positions">
-        <ComboBox ItemsSource="{Binding Content.Positions, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=4}}" 
+        <ComboBox ItemsSource="{Binding Content.Positions, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=3}}" 
                   DisplayMemberPath="Name"
                   SelectedItem="{Binding Position}"
                   Style="{StaticResource st_TableComboBox}"
@@ -154,7 +154,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="dt_ComboBox.Ranks">
-        <ComboBox ItemsSource="{Binding Content.Ranks, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=4}}"
+        <ComboBox ItemsSource="{Binding Content.Ranks, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=3}}"
                   DisplayMemberPath="Number"
                   SelectedItem="{Binding Rank}"
                   Style="{StaticResource st_TableComboBox}"
@@ -180,8 +180,8 @@
                 />
             </Border>
 
-            <ScrollViewer Grid.Row="1">
-                <Grid>
+            
+                <Grid Grid.Row="1">
                     <DataGrid ItemsSource="{Binding Employees}"
                       VerticalAlignment="Top"
                       >
@@ -233,7 +233,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
-            </ScrollViewer>
+           
 
             <Grid Height="60" Grid.Row="2" >
                 <Grid.ColumnDefinitions>

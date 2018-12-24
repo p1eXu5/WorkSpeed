@@ -23,5 +23,6 @@ namespace WorkSpeed.Interfaces
         IEnumerable<Appointment> GetAppointments ();
         IEnumerable<Position> GetPositions ();
         IEnumerable<Rank> GetRanks ();
+        IEnumerable< GatheringAction > GetGatheringActions ();
     }
 }

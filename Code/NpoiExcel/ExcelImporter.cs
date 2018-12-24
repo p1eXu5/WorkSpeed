@@ -95,7 +95,9 @@ namespace NpoiExcel
                                                                              ITypeConverter< TIn, TOutType > typeConverter )
         {
             var typeCollection = FillModelCollection( sheetTable, typeof( TIn ), propertyMap );
-            return typeCollection.Cast< TIn >().Select( typeConverter.Convert );
+            var typedCollection = typeCollection.Cast< TIn >().Select( typeConverter.Convert ).ToArray();
+
+            return typedCollection;
         }
 
 
@@ -136,7 +138,7 @@ namespace NpoiExcel
             ArrayList typeInstanceCollection = new ArrayList( sheetTable.RowCount );
 
             double progress = 0.0;
-            double percent = sheetTable.RowCount / 100.0;
+            double percent = 1.0 / sheetTable.RowCount;
             OnProgressChanged( progress );
 
             for (var j = 0; j < sheetTable.RowCount; ++j) {

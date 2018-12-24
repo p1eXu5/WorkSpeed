@@ -159,6 +159,14 @@ namespace WorkSpeed.FileModels.Converters
             var withProductAction = GetEmployeeAction< WithProductAction >( withProductModel );
             var importModel = ( TImportModel )Activator.CreateInstance( typeof( TImportModel ) );
 
+            importModel.StartTime = withProductAction.StartTime;
+            importModel.Employee = withProductAction.Employee;
+            importModel.Duration = withProductAction.Duration;
+            importModel.Document = withProductAction.Document;
+            importModel.Operation = withProductAction.Operation;
+
+            importModel.ProductQuantity = withProductModel.ProductQuantity;
+
             importModel.Product = new Product {
 
                 Id = withProductModel.ProductId,
@@ -168,16 +176,8 @@ namespace WorkSpeed.FileModels.Converters
 
                     Id = withProductModel.ImmadiateProductId,
                     Name = withProductModel.ImmadiateProduct,
-
-                    Parent = new Product {
-
-                        Id = withProductModel.SecondProductId,
-                        Name = withProductModel.SecondProduct
-                    }
                 }
             };
-
-            withProductAction.ProductQuantity = withProductModel.ProductQuantity;
 
             return importModel;
         }

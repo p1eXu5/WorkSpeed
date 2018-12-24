@@ -25,8 +25,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
         public override string Header { get; } = "Проверка сотрудников.";
 
-        public override string Message { get; protected set; }
-
         public ReadOnlyObservableCollection< EmployeeViewModel > Employees { get; }
 
         public List< Appointment > Appointments { get; set; }

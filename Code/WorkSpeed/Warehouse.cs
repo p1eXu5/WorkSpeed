@@ -71,6 +71,7 @@ namespace WorkSpeed
         public IEnumerable< Appointment > GetAppointments() => _context.GetAppointments();
         public IEnumerable< Position > GetPositions() => _context.GetPositions();
         public IEnumerable< Rank > GetRanks() => _context.GetRanks();
+        public IEnumerable< GatheringAction > GetGatheringActions () => _context.GetGatheringActions();
         
         /// <summary>
         /// Entities that don't contained in DB.
@@ -128,7 +129,7 @@ namespace WorkSpeed
                         sheetTable,  
                         mappedType.propertyMap,  
                         new ImportModelConverter< ProductImportModel, Product >( new ImportModelVisitor() ) 
-                    )
+                    ).ToArray()
                 );
             }
             else if ( typeof( EmployeeImportModel ) == mappedType.type ) {
@@ -138,7 +139,7 @@ namespace WorkSpeed
                         sheetTable,  
                         mappedType.propertyMap,  
                         new ImportModelConverter< EmployeeImportModel, Employee >( new ImportModelVisitor() ) 
-                    )
+                    ).ToArray()
                 );
             }
             else if ( typeof( EmployeeFullImportModel ) == mappedType.type ) {
@@ -148,7 +149,7 @@ namespace WorkSpeed
                         sheetTable,
                         mappedType.propertyMap,
                         new ImportModelConverter< EmployeeFullImportModel, Employee >( new ImportModelVisitor() )
-                    )
+                    ).ToArray()
                 );
             }
             else if ( typeof( ShipmentImportModel ) == mappedType.type ) {
@@ -158,7 +159,7 @@ namespace WorkSpeed
                         sheetTable,  
                         mappedType.propertyMap,  
                         new ImportModelConverter< ShipmentImportModel, ShipmentAction >( new ImportModelVisitor() ) 
-                    )
+                    ).ToArray()
                 );
             }
             else if ( typeof( GatheringImportModel ) == mappedType.type ) {
@@ -168,7 +169,7 @@ namespace WorkSpeed
                         sheetTable,  
                         mappedType.propertyMap,  
                         new ImportModelConverter< GatheringImportModel, GatheringAction >( new ImportModelVisitor() ) 
-                    )
+                    ).ToArray()
                 );
             }
             else if ( typeof( ReceptionImportModel ) == mappedType.type ) {
@@ -178,7 +179,7 @@ namespace WorkSpeed
                         sheetTable,  
                         mappedType.propertyMap,  
                         new ImportModelConverter< ReceptionImportModel, ReceptionAction >( new ImportModelVisitor() ) 
-                    )
+                    ).ToArray()
                 );
             }
             else if ( typeof( InventoryImportModel ) == mappedType.type ) {
@@ -188,7 +189,7 @@ namespace WorkSpeed
                         sheetTable,  
                         mappedType.propertyMap,  
                         new ImportModelConverter< InventoryImportModel, InventoryAction >( new ImportModelVisitor() ) 
-                    )
+                    ).ToArray()
                 );
             }
             else if ( typeof( ProductivityImportModel ) == mappedType.type ) {
@@ -198,7 +199,7 @@ namespace WorkSpeed
                         sheetTable,  
                         mappedType.propertyMap,  
                         new ImportModelConverter< ProductivityImportModel, EmployeeAction >( new ImportModelVisitor() ) 
-                    )
+                    ).ToArray()
                 );
             }
 

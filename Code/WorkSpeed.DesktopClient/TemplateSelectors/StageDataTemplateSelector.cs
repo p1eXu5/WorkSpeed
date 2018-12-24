@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using WorkSpeed.DesktopClient.ViewModels;
 using WorkSpeed.DesktopClient.ViewModels.StageViewModels;
 
 namespace WorkSpeed.DesktopClient.TemplateSelectors
@@ -24,6 +23,12 @@ namespace WorkSpeed.DesktopClient.TemplateSelectors
                 if ( item is CheckEmployeesStageViewModel )
                 {
                     var o = element.FindResource( "dt_EmployeeTable" ) as DataTemplate;
+                    return o;
+                }
+
+                if ( item is ProductivityStageViewModel )
+                {
+                    var o = element.FindResource( "dt_ProductivityTable" ) as DataTemplate;
                     return o;
                 }
             }

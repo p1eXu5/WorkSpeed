@@ -87,6 +87,9 @@
         <Setter Property="HeadersVisibility" Value="Column" />
         <Setter Property="SelectionMode" Value="Extended"  />
         <Setter Property="SelectionUnit" Value="CellOrRowHeader" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
     </Style>
 
     <!-- DataGridTemplateColumn Control Styles -->

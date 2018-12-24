@@ -18,7 +18,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
         private bool _isInProgress;
         private string _fileName;
         private double _progressCounter;
-        private string _message;
+        
 
         protected CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
 
@@ -39,14 +39,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
         #region Properties
 
-        public override string Message
-        {
-            get => _message;
-            protected set {
-                _message = value;
-                OnPropertyChanged();
-            }
-        }
+        
 
         public string FileName
         {
