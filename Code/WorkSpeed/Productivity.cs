@@ -10,28 +10,48 @@ namespace WorkSpeed
 {
     public class Productivity
     {
+        #region Fields 
+
         private readonly TimeSpan THRESHOLD_MIN = TimeSpan.FromMinutes( 2 );
         private readonly TimeSpan THRESHOLD_MAX = TimeSpan.FromMinutes( 10 );
+        private readonly TimeSpan SMALL_BREAK = TimeSpan.FromMinutes( 5 );
+        private readonly TimeSpan BIG_LUNCH_TIME = TimeSpan.FromMinutes( 30 );
 
         private List< Period > _smokeBreaks;
         private List< Period > _unsmokeBreaks;
 
-        private GatheringAction _lastGatheringAction;
+        private EmployeeAction _lastAction;
 
-        private ActionTime _gatheringActionTime;
+        private Period _bigLunch;
+
+        private Dictionary< int, ActionData > _actionDataDictionary;
 
         private TimeSpan _offTime;
 
         private int _gatheringLines;
         private int _gatheringQuantity;
 
+        #endregion
+
+
+        #region Ctor
+
         public Productivity (Employee employee)
         {
             Employee = employee ?? throw new ArgumentNullException();
 
+            _actionDataDictionary = new Dictionary< int, ActionData >();
+
             SetSmokeBreakes();
             SetUnsmokeBreakes();
         }
+
+        #endregion
+
+
+        public Employee Employee { get; }
+
+        public TimeSpan GatheringTime => _actionDataDictionary[ ( int )OperationGroups.Gathering ].Duration;
 
         private void SetSmokeBreakes ()
         {
@@ -53,39 +73,64 @@ namespace WorkSpeed
             }
         }
 
-        public Employee Employee { get; }
 
-        public void AddGatheringAction ( GatheringAction gatheringAction )
+        public void AddEmployeeAction ( EmployeeAction employeeAction )
         {
-            if ( _lastGatheringAction == null ) {
+            if ( !employeeAction.Employee.Id.Equals(Employee.Id) ) throw new ArgumentException("Another employee.");
 
-                _lastGatheringAction = gatheringAction;
-                InitTimeAndCounters( gatheringAction );
-                return;
-            }
+            var pause = GetPause( employeeAction.StartTime );
+            pause = TryModifyPause( pause, Employee.IsSmoker );
 
-            if ( gatheringAction.IsGatheringOperation() ) {
+            AddActionData( employeeAction, pause, _actionDataDictionary[ (int) employeeAction.OperationGroup() ] );
 
-                    if ( _lastGatheringAction.IsGatheringOperation() ) {
-
-
-                    }
-            }
-
+            _lastAction = employeeAction;
         }
 
-        private void InitTimeAndCounters ( GatheringAction gatheringAction )
+        private Period GetPause ( DateTime actionStartTime )
         {
-            if ( !gatheringAction.IsGatheringOperation() ) return;
+            if ( _lastAction == null ) return new Period();
 
-            _gatheringActionTime.Start = gatheringAction.StartTime;
-            _gatheringActionTime.End = gatheringAction.StartTime + gatheringAction.Duration;
-            _gatheringActionTime.Duration = gatheringAction.Duration;
-
-            ++_gatheringLines;
-            _gatheringQuantity = gatheringAction.ProductQuantity;
+            return new Period( _lastAction.StartTime.AddSeconds( _lastAction.Duration.TotalSeconds ), actionStartTime );
         }
 
+
+        private Period TryModifyPause ( Period pause, bool isSmoker )
+        {
+            if ( pause.Duration < SMALL_BREAK ) {
+                return pause;
+            }
+
+            if ( pause.Duration >= BIG_LUNCH_TIME && !_bigLunch.IsTheSameDate( pause ) ) {
+
+                _bigLunch = pause;
+                return Period.Zero;
+            }
+
+            if ( _lastAction.OperationGroup() == OperationGroups.Shipment ) return Period.Zero;
+
+            var breaks = isSmoker ? _smokeBreaks : _unsmokeBreaks;
+
+            foreach ( var breakElem in breaks ) {
+
+                if ( breakElem < pause) continue;
+                if ( breakElem > pause) break;
+                pause -= breakElem;
+            }
+
+            return pause;
+        }
+
+        private void AddActionData ( EmployeeAction employeeAction, Period pause, ActionData actionData )
+        {
+            if ( employeeAction.IsShipmentOperation() ) {
+                AddShippingDetails( employeeAction as ShipmentAction, actionData );
+            }
+
+            if ( employeeAction.IsGatheringOperation() ) {
+
+                AddGatheringDetails( employeeAction as WithProductAction, pause, actionData );
+            }
+        }
         
 
         public TimeSpan GetWorkTime ()
@@ -107,5 +152,6 @@ namespace WorkSpeed
         {
             throw new NotImplementedException();
         }
+
     }
 }

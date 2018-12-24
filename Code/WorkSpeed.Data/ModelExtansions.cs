@@ -21,6 +21,9 @@ namespace WorkSpeed.Data
                 case OperationGroups.ShopperGathering:
                 case OperationGroups.Packing:
                 case OperationGroups.ClientPacking:
+                case OperationGroups.Defragmentation:
+                case OperationGroups.Placing:
+                case OperationGroups.Replacing:
 
                     return true;
             }
@@ -28,14 +31,13 @@ namespace WorkSpeed.Data
             return false;
         }
 
-        public static bool IsPackingOperation ( this EmployeeAction employeeAction )
+        public static bool IsShipmentOperation ( this EmployeeAction employeeAction )
         {
             var operationGroup = employeeAction?.Operation?.Group?.Name ?? throw new ArgumentNullException();
 
             switch ( operationGroup )
             {
-                case OperationGroups.Packing:
-                case OperationGroups.ClientPacking:
+                case OperationGroups.Shipment:
 
                     return true;
             }

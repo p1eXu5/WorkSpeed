@@ -55,7 +55,7 @@
     <Compile Include="ActionModels\ImportedProduct.cs" />
     <Compile Include="ActionModels\ImportedReceptionActionDetails.cs" />
     <Compile Include="ActionModels\ImportedShipmentActionDetails.cs" />
-    <Compile Include="ActionTime.cs" />
+    <Compile Include="ActionData.cs" />
     <Compile Include="BreakConstraintsForNotSmokers.cs" />
     <Compile Include="BreakConstraintsForSmokers.cs" />
     <Compile Include="CategoryConstraints.cs" />

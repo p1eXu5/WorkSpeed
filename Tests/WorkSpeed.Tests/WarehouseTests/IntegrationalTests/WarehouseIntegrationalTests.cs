@@ -65,7 +65,11 @@ namespace WorkSpeed.Tests.WarehouseTests.IntegrationalTests
             var dataImporter = GetDataImporter();
             var warehouse = GetWarehouse( businessContext, dataImporter );
 
+            var fileEmployees = "employees.xlsx".AppendAssemblyPath( "WarehouseTests\\TestFiles" );
             var file = "gathering.xls".AppendAssemblyPath( "WarehouseTests\\TestFiles" );
+
+            Task<bool> res0 = warehouse.ImportAsync<EmployeeFullImportModel>( fileEmployees, new CancellationToken() );
+            res0.Wait();
 
             // Action:
             Task<bool> res = warehouse.ImportAsync< GatheringImportModel >( file, new CancellationToken() );
@@ -84,6 +88,7 @@ namespace WorkSpeed.Tests.WarehouseTests.IntegrationalTests
             var warehouse = GetWarehouse( businessContext, dataImporter );
 
             var file = "employees.xlsx".AppendAssemblyPath( "WarehouseTests\\TestFiles" );
+            
 
             // Action:
             Task<bool> res = warehouse.ImportAsync< EmployeeFullImportModel >( file, new CancellationToken() );
