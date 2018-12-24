@@ -77,6 +77,8 @@ namespace WorkSpeed
         public void AddEmployeeAction ( EmployeeAction employeeAction )
         {
             if ( !employeeAction.Employee.Id.Equals(Employee.Id) ) throw new ArgumentException("Another employee.");
+            if ( _lastAction != null && _lastAction.StartTime > employeeAction.StartTime )
+                throw new ArgumentException("Actions must be sorted.");
 
             var pause = GetPause( employeeAction.StartTime );
             pause = TryModifyPause( pause, Employee.IsSmoker );
@@ -130,6 +132,37 @@ namespace WorkSpeed
 
                 AddGatheringDetails( employeeAction as WithProductAction, pause, actionData );
             }
+        }
+
+        private void AddShippingDetails ( ShipmentAction shipment, ActionData actionData )
+        {
+            throw new NotImplementedException();
+        }
+
+        private void AddGatheringDetails ( WithProductAction withProductAction, Period pause, ActionData actionData )
+        {
+            if ( _lastAction == null ) {
+
+                actionData.Duration = withProductAction.Duration;
+                actionData.Start = withProductAction.StartTime;
+                actionData.End = withProductAction.StartTime.Add( withProductAction.Duration );
+            }
+            else if ( _lastAction.OperationGroup() == withProductAction.OperationGroup() ) {
+
+                // Другой следующий документ:
+                if ( _lastAction.StartTime != withProductAction.StartTime ) {
+
+                }
+            }
+            // Предыдущая операция другая:
+            else {
+                
+            }
+
+            ++actionData.Lines;
+            actionData.Quantity += withProductAction.ProductQuantity;
+            actionData.Weight += withProductAction.Product.Weight * withProductAction.ProductQuantity;
+            actionData.Volume += withProductAction.Product.GetVolume() * withProductAction.ProductQuantity;
         }
         
 

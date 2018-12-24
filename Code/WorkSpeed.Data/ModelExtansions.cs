@@ -49,5 +49,12 @@ namespace WorkSpeed.Data
         {
             return employeeAction?.Operation?.Group?.Name ?? throw new ArgumentNullException();
         }
+
+        public static double GetVolume ( this Product product )
+        {
+            if ( product == null ) throw new ArgumentNullException();
+
+            return product.ItemHeight * product.ItemWidth * product.ItemLength;
+        }
     }
 }
