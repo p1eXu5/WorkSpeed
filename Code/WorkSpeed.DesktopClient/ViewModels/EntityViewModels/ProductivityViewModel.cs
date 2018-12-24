@@ -17,6 +17,15 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
             _productivity = productivity ?? throw new ArgumentNullException();
         }
 
+        public string EmployeeName => _productivity.Employee.Name;
+        public string Position => _productivity.Employee.Position.Name;
+        public string Rank => _productivity.Employee.Rank.Number.ToString();
+        public string IsSmoker => _productivity.Employee.IsSmoker ? "Да" : "Нет";
 
+        public TimeSpan WorkTime => _productivity.GetWorkTime();
+        public TimeSpan OffTime => _productivity.GetOffTime();
+
+        public int GatheredLines => _productivity.GetGatheredLines();
+        public double GatheringSpeed => _productivity.GetGatheringSpeed();
     }
 }

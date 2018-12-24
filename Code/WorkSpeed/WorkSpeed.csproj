@@ -59,7 +59,9 @@
     <Compile Include="BreakConstraintsForSmokers.cs" />
     <Compile Include="CategoryConstraints.cs" />
     <Compile Include="Constraints\BreakConstraints.cs" />
-    <Compile Include="Constraints\ITimeConstraint.cs" />
+    <Compile Include="Constraints\DefaultCategoryConstraints.cs" />
+    <Compile Include="Constraints\DefaultTimeConstraints.cs" />
+    <Compile Include="Constraints\ITimeConstraints.cs" />
     <Compile Include="Constraints\ITimeConstraintFactory.cs" />
     <Compile Include="FileModels\Comparers\ActionImportModelComparer.cs" />
     <Compile Include="Constraints\IBreakConstraints.cs" />
@@ -71,10 +73,11 @@
     <Compile Include="FileModels\ProductImportModel.cs" />
     <Compile Include="FileModels\WithEmployeeImportModel.cs" />
     <Compile Include="FileModels\Converters\IImportModelVisitor.cs" />
+    <Compile Include="Period.cs" />
+    <Compile Include="Productivity.cs" />
     <Compile Include="ProductivityCalculator\AddTimeOptions.cs" />
-    <Compile Include="ProductivityCalculator\ProductivityCalculator.cs" />
     <Compile Include="ProductivityCalculator\IProductivityCalculator.cs" />
-    <Compile Include="ProductivityCalculator\Productivity.cs" />
+    <Compile Include="ProductivityCalculator\Productivity2.cs" />
     <Compile Include="ActionModels\ProductMgh.cs" />
     <Compile Include="FileModels\ActionImportModel.cs" />
     <Compile Include="FileModels\WithProductActionImportModel.cs" />

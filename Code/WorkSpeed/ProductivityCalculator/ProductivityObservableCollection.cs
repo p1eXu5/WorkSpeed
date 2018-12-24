@@ -11,7 +11,7 @@ using WorkSpeed.FileModels;
 
 namespace WorkSpeed.ProductivityCalculator
 {
-    public class ProductivityObservableCollection : ObservableCollection< Productivity >
+    public class ProductivityObservableCollection : ObservableCollection< Productivity2 >
     {
         private SortedSet<EmployeeAction> _actions;
 

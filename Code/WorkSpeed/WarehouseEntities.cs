@@ -21,7 +21,7 @@ namespace WorkSpeed
         //private readonly IProductivityCalculator _productivityCalculator;
 
         private readonly ObservableCollection<Employee> _employees;
-        private readonly ObservableCollection<Productivity> _productivity;
+        private readonly ObservableCollection<Productivity2> _productivity;
 
         public WarehouseEntities(IWorkSpeedBusinessContext dbContext)
         {
@@ -31,7 +31,7 @@ namespace WorkSpeed
             _employees = new ObservableCollection<Employee>();
             Employees = new ReadOnlyObservableCollection<Employee> (_employees);
 
-            _productivity = new ObservableCollection<Productivity>();
+            _productivity = new ObservableCollection<Productivity2>();
             Employees = new ReadOnlyObservableCollection<Employee>(_employees);
         }
 

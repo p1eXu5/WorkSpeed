@@ -85,7 +85,6 @@
     <Compile Include="Views\FastProductivityMainWindow.xaml.cs">
       <DependentUpon>FastProductivityMainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WorkingTimeViewModel.cs" />
     <Page Include="Resources\ButtonStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -192,10 +191,6 @@
     <ProjectReference Include="..\WorkSpeed.Data\WorkSpeed.Data.csproj">
       <Project>{72e065c5-8769-4008-9529-11194be488e0}</Project>
       <Name>WorkSpeed.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WorkSpeed.Manager\WorkSpeed.Manager.csproj">
-      <Project>{d65854b3-652e-466f-9a0f-c22cf8191dcd}</Project>
-      <Name>WorkSpeed.Manager</Name>
     </ProjectReference>
     <ProjectReference Include="..\WorkSpeed.MvvmBaseLibrary\WorkSpeed.MvvmBaseLibrary.csproj">
       <Project>{aa23ec1f-26a2-4962-8b57-8c4626c4cd9f}</Project>

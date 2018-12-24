@@ -10,6 +10,6 @@ namespace WorkSpeed.ProductivityCalculator
 {
     public interface IProductivityCalculator<TAction> where TAction : EmployeeAction
     {
-        void Calculate (SortedSet<TAction> actions, ICollection<Productivity> productivities);
+        void Calculate (SortedSet<TAction> actions, ICollection<Productivity2> productivities);
     }
 }

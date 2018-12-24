@@ -416,6 +416,13 @@ namespace WorkSpeed.Data.BusinessContexts
 
         public IEnumerable< GatheringAction > GetGatheringActions () => _gatheringActions;
 
+        public IEnumerable< GatheringAction > GetGatheringActions ( Employee employee )
+        {
+            if ( employee == null ) throw new ArgumentNullException();
+
+            return _gatheringActions.Where( a => a.Employee.Id == employee.Id ).OrderBy( a => a.StartTime );
+        }
+
         public void AddGatheringAction ( GatheringAction gatheringAction )
         {
             if ( gatheringAction == null

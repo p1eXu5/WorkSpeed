@@ -12,7 +12,7 @@ namespace WorkSpeed.ProductivityIndicatorsModels
 {
     public class TimeIndicators : ProductivityIndicators
     {
-        private readonly ITimeConstraint _timeConstraint;
+        private readonly ITimeConstraints _timeConstraint;
 
         private ProductivityTime _gatheringTime = new ProductivityTime();
         private ProductivityTime _clientGatheringTime = new ProductivityTime();
@@ -25,7 +25,7 @@ namespace WorkSpeed.ProductivityIndicatorsModels
         private ProductivityTime _shipmentTime = new ProductivityTime();
         private ProductivityTime _nonProductivTime = new ProductivityTime();
 
-        public TimeIndicators ( string name, ITimeConstraint timeConstraint )
+        public TimeIndicators ( string name, ITimeConstraints timeConstraint )
             : base( name )
         {
             _timeConstraint = timeConstraint ?? throw new ArgumentNullException();

@@ -17,6 +17,7 @@ namespace WorkSpeed.Data.BusinessContexts
         void AddProduct ( Product product );
 
         IEnumerable< GatheringAction > GetGatheringActions ();
+        IEnumerable<GatheringAction> GetGatheringActions ( Employee employee );
         void AddGatheringAction ( GatheringAction gatheringAction );
 
         IEnumerable< Employee > GetEmployees ();

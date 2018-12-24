@@ -12,13 +12,13 @@ using WorkSpeed.ProductivityIndicatorsModels;
 
 namespace WorkSpeed.ProductivityCalculator
 {
-    public class Productivity
+    public class Productivity2
     {
         #region Static
 
         private static readonly Dictionary<OperationGroups, string> _indicatorsNames;
 
-        static Productivity ()
+        static Productivity2 ()
         {
             _indicatorsNames = new Dictionary< OperationGroups, string >
             {
@@ -50,32 +50,35 @@ namespace WorkSpeed.ProductivityCalculator
         protected readonly CompositeQuantityIndicators _scanned;
         protected readonly CompositeQuantityIndicators _shipment;
 
+        private readonly ITimeConstraints _timeConstraints;
+        private readonly ICategoryConstraints _categoryConstraints;
+
         #endregion
 
 
         #region Constructor
 
-        public Productivity ( EmployeeAction employeeAction,  ITimeConstraintFactory timeConstraintFactory,  ICategoryConstraints categoryConstraints )
+        public Productivity2 ( Employee employee )
         {
-            Employee = employeeAction.Employee ?? throw new ArgumentNullException();
+            Employee = employee ?? throw new ArgumentNullException();
 
-            _times = new TimeIndicators( "Рабочее время", timeConstraintFactory.GeTimeConstraint( Employee ) );
+            _timeConstraints = new DefaultTimeConstraints();
+            _categoryConstraints = new DefaultCategoryConstraints();
 
-            _gathered = new CompositeQuantityIndicators( "Набор", categoryConstraints );
+            _times = new TimeIndicators( "Рабочее время", _timeConstraints );
+
+            _gathered = new CompositeQuantityIndicators( "Набор", _categoryConstraints );
             FillGetheringIndicators( _gathered );
 
-            _placed = new LineIndicators( _indicatorsNames[ OperationGroups.Placing ], categoryConstraints );
-            _defragment = new LineIndicators( _indicatorsNames[ OperationGroups.Defragmentation ], categoryConstraints );
-            _inventory = new LineIndicators( _indicatorsNames[ OperationGroups.Inventory ], categoryConstraints );
+            _placed = new LineIndicators( _indicatorsNames[ OperationGroups.Placing ], _categoryConstraints );
+            _defragment = new LineIndicators( _indicatorsNames[ OperationGroups.Defragmentation ], _categoryConstraints );
+            _inventory = new LineIndicators( _indicatorsNames[ OperationGroups.Inventory ], _categoryConstraints );
 
             _scanned = new CompositeQuantityIndicators( "Сканирование" );
             FillScanningIndicators( _scanned );
 
             _shipment = new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.Shipment ] );
             FillShipmentIndicators( _shipment );
-
-            AddTime( employeeAction );
-            AddActionDetails( employeeAction );
         }
 
         private void FillGetheringIndicators ( CompositeQuantityIndicators gathered )

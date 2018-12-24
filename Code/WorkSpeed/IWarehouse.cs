@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
 using WorkSpeed.FileModels;
+using WorkSpeed.ProductivityCalculator;
 
 namespace WorkSpeed.Interfaces
 {
@@ -24,5 +25,7 @@ namespace WorkSpeed.Interfaces
         IEnumerable<Position> GetPositions ();
         IEnumerable<Rank> GetRanks ();
         IEnumerable< GatheringAction > GetGatheringActions ();
+
+        Task GetProductivitiesAsync ( Progress< Productivity > progress );
     }
 }

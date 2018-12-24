@@ -7,7 +7,7 @@ using WorkSpeed.ProductivityIndicatorsModels;
 
 namespace WorkSpeed.Constraints
 {
-    public interface ITimeConstraint
+    public interface ITimeConstraints
     {
         ProductivityTime GetProductivityTime ( ProductivityTime addingTime, ProductivityTime targetTime );
     }

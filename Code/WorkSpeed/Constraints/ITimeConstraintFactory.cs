@@ -9,6 +9,6 @@ namespace WorkSpeed.Constraints
 {
     public interface ITimeConstraintFactory
     {
-        ITimeConstraint GeTimeConstraint ( Employee employee );
+        ITimeConstraints GeTimeConstraint ( Employee employee );
     }
 }

@@ -5,91 +5,111 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkSpeed.DesktopClient.Views.Design"
         mc:Ignorable="d"
-        Title="DesignWindow" Height="450" Width="800">
+        Title="DesignWindow" Height="450" Width="1500">
 
-    <Grid Width="Auto" Height="Auto" Margin="5">
+    <Grid Width="Auto" Height="Auto" Margin="5" HorizontalAlignment="Center">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
             <RowDefinition Height="5*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="1" >
-            <ScrollViewer MinHeight="200" >
-                <DataGrid ItemsSource="{Binding Source={StaticResource EmployeeCollection}}"
+        <Border Margin="10,5" Height="Auto">
+            <TextBlock FontSize="24"
+                           HorizontalAlignment="Center"
+                           FontWeight="DemiBold"
+                           Foreground="{StaticResource br_MainWindow.BackgroundAlternative}"
+                           Text="{Binding Header}"
+                />
+        </Border>
+
+        <Button Grid.Row="1" 
+                Content="Сформировать" Width="140" Height="26"
+                Command="{Binding GenerateCommand}"
+                HorizontalAlignment="Left"
+                Margin="0,0"
+        />
+
+        <Grid Grid.Row="2">
+            <DataGrid ItemsSource="{Binding Employees}"
                       VerticalAlignment="Top"
                       >
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Код" 
-                                    Width="80" 
-                                    Binding="{Binding Id}"
-                                    CanUserResize="False"
-                                    CellStyle="{StaticResource st_CenteredCell}"
-                                    IsReadOnly="True"
-                                    />
-                        <DataGridComboBoxColumn Header="Должность" 
-                                        ItemsSource="{Binding Source={StaticResource Appointments}}"     
-                                        SelectedItemBinding="{Binding Appointment}"
-                                        DisplayMemberPath="InnerName"
+                <DataGrid.Columns>
+
+                    <DataGridTextColumn Header="Сотрудник"  
+                                        MinWidth="240"
+                                        Binding="{Binding EmployeeName}" 
+                                        CellStyle="{StaticResource st_VerticalCenteredCell}"
+                                        IsReadOnly="True"
+                                        />
+
+                    <DataGridTextColumn Header="Зона ответственности" 
                                         MinWidth="180"
-                                        IsReadOnly="False" 
-                                        />
-                        <DataGridTextColumn Header="Сотрудник"  
-                                    MinWidth="240"
-                                    Binding="{Binding Name}" 
-                                    CellStyle="{StaticResource st_VerticalCenteredCell}"
-                                    IsReadOnly="True"
-                                    />
-                        <DataGridTemplateColumn Header="Работает" 
+                                        Binding="{Binding Position}" 
+                                        CellStyle="{StaticResource st_VerticalCenteredCell}"
+                                        IsReadOnly="True"
+                                                    />
+                    <DataGridTextColumn Header="Ранг" 
+                                        MinWidth="80"
+                                        Binding="{Binding Rank}" 
+                                        CellStyle="{StaticResource st_CenteredCell}"
+                                        IsReadOnly="True"
+                                                    />
+                    <DataGridTextColumn Header="Курит" 
                                         Width="70"
-                                        CellTemplate="{StaticResource dt_IsActive}"
+                                        Binding="{Binding IsSmoker}" 
                                         CellStyle="{StaticResource st_CenteredCell}"
-                                        CanUserSort="True"
-                                        SortMemberPath="IsActive"
+                                        IsReadOnly="True"
                                         />
-                        <DataGridComboBoxColumn Header="Зона ответственности"
-                                        ItemsSource="{Binding Source={StaticResource Positions}}"     
-                                        SelectedItemBinding="{Binding Appointment}"
-                                        DisplayMemberPath="InnerName"
-                                        MinWidth="180" 
-                                        IsReadOnly="False" 
-                                        />
-                        <DataGridComboBoxColumn Header="Ранг" 
-                                        ItemsSource="{Binding Source={StaticResource Ranks}}"     
-                                        SelectedItemBinding="{Binding Rank}"
-                                        DisplayMemberPath="InnerName"
-                                        MinWidth="180" 
-                                        IsReadOnly="False" 
-                                        />
-                        <DataGridTemplateColumn Header="Курит" Width="70"
-                                        CellTemplate="{StaticResource dt_IsSmoker}"
+
+                    <DataGridTextColumn Header="Отработал" 
+                                        Width="100"
+                                        Binding="{Binding WorkTime}" 
                                         CellStyle="{StaticResource st_CenteredCell}"
-                                        CanUserSort="True"
-                                        SortMemberPath="IsSmoker"
+                                        IsReadOnly="True"
                                         />
-                    </DataGrid.Columns>
-                </DataGrid>
-            </ScrollViewer>
+                    <DataGridTextColumn Header="Бездельничал" 
+                                        Width="100"
+                                        Binding="{Binding OffTime}" 
+                                        CellStyle="{StaticResource st_CenteredCell}"
+                                        IsReadOnly="True"
+                                        />
+                    <DataGridTextColumn Header="Собрал строк" 
+                                        Width="98"
+                                        Binding="{Binding GatheredLines}" 
+                                        CellStyle="{StaticResource st_CenteredCell}"
+                                        IsReadOnly="True"
+                                        />
+                    <DataGridTextColumn Header="Скорость, стр./час" 
+                                        Width="120"
+                                        Binding="{Binding GatheringSpeed}" 
+                                        CellStyle="{StaticResource st_CenteredCell}"
+                                        IsReadOnly="True"
+                                        />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
 
-        </StackPanel>
-            <Grid Height="60" Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
 
-                <Button Content="Выход" Width="80" Height="26"
-                        Command="{Binding BackwardCommand}"
-                        HorizontalAlignment="Left"
-                        Margin="80,0"
-                        />
+        <Grid Height="60" Grid.Row="3" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="1" Content="Далее" Width="80" Height="26"
-                        Command="{Binding ForwardCommand}"
-                        HorizontalAlignment="Right"
-                        Margin="80,0"
-                        />
-            </Grid>
+            <Button Content="Выход" Width="80" Height="26"
+                    Command="{Binding BackwardCommand}"
+                    HorizontalAlignment="Left"
+                    Margin="80,0"
+                    />
+
+            <Button Grid.Column="1" Content="Далее" Width="80" Height="26"
+                    Command="{Binding ForwardCommand}"
+                    HorizontalAlignment="Right"
+                    Margin="80,0"
+                    />
+        </Grid>
     </Grid>
 </Window>
