@@ -37,6 +37,47 @@ namespace WorkSpeed.Productivity
             UpdateLastAction( action );
         }
 
+        public TimeSpan GetTotalTime ()
+        {
+            throw new NotImplementedException();
+        }
+
+        public TimeSpan GetOffTime ()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary< OperationGroups, TimeSpan > GetOperationTimes ()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary< OperationGroups, int[] > GetLines ()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<OperationGroups, int[]> GetQuantities ()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<OperationGroups, int[]> GetScans ()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<OperationGroups, double[]> GetWeights ()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<OperationGroups, double[]> GetVolumes ()
+        {
+            throw new NotImplementedException();
+        }
+
+
         [ MethodImpl( MethodImplOptions.AggressiveInlining ) ]
         private void InitActionDetailsArray ( ICategoryFilter categoryFilter )
         {

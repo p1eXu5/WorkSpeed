@@ -31,9 +31,32 @@ namespace WorkSpeed.Productivity
             _actionRepositories[ action.Employee.Id ].AddAction( action );
         }
 
-        public ProductivityEmployee GetProductivity ( Data.Models.Employee employee )
+        public bool HasOperations ( Employee employee )
         {
-            throw new NotImplementedException();
+            if ( employee == null ) throw new ArgumentNullException( nameof( employee ), "Employee cannot be null.");
+            return _actionRepositories.ContainsKey( employee.Id );
+        }
+
+        public ProductivityEmployee GetProductivity ( Employee employee )
+        {
+            if ( !HasOperations( employee ) ) return new ProductivityEmployee();
+
+            var actionRepository = _actionRepositories[ employee.Id ];
+
+            var productivity = new ProductivityEmployee {
+
+                Employee = employee,
+                TotalTime = actionRepository.GetTotalTime(),
+                OffTime = actionRepository.GetOffTime(),
+                OperationTimes = actionRepository.GetOperationTimes(),
+                Lines = actionRepository.GetLines(),
+                Quantities = actionRepository.GetQuantities(),
+                Scans = actionRepository.GetScans(),
+                Weight = actionRepository.GetWeights(),
+                Volume = actionRepository.GetVolumes()
+            };
+
+            return productivity;
         }
     }
 }

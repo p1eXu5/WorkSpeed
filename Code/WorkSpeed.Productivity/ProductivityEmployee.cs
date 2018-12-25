@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Productivity
 {
-    public class ProductivityEmployee
+    public struct ProductivityEmployee
     {
-        public ProductivityEmployee Employee { get; set; }
+        public Employee Employee { get; set; }
 
         public TimeSpan TotalTime { get; set; }
         public TimeSpan OffTime { get; set; }
 
-        public Dictionary< OperationGroups, TimeSpan > OperationTimeDictionary { get; set; }
+        public Dictionary< OperationGroups, TimeSpan > OperationTimes { get; set; }
 
         public Dictionary< OperationGroups, int[] > Lines { get; set; }
         public Dictionary< OperationGroups, int[] > Quantities { get; set; }
@@ -24,27 +22,37 @@ namespace WorkSpeed.Productivity
 
         public double GetSpeedLinesPerHour ( OperationGroups operation )
         {
-            throw new NotImplementedException();
+            if ( !Lines.ContainsKey( operation ) ) return 0.0;
+
+            return Lines[ operation ].Sum() / OperationTimes[ operation ].TotalHours;
         }
 
         public double GetSpeedQuantitiesPerHour ( OperationGroups operation )
         {
-            throw new NotImplementedException();
+            if ( !Quantities.ContainsKey( operation ) ) return 0.0;
+
+            return Quantities[ operation ].Sum() / OperationTimes[ operation ].TotalHours;
         }
 
         public double GetSpeedScansPerHour ( OperationGroups operation )
         {
-            throw new NotImplementedException();
+            if ( !Scans.ContainsKey( operation ) ) return 0.0;
+
+            return Scans[ operation ].Sum() / OperationTimes[ operation ].TotalHours;
         }
 
         public double GetSpeedWeightPerHour ( OperationGroups operation )
         {
-            throw new NotImplementedException();
+            if ( !Weight.ContainsKey( operation ) ) return 0.0;
+
+            return Weight[ operation ].Sum() / OperationTimes[ operation ].TotalHours;
         }
 
         public double GetSpeedVolumePerHour ( OperationGroups operation )
         {
-            throw new NotImplementedException();
+            if ( !Volume.ContainsKey( operation ) ) return 0.0;
+
+            return Volume[ operation ].Sum() / OperationTimes[ operation ].TotalHours;
         }
     }
 }
