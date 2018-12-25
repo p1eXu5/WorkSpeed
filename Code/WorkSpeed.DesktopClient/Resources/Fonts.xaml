@@ -1,0 +1,6 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    >
+    <FontFamily x:Key="ft_NotoSerif">pack://application:,,,/Resources/Fonts/Noto_Serif/#Noto Serif</FontFamily>
+    <FontFamily x:Key="font_SuiGeneris">pack://application:,,,/Resources/Fonts/#Sui Generis Rg</FontFamily>
+</ResourceDictionary>

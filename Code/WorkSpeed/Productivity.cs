@@ -58,7 +58,7 @@ namespace WorkSpeed
             _smokeBreaks = new List< Period >();
 
             for ( int i = 0; i < 24; i++ ) {  
-                _smokeBreaks.Add( new Period( new TimeSpan( i, 55, 0 ), new TimeSpan( i, 59, 59 ) ) );
+                //_smokeBreaks.Add( new Period( new TimeSpan( i, 55, 0 ), new TimeSpan( i, 59, 59 ) ) );
             }
         }
 
@@ -68,8 +68,8 @@ namespace WorkSpeed
 
             for ( int i = 0; i < 24; i += 2 )
             {
-                _smokeBreaks.Add( new Period( new TimeSpan( i, 0, 0 ), new TimeSpan( i, 04, 59 ) ) );
-                _smokeBreaks.Add( new Period( new TimeSpan( i + 1, 55, 0 ), new TimeSpan( i + 1, 59, 59 ) ) );
+                //_smokeBreaks.Add( new Period( new TimeSpan( i, 0, 0 ), new TimeSpan( i, 04, 59 ) ) );
+                //_smokeBreaks.Add( new Period( new TimeSpan( i + 1, 55, 0 ), new TimeSpan( i + 1, 59, 59 ) ) );
             }
         }
 
