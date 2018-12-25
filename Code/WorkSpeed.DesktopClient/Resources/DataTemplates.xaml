@@ -388,7 +388,7 @@
                     <uc:DayShift></uc:DayShift>
                 </Expander>
                 <Expander Header="Ночная смена">
-                    <uc:DayShift></uc:DayShift>
+                    <uc:NightShift></uc:NightShift>
                 </Expander>
             </StackPanel>
 
