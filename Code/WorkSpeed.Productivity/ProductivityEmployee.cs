@@ -7,9 +7,9 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Productivity
 {
-    public class EmployeeProductivity
+    public class ProductivityEmployee
     {
-        public Employee Employee { get; set; }
+        public ProductivityEmployee Employee { get; set; }
 
         public TimeSpan TotalTime { get; set; }
         public TimeSpan OffTime { get; set; }
