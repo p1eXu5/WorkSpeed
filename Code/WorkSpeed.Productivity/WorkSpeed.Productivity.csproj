@@ -44,10 +44,12 @@
     <Compile Include="ActionDetails\ShipmentActionDetails.cs" />
     <Compile Include="ActionDetails\TimeActionDetails.cs" />
     <Compile Include="ActionDetails\WithProductActionDtails.cs" />
-    <Compile Include="ActionRepository.cs" />
+    <Compile Include="EmployeeActionRepository.cs" />
+    <Compile Include="EmployeeActionFactory.cs" />
     <Compile Include="IPauseBetweenActions.cs" />
     <Compile Include="PauseBetweenActions.cs" />
     <Compile Include="Period.cs" />
+    <Compile Include="EmployeeProductivity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ActionDetails\WithScansActionDetails.cs" />
   </ItemGroup>

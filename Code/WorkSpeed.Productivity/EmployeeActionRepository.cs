@@ -11,14 +11,14 @@ using WorkSpeed.Productivity.ActionDetails;
 
 namespace WorkSpeed.Productivity
 {
-    public class ActionRepository
+    public class EmployeeActionRepository
     {
         private readonly Employee _employee;
         private EmployeeAction _lastAction;
         private IPauseBetweenActions _pause;
         private TimeActionDetails[] _actions;
 
-        public ActionRepository ( Employee employee, IPauseBetweenActions pause, ICategoryFilter categoryFilter )
+        public EmployeeActionRepository ( Employee employee, IPauseBetweenActions pause, ICategoryFilter categoryFilter )
         {
             _employee = employee ?? throw new ArgumentNullException( nameof(employee), "Employee cannot be null." );
             _pause = pause ?? throw new ArgumentNullException( nameof( pause ), "IPauseBetweenActions cannot be null." );
