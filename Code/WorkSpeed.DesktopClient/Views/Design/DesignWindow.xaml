@@ -4,64 +4,52 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkSpeed.DesktopClient.Views.Design"
+        xmlns:uc="clr-namespace:WorkSpeed.DesktopClient.Views.UserControls"
         mc:Ignorable="d"
-        Title="DesignWindow" Height="450" Width="600">
+        Title="DesignWindow" Height="700" Width="600">
+    <Grid Width="Auto" Height="Auto" Margin="5" HorizontalAlignment="Center">
 
-    <StackPanel Width="Auto" Height="Auto" Margin="5,5,5,20" 
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                TextElement.FontSize="14"
-                TextElement.FontFamily="{StaticResource ft_NotoSerif}"
-                >
-        <StackPanel.Resources>
-            <Style TargetType="HeaderedContentControl">
-                <Setter Property="Margin" Value="2,6"/>
-                <Setter Property="Focusable" Value="False"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="HeaderedContentControl">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <ContentPresenter ContentSource="Header" 
-                                                  DockPanel.Dock="Left" 
-                                                  Focusable="False" 
-                                                  VerticalAlignment="Bottom"
-                                                  HorizontalAlignment="Right"
-                                                  TextElement.FontWeight="Bold"
-                                                  TextElement.FontSize="12"
-                                                  >
-                                    <ContentPresenter.RenderTransform>
-                                        <TranslateTransform Y="-2" />
-                                    </ContentPresenter.RenderTransform>
-                                </ContentPresenter>
-                                <ContentPresenter Grid.Column="1" 
-                                                  ContentSource="Content"
-                                                  MinWidth="150"
-                                                  Margin="5,0,0,0" 
-                                                  DockPanel.Dock="Right" 
-                                                  VerticalAlignment="Bottom"
-                                                  />
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </StackPanel.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <HeaderedContentControl Header="Наименование смены:">
-            <TextBox Padding="2,0" 
-                     BorderBrush="{StaticResource br_MainWindow.BackgroundAlternative}"
-                     BorderThickness="0,0,0,1"
-                     >Ночная смена</TextBox>
-        </HeaderedContentControl>
-        <HeaderedContentControl Header="Наименоие смены:">
-            <TextBox Padding="2,0" 
-                     BorderBrush="{StaticResource br_MainWindow.BackgroundAlternative}"
-                     BorderThickness="0,0,0,1"
-            >Ночная смена</TextBox>
-        </HeaderedContentControl>
-    </StackPanel>
+        <Border Margin="10,5" Height="Auto">
+            <TextBlock FontSize="24"
+                       HorizontalAlignment="Center"
+                       FontWeight="DemiBold"
+                       Foreground="{StaticResource br_MainWindow.BackgroundAlternative}"
+                       Text="{Binding Header}"
+            />
+        </Border>
+
+        <StackPanel Orientation="Vertical" Grid.Row="1">
+            <Expander Header="Дневная смена">
+                <uc:DayShift></uc:DayShift>
+            </Expander>
+            <Expander Header="Ночная смена">
+                <uc:DayShift></uc:DayShift>
+            </Expander>
+        </StackPanel>
+
+        <Grid Height="60" Grid.Row="3" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Button Content="Выход" Width="80" Height="26"
+                    Command="{Binding BackwardCommand}"
+                    HorizontalAlignment="Left"
+                    Margin="80,0"
+            />
+
+            <Button Grid.Column="1" Content="Далее" Width="80" Height="26"
+                    Command="{Binding ForwardCommand}"
+                    HorizontalAlignment="Right"
+                    Margin="80,0"
+            />
+        </Grid>
+    </Grid>
 </Window>

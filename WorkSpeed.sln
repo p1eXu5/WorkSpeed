@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkSpeed.Tests", "Tests\Wo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkSpeed.Productivity", "Code\WorkSpeed.Productivity\WorkSpeed.Productivity.csproj", "{61C2A155-2641-4617-826E-82911531837A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimerBox", "Code\TimerBox\TimerBox.csproj", "{02562077-FD65-4B02-9F56-53A2C184552F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{61C2A155-2641-4617-826E-82911531837A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61C2A155-2641-4617-826E-82911531837A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61C2A155-2641-4617-826E-82911531837A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02562077-FD65-4B02-9F56-53A2C184552F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02562077-FD65-4B02-9F56-53A2C184552F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02562077-FD65-4B02-9F56-53A2C184552F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02562077-FD65-4B02-9F56-53A2C184552F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,6 +124,7 @@ Global
 		{0943E858-2173-4084-AFC8-C0524D8CB825} = {1ECA741B-6388-4A77-8B30-D1E113F4F26F}
 		{3255DCE1-693B-4A92-B8F9-84A943FA4598} = {1ECA741B-6388-4A77-8B30-D1E113F4F26F}
 		{61C2A155-2641-4617-826E-82911531837A} = {F1D4BFA4-0774-466A-B80A-3CF5497D6AED}
+		{02562077-FD65-4B02-9F56-53A2C184552F} = {F1D4BFA4-0774-466A-B80A-3CF5497D6AED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {74CCEA37-7ECF-4A64-9DA7-75E503ED2A97}

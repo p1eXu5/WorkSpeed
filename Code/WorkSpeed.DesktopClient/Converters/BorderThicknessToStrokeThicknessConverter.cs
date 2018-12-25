@@ -36,12 +36,19 @@ namespace WorkSpeed.DesktopClient.Converters
 
             switch ( parameter?.ToString().ToUpperInvariant() ) {
 
-                case "INNER":
+                case "WIDTH":
+                    return thickness.Left;
+                case "HEIGHT":
                     return thickness.Top;
                 case "OUTER":
+                    return thickness.Right;
+                case "INNER":
+                    return thickness.Bottom;
+
                 default:
                     return thickness.Left;
             }
+
         }
 
         public object ConvertBack ( object value, Type targetType, object parameter, CultureInfo culture )

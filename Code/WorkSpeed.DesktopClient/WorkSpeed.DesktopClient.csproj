@@ -75,6 +75,7 @@
     <Compile Include="ViewModels\StageViewModels\MoveRequestedEventArgs.cs" />
     <Compile Include="ViewModels\StageViewModels\ProductsImportStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ProductivityStageViewModel.cs" />
+    <Compile Include="ViewModels\StageViewModels\ShiftListViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\StageViewModel.cs" />
     <Compile Include="Views\Design\DesignWindow.xaml.cs">
       <DependentUpon>DesignWindow.xaml</DependentUpon>
@@ -84,6 +85,12 @@
     </Compile>
     <Compile Include="Views\FastProductivityMainWindow.xaml.cs">
       <DependentUpon>FastProductivityMainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\DayShift.xaml.cs">
+      <DependentUpon>DayShift.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\NightShift.xaml.cs">
+      <DependentUpon>NightShift.xaml</DependentUpon>
     </Compile>
     <Page Include="Resources\ButtonStyles.xaml">
       <SubType>Designer</SubType>
@@ -152,6 +159,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\FastProductivityMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\DayShift.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\NightShift.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

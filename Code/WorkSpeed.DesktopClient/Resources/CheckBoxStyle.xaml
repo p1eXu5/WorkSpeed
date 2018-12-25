@@ -16,27 +16,36 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="CheckBox">
-                    <Border Background="Transparent">
-                        <Grid>
-                            <Ellipse x:Name="PART_OuterCircle"
-                                     StrokeThickness="{TemplateBinding BorderThickness, 
-                                                          Converter={StaticResource conv_ThicknessToThickness}, 
-                                                          ConverterParameter=outer}"
-                                     Stretch="Fill"
-                                     Stroke="{TemplateBinding BorderBrush}"
-                                     Fill="{x:Null}"
-                                     />
-                            <Ellipse x:Name="PART_InnerCircle"
-                                     Stretch="Fill"
-                                     StrokeThickness="{TemplateBinding BorderThickness, 
-                                                          Converter={StaticResource conv_ThicknessToThickness}, 
-                                                          ConverterParameter=inner}"
-                                     Stroke="Transparent"
-                                     Fill="{TemplateBinding Foreground}"
-                                     Visibility="{TemplateBinding IsChecked, Converter={StaticResource conv_BooleanToVisibility}}"
-                                     />
-                        </Grid>
-                    </Border>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Background="Transparent" 
+                                Width="{TemplateBinding BorderThickness, 
+                                                        Converter={StaticResource conv_ThicknessToThickness}, 
+                                                        ConverterParameter=width}" 
+                                Height="{TemplateBinding BorderThickness, 
+                                                         Converter={StaticResource conv_ThicknessToThickness}, 
+                                                         ConverterParameter=height}">
+                            <Grid>
+                                <Ellipse x:Name="PART_OuterCircle"
+                                         StrokeThickness="{TemplateBinding BorderThickness, 
+                                                              Converter={StaticResource conv_ThicknessToThickness}, 
+                                                              ConverterParameter=outer}"
+                                         Stretch="Fill"
+                                         Stroke="{TemplateBinding BorderBrush}"
+                                         Fill="{x:Null}"
+                                         />
+                                <Ellipse x:Name="PART_InnerCircle"
+                                         Stretch="Fill"
+                                         StrokeThickness="{TemplateBinding BorderThickness, 
+                                                              Converter={StaticResource conv_ThicknessToThickness}, 
+                                                              ConverterParameter=inner}"
+                                         Stroke="Transparent"
+                                         Fill="{TemplateBinding Foreground}"
+                                         Visibility="{TemplateBinding IsChecked, Converter={StaticResource conv_BooleanToVisibility}}"
+                                         />
+                            </Grid>
+                        </Border>
+                        <ContentPresenter Margin="5,0,0,0" Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                    </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
