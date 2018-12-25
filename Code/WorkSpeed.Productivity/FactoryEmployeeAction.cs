@@ -25,7 +25,7 @@ namespace WorkSpeed.Productivity
         public void AddAction ( EmployeeAction action )
         {
             if ( !_actionRepositories.ContainsKey( action.Employee.Id ) ) {
-                _actionRepositories[ action.Employee.Id ] = new RepositoryEmployeeAction( action.Employee, _pauseBetweenActions, _categoryFilter );
+                _actionRepositories[ action.Employee.Id ] = new RepositoryEmployeeAction( _pauseBetweenActions, _categoryFilter );
             }
 
             _actionRepositories[ action.Employee.Id ].AddAction( action );

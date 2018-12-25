@@ -8,11 +8,11 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Productivity.ActionDetails
 {
-    public class WithProductActionDtails : TimeActionDetails
+    public class WithProductActionDetails : TimeActionDetails
     {
         protected readonly ICategoryFilter _filter;
 
-        public WithProductActionDtails ( ICategoryFilter filter )
+        public WithProductActionDetails ( ICategoryFilter filter )
         {
             _filter = filter ?? throw new ArgumentNullException( nameof( filter ), "ICategoryFilter cannot be null." );
 

@@ -8,7 +8,7 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Productivity.ActionDetails
 {
-    public class WithScansActionDetails : WithProductActionDtails
+    public class WithScansActionDetails : WithProductActionDetails
     {
         public WithScansActionDetails ( ICategoryFilter filter ) : base( filter )
         {
