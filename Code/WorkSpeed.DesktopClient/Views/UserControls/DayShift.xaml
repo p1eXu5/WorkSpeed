@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:WorkSpeed.DesktopClient.Views.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
     <StackPanel Width="Auto" Height="Auto" Margin="5,5,5,20" 
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -16,67 +17,9 @@
                     CanVerticallyScroll="True"
                     ScrollViewer.VerticalScrollBarVisibility="Auto"
                     >
-        <StackPanel.Resources>
-
-            <Style x:Key="st_TextBox" TargetType="TextBox">
-                <Setter Property="Padding" Value="2,0" />
-                <Setter Property="BorderThickness" Value="0,0,0,1" />
-                <Setter Property="BorderBrush" Value="{StaticResource br_MainWindow.BackgroundAlternative}" />
-                <Setter Property="Foreground" Value="Black" />
-                <Setter Property="FontSize" Value="14" />
-            </Style>
-
-            <Style TargetType="HeaderedContentControl">
-                <Setter Property="Margin" Value="2,6"/>
-                <Setter Property="Focusable" Value="False"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="HeaderedContentControl">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" SharedSizeGroup="Shift" />
-                                    <ColumnDefinition Width="*" SharedSizeGroup="Shift"/>
-                                </Grid.ColumnDefinitions>
-                                <ContentPresenter ContentSource="Header" 
-                                                      DockPanel.Dock="Left"
-                                                      Focusable="False" 
-                                                      Margin="0,0,5,0"
-                                                      VerticalAlignment="Bottom"
-                                                      HorizontalAlignment="Right"
-                                                      TextElement.FontWeight="Bold"
-                                                      TextElement.FontSize="12"
-                                                      >
-                                    <ContentPresenter.RenderTransform>
-                                        <TranslateTransform Y="-2" />
-                                    </ContentPresenter.RenderTransform>
-                                </ContentPresenter>
-                                <ContentPresenter Grid.Column="1" 
-                                                      ContentSource="Content"
-                                                      Margin="5,0,0,0"
-                                                      DockPanel.Dock="Right" 
-                                                      VerticalAlignment="Bottom"
-                                                      HorizontalAlignment="Left"
-                                                      />
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <Style x:Key="st_TextBlock" TargetType="TextBlock">
-                <Setter Property="FontSize" Value="12" />
-                <Setter Property="FontWeight" Value="Normal" />
-                <Setter Property="RenderTransform">
-                    <Setter.Value>
-                        <TranslateTransform Y="2" />
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-        </StackPanel.Resources>
 
         <HeaderedContentControl Header="Наименование смены:">
-            <TextBox Style="{StaticResource st_TextBox}"
+            <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
                          MinWidth="100"
                          >Дневная смена</TextBox>
         </HeaderedContentControl>
@@ -85,7 +28,7 @@
                                 Margin="0,10,0,6"
                                 >
             <StackPanel Orientation="Horizontal">
-                <TextBox Style="{StaticResource st_TextBox}"
+                <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
                          MinWidth="24"
                          HorizontalContentAlignment="Center"
                 >
@@ -96,25 +39,25 @@
 
         <HeaderedContentControl Header="Длительность смены:">
             <StackPanel Orientation="Horizontal">
-                <TextBox Style="{StaticResource st_TextBox}"
+                <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
                          MinWidth="24"
                          HorizontalContentAlignment="Center"
                          >
                     12
                 </TextBox>
-                <TextBlock Style="{StaticResource st_TextBlock}" Text=" час." />
+                <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text=" час." />
             </StackPanel>
         </HeaderedContentControl>
 
         <HeaderedContentControl Header="Длительность обеда:">
             <StackPanel Orientation="Horizontal">
-                <TextBox Style="{StaticResource st_TextBox}"
+                <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
                          MinWidth="24"
                          HorizontalContentAlignment="Center"
                          >
                     30
                 </TextBox>
-                <TextBlock Style="{StaticResource st_TextBlock}" Text=" мин." />
+                <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text=" мин." />
             </StackPanel>
         </HeaderedContentControl>
 
@@ -129,37 +72,37 @@
             <StackPanel TextElement.Foreground="{StaticResource br_MainWindow.BackgroundAlternative}">
                 <HeaderedContentControl Header="Периодичность перерывов:">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{StaticResource st_TextBlock}" Text="1 перерыв в " />
-                        <TextBox Style="{StaticResource st_TextBox}"
-                                     MinWidth="24"
-                                     HorizontalContentAlignment="Center"
-                                    >
+                        <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text="1 перерыв в " />
+                        <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
+                                 MinWidth="24"
+                                 HorizontalContentAlignment="Center"
+                                 >
                             2
                         </TextBox>
-                        <TextBlock Style="{StaticResource st_TextBlock}" Text=" час(а)" />
+                        <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text=" час(а)" />
                     </StackPanel>
                 </HeaderedContentControl>
                 <HeaderedContentControl Header="Длительность перерыва:">
                     <StackPanel Orientation="Horizontal">
-                        <TextBox Style="{StaticResource st_TextBox}"
+                        <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
                                      MinWidth="24"
                                      HorizontalContentAlignment="Center"
                             >
                             10
                         </TextBox>
-                        <TextBlock Style="{StaticResource st_TextBlock}" Text=" мин." />
+                        <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text=" мин." />
                     </StackPanel>
                 </HeaderedContentControl>
                 <HeaderedContentControl Header="Начало перерывов:">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{StaticResource st_TextBlock}" Text="за " />
-                        <TextBox Style="{StaticResource st_TextBox}"
+                        <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text="за " />
+                        <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
                                      MinWidth="24"
                                      HorizontalContentAlignment="Center"
                             >
                             5
                         </TextBox>
-                        <TextBlock Style="{StaticResource st_TextBlock}" Text=" мин. до конца периода" />
+                        <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text=" мин. до конца периода" />
                     </StackPanel>
                 </HeaderedContentControl>
             </StackPanel>
@@ -189,37 +132,37 @@
                 <StackPanel TextElement.Foreground="{StaticResource br_MainWindow.BackgroundAlternative}">
                     <HeaderedContentControl Header="Периодичность перерывов:">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Style="{StaticResource st_TextBlock}" Text="1 перерыв в " />
-                            <TextBox Style="{StaticResource st_TextBox}"
+                            <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text="1 перерыв в " />
+                            <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
                                          MinWidth="24"
                                          HorizontalContentAlignment="Center"
                                         >
                                 1
                             </TextBox>
-                            <TextBlock Style="{StaticResource st_TextBlock}" Text=" час(а)" />
+                            <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text=" час(а)" />
                         </StackPanel>
                     </HeaderedContentControl>
                     <HeaderedContentControl Header="Длительность перерыва:">
                         <StackPanel Orientation="Horizontal">
-                            <TextBox Style="{StaticResource st_TextBox}"
+                            <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
                                          MinWidth="24"
                                          HorizontalContentAlignment="Center"
                                          >
                                 5
                             </TextBox>
-                            <TextBlock Style="{StaticResource st_TextBlock}" Text=" мин." />
+                            <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text=" мин." />
                         </StackPanel>
                     </HeaderedContentControl>
                     <HeaderedContentControl Header="Начало перерывов:">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Style="{StaticResource st_TextBlock}" Text="за " />
-                            <TextBox Style="{StaticResource st_TextBox}"
+                            <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text="за " />
+                            <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
                                          MinWidth="24"
                                          HorizontalContentAlignment="Center"
                                          >
                                 5
                             </TextBox>
-                            <TextBlock Style="{StaticResource st_TextBlock}" Text=" мин. до конца периода" />
+                            <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text=" мин. до конца периода" />
                         </StackPanel>
                     </HeaderedContentControl>
                 </StackPanel>

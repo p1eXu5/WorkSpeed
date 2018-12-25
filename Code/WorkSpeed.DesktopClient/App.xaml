@@ -14,6 +14,7 @@
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/CheckBoxStyle.xaml" />
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/ComboBoxStyles.xaml" />
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/DataGridStyles.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/HeaderContentControlStyles.xaml" />
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/DataTemplates.xaml" />
              </ResourceDictionary.MergedDictionaries>
          </ResourceDictionary>
