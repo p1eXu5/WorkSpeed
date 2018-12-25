@@ -45,7 +45,7 @@ namespace WorkSpeed.Data
             return false;
         }
 
-        public static OperationGroups OperationGroup ( this EmployeeAction employeeAction )
+        public static OperationGroups GetOperationGroup ( this EmployeeAction employeeAction )
         {
             return employeeAction?.Operation?.Group?.Name ?? throw new ArgumentNullException();
         }

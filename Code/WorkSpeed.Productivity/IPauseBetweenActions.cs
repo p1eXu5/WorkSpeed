@@ -9,7 +9,7 @@ namespace WorkSpeed.Productivity
 {
     public interface IPauseBetweenActions
     {
-        void Update ( EmployeeAction lastAction, EmployeeAction action );
+        TimeSpan GetPauseInterval ( EmployeeAction lastAction, EmployeeAction action );
         Period GetPause ();
     }
 }

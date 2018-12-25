@@ -83,7 +83,7 @@ namespace WorkSpeed
             var pause = GetPause( employeeAction.StartTime );
             pause = TryModifyPause( pause, Employee.IsSmoker );
 
-            AddActionData( employeeAction, pause, _actionDataDictionary[ (int) employeeAction.OperationGroup() ] );
+            AddActionData( employeeAction, pause, _actionDataDictionary[ (int) employeeAction.GetOperationGroup() ] );
 
             _lastAction = employeeAction;
         }
@@ -108,7 +108,7 @@ namespace WorkSpeed
                 return Period.Zero;
             }
 
-            if ( _lastAction.OperationGroup() == OperationGroups.Shipment ) return Period.Zero;
+            if ( _lastAction.GetOperationGroup() == OperationGroups.Shipment ) return Period.Zero;
 
             var breaks = isSmoker ? _smokeBreaks: _unsmokeBreaks;
 
@@ -148,7 +148,7 @@ namespace WorkSpeed
                 actionData.Start = withProductAction.StartTime;
                 actionData.End = withProductAction.StartTime.Add( withProductAction.Duration );
             }
-            else if ( _lastAction.OperationGroup() == withProductAction.OperationGroup() ) {
+            else if ( _lastAction.GetOperationGroup() == withProductAction.GetOperationGroup() ) {
 
                 // Другой следующий документ:
                 if ( _lastAction.StartTime != withProductAction.StartTime ) {
