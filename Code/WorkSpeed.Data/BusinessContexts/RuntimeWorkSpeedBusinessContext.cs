@@ -20,6 +20,7 @@ namespace WorkSpeed.Data.BusinessContexts
         private readonly List< Appointment > _appointments = new List< Appointment >();
         private readonly List< Position > _positions = new List< Position >();
         private readonly List< Rank > _ranks = new List< Rank >();
+        private readonly List< Category > _categories = new List< Category >();
 
         #endregion
 
@@ -43,6 +44,7 @@ namespace WorkSpeed.Data.BusinessContexts
             SeedAppointments();
             SeedPositions();
             SeedRanks();
+            SeedCategories();
         }
 
         private void SeedOperations ()
@@ -400,6 +402,48 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Number = 14,
                     OneHourCost = 533.33m
+                },
+            } );
+        }
+
+        private void SeedCategories ()
+        {
+            _categories.AddRange( new [] {
+                new Category {
+                    Id = 1,
+                    Date = DateTime.Now,
+                    Name = "Товары до 2,5 литров",
+                    MaxVolume = ( float )(2.5 / 1000)
+                },
+                new Category {
+                    Id = 1,
+                    Date = DateTime.Now,
+                    Name = "Товары до 5 литров",
+                    MaxVolume = ( float )(5.0 / 1000)
+                },
+                new Category {
+                    Id = 1,
+                    Date = DateTime.Now,
+                    Name = "Товары до 25 литров",
+                    MaxVolume = ( float )(25.0 / 1000)
+                },
+                new Category {
+                    Id = 1,
+                    Date = DateTime.Now,
+                    Name = "Товары до 100 литров",
+                    MaxVolume = ( float )(100.0 / 1000)
+                },
+                new Category {
+                    Id = 1,
+                    Date = DateTime.Now,
+                    Name = "Товары до 250 литров",
+                    MaxVolume = ( float )(250.0 / 1000)
+                },
+                new Category {
+                    Id = 1,
+                    Date = DateTime.Now,
+                    Name = "Товары от 250 литров",
+                    MinVolume = ( float )(250.0 / 1000)
                 },
             } );
         }

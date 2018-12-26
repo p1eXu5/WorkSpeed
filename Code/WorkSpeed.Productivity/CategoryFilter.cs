@@ -9,9 +9,41 @@ namespace WorkSpeed.Productivity
 {
     public class CategoryFilter : ICategoryFilter
     {
+        private readonly List< Category > _categories;
+
         public CategoryFilter ( IEnumerable<Category> categories )
         {
-            
+            var inputCategories = categories.OrderBy( c => c.MaxVolume ).ThenBy( c => c.Date ).ToArray();
+
+            var maxElement = inputCategories.FirstOrDefault( c => c.MaxVolume.Equals( 0.0 ) );
+            int iStart = 0;
+
+            if ( maxElement != null ) {
+                maxElement.MaxVolume = Double.PositiveInfinity;
+            }
+            else {
+                maxElement = new Category {
+                    Date = DateTime.Now,
+                    MaxVolume = Double.PositiveInfinity,
+                    MinVolume = inputCategories[0].MaxVolume,
+                    Name = $"Товары от { inputCategories[ 0 ].MaxVolume } литров"
+                };
+                iStart = 1;
+            }
+
+            _categories = new List< Category > { maxElement };
+
+            for ( int i = iStart; i < inputCategories.Length; ++i ) {
+
+                if ( inputCategories[ i ].MinVolume >= 0.0
+                     && inputCategories[ i ].MaxVolume < maxElement.MinVolume ) {
+
+                    _categories.Add( inputCategories[ i ] );
+                    maxElement = inputCategories[ i ];
+                }
+
+                if ( inputCategories[ i ].MinVolume.Equals( 0.0 ) ) break;
+            }
         }
 
         public int GetCategory ( Product product )
@@ -24,6 +56,6 @@ namespace WorkSpeed.Productivity
             throw new NotImplementedException();
         }
 
-        public int Count { get; }
+        public int Count => _categories.Count;
     }
 }
