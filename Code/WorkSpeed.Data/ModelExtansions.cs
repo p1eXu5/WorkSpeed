@@ -9,6 +9,11 @@ namespace WorkSpeed.Data
 {
     public static class ModelExtansions
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeeAction"></param>
+        /// <returns></returns>
         public static bool IsGatheringOperation ( this EmployeeAction employeeAction )
         {
             var operationGroup = employeeAction?.Operation?.Group?.Name ?? throw new ArgumentNullException();
@@ -31,6 +36,11 @@ namespace WorkSpeed.Data
             return false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeeAction"></param>
+        /// <returns></returns>
         public static bool IsShipmentOperation ( this EmployeeAction employeeAction )
         {
             var operationGroup = employeeAction?.Operation?.Group?.Name ?? throw new ArgumentNullException();
@@ -45,16 +55,38 @@ namespace WorkSpeed.Data
             return false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeeAction"></param>
+        /// <returns></returns>
         public static OperationGroups GetOperationGroup ( this EmployeeAction employeeAction )
         {
             return employeeAction?.Operation?.Group?.Name ?? throw new ArgumentNullException();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
         public static double GetVolume ( this Product product )
         {
             if ( product == null ) throw new ArgumentNullException();
 
             return product.ItemHeight * product.ItemWidth * product.ItemLength;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeeAction"></param>
+        /// <returns></returns>
+        public static DateTime EndTime ( this EmployeeAction employeeAction )
+        {
+            if ( employeeAction == null ) throw new ArgumentNullException( nameof( employeeAction ), "EmployeeAction cannot be null." );
+
+            return employeeAction.StartTime.Add( employeeAction.Duration );
         }
     }
 }

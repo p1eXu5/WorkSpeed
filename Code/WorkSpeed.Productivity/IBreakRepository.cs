@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Productivity
 {
-    public interface IPauseBetweenActions
+    public interface IBreakRepository
     {
-        TimeSpan GetPauseInterval ( EmployeeAction lastAction, EmployeeAction action );
+        string[] GetNames ();
+        string Check ( Period period );
     }
 }

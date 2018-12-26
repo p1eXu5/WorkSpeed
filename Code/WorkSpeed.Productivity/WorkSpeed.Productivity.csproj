@@ -44,6 +44,7 @@
     <Compile Include="ActionDetails\ShipmentActionDetails.cs" />
     <Compile Include="ActionDetails\TimeActionDetails.cs" />
     <Compile Include="ActionDetails\WithProductActionDetails.cs" />
+    <Compile Include="IBreakRepository.cs" />
     <Compile Include="RepositoryEmployeeAction.cs" />
     <Compile Include="FactoryEmployeeAction.cs" />
     <Compile Include="IPauseBetweenActions.cs" />

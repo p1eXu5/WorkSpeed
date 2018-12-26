@@ -37,6 +37,17 @@ namespace WorkSpeed
             return Start.Date == other.Start.Date;
         }
 
+        public static bool operator == ( Period periodA, Period periodB )
+        {
+            return (periodA.Start == periodB.Start
+                    && periodA.End == periodB.End);
+        }
+
+        public static bool operator != ( Period periodA, Period periodB )
+        {
+            return !( periodA == periodB );
+        }
+
         public static bool operator < ( Period periodA, Period periodB )
         {
             return (periodA.Start < periodB.Start
