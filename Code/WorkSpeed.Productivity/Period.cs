@@ -29,6 +29,25 @@ namespace WorkSpeed
             return new DayPeriod( Start.TimeOfDay, End.TimeOfDay );
         }
 
+        public DateTime[] GetDays ()
+        {
+            var days = new List< DateTime >();
+            var start = Start;
+
+            do {
+                days.Add( start.Date );
+                start = start.AddDays( 1 );
+
+            } while ( start.Date < End.Date );
+
+            return days.ToArray();
+        }
+
+        public bool Contains ( Period other )
+        {
+            return (other.Start >= Start && other.End <= End);
+        }
+
         public override bool Equals ( object obj )
         {
             if ( ReferenceEquals( null, obj ) ) return false;

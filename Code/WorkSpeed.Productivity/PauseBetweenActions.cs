@@ -51,7 +51,9 @@ namespace WorkSpeed.Productivity
             var longBreakDuration = _breakRepository.GetLongest( pause );
             var shortBreakDuration = _breakRepository.GetShortest( action.Employee );
 
-            if ( !_breaks.Contains( pause.Start.Date ) && pause.Duration >= longBreakDuration ) {
+            if ( longBreakDuration > TimeSpan.Zero 
+                 && !_breaks.Contains( pause.Start.Date ) 
+                 && pause.Duration >= longBreakDuration ) {
 
                 // Check both intervals on fixed breaks, [Start + Longest : End] and [Start : End - Longest]
 
@@ -67,7 +69,8 @@ namespace WorkSpeed.Productivity
                                        ? (pause.Duration - longBreakDuration) + pauseAfter
                                        : (pause.Duration - longBreakDuration) + pauseBefore;
             }
-            else if ( pause.Duration >= shortBreakDuration ) {
+            else if ( shortBreakDuration > TimeSpan.Zero
+                      && pause.Duration >= shortBreakDuration ) {
 
                 resultPouse = _breakRepository.CheckFixed( pause, action.Employee );
             }

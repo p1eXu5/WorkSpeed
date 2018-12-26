@@ -27,6 +27,13 @@ namespace WorkSpeed.Productivity
                    || (other.End >= Start && other.End <= End);
         }
 
+        public Period GetDatePeriod ( DateTime dateTime )
+        {
+            var date = dateTime.Date;
+
+            return new Period( date.Add( Start ), date.Add( End ) );
+        }
+
         public override bool Equals ( object obj )
         {
             if ( ReferenceEquals( null, obj ) ) return false;

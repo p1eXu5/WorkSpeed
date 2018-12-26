@@ -9,48 +9,72 @@ namespace WorkSpeed.Productivity
 {
     public class BreakRepository : IBreakRepository
     {
-        private readonly Dictionary< string, (TimeSpan duration, DayPeriod period) > _variableBreaks;
-        private readonly Dictionary< string, List<DayPeriod> > _fixedBreaks;
-        private Predicate< Employee > _predicate;
+        private readonly Dictionary< TimeSpan, ( string name, DayPeriod period) > _variableBreaks;
+        private readonly Dictionary< Predicate<Employee>, (string name, List< DayPeriod > breakList) > _fixedBreaks;
 
         public BreakRepository ()
         {
-            _variableBreaks = new Dictionary< string, (TimeSpan duration, DayPeriod period) >(2);
-            _fixedBreaks = new Dictionary<string, List< DayPeriod >>( 2 );
+            _variableBreaks = new Dictionary< TimeSpan, (string, DayPeriod period) >( 2 );
+            _fixedBreaks = new Dictionary< Predicate<Employee>, (string name, List<DayPeriod> period) >( 2 );
         }
 
         public TimeSpan GetLongest ( Period period )
         {
-            return _variableBreaks.Where( v => period.Duration >= v.Value.duration && v.Value.period.IsIntersects( period.GetDayPeriod() ) )
-                                  .OrderBy( v => v.Value.period.Start )
-                                  .Select( v => v.Value.duration )
+            return _variableBreaks.Where( v => period.Duration >= v.Key && v.Value.period.IsIntersects( period.GetDayPeriod() ) )
+                                  .OrderBy( v => v.Key )
+                                  .Select( v => v.Key )
                                   .FirstOrDefault();
         }
 
         public TimeSpan GetShortest ( Employee employee )
         {
-            if ( _predicate != null ) {
+            var fixedBreaks = _fixedBreaks.FirstOrDefault( f => f.Key( employee ) );
 
+            if ( fixedBreaks.Key ==  null ) return TimeSpan.Zero;
 
-            }
-            return _fixedBreaks.Min( v => v.Value. );
+            return fixedBreaks.Value.breakList[ 0 ].Duration;
         }
 
         public TimeSpan CheckFixed ( Period period, Employee employee )
         {
-            throw new NotImplementedException();
+            var fixedBreaks = _fixedBreaks.FirstOrDefault( f => f.Key( employee ) );
+
+            if ( fixedBreaks.Key == null ) return period.Duration;
+
+            var duration = period.Duration;
+            var days = period.GetDays();
+
+            foreach ( var theBreak in fixedBreaks.Value.breakList ) {
+
+                if ( days.Length > 1 ) {
+
+                    foreach ( var day in days ) {
+
+                        if ( period.Contains( theBreak.GetDatePeriod( day ) ) ) {
+                            duration -= theBreak.Duration;
+                        }
+                    }
+                }
+                else if ( period.Contains( theBreak.GetDatePeriod( period.Start ) ) ) {
+                    duration -= theBreak.Duration;
+                }
+            }
+
+            return duration;
         }
 
         public void SetVariableBreak ( string name, TimeSpan duration, DayPeriod period )
         {
-            _variableBreaks[ name ] = (duration, period);
+            if ( duration < TimeSpan.Zero ) throw new ArgumentException();
+
+            _variableBreaks[ duration ] = (name, period);
         }
 
         public void SetFixedBreaks ( string name, 
                                      TimeSpan duration, 
                                      TimeSpan interval, 
                                      TimeSpan offset, 
-                                     Predicate<Employee> predicate = null )
+                                     Predicate<Employee> predicate )
         {
             if ( String.IsNullOrWhiteSpace( name ) ) throw new ArgumentException( "name is null or empty or whitespaces." );
 
@@ -61,9 +85,9 @@ namespace WorkSpeed.Productivity
             if ( offset < TimeSpan.Zero && offset >= TimeSpan.FromDays( 1 ) )
                 throw new ArgumentException( "interval must be greater than zero and less than full day", nameof( interval ));
 
-            _predicate = predicate;
+            if ( predicate == null ) throw new ArgumentNullException(nameof( predicate ), "predicate cannot be null");
 
-            _fixedBreaks[ name ] = new List< DayPeriod >();
+            var periodList = new List< DayPeriod >();
 
             TimeSpan start;
             TimeSpan end = offset;
@@ -73,31 +97,31 @@ namespace WorkSpeed.Productivity
                 start = end + interval;
                 end += interval + duration;
                 period = new DayPeriod( start, end );
-                _fixedBreaks[ name ].Add( period );
+                periodList.Add( period );
 
             } while ( end < TimeSpan.FromDays( 1 ) );
 
+            var lastEnd = end > TimeSpan.FromDays( 1 ) ? end - TimeSpan.FromDays( 1 ) : TimeSpan.Zero ;
+
             end = offset;
+            start = end - duration;
 
-            do {
-                start = end - duration - interval;
+            while ( start > lastEnd ) {
+
                 period = new DayPeriod( start, end );
-                _fixedBreaks[ name ].Add( period );
-                end = start;
+                periodList.Add( period );
+                end = start - interval;
+                start = end - duration;
+            }
 
-            } while ( end > TimeSpan.Zero );
-
+            _fixedBreaks[ predicate ] = (name, periodList);
         }
 
         public DayPeriod[] GetFixedBreaks ( string name )
         {
             if ( String.IsNullOrWhiteSpace( name ) ) throw new ArgumentException("name is null or empty or whitespaces.");
 
-            if ( _fixedBreaks.ContainsKey( name ) ) {
-                return _fixedBreaks[ name ].ToArray();
-            }
-
-            return new DayPeriod[0];
+            return _fixedBreaks.Where( fb => fb.Value.name.Equals( name ) ).Select( fb => fb.Value.breakList ).First().ToArray();
         }
     }
 }
