@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
 
-namespace WorkSpeed.Data.BusinessContexts
+namespace WorkSpeed.Productivity
 {
     public interface ICategoryFilter
     {
