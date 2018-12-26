@@ -10,6 +10,8 @@ namespace WorkSpeed.Data.BusinessContexts
 {
     public class RuntimeWorkSpeedBusinessContext : IWorkSpeedBusinessContext
     {
+        #region Fields
+
         private readonly List< Product > _products = new List< Product >( 40_000 );
         private readonly List< Employee > _employees = new List< Employee >();
         private readonly List< GatheringAction > _gatheringActions = new List< GatheringAction >();
@@ -19,6 +21,8 @@ namespace WorkSpeed.Data.BusinessContexts
         private readonly List< Position > _positions = new List< Position >();
         private readonly List< Rank > _ranks = new List< Rank >();
 
+        #endregion
+
 
         #region Constructor
 
@@ -26,6 +30,11 @@ namespace WorkSpeed.Data.BusinessContexts
         {
             OnModelCreating();
         }
+
+        #endregion
+
+
+        #region Seeding
 
         private void OnModelCreating ()
         {
@@ -398,6 +407,8 @@ namespace WorkSpeed.Data.BusinessContexts
         #endregion
 
 
+        #region Methods
+
         public bool HasProducts () => _products.Any();
 
         public Task< bool > HasProductsAsync ()
@@ -489,5 +500,7 @@ namespace WorkSpeed.Data.BusinessContexts
         {
             return _ranks;
         }
+
+        #endregion
     }
 }

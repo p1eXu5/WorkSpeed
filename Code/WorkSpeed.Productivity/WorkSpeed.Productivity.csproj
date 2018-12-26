@@ -45,6 +45,7 @@
     <Compile Include="ActionDetails\TimeActionDetails.cs" />
     <Compile Include="ActionDetails\WithProductActionDetails.cs" />
     <Compile Include="BreakRepository.cs" />
+    <Compile Include="CategoryFilter.cs" />
     <Compile Include="DayPeriod.cs" />
     <Compile Include="IBreakRepository.cs" />
     <Compile Include="ICategoryFilter.cs" />
