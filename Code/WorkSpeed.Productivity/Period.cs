@@ -51,12 +51,12 @@ namespace WorkSpeed
         public static bool operator < ( Period periodA, Period periodB )
         {
             return (periodA.Start < periodB.Start
-                    && periodA.End < periodB.End);
+                    && periodA.End < periodB.Start);
         }
 
         public static bool operator > ( Period periodA, Period periodB )
         {
-            return (periodA.Start > periodB.Start
+            return (periodA.Start > periodB.End
                     && periodA.End > periodB.End);
         }
 
