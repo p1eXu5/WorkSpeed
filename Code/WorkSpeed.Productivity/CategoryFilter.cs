@@ -37,8 +37,7 @@ namespace WorkSpeed.Productivity
                 if ( !inputCategories[ i ].MaxVolume.Equals( 0.0 ) ) {
 
                     if ( maxElement.MinVolume.Equals( null )
-                        && inputCategories[ i ].MaxVolume < maxElement.MaxVolume
-                        ) {
+                        && inputCategories[ i ].MaxVolume < maxElement.MaxVolume ) {
 
                         maxElement.MinVolume = inputCategories[ i ].MaxVolume;
                         _categories.Add( inputCategories[ i ] );
