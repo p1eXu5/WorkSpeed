@@ -16,11 +16,18 @@ namespace WorkSpeed.Productivity
         private EmployeeAction _lastAction;
         private readonly IPauseBetweenActions _pause;
         private TimeActionDetails[] _actions;
+        private readonly TimeSpan _pauseThreshold;
+        private readonly Queue< TimeSpan > _pauses;
 
-        public RepositoryEmployeeAction ( IPauseBetweenActions pause, ICategoryFilter categoryFilter )
+        public RepositoryEmployeeAction ( IPauseBetweenActions pause, ICategoryFilter categoryFilter, TimeSpan pauseThreshold )
         {
             _pause = pause ?? throw new ArgumentNullException( nameof( pause ), "IPauseBetweenActions cannot be null." );
             if ( categoryFilter == null ) throw new ArgumentNullException( nameof( categoryFilter ), "ICategoryFilter cannot be null." );
+
+            if ( pauseThreshold < TimeSpan.Zero ) throw new ArgumentException();
+
+            _pauseThreshold = pauseThreshold;
+            _pauses = new Queue< TimeSpan >();
 
             InitActionDetailsArray( categoryFilter );
         }
@@ -32,6 +39,13 @@ namespace WorkSpeed.Productivity
         public void AddAction ( EmployeeAction action )
         {
             var pause = _pause.GetPauseInterval( _lastAction, action );
+            _pauses.Enqueue( pause );
+
+            if ( pause > _pauseThreshold ) {
+
+                _actions[ _actions.Length - 1 ].AddDetails( new EmployeeAction(), pause - _pauseThreshold );
+                pause = _pauseThreshold;
+            }
 
             var operation = ( int )action.GetOperationGroup();
             _actions[ operation ].AddDetails( action, pause );
@@ -191,6 +205,19 @@ namespace WorkSpeed.Productivity
             }
 
             return volumes;
+        }
+
+        public Dictionary< TimeSpan, int > GetPauses ()
+        {
+            var pauses = new Dictionary< TimeSpan, int >(6);
+            pauses[ TimeSpan.FromSeconds( 10 ) ] = _pauses.Count( p => p.TotalSeconds < 10 );
+            pauses[ TimeSpan.FromSeconds( 30 ) ] = _pauses.Count( p => p.TotalSeconds >= 10 && p.TotalSeconds < 30 );
+            pauses[ TimeSpan.FromSeconds( 60 ) ] = _pauses.Count( p => p.TotalSeconds >= 30 && p.TotalSeconds < 60 );
+            pauses[ TimeSpan.FromMinutes( 2 ) ] = _pauses.Count( p => p.TotalSeconds >= 60 && p.TotalMinutes < 2 );
+            pauses[ TimeSpan.FromMinutes( 5 ) ] = _pauses.Count( p => p.TotalMinutes >= 2 && p.TotalMinutes < 5 );
+            pauses[ TimeSpan.FromMinutes( 60 ) ] = _pauses.Count( p => p.TotalMinutes >= 5 && p.TotalMinutes < 60 );
+
+            return pauses;
         }
 
         /// <summary>

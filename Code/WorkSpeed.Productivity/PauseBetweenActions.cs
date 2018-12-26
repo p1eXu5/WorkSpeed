@@ -24,13 +24,7 @@ namespace WorkSpeed.Productivity
             _breakRepository = breakRepository ?? throw new ArgumentNullException( nameof( breakRepository ), "IBreakRepository cannot be null." );
             _minBetweenShifts = minBetweenShifts;
             _breaks = new HashSet< DateTime >();
-            PausesBiggerShort = new Queue< Period >();
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public Queue< Period > PausesBiggerShort { get; private set; }
 
         /// <summary>
         /// 
@@ -76,10 +70,6 @@ namespace WorkSpeed.Productivity
             else if ( pause.Duration >= shortBreakDuration ) {
 
                 resultPouse = _breakRepository.CheckFixed( pause, action.Employee );
-            }
-
-            if ( resultPouse >= shortBreakDuration ) {
-                PausesBiggerShort.Enqueue( pause );
             }
 
             return resultPouse;

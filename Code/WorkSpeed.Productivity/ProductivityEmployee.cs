@@ -19,6 +19,7 @@ namespace WorkSpeed.Productivity
         public Dictionary< OperationGroups, int[] > Scans { get; set; }
         public Dictionary< OperationGroups, double[] > Weight { get; set; }
         public Dictionary< OperationGroups, double[] > Volume { get; set; }
+        public Dictionary<TimeSpan, int> Pauses { get; set; }
 
         public double GetSpeedLinesPerHour ( OperationGroups operation )
         {
