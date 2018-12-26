@@ -10,6 +10,8 @@ namespace WorkSpeed.Productivity
     {
         public DayPeriod ( TimeSpan start, TimeSpan end )
         {
+            if ( start > end ) throw new ArgumentException( "Start can't be greater than End." );
+
             Start = start;
             End = end;
         }
@@ -19,7 +21,7 @@ namespace WorkSpeed.Productivity
 
         public TimeSpan Duration => End - Start;
 
-        public bool IsIntersect ( DayPeriod other )
+        public bool IsIntersects ( DayPeriod other )
         {
             return (other.Start >= Start && other.Start <= End)
                    || (other.End >= Start && other.End <= End);
@@ -48,7 +50,7 @@ namespace WorkSpeed.Productivity
 
         public static bool operator != ( DayPeriod dayPeriodA, DayPeriod dayPeriodB )
         {
-            return !dayPeriodA.Equals( dayPeriodB );
+            return !( dayPeriodA == dayPeriodB );
         }
     }
 }

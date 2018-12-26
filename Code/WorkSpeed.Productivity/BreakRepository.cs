@@ -21,7 +21,7 @@ namespace WorkSpeed.Productivity
 
         public TimeSpan GetLongest ( Period period )
         {
-            return _variableBreaks.Where( v => period.Duration >= v.Value.duration && v.Value.period.IsIntersects( period.GetDayPeriod ) )
+            return _variableBreaks.Where( v => period.Duration >= v.Value.duration && v.Value.period.IsIntersects( period.GetDayPeriod() ) )
                                   .OrderBy( v => v.Value.period.Start )
                                   .Select( v => v.Value.duration )
                                   .FirstOrDefault();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkSpeed.Productivity;
 
 namespace WorkSpeed
 {
@@ -16,31 +17,37 @@ namespace WorkSpeed
             End = end;
         }
 
-        public DateTime Start { get; private set; }
-        public DateTime End { get; private set; }
+        public DateTime Start { get; }
+        public DateTime End { get; }
 
         public static Period Zero => new Period(new DateTime(0), new DateTime(0));
 
         public TimeSpan Duration => End - Start;
 
-        public bool Contains ( Period period )
+        public DayPeriod GetDayPeriod ()
         {
-            if ( period.Start >= Start && period.End <= End ) {
-                return true;
-            }
-
-            return false;
+            return new DayPeriod( Start.TimeOfDay, End.TimeOfDay );
         }
 
-        public bool IsTheSameDate ( Period other )
+        public override bool Equals ( object obj )
         {
-            return Start.Date == other.Start.Date;
+            if ( ReferenceEquals( null, obj ) ) return false;
+            return obj is Period other && Equals( other );
+        }
+
+        public bool Equals ( Period other )
+        {
+            return other.Start == Start && other.End == End;
+        }
+
+        public override int GetHashCode ()
+        {
+            return Start.GetHashCode() + 31 * End.GetHashCode();
         }
 
         public static bool operator == ( Period periodA, Period periodB )
         {
-            return (periodA.Start == periodB.Start
-                    && periodA.End == periodB.End);
+            return periodA.Equals( periodB );
         }
 
         public static bool operator != ( Period periodA, Period periodB )
@@ -58,44 +65,6 @@ namespace WorkSpeed
         {
             return (periodA.Start > periodB.End
                     && periodA.End > periodB.End);
-        }
-
-        public static Period operator - ( Period periodA, Period periodB )
-        {
-            if ( periodB.Start >= periodA.End || periodB.End <= periodA.Start ) return periodA;
-            if ( periodB.Start <= periodA.Start && periodB.End >= periodA.End ) return Period.Zero;
-
-            if ( periodB.Start >= periodA.Start && periodB.Start < periodA.End ) {
-
-                if ( periodB.End <= periodA.End ) {
-
-                    periodA.End = periodA.End.Subtract( periodB.Duration );
-                    return periodA;
-                }
-
-                if ( periodB.End > periodA.End ) {
-
-                    periodA.End = periodB.Start;
-                    return periodA;
-                }
-            }
-
-            if ( periodB.End > periodA.Start && periodB.End <= periodA.End ) {
-
-                if ( periodB.Start < periodA.Start ) {
-
-                    periodA.Start = periodB.End;
-                    return periodA;
-                }
-
-                if ( periodB.Start >= periodA.Start ) {
-
-                    periodA.End = periodA.End.Subtract( periodB.Duration );
-                    return periodA;
-                }
-            }
-
-            return periodA;
         }
     }
 }
