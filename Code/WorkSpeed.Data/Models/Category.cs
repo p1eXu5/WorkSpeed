@@ -15,7 +15,7 @@ namespace WorkSpeed.Data.Models
         public double? MinVolume { get; set; }
 
         /// <summary>
-        /// if it's null, than MaxVolume equal to positive infinity or
+        /// if it's zero, than MaxVolume equal to positive infinity or
         /// next MinVolume.
         /// </summary>
         public double MaxVolume { get; set; }

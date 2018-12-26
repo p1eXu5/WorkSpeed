@@ -21,7 +21,7 @@ namespace WorkSpeed.Productivity.ActionDetails
 
             if ( !( action is ReceptionAction reception ) ) return;
 
-            Scans[ _filter.GetCategory( reception.Product ) ] += reception.ScanQuantity;
+            Scans[ _filter.GetCategoryIndex( reception.Product ) ] += reception.ScanQuantity;
 
         }
 

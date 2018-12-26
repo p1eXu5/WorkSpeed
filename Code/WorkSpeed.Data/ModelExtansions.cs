@@ -69,12 +69,12 @@ namespace WorkSpeed.Data
         /// 
         /// </summary>
         /// <param name="product"></param>
-        /// <returns></returns>
+        /// <returns>Volume in liters</returns>
         public static double GetVolume ( this Product product )
         {
             if ( product == null ) throw new ArgumentNullException();
 
-            return product.ItemHeight * product.ItemWidth * product.ItemLength;
+            return product.ItemHeight * product.ItemWidth * product.ItemLength * 1000;
         }
 
         /// <summary>

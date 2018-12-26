@@ -14,6 +14,7 @@ namespace WorkSpeed.Data.Models
 
         public bool IsGroup { get; set; }
 
+        // cm
         public float ItemLength { get; set; }
         public float ItemWidth  { get; set; }
         public float ItemHeight { get; set; }

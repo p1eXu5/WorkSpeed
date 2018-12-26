@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkSpeed.Data;
 using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Productivity
@@ -35,25 +36,51 @@ namespace WorkSpeed.Productivity
 
             for ( int i = iStart; i < inputCategories.Length; ++i ) {
 
-                if ( inputCategories[ i ].MinVolume >= 0.0
-                     && inputCategories[ i ].MaxVolume < maxElement.MinVolume ) {
+                if ( !inputCategories[ i ].MaxVolume.Equals( 0.0 ) ) {
 
-                    _categories.Add( inputCategories[ i ] );
-                    maxElement = inputCategories[ i ];
+                    if ( maxElement.MinVolume.Equals( null )
+                        && inputCategories[ i ].MaxVolume < maxElement.MaxVolume
+                        ) {
+
+                        maxElement.MinVolume = inputCategories[ i ].MaxVolume;
+                        _categories.Add( inputCategories[ i ] );
+                        maxElement = inputCategories[ i ];
+                    }
+                    else if ( inputCategories[ i ].MaxVolume <= maxElement.MinVolume ) {
+                        _categories.Add( inputCategories[ i ] );
+                        maxElement = inputCategories[ i ];
+                    }
                 }
 
                 if ( inputCategories[ i ].MinVolume.Equals( 0.0 ) ) break;
             }
+
+            if ( maxElement.MinVolume > 0 ) {
+
+                _categories.Add( new Category {
+
+                    Date = DateTime.Now,
+                    MaxVolume = (double)maxElement.MinVolume,
+                    MinVolume = 0,
+                    Name = $"Товары до { maxElement.MaxVolume } литров"
+                } );
+            }
         }
 
-        public int GetCategory ( Product product )
+        public int GetCategoryIndex ( Product product )
         {
-            throw new NotImplementedException();
+            var productVolume = product.GetVolume();
+            var category = _categories.First( c => productVolume < c.MaxVolume && productVolume >= c.MinVolume  );
+            return _categories.IndexOf( category );
         }
 
-        public string GetCategoryName ( int category )
+        public string GetCategoryName ( int index )
         {
-            throw new NotImplementedException();
+            if ( index < _categories.Count ) {
+                return _categories[ index ].Name;
+            }
+
+            return null;
         }
 
         public int Count => _categories.Count;

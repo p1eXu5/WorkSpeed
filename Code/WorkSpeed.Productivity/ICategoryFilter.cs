@@ -9,7 +9,7 @@ namespace WorkSpeed.Productivity
 {
     public interface ICategoryFilter
     {
-        int GetCategory ( Product product );
+        int GetCategoryIndex ( Product product );
         string GetCategoryName ( int category );
 
         int Count { get; }

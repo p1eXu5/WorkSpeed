@@ -29,7 +29,7 @@ namespace WorkSpeed.Productivity.ActionDetails
             if ( !(action is WithProductAction withProductAction) ) return;
 
             var product = withProductAction.Product;
-            var category = _filter.GetCategory( product );
+            var category = _filter.GetCategoryIndex( product );
 
             Weight[ category ] += product.Weight + withProductAction.ProductQuantity;
             Volume[ category ] += product.Volume + withProductAction.ProductQuantity;
