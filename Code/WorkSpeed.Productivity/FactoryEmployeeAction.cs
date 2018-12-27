@@ -100,5 +100,23 @@ namespace WorkSpeed.Productivity
         {
             PauseBetweenActions.BreakRepository.SetFixedBreaks( name, duration, interval, offset, predicate );
         }
+
+        public IEnumerable< Category > GetCategories ()
+        {
+            return CategoryFilter.GetCategories();
+        }
+
+        public double GetThreshold () => PauseBetweenActions.MinRestBetweenShifts.Seconds;
+
+        public void SetThreshold ( double threshold )
+        {
+            ClearActions();
+            PauseBetweenActions.MinRestBetweenShifts = TimeSpan.FromSeconds( threshold );
+        }
+
+        public void ClearActions ()
+        {
+            _actionRepositories.Clear();
+        }
     }
 }

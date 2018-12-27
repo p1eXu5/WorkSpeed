@@ -11,5 +11,6 @@ namespace WorkSpeed.Productivity
     {
         IBreakRepository BreakRepository { get; }
         TimeSpan GetPauseInterval ( EmployeeAction lastAction, EmployeeAction action );
+        TimeSpan MinRestBetweenShifts { get; set; }
     }
 }

@@ -80,6 +80,8 @@ namespace WorkSpeed.Productivity
             return null;
         }
 
+        public IEnumerable< Category > GetCategories () => _categories;
+
         public int Count => _categories.Count;
     }
 }

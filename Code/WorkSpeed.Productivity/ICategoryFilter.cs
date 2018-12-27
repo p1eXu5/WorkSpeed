@@ -11,6 +11,7 @@ namespace WorkSpeed.Productivity
     {
         int GetCategoryIndex ( Product product );
         string GetCategoryName ( int category );
+        IEnumerable< Category > GetCategories ();
 
         int Count { get; }
     }
