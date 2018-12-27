@@ -12,7 +12,7 @@ namespace WorkSpeed.Data.Models
         public DateTime Date { get; set; }
         public string Name { get; set; }
 
-        public double? MinVolume { get; set; }
+        public double MinVolume { get; set; }
 
         /// <summary>
         /// if it's zero, than MaxVolume equal to positive infinity or
