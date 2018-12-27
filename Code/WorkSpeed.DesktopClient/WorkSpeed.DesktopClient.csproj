@@ -63,6 +63,7 @@
     <Compile Include="Converters\BorderThicknessToStrokeThicknessConverter.cs" />
     <Compile Include="Converters\EvenOddToZeroOneConverter.cs" />
     <Compile Include="TemplateSelectors\StageDataTemplateSelector.cs" />
+    <Compile Include="ViewModels\EntityViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\ProductivityViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\ShortBreakViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ActionsImportStageViewModel.cs" />

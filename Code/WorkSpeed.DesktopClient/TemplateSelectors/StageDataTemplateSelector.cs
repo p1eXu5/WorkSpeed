@@ -21,6 +21,12 @@ namespace WorkSpeed.DesktopClient.TemplateSelectors
                     return o;
                 }
 
+                if ( item is CategoriesThresholdStageViewModel )
+                {
+                    var o = element.FindResource( "dt_CategoriesThreshold" ) as DataTemplate;
+                    return o;
+                }
+
                 if ( item is ImportStageViewModel ) {
                     var o =  element.FindResource( "dt_ImportFile" ) as DataTemplate;
                     return o;
