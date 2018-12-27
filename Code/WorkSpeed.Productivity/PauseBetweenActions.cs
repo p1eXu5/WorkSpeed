@@ -10,21 +10,22 @@ namespace WorkSpeed.Productivity
 {
     public class PauseBetweenActions : IPauseBetweenActions
     {
-        private readonly IBreakRepository _breakRepository;
-        private readonly TimeSpan _minBetweenShifts;
+        private readonly TimeSpan _minRestBetweenShifts;
         private readonly HashSet< DateTime > _breaks;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="breakRepository"></param>
-        /// <param name="minBetweenShifts">Minimum pause between shifts.</param>
-        public PauseBetweenActions ( IBreakRepository breakRepository, TimeSpan minBetweenShifts )
+        /// <param name="minRestBetweenShifts">Minimum pause between shifts.</param>
+        public PauseBetweenActions ( IBreakRepository breakRepository, TimeSpan minRestBetweenShifts )
         {
-            _breakRepository = breakRepository ?? throw new ArgumentNullException( nameof( breakRepository ), "IBreakRepository cannot be null." );
-            _minBetweenShifts = minBetweenShifts;
+            BreakRepository = breakRepository ?? throw new ArgumentNullException( nameof( breakRepository ), "IBreakRepository cannot be null." );
+            _minRestBetweenShifts = minRestBetweenShifts;
             _breaks = new HashSet< DateTime >();
         }
+
+        public IBreakRepository BreakRepository { get; }
 
         /// <summary>
         /// 
@@ -43,13 +44,13 @@ namespace WorkSpeed.Productivity
                 pause = new Period( action.EndTime(), lastAction.StartTime );
             }
 
-            if ( pause.Duration == TimeSpan.Zero || pause.Duration >= _minBetweenShifts ) return TimeSpan.Zero;
+            if ( pause.Duration == TimeSpan.Zero || pause.Duration >= _minRestBetweenShifts ) return TimeSpan.Zero;
 
 
             TimeSpan resultPouse = TimeSpan.Zero;
 
-            var longBreakDuration = _breakRepository.GetLongest( pause );
-            var shortBreakDuration = _breakRepository.GetShortest( action.Employee );
+            var longBreakDuration = BreakRepository.GetLongest( pause );
+            var shortBreakDuration = BreakRepository.GetShortest( action.Employee );
 
             if ( longBreakDuration > TimeSpan.Zero 
                  && !_breaks.Contains( pause.Start.Date ) 
@@ -57,11 +58,11 @@ namespace WorkSpeed.Productivity
 
                 // Check both intervals on fixed breaks, [Start + Longest : End] and [Start : End - Longest]
 
-                var pauseAfter = _breakRepository.CheckFixed( 
+                var pauseAfter = BreakRepository.CheckFixed( 
                     new Period( pause.Start.Add( longBreakDuration ), pause.End ), action.Employee 
                 );
 
-                var pauseBefore = _breakRepository.CheckFixed(
+                var pauseBefore = BreakRepository.CheckFixed(
                     new Period( pause.Start, pause.End.Subtract( longBreakDuration ) ), action.Employee
                 );
 
@@ -72,7 +73,7 @@ namespace WorkSpeed.Productivity
             else if ( shortBreakDuration > TimeSpan.Zero
                       && pause.Duration >= shortBreakDuration ) {
 
-                resultPouse = _breakRepository.CheckFixed( pause, action.Employee );
+                resultPouse = BreakRepository.CheckFixed( pause, action.Employee );
             }
 
             return resultPouse;

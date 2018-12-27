@@ -130,13 +130,12 @@
 
     <!-- _______________________ Shift Setup ________________________ -->
 
-    <DataTemplate x:Key="dt_ShiftList">
+    <DataTemplate x:Key="dt_ShiftSetup">
         <Grid Width="Auto" Height="Auto" Margin="5" HorizontalAlignment="Center">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="5*" />
-                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <Border Margin="10,5" Height="Auto">
@@ -148,33 +147,8 @@
                 />
             </Border>
 
-            <StackPanel Orientation="Vertical" Grid.Row="1">
-                <Expander Header="Дневная смена">
-                    <uc:DayShift></uc:DayShift>
-                </Expander>
-                <Expander Header="Ночная смена">
-                    <uc:NightShift></uc:NightShift>
-                </Expander>
-            </StackPanel>
+            <uc:ShiftSetup Grid.Row="1" />
 
-            <Grid Height="60" Grid.Row="3" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-
-                <Button Content="Выход" Width="80" Height="26"
-                        Command="{Binding BackwardCommand}"
-                        HorizontalAlignment="Left"
-                        Margin="80,0"
-                />
-
-                <Button Grid.Column="1" Content="Далее" Width="80" Height="26"
-                        Command="{Binding ForwardCommand}"
-                        HorizontalAlignment="Right"
-                        Margin="80,0"
-                />
-            </Grid>
         </Grid>
     </DataTemplate>
 

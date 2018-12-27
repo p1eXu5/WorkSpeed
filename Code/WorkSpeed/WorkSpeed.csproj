@@ -76,7 +76,6 @@
     <Compile Include="FileModels\WithEmployeeImportModel.cs" />
     <Compile Include="FileModels\Converters\IImportModelVisitor.cs" />
     <Compile Include="Period.cs" />
-    <Compile Include="Productivity.cs" />
     <Compile Include="ProductivityCalculator\AddTimeOptions.cs" />
     <Compile Include="ProductivityCalculator\IProductivityCalculator.cs" />
     <Compile Include="ProductivityCalculator\Productivity2.cs" />
@@ -120,6 +119,10 @@
     <ProjectReference Include="..\WorkSpeed.Data\WorkSpeed.Data.csproj">
       <Project>{72e065c5-8769-4008-9529-11194be488e0}</Project>
       <Name>WorkSpeed.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WorkSpeed.Productivity\WorkSpeed.Productivity.csproj">
+      <Project>{61c2a155-2641-4617-826e-82911531837a}</Project>
+      <Name>WorkSpeed.Productivity</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

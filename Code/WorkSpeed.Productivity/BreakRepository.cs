@@ -63,11 +63,11 @@ namespace WorkSpeed.Productivity
             return duration;
         }
 
-        public void SetVariableBreak ( string name, TimeSpan duration, DayPeriod period )
+        public void SetVariableBreak ( string name, TimeSpan breakDuration, DayPeriod dayPeriod )
         {
-            if ( duration < TimeSpan.Zero ) throw new ArgumentException();
+            if ( breakDuration < TimeSpan.Zero ) throw new ArgumentException();
 
-            _variableBreaks[ duration ] = (name, period);
+            _variableBreaks[ breakDuration ] = (name, dayPeriod);
         }
 
         public void SetFixedBreaks ( string name, 
@@ -79,7 +79,7 @@ namespace WorkSpeed.Productivity
             if ( String.IsNullOrWhiteSpace( name ) ) throw new ArgumentException( "name is null or empty or whitespaces." );
 
             if ( duration < TimeSpan.Zero && offset >= TimeSpan.FromDays( 1 ) )
-                throw new ArgumentException( "duration must be greater than zero and less than full day", nameof( duration ));
+                throw new ArgumentException( "breakDuration must be greater than zero and less than full day", nameof( duration ));
             if ( interval < TimeSpan.Zero && offset >= TimeSpan.FromDays( 1 ) )
                 throw new ArgumentException( "interval must be greater than zero and less than full day", nameof( interval ));
             if ( offset < TimeSpan.Zero && offset >= TimeSpan.FromDays( 1 ) )

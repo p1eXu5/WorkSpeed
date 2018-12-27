@@ -65,6 +65,7 @@
     <Compile Include="TemplateSelectors\StageDataTemplateSelector.cs" />
     <Compile Include="ViewModels\EntityViewModels\ProductivityViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ActionsImportStageViewModel.cs" />
+    <Compile Include="ViewModels\StageViewModels\CategoriesThresholdStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\CheckEmployeesStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\Directions.cs" />
     <Compile Include="ViewModels\StageViewModels\EmployeesImportStageViewModel.cs" />
@@ -75,7 +76,7 @@
     <Compile Include="ViewModels\StageViewModels\MoveRequestedEventArgs.cs" />
     <Compile Include="ViewModels\StageViewModels\ProductsImportStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ProductivityStageViewModel.cs" />
-    <Compile Include="ViewModels\StageViewModels\ShiftListViewModel.cs" />
+    <Compile Include="ViewModels\StageViewModels\ShiftSetupStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\StageViewModel.cs" />
     <Compile Include="Views\Design\DesignWindow.xaml.cs">
       <DependentUpon>DesignWindow.xaml</DependentUpon>
@@ -95,8 +96,8 @@
     <Compile Include="Views\UserControls\CategoriesSetup.xaml.cs">
       <DependentUpon>CategoriesSetup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UserControls\DayShift.xaml.cs">
-      <DependentUpon>DayShift.xaml</DependentUpon>
+    <Compile Include="Views\UserControls\ShiftView.xaml.cs">
+      <DependentUpon>ShiftView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\NightShift.xaml.cs">
       <DependentUpon>NightShift.xaml</DependentUpon>
@@ -183,7 +184,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UserControls\DayShift.xaml">
+    <Page Include="Views\UserControls\ShiftView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -244,6 +245,10 @@
     <ProjectReference Include="..\WorkSpeed.MvvmBaseLibrary\WorkSpeed.MvvmBaseLibrary.csproj">
       <Project>{aa23ec1f-26a2-4962-8b57-8c4626c4cd9f}</Project>
       <Name>WorkSpeed.MvvmBaseLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WorkSpeed.Productivity\WorkSpeed.Productivity.csproj">
+      <Project>{61c2a155-2641-4617-826e-82911531837a}</Project>
+      <Name>WorkSpeed.Productivity</Name>
     </ProjectReference>
     <ProjectReference Include="..\WorkSpeed\WorkSpeed.csproj">
       <Project>{035d995a-6f8a-47c1-aebd-41b2cc5d6d7d}</Project>

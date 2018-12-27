@@ -8,13 +8,14 @@ using System.Windows.Input;
 using WorkSpeed.DesktopClient.ViewModels.EntityViewModels;
 using WorkSpeed.ProductivityCalculator;
 using WorkSpeed.MvvmBaseLibrary;
+using WorkSpeed.Productivity;
 
 namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 {
     public class ProductivityStageViewModel : StageViewModel
     {
         private readonly ObservableCollection< ProductivityViewModel > _productivities;
-        private Progress< Productivity > _progress;
+        private Progress< ProductivityEmployee > _progress;
         private double _progressCounter;
         private double _progressStep;
 
@@ -24,7 +25,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
             _productivities = new ObservableCollection< ProductivityViewModel >();
             Productivities = new ReadOnlyObservableCollection< ProductivityViewModel >( _productivities );
 
-            _progress = new Progress< Productivity >( OnProgress );
+            _progress = new Progress< ProductivityEmployee >( OnProgress );
         }
 
         public override string Header { get; } = "Выработка.";
@@ -56,7 +57,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
             await Warehouse.GetProductivitiesAsync( _progress );
         }
 
-        private void OnProgress ( Productivity productivity )
+        private void OnProgress ( ProductivityEmployee productivity )
         {
             ProgressCounter = _progressCounter + _progressStep;
 

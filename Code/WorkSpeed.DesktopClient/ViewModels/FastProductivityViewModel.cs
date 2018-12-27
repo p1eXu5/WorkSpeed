@@ -21,7 +21,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
         private readonly TwoDirectionQueue<Func<IStageViewModel>> _stageQueue;
         private IStageViewModel _stageViewModel;
         private IStageViewModel _stageViewModel2;
-        private readonly Warehouse _warehouse = new Warehouse( new RuntimeWorkSpeedBusinessContext(), new ExcelDataImporter() );
+        private readonly IWarehouse _warehouse;
 
         private int _stageIndex;
 
@@ -30,15 +30,19 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
         #region Ctor
 
-        public FastProductivityViewModel ()
+        public FastProductivityViewModel ( IWarehouse warehouse )
         {
+            _warehouse = warehouse ?? throw new ArgumentNullException( nameof( warehouse ), @"IWarehouse cannot be null" );
+
             _stageQueue = new TwoDirectionQueue< Func< IStageViewModel >>();
 
-            _stageQueue.Enqueue( () => new ProductsImportStageViewModel( this, 0 ) );
-            _stageQueue.Enqueue( () => new EmployeesImportStageViewModel( this, 1 ) );
-            _stageQueue.Enqueue( () => new CheckEmployeesStageViewModel( this, 2 ) );
-            _stageQueue.Enqueue( () => new ActionsImportStageViewModel( this, 3 ) );
-            _stageQueue.Enqueue( () => new ProductivityStageViewModel( this, 4 ) );
+            _stageQueue.Enqueue( () => new ShiftSetupStageViewModel( this, 0 ) );
+            _stageQueue.Enqueue( () => new CategoriesThresholdStageViewModel( this, 1 ) );
+            _stageQueue.Enqueue( () => new ProductsImportStageViewModel( this, 2 ) );
+            _stageQueue.Enqueue( () => new EmployeesImportStageViewModel( this, 3 ) );
+            _stageQueue.Enqueue( () => new CheckEmployeesStageViewModel( this, 4 ) );
+            _stageQueue.Enqueue( () => new ActionsImportStageViewModel( this, 5 ) );
+            _stageQueue.Enqueue( () => new ProductivityStageViewModel( this, 6 ) );
 
             SetStageViewModel( GetNextStageViewModel( _stageQueue ) );
         }

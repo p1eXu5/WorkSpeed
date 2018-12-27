@@ -156,6 +156,7 @@
     <Compile Include="Models\ReceptionAction.cs" />
     <Compile Include="Models\Salary.cs" />
     <Compile Include="Models\ScanningAction.cs" />
+    <Compile Include="Models\Shift.cs" />
     <Compile Include="Models\ShipmentAction.cs" />
     <Compile Include="Models\ShipmentComplexity.cs" />
     <Compile Include="Models\WithProductAction.cs" />

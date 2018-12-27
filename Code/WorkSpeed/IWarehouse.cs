@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
 using WorkSpeed.FileModels;
+using WorkSpeed.Productivity;
 using WorkSpeed.ProductivityCalculator;
 
 namespace WorkSpeed.Interfaces
@@ -18,14 +19,16 @@ namespace WorkSpeed.Interfaces
         Task<bool> ImportAsync (string fileName);
         Task<bool> ImportAsync< TImportModel > ( string fileName, CancellationToken cancellationToken, IProgress<double> progress = null ) where TImportModel : ImportModel;
         Task<bool> HasProductsAsync ();
+        void UpdateShiftBreaks ();
 
         IEnumerable< Product > GetProducts ();
         IEnumerable< Employee > GetEmployees ();
-        IEnumerable<Appointment> GetAppointments ();
-        IEnumerable<Position> GetPositions ();
-        IEnumerable<Rank> GetRanks ();
+        IEnumerable< Appointment > GetAppointments ();
+        IEnumerable< Position > GetPositions ();
+        IEnumerable< Rank > GetRanks ();
+        IEnumerable< Shift > GetShifts ();
         IEnumerable< GatheringAction > GetGatheringActions ();
 
-        Task GetProductivitiesAsync ( Progress< Productivity > progress );
+        Task GetProductivitiesAsync ( Progress< ProductivityEmployee > progress );
     }
 }

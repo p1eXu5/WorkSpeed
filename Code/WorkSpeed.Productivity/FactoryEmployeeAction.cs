@@ -8,11 +8,9 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Productivity
 {
-    public class FactoryEmployeeAction
+    public class FactoryEmployeeAction : IFactoryEmployeeAction
     {
         private readonly Dictionary< string, RepositoryEmployeeAction > _actionRepositories;
-        private readonly IPauseBetweenActions _pauseBetweenActions;
-        private readonly ICategoryFilter _categoryFilter;
         private readonly TimeSpan _pauseThreshold;
 
         /// <summary>
@@ -23,8 +21,8 @@ namespace WorkSpeed.Productivity
         /// <param name="pauseThreshold"></param>
         public FactoryEmployeeAction ( IPauseBetweenActions pause,  ICategoryFilter categoryFilter, TimeSpan pauseThreshold )
         {
-            _pauseBetweenActions = pause ?? throw new ArgumentNullException( nameof( pause ), "IPauseBetweenActions cannot be null." );
-            _categoryFilter = categoryFilter ?? throw new ArgumentNullException( nameof( categoryFilter ), "ICategoryFilter cannot be null." );
+            PauseBetweenActions = pause ?? throw new ArgumentNullException( nameof( pause ), "IPauseBetweenActions cannot be null." );
+            CategoryFilter = categoryFilter ?? throw new ArgumentNullException( nameof( categoryFilter ), "ICategoryFilter cannot be null." );
 
             _actionRepositories = new Dictionary< string, RepositoryEmployeeAction >();
 
@@ -33,6 +31,10 @@ namespace WorkSpeed.Productivity
             _pauseThreshold = pauseThreshold;
         }
 
+        public IPauseBetweenActions PauseBetweenActions { get; }
+
+        public ICategoryFilter CategoryFilter { get; }
+
         /// <summary>
         /// 
         /// </summary>
@@ -40,7 +42,7 @@ namespace WorkSpeed.Productivity
         public void AddAction ( EmployeeAction action )
         {
             if ( !_actionRepositories.ContainsKey( action.Employee.Id ) ) {
-                _actionRepositories[ action.Employee.Id ] = new RepositoryEmployeeAction( _pauseBetweenActions, _categoryFilter, _pauseThreshold );
+                _actionRepositories[ action.Employee.Id ] = new RepositoryEmployeeAction( PauseBetweenActions, CategoryFilter, _pauseThreshold );
             }
 
             _actionRepositories[ action.Employee.Id ].AddAction( action );
@@ -83,6 +85,20 @@ namespace WorkSpeed.Productivity
             };
 
             return productivity;
+        }
+
+        public void AddVariableBreak ( string name, TimeSpan breakDuration, DayPeriod dayPeriod )
+        {
+            PauseBetweenActions.BreakRepository.SetVariableBreak( name, breakDuration, dayPeriod );
+        }
+
+        public void AddFixedBreaks ( string name, 
+                                     TimeSpan duration, 
+                                     TimeSpan interval, 
+                                     TimeSpan offset, 
+                                     Predicate< Employee > predicate )
+        {
+            PauseBetweenActions.BreakRepository.SetFixedBreaks( name, duration, interval, offset, predicate );
         }
     }
 }

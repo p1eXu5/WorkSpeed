@@ -16,6 +16,7 @@ using WorkSpeed.FileModels;
 using WorkSpeed.FileModels.Converters;
 using WorkSpeed.Interfaces;
 using WorkSpeed.ProductivityCalculator;
+using WorkSpeed.Productivity;
 
 namespace WorkSpeed
 {
@@ -34,10 +35,11 @@ namespace WorkSpeed
 
         #region Constructor
 
-        public Warehouse( IWorkSpeedBusinessContext context, IDataImporter dataImporter )
+        public Warehouse( IWorkSpeedBusinessContext context, IDataImporter dataImporter, IFactoryEmployeeAction factoryEmployeeAction )
         {
             _context = context ?? throw new ArgumentNullException( nameof( context ) );
             _dataImporter = dataImporter ?? throw new ArgumentNullException( nameof( dataImporter ) );
+            FactoryEmployeeAction = factoryEmployeeAction ?? throw new ArgumentNullException( nameof( factoryEmployeeAction ) );
 
             _typeRepository = new TypeRepository();
             AddTypesToRepository (_typeRepository);
@@ -45,32 +47,20 @@ namespace WorkSpeed
             _productivities = new ProductivityObservableCollection();
         }
 
-        private void AddTypesToRepository ( ITypeRepository repo )
-        {
-            repo.RegisterType< ProductImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-
-            repo.RegisterType< EmployeeImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-            repo.RegisterType< EmployeeFullImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-
-            repo.RegisterType< ShipmentImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-
-            repo.RegisterType< GatheringImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-            repo.RegisterType< InventoryImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-            repo.RegisterType< ReceptionImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-
-            repo.RegisterType< ProductivityImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-        }
 
         #endregion
 
 
         #region Properties
 
+        public IFactoryEmployeeAction FactoryEmployeeAction { get; }
+
         public IEnumerable< Product > GetProducts() => _context.GetProducts();
         public IEnumerable< Employee > GetEmployees() => _context.GetEmployees();
         public IEnumerable< Appointment > GetAppointments() => _context.GetAppointments();
         public IEnumerable< Position > GetPositions() => _context.GetPositions();
         public IEnumerable< Rank > GetRanks() => _context.GetRanks();
+        public IEnumerable < Shift > GetShifts () => _context.GetShifts();
         public IEnumerable< GatheringAction > GetGatheringActions () => _context.GetGatheringActions();
         
         /// <summary>
@@ -111,21 +101,15 @@ namespace WorkSpeed
             return await Task<bool>.Factory.StartNew (() => Import (fileName), TaskCreationOptions.LongRunning);
         }
 
-        public async Task GetProductivitiesAsync ( Progress< Productivity > progress )
+        public async Task GetProductivitiesAsync ( Progress< ProductivityEmployee > progress )
         {
             await Task.Run( () => GetProductivities( progress ) );
         }
 
-        private void GetProductivities ( Progress< Productivity > progress )
+        private void GetProductivities ( Progress< ProductivityEmployee > progress )
         {
             foreach ( var employee in _context.GetGatheringActions().Select( a => a.Employee ).Distinct() ) {
                 
-                var productivity = new Productivity( employee );
-
-                foreach ( var gatheringAction in _context.GetGatheringActions( employee ) ) {
-                    
-
-                }
             }
         }
 
@@ -134,6 +118,35 @@ namespace WorkSpeed
             throw new NotImplementedException();
         }
 
+        public void UpdateShiftBreaks ()
+        {
+            var shifts = _context.GetShifts();
+
+            foreach ( var shift in shifts ) {
+
+                FactoryEmployeeAction.AddVariableBreak( shift.Name, 
+                                                        shift.LunchDuration, 
+                                                        new Productivity.DayPeriod( shift.StartTime, shift.StartTime + shift.Duration ) 
+                );
+            }
+        }
+
+
+        private void AddTypesToRepository ( ITypeRepository repo )
+        {
+            repo.RegisterType< ProductImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+
+            repo.RegisterType< EmployeeImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            repo.RegisterType< EmployeeFullImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+
+            repo.RegisterType< ShipmentImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+
+            repo.RegisterType< GatheringImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            repo.RegisterType< InventoryImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            repo.RegisterType< ReceptionImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+
+            repo.RegisterType< ProductivityImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+        }
 
         private bool Import ( string fileName,  Type type = null )
         {

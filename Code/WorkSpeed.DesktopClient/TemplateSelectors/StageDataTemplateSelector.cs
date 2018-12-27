@@ -15,9 +15,9 @@ namespace WorkSpeed.DesktopClient.TemplateSelectors
         {
             if ( container is FrameworkElement element ) {
 
-                if ( item is ShiftListViewModel )
+                if ( item is ShiftSetupStageViewModel )
                 {
-                    var o = element.FindResource( "dt_ImportFile" ) as DataTemplate;
+                    var o = element.FindResource( "dt_ShiftSetup" ) as DataTemplate;
                     return o;
                 }
 

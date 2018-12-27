@@ -49,6 +49,7 @@
     <Compile Include="DayPeriod.cs" />
     <Compile Include="IBreakRepository.cs" />
     <Compile Include="ICategoryFilter.cs" />
+    <Compile Include="IFactoryEmployeeAction.cs" />
     <Compile Include="RepositoryEmployeeAction.cs" />
     <Compile Include="FactoryEmployeeAction.cs" />
     <Compile Include="IPauseBetweenActions.cs" />

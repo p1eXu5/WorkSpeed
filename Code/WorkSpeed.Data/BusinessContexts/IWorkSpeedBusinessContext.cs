@@ -28,5 +28,9 @@ namespace WorkSpeed.Data.BusinessContexts
         IEnumerable< Position > GetPositions ();
 
         IEnumerable< Rank > GetRanks ();
+
+        IEnumerable< Category > GetCategories ();
+
+        IEnumerable< Shift > GetShifts ();
     }
 }

@@ -21,6 +21,7 @@ namespace WorkSpeed.Data.BusinessContexts
         private readonly List< Position > _positions = new List< Position >();
         private readonly List< Rank > _ranks = new List< Rank >();
         private readonly List< Category > _categories = new List< Category >();
+        private readonly List< Shift > _shifts = new List< Shift >();
 
         #endregion
 
@@ -45,7 +46,9 @@ namespace WorkSpeed.Data.BusinessContexts
             SeedPositions();
             SeedRanks();
             SeedCategories();
+            SeedShifts();
         }
+
 
         private void SeedOperations ()
         {
@@ -448,6 +451,26 @@ namespace WorkSpeed.Data.BusinessContexts
             } );
         }
 
+        private void SeedShifts ()
+        {
+            _shifts.AddRange( new [] {
+                new Shift {
+                    Name = "Дневная смена",
+                    StartTime = new TimeSpan( 8, 0, 0),
+                    Duration = TimeSpan.FromHours( 12 ),
+                    LunchDuration = TimeSpan.FromMinutes( 30 ),
+                    RestTime = TimeSpan.FromMinutes( 60 )
+                },
+                new Shift {
+                    Name = "Ночная смена",
+                    StartTime = new TimeSpan( 20, 0, 0),
+                    Duration = TimeSpan.FromHours( 12 ),
+                    LunchDuration = TimeSpan.FromMinutes( 30 ),
+                    RestTime = TimeSpan.FromMinutes( 60 )
+                },
+            } );
+        }
+
         #endregion
 
 
@@ -543,6 +566,16 @@ namespace WorkSpeed.Data.BusinessContexts
         public IEnumerable< Rank > GetRanks ()
         {
             return _ranks;
+        }
+
+        public IEnumerable< Category > GetCategories ()
+        {
+            return _categories;
+        }
+
+        public IEnumerable< Shift > GetShifts ()
+        {
+            return _shifts;
         }
 
         #endregion

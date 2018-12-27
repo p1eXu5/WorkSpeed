@@ -8,9 +8,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using NpoiExcel;
+using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.DesktopClient.ViewModels;
 using WorkSpeed.DesktopClient.Views;
 using WorkSpeed.FileModels;
+using WorkSpeed.Productivity;
 
 namespace WorkSpeed.DesktopClient
 {
@@ -21,14 +24,17 @@ namespace WorkSpeed.DesktopClient
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            var sw = new Stopwatch();
-            sw.Start();
+            var context = new RuntimeWorkSpeedBusinessContext();
+            var categoryFilter = new CategoryFilter( context.GetCategories() );
+            var pauseBetween = new PauseBetweenActions( new BreakRepository(), TimeSpan.FromHours( 4 ) );
 
-            object typeInstance = Activator.CreateInstance( typeof( ProductImportModel) );
+            var factoryEmployeeAction = new FactoryEmployeeAction( pauseBetween, categoryFilter, TimeSpan.FromMinutes( 2 ) );
 
-            Debug.WriteLine( sw.Elapsed );
+            var importer = new ExcelDataImporter();
 
-            var vm = new FastProductivityViewModel();
+            var warehouse = new Warehouse( context, importer, factoryEmployeeAction );
+
+            var vm = new FastProductivityViewModel( warehouse );
             Window mainWindow = new FastProductivityMainWindow();
             mainWindow.DataContext = vm;
 

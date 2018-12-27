@@ -18,9 +18,9 @@ namespace WorkSpeed.DesktopClient.Views.UserControls
     /// <summary>
     /// Interaction logic for DayShift.xaml
     /// </summary>
-    public partial class DayShift : UserControl
+    public partial class ShiftView : UserControl
     {
-        public DayShift()
+        public ShiftView()
         {
             InitializeComponent();
         }
