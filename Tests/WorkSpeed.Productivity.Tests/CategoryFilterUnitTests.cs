@@ -29,19 +29,6 @@ namespace WorkSpeed.Productivity.Tests
 
 
 
-
-        [Test ]
-        public void Ctor_ByDefault_DontCreateCategories ()
-        {
-
-
-
-
-
-
-        }
-
-
         [ Test ]
         public void Ctor__Categories_Empty__DontCreateCategories ()
         {
