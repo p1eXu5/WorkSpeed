@@ -3,9 +3,14 @@
                     xmlns:uc="clr-namespace:WorkSpeed.DesktopClient.Views.UserControls"
                     >
 
+
+    <!-- ______________________ Import File _____________________ -->
+    
     <!-- ImportFile -->
     <DataTemplate x:Key="dt_ImportFile" x:Shared="true">
-        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid Margin="5" Width="Auto" Height="Auto" 
+              VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+              >
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.1*" MinHeight="50" />
                 <RowDefinition Height="*"/>
@@ -20,109 +25,13 @@
                            />
             </Border>
 
-            <Grid Grid.Row="1" MaxWidth="300">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="90" />
-                    <RowDefinition Height="26"/>
-                    <RowDefinition Height="3*" />
-                </Grid.RowDefinitions>
-
-                <!-- File -->
-                <StackPanel Grid.Row="1"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        >
-                    <Border BorderBrush="Blue" 
-                        BorderThickness="0,0,0,1" 
-                        SnapsToDevicePixels="True"
-                        >
-                        <TextBlock Text="{Binding FileName}"
-                               MinWidth="200"
-                               />
-                    </Border>
-
-                    <Button x:Name="m_OpenFileButton" Margin="10,0,0,0" 
-                        Style="{StaticResource st_ImageButton}"
-                        Command="{Binding OpenCommand}"
-                        >
-                        <Image Source="{DynamicResource im_OpenFile}" 
-                           RenderOptions.EdgeMode="Aliased"
-                           RenderOptions.BitmapScalingMode="Fant"
-                           />
-                    </Button>
-                </StackPanel>
-
-                <Grid Grid.Row="2" Margin="20, 2" >
-                    <StackPanel Orientation="Vertical"
-                                VerticalAlignment="Center"
-                            >
-                        <ProgressBar Height="20" Background="{StaticResource br_MainWindow.Background}" 
-                                     Value="{Binding ProgressCounter}"
-                                     Minimum="0"
-                                     Maximum="1"
-                                     Opacity="0.0"
-                                     >
-
-                            <ProgressBar.Style>
-                                <Style TargetType="ProgressBar">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsInProgress}" 
-                                                 Value="True">
-                                            <DataTrigger.EnterActions>
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4"/>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </DataTrigger.EnterActions>
-                                            <DataTrigger.ExitActions>
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.4"/>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </DataTrigger.ExitActions>
-                                        </DataTrigger>
-
-                                    </Style.Triggers>
-                                </Style>
-                            </ProgressBar.Style>
-                        </ProgressBar>
-
-                        <Border Margin="0">
-                            <TextBlock Text="{Binding Message}"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Top" />
-                        </Border>
-                    </StackPanel>
-                </Grid>
-
-                <!-- Buttons -->
-                <Grid Grid.Row="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-
-                    <Button Content="Выход" Width="80"
-                            Command="{Binding BackwardCommand}"
-                            />
-
-                    <Button Grid.Column="1" Content="Далее" Width="80"
-                            Command="{Binding ForwardCommand}"
-                            />
-
-                </Grid>
-            </Grid>
+            <uc:FileImport Grid.Row="1" />
         </Grid>
     </DataTemplate>
 
 
 
-    <!-- _______________Employee Table Templates_______________ -->
+    <!-- _______________ Employee Table Templates _______________ -->
 
     <!-- CheckBoxes -->
     <DataTemplate x:Key="dt_IsActive">
@@ -162,15 +71,17 @@
                   />
     </DataTemplate>
 
-    <!-- DataGrid -->
+    <!-- Employee DataGrid -->
     <DataTemplate x:Key="dt_EmployeeTable">
-        <Grid Width="Auto" Height="Auto" Margin="5" HorizontalAlignment="Center">
+        <Grid Width="Auto" Height="Auto" Margin="5" 
+              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+              >
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="5*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="0.1*" MinHeight="50" />
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+
 
             <Border Margin="10,5" Height="Auto">
                 <TextBlock FontSize="24"
@@ -181,91 +92,27 @@
                 />
             </Border>
 
-            
-                <Grid Grid.Row="1">
-                    <DataGrid ItemsSource="{Binding Employees}"
-                      VerticalAlignment="Top"
-                      >
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Код" 
-                                                Width="80" 
-                                                Binding="{Binding Id}"
-                                                CanUserResize="False"
-                                                CellStyle="{StaticResource st_CenteredCell}"
-                                                IsReadOnly="True"
-                                                />
-                            <DataGridTemplateColumn Header="Должность" 
-                                                    MinWidth="180"
-                                                    CellTemplate="{StaticResource dt_ComboBox.Appointments}"
-                                                    SortMemberPath="Appointment" 
-                                                    CanUserSort="True"
-                                                    />
-                            <DataGridTextColumn Header="Сотрудник"  
-                                                MinWidth="240"
-                                                Binding="{Binding Name}" 
-                                                CellStyle="{StaticResource st_VerticalCenteredCell}"
-                                                IsReadOnly="True"
-                                                />
-                            <DataGridTemplateColumn Header="Работает" 
-                                                    Width="70"
-                                                    CellTemplate="{StaticResource dt_IsActive}"
-                                                    CellStyle="{StaticResource st_CenteredCell}"
-                                                    CanUserSort="True"
-                                                    SortMemberPath="IsActive"
-                                                    />
-                            <DataGridTemplateColumn Header="Зона ответственности" 
-                                                    MinWidth="180"
-                                                    CellTemplate="{StaticResource dt_ComboBox.Positions}"
-                                                    SortMemberPath="Position" 
-                                                    CanUserSort="True"
-                                                    />
-                            <DataGridTemplateColumn Header="Ранг" 
-                                                    MinWidth="180"
-                                                    CellTemplate="{StaticResource dt_ComboBox.Ranks}"
-                                                    SortMemberPath="Rank" 
-                                                    CanUserSort="True"
-                                                    />
-                            <DataGridTemplateColumn Header="Курит" Width="70"
-                                        CellTemplate="{StaticResource dt_IsSmoker}"
-                                        CellStyle="{StaticResource st_CenteredCell}"
-                                        CanUserSort="True"
-                                        SortMemberPath="IsSmoker"
-                                        />
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-           
 
-            <Grid Height="60" Grid.Row="2" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
+            <uc:FileImport Grid.Row="1" />
 
-                <Button Content="Выход" Width="80" Height="26"
-                    Command="{Binding BackwardCommand}"
-                    HorizontalAlignment="Left"
-                    Margin="80,0"
-                    />
-
-                <Button Grid.Column="1" Content="Далее" Width="80" Height="26"
-                    Command="{Binding ForwardCommand}"
-                    HorizontalAlignment="Right"
-                    Margin="80,0"
-                    />
-            </Grid>
         </Grid>
     </DataTemplate>
 
+
+
+    <!-- _______________ Productivity Table Templates _______________ -->
+
+    <!-- Productivity DataGrid -->
     <DataTemplate x:Key="dt_ProductivityTable">
-        <Grid Width="Auto" Height="Auto" Margin="5" HorizontalAlignment="Center">
+        <Grid Width="Auto" Height="Auto" Margin="5" 
+              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+              >
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="40" />
-                <RowDefinition Height="5*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="0.1*" MinHeight="50" />
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+
 
             <Border Margin="10,5" Height="Auto">
                 <TextBlock FontSize="24"
@@ -276,94 +123,12 @@
                 />
             </Border>
 
-            <Button Grid.Row="1" 
-                Content="Сформировать" Width="140" Height="26"
-                Command="{Binding GenerateCommand}"
-                HorizontalAlignment="Left"
-                Margin="0,0"
-        />
-
-            <Grid Grid.Row="2">
-                <DataGrid ItemsSource="{Binding Employees}"
-                      VerticalAlignment="Top"
-                      >
-                    <DataGrid.Columns>
-
-                        <DataGridTextColumn Header="Сотрудник"  
-                                        MinWidth="240"
-                                        Binding="{Binding EmployeeName}" 
-                                        CellStyle="{StaticResource st_VerticalCenteredCell}"
-                                        IsReadOnly="True"
-                                        />
-
-                        <DataGridTextColumn Header="Зона ответственности" 
-                                        MinWidth="180"
-                                        Binding="{Binding Position}" 
-                                        CellStyle="{StaticResource st_VerticalCenteredCell}"
-                                        IsReadOnly="True"
-                                                    />
-                        <DataGridTextColumn Header="Ранг" 
-                                        MinWidth="80"
-                                        Binding="{Binding Rank}" 
-                                        CellStyle="{StaticResource st_CenteredCell}"
-                                        IsReadOnly="True"
-                                                    />
-                        <DataGridTextColumn Header="Курит" 
-                                        Width="70"
-                                        Binding="{Binding IsSmoker}" 
-                                        CellStyle="{StaticResource st_CenteredCell}"
-                                        IsReadOnly="True"
-                                        />
-
-                        <DataGridTextColumn Header="Отработал" 
-                                        Width="100"
-                                        Binding="{Binding WorkTime}" 
-                                        CellStyle="{StaticResource st_CenteredCell}"
-                                        IsReadOnly="True"
-                                        />
-                        <DataGridTextColumn Header="Бездельничал" 
-                                        Width="100"
-                                        Binding="{Binding OffTime}" 
-                                        CellStyle="{StaticResource st_CenteredCell}"
-                                        IsReadOnly="True"
-                                        />
-                        <DataGridTextColumn Header="Собрал строк" 
-                                        Width="98"
-                                        Binding="{Binding GatheredLines}" 
-                                        CellStyle="{StaticResource st_CenteredCell}"
-                                        IsReadOnly="True"
-                                        />
-                        <DataGridTextColumn Header="Скорость, стр./час" 
-                                        Width="120"
-                                        Binding="{Binding GatheringSpeed}" 
-                                        CellStyle="{StaticResource st_CenteredCell}"
-                                        IsReadOnly="True"
-                                        />
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
-
-
-            <Grid Height="60" Grid.Row="3" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-
-                <Button Content="Выход" Width="80" Height="26"
-                    Command="{Binding BackwardCommand}"
-                    HorizontalAlignment="Left"
-                    Margin="80,0"
-                    />
-
-                <Button Grid.Column="1" Content="Далее" Width="80" Height="26"
-                    Command="{Binding ForwardCommand}"
-                    HorizontalAlignment="Right"
-                    Margin="80,0"
-                    />
-            </Grid>
         </Grid>
     </DataTemplate>
+
+
+
+    <!-- _______________________ Shift Setup ________________________ -->
 
     <DataTemplate x:Key="dt_ShiftList">
         <Grid Width="Auto" Height="Auto" Margin="5" HorizontalAlignment="Center">
@@ -412,5 +177,10 @@
             </Grid>
         </Grid>
     </DataTemplate>
+
+
+
+    <!-- _________________ Categories And Threshold _________________ -->
+
 
 </ResourceDictionary>

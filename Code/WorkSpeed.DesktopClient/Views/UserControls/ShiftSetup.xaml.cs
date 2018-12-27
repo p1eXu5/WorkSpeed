@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WorkSpeed.DesktopClient.Views
+namespace WorkSpeed.DesktopClient.Views.UserControls
 {
     /// <summary>
-    /// Interaction logic for FileImportUserControl.xaml
+    /// Interaction logic for ShiftSetup.xaml
     /// </summary>
-    public partial class FileImportUserControl : UserControl
+    public partial class ShiftSetup : UserControl
     {
-        public FileImportUserControl ()
+        public ShiftSetup()
         {
             InitializeComponent();
         }

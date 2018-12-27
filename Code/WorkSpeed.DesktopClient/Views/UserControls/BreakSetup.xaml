@@ -1,65 +1,13 @@
-﻿<UserControl x:Class="WorkSpeed.DesktopClient.Views.UserControls.NightShift"
+﻿<UserControl x:Class="WorkSpeed.DesktopClient.Views.UserControls.BreakSetup"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WorkSpeed.DesktopClient.Views.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="500">
-
-    <StackPanel Width="Auto" Height="Auto" Margin="5,5,5,20" 
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    TextElement.FontSize="14"
-                    TextElement.FontFamily="{StaticResource ft_NotoSerif}"
-                    Grid.IsSharedSizeScope="True"
-                    TextElement.Foreground="{StaticResource br_MainWindow.BackgroundAlternative}"
-                    CanVerticallyScroll="True"
-                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                    >
-
-        <HeaderedContentControl Header="Наименование смены:">
-            <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
-                         MinWidth="100"
-                         >Ночная смена</TextBox>
-        </HeaderedContentControl>
-
-        <HeaderedContentControl Header="Начало смены:"
-                                Margin="0,10,0,6"
-                                >
-            <StackPanel Orientation="Horizontal">
-                <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
-                         MinWidth="24"
-                         HorizontalContentAlignment="Center"
+    <StackPanel Style="{StaticResource st_HeaderContentControl.Container}"
                 >
-                    20:00
-                </TextBox>
-            </StackPanel>
-        </HeaderedContentControl>
-
-        <HeaderedContentControl Header="Длительность смены:">
-            <StackPanel Orientation="Horizontal">
-                <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
-                         MinWidth="24"
-                         HorizontalContentAlignment="Center"
-                         >
-                    12
-                </TextBox>
-                <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text=" час." />
-            </StackPanel>
-        </HeaderedContentControl>
-
-        <HeaderedContentControl Header="Длительность обеда:">
-            <StackPanel Orientation="Horizontal">
-                <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
-                         MinWidth="24"
-                         HorizontalContentAlignment="Center"
-                         >
-                    30
-                </TextBox>
-                <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text=" мин." />
-            </StackPanel>
-        </HeaderedContentControl>
-
         <GroupBox Margin="0,10">
             <GroupBox.Header>
                 <TextBlock Foreground="{StaticResource br_MainWindow.Foreground}" 
@@ -73,9 +21,9 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text="1 перерыв в " />
                         <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
-                                     MinWidth="24"
-                                     HorizontalContentAlignment="Center"
-                                    >
+                                 MinWidth="24"
+                                 HorizontalContentAlignment="Center"
+                                 >
                             2
                         </TextBox>
                         <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text=" час(а)" />
@@ -120,7 +68,7 @@
                                />
             </CheckBox>
 
-            <GroupBox Margin="0,10">
+            <GroupBox Margin="0,10" IsEnabled="{Binding ElementName=mCheckBox, Path=IsChecked}">
                 <GroupBox.Header>
                     <TextBlock Foreground="{StaticResource br_MainWindow.Foreground}" 
                                    FontSize="11"
@@ -128,7 +76,9 @@
                                    Text="Короткие перерываы для курящих"
                                    />
                 </GroupBox.Header>
-                <StackPanel TextElement.Foreground="{StaticResource br_MainWindow.BackgroundAlternative}">
+                <StackPanel TextElement.Foreground="{StaticResource br_MainWindow.BackgroundAlternative}"
+                            Opacity=".5"
+                            >
                     <HeaderedContentControl Header="Периодичность перерывов:">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text="1 перерыв в " />
@@ -164,10 +114,33 @@
                             <TextBlock Style="{StaticResource st_HeaderContentControl.Header}" Text=" мин. до конца периода" />
                         </StackPanel>
                     </HeaderedContentControl>
+                    <StackPanel.Style>
+
+                        <Style TargetType="StackPanel">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.5" Duration="0:0:0.4" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.4" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
                 </StackPanel>
+
             </GroupBox>
 
         </StackPanel>
-
     </StackPanel>
 </UserControl>

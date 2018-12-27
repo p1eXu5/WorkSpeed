@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WorkSpeed.DesktopClient.Views
+namespace WorkSpeed.DesktopClient.Views.UserControls
 {
     /// <summary>
-    /// Interaction logic for ImportDataUserControl.xaml
+    /// Interaction logic for EmployeeTable.xaml
     /// </summary>
-    public partial class ImportDataUserControl : UserControl
+    public partial class EmployeeTable : UserControl
     {
-        public ImportDataUserControl()
+        public EmployeeTable()
         {
             InitializeComponent();
         }
