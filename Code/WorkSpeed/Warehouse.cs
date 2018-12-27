@@ -51,7 +51,7 @@ namespace WorkSpeed
         #endregion
 
 
-        #region Properties
+        #region Context Methods
 
         public IFactoryEmployeeAction FactoryEmployeeAction { get; }
 
@@ -63,6 +63,14 @@ namespace WorkSpeed
         public IEnumerable < Shift > GetShifts () => _context.GetShifts();
         public IEnumerable< ShortBreak > GetBreakList () => _context.GetBreakList();
         public IEnumerable< GatheringAction > GetGatheringActions () => _context.GetGatheringActions();
+        public IEnumerable< Category > GetCategories () => FactoryEmployeeAction.GetCategories ();
+
+        public double GetThreshold () => FactoryEmployeeAction.GetThreshold();
+
+        public void SetThreshold ( double threshold )
+        {
+            FactoryEmployeeAction.SetThreshold( double threshold );
+        }
 
 
         public Task<bool> HasProductsAsync () => _context.HasProductsAsync();
@@ -91,6 +99,8 @@ namespace WorkSpeed
                 progress.Report( args.Progress );
             }
         }
+
+        public IWarehouseEntities NewData { get; }
 
         public async Task<bool> ImportAsync (string fileName)
         {
