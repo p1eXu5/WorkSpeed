@@ -18,45 +18,11 @@ namespace WorkSpeed.Tests.ProductivityTests
             CultureInfo.CurrentUICulture = new CultureInfo( "en-us" );
         }
 
-        [ Test ]
-        public void AddAction_ActionWithAnotherEmployee_Throws ()
-        {
-            // Arrange:
-            var productivityEmployee = GetEmployee( "AR54321" );
-            var productivity = GetProductivity( productivityEmployee );
 
-            var duration = TimeSpan.FromSeconds( 5 );
-            var actionEmployee = GetEmployee( "AR12345" );
-            var action = GetGatheringAction( actionEmployee, OperationGroups.Gathering );
-
-            // Action:
-            // Assert:
-            var ex = Assert.Catch<ArgumentException>( () => productivity.AddEmployeeAction( action ) );
-        }
-
-        [ Test ]
-        public void AddAction_FistActionIsGathering_AddDuration ()
-        {
-            // Arrange:
-            var employee = GetEmployee( "AR12345" );
-            var productivity = GetProductivity( employee );
-            var duration = TimeSpan.FromSeconds( 5 );
-            var action = GetGatheringAction( employee, OperationGroups.Gathering, duration );
-
-            // Action:
-            productivity.AddEmployeeAction( action );
-
-            // Assert:
-            Assert.That( duration == productivity.GatheringTime, $"{productivity.GatheringTime}" );
-        }
 
 
         #region Factory
 
-        private Productivity GetProductivity ( Employee employee )
-        {
-            return new Productivity( employee );
-        }
 
         private GatheringAction GetGatheringAction (
             Employee employee,

@@ -178,7 +178,7 @@
             </Border>
 
 
-            <uc:EmployeeTable Grid.Row="1" />
+            <uc:CategoriesThreshold Grid.Row="1" />
 
         </Grid>
     </DataTemplate>

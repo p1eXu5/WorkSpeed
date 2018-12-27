@@ -11,6 +11,7 @@ using NUnit.Framework;
 using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.Data.Models;
 using WorkSpeed.FileModels;
+using WorkSpeed.Productivity;
 
 namespace WorkSpeed.Tests.WarehouseTests.IntegrationalTests
 {
@@ -29,7 +30,7 @@ namespace WorkSpeed.Tests.WarehouseTests.IntegrationalTests
             // Arrange:
             var businessContext = GetBusinessContext();
             var dataImporter = GetDataImporter();
-            var warehouse = GetWarehouse( businessContext, dataImporter );
+            var warehouse = GetWarehouse( businessContext, dataImporter, null );
 
             // Action:
             Task<bool> res = warehouse.HasProductsAsync();
@@ -45,7 +46,7 @@ namespace WorkSpeed.Tests.WarehouseTests.IntegrationalTests
             // Arrange:
             var businessContext = GetBusinessContext();
             var dataImporter = GetDataImporter();
-            var warehouse = GetWarehouse( businessContext, dataImporter );
+            var warehouse = GetWarehouse( businessContext, dataImporter, null );
 
             var file = "products.xlsx".AppendAssemblyPath( "WarehouseTests\\TestFiles" );
 
@@ -63,7 +64,7 @@ namespace WorkSpeed.Tests.WarehouseTests.IntegrationalTests
             // Arrange:
             var businessContext = GetBusinessContext();
             var dataImporter = GetDataImporter();
-            var warehouse = GetWarehouse( businessContext, dataImporter );
+            var warehouse = GetWarehouse( businessContext, dataImporter, null );
 
             var fileEmployees = "employees.xlsx".AppendAssemblyPath( "WarehouseTests\\TestFiles" );
             var file = "gathering.xls".AppendAssemblyPath( "WarehouseTests\\TestFiles" );
@@ -85,7 +86,7 @@ namespace WorkSpeed.Tests.WarehouseTests.IntegrationalTests
             // Arrange:
             var businessContext = GetBusinessContext();
             var dataImporter = GetDataImporter();
-            var warehouse = GetWarehouse( businessContext, dataImporter );
+            var warehouse = GetWarehouse( businessContext, dataImporter, null );
 
             var file = "employees.xlsx".AppendAssemblyPath( "WarehouseTests\\TestFiles" );
             
@@ -110,9 +111,9 @@ namespace WorkSpeed.Tests.WarehouseTests.IntegrationalTests
             return new ExcelDataImporter();
         }
 
-        private Warehouse GetWarehouse( IWorkSpeedBusinessContext context, IDataImporter importer )
+        private Warehouse GetWarehouse( IWorkSpeedBusinessContext context, IDataImporter importer, IFactoryEmployeeAction factory )
         {
-            return new Warehouse( context, importer );
+            return new Warehouse( context, importer, factory );
         }
 
         #endregion
