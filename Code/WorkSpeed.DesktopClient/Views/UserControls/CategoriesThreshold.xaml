@@ -1,0 +1,94 @@
+﻿<UserControl x:Class="WorkSpeed.DesktopClient.Views.UserControls.CategoriesThreshold"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WorkSpeed.DesktopClient.Views.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid VerticalAlignment="Stretch"
+          >
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="60" />
+        </Grid.RowDefinitions>
+
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" >
+            <ListBox Grid.IsSharedSizeScope="True"
+                     Background="Transparent"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Center"
+                     >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="71" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Category" />
+                                <ColumnDefinition Width="71"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Margin="20,0" 
+                                 Style="{StaticResource st_HeaderContentControl.Content}"
+                                 FontWeight="Bold"
+                                 VerticalContentAlignment="Center"
+                                 >
+                                0.0
+                            </TextBox>
+
+                            <TextBox Grid.Column="1" 
+                                 Style="{StaticResource st_HeaderContentControl.Content}"
+                                 FontWeight="Bold"
+                        >
+                                Категория товара от 100 до 250 литров
+                            </TextBox>
+                            <TextBox Grid.Column="2" Margin="20,0" 
+                                 Style="{StaticResource st_HeaderContentControl.Content}"
+                                 FontWeight="Bold"
+                                 VerticalContentAlignment="Center"
+                        >
+                                250
+                            </TextBox>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <HeaderedContentControl Header="Длительность смены:" 
+                                    FontSize="14"
+                                    Margin="0,40,0,0"
+                                    >
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
+                             MinWidth="24"
+                             HorizontalContentAlignment="Center"
+                             Text="{}}{Binding Duration}"
+                             FontSize="14"
+                             FontWeight="Bold"
+                    />
+                </StackPanel>
+            </HeaderedContentControl>
+
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Button Content="Выход" Width="80" Height="26"
+                    Command="{Binding BackwardCommand}"
+                    HorizontalAlignment="Center"
+                    Margin="80,0"
+            />
+
+            <Button Grid.Column="1" Content="Далее" Width="80" Height="26"
+                    Command="{Binding ForwardCommand}"
+                    HorizontalAlignment="Center"
+                    Margin="80,0"
+            />
+        </Grid>
+
+    </Grid>
+</UserControl>

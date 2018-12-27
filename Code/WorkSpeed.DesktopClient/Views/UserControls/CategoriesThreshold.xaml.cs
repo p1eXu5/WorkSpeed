@@ -18,9 +18,9 @@ namespace WorkSpeed.DesktopClient.Views.UserControls
     /// <summary>
     /// Interaction logic for CategoriesSetup.xaml
     /// </summary>
-    public partial class CategoriesSetup : UserControl
+    public partial class CategoriesThreshold : UserControl
     {
-        public CategoriesSetup()
+        public CategoriesThreshold ()
         {
             InitializeComponent();
         }

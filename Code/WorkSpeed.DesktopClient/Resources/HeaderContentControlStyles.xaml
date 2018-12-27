@@ -27,25 +27,25 @@
                             <ColumnDefinition Width="*" SharedSizeGroup="Shift"/>
                         </Grid.ColumnDefinitions>
                         <ContentPresenter ContentSource="Header" 
-                                                      DockPanel.Dock="Left"
-                                                      Focusable="False" 
-                                                      Margin="0,0,5,0"
-                                                      VerticalAlignment="Bottom"
-                                                      HorizontalAlignment="Right"
-                                                      TextElement.FontWeight="Bold"
-                                                      TextElement.FontSize="12"
-                                                      >
+                                          DockPanel.Dock="Left"
+                                          Focusable="False" 
+                                          Margin="0,0,5,0"
+                                          VerticalAlignment="Bottom"
+                                          HorizontalAlignment="Right"
+                                          TextElement.FontWeight="Bold"
+                                          TextElement.FontSize="{TemplateBinding FontSize}"
+                                          >
                             <ContentPresenter.RenderTransform>
                                 <TranslateTransform Y="-2" />
                             </ContentPresenter.RenderTransform>
                         </ContentPresenter>
                         <ContentPresenter Grid.Column="1" 
-                                                      ContentSource="Content"
-                                                      Margin="5,0,0,0"
-                                                      DockPanel.Dock="Right" 
-                                                      VerticalAlignment="Bottom"
-                                                      HorizontalAlignment="Left"
-                                                      />
+                                          ContentSource="Content"
+                                          Margin="5,0,0,0"
+                                          DockPanel.Dock="Right" 
+                                          VerticalAlignment="Bottom"
+                                          HorizontalAlignment="Left"
+                                          /> 
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -66,6 +66,7 @@
         <Setter Property="Padding" Value="2,0" />
         <Setter Property="BorderThickness" Value="0,0,0,1" />
         <Setter Property="BorderBrush" Value="{StaticResource br_MainWindow.BackgroundAlternative}" />
+        <Setter Property="Background" Value="{StaticResource br_MainWindow.Background}" />
         <Setter Property="Foreground" Value="Black" />
         <Setter Property="FontSize" Value="14" />
     </Style>
