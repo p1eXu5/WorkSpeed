@@ -63,11 +63,6 @@ namespace WorkSpeed
         public IEnumerable < Shift > GetShifts () => _context.GetShifts();
         public IEnumerable< ShortBreak > GetBreakList () => _context.GetBreakList();
         public IEnumerable< GatheringAction > GetGatheringActions () => _context.GetGatheringActions();
-        
-        /// <summary>
-        /// Entities that don't contained in DB.
-        /// </summary>
-        public IWarehouseEntities NewData { get; }
 
 
         public Task<bool> HasProductsAsync () => _context.HasProductsAsync();
