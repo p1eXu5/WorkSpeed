@@ -14,7 +14,7 @@
         d:DataContext="{d:DesignInstance vm:FastProductivityViewModel}"
 
         mc:Ignorable="d"
-        Title="WorkSpeedFastProductivity" Height="450" Width="1500"
+        Title="WorkSpeedFastProductivity" Height="700" Width="1500"
         Background="{StaticResource br_MainWindow.Background}"
         >
 
@@ -83,6 +83,14 @@
             </Setter>
         </Style>
 
+        <Style TargetType="Path" x:Key="st_Stages.Path">
+            <Setter Property="Width" Value="24" />
+            <Setter Property="Height" Value="16" />
+            <Setter Property="Stretch" Value="Uniform" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Fill" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}, Path=Foreground}" />
+        </Style>
+
     </Window.Resources>
 
     <Grid>
@@ -100,14 +108,40 @@
                  SelectionMode="Single" IsHitTestVisible="False"
                  >
 
+            <!-- Shift Setup -->
+            <ListBoxItem Margin="5,10,5,0"
+                         >
+                <StackPanel Height="30" Orientation="Horizontal">
+                    <Path Data="{StaticResource g_ShiftSetupIcon}" 
+                          Style="{StaticResource st_Stages.Path}"
+                          />
+                    <TextBlock VerticalAlignment="Center"
+                               Margin="10,0"
+                               Text="Настройка смен"
+                               />
+                </StackPanel>
+            </ListBoxItem>
+
+            <!-- Categories And Threshold -->
+            <ListBoxItem Margin="5,10,5,0"
+                         >
+                <StackPanel Height="30" Orientation="Horizontal">
+                    <Path Data="{StaticResource g_SetupIcon}" 
+                          Style="{StaticResource st_Stages.Path}"
+                          />
+                    <TextBlock VerticalAlignment="Center"
+                               Margin="10,0"
+                               Text="Категории и порог"
+                               />
+                </StackPanel>
+            </ListBoxItem>
+
+            <!-- Product Import -->
             <ListBoxItem x:Name="m_MMM" Margin="5,10,5,0"
                          >
                 <StackPanel Height="30" Orientation="Horizontal">
                     <Path Data="{StaticResource g_ProductsIcon}" 
-                          Height="16" Width="24"
-                          Stretch="Uniform"
-                          VerticalAlignment="Center" 
-                          Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}, Path=Foreground}"
+                          Style="{StaticResource st_Stages.Path}"
                           />
                     <TextBlock VerticalAlignment="Center"
                                Margin="10,0"
@@ -115,60 +149,56 @@
                                />
                 </StackPanel>
             </ListBoxItem>
+
+            <!-- Employee Import -->
             <ListBoxItem>
                 <StackPanel Height="30" Orientation="Horizontal">
                     <Path Data="{StaticResource g_EmployeesIcon}" 
-                          Height="16" Width="24"
-                          Stretch="Uniform"
-                          VerticalAlignment="Center" 
-                          Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}, Path=Foreground}"
-                    />
+                          Style="{StaticResource st_Stages.Path}"
+                          />
                     <TextBlock VerticalAlignment="Center"
                                Margin="10,0"
                                Text="Импорт сотрудников"
-                    />
+                               />
                 </StackPanel>
             </ListBoxItem>
+
+            <!-- Employee Check -->
             <ListBoxItem>
                 <StackPanel Height="30" Orientation="Horizontal">
                     <Path Data="{StaticResource g_EditIcon}" 
-                          Height="16" Width="24"
-                          Stretch="Uniform"
-                          VerticalAlignment="Center" 
-                          Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}, Path=Foreground}"
-                    />
+                          Style="{StaticResource st_Stages.Path}"
+                          />
                     <TextBlock VerticalAlignment="Center"
                                Margin="10,0"
                                Text="Проверка сотрудников"
-                    />
+                               />
                 </StackPanel>
             </ListBoxItem>
+
+            <!-- Actions Import -->
             <ListBoxItem>
                 <StackPanel Height="30" Orientation="Horizontal">
-                    <Path Data="{StaticResource g_ProductivityIcon}" 
-                          Height="16" Width="24"
-                          Stretch="Uniform"
-                          VerticalAlignment="Center" 
-                          Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}, Path=Foreground}"
-                    />
+                    <Path Data="{StaticResource g_ActionsIcon}" 
+                          Style="{StaticResource st_Stages.Path}"
+                          />
                     <TextBlock VerticalAlignment="Center"
                                Margin="10,0"
                                Text="Импорт действий"
-                    />
+                               />
                 </StackPanel>
             </ListBoxItem>
+
+            <!-- Productivity -->
             <ListBoxItem>
                 <StackPanel Height="30" Orientation="Horizontal">
                     <Path Data="{StaticResource g_ProductivityIcon}" 
-                          Height="16" Width="24"
-                          Stretch="Uniform"
-                          VerticalAlignment="Center" 
-                          Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}, Path=Foreground}"
-                    />
+                          Style="{StaticResource st_Stages.Path}"
+                          />
                     <TextBlock VerticalAlignment="Center"
                                Margin="10,0"
                                Text="Выработка сотрудников"
-                    />
+                               />
                 </StackPanel>
             </ListBoxItem>
         </ListBox>

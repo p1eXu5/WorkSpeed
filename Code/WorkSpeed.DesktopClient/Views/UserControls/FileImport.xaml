@@ -5,80 +5,106 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WorkSpeed.DesktopClient.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="1500"
+             d:DesignHeight="300" d:DesignWidth="400"
              HorizontalAlignment="Stretch" 
              VerticalAlignment="Stretch"
              >
 
-    <StackPanel VerticalAlignment="Center">
-        <DataGrid ItemsSource="{Binding Employees}"
-                  VerticalAlignment="Top"
-                  >
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Код" 
-                                            Width="80" 
-                                            Binding="{Binding Id}"
-                                            CanUserResize="False"
-                                            CellStyle="{StaticResource st_CenteredCell}"
-                                            IsReadOnly="True"
-                                            />
-                <DataGridTemplateColumn Header="Должность" 
-                                                MinWidth="180"
-                                                CellTemplate="{StaticResource dt_ComboBox.Appointments}"
-                                                SortMemberPath="Appointment" 
-                                                CanUserSort="True"
-                                                />
-                <DataGridTextColumn Header="Сотрудник"  
-                                            MinWidth="240"
-                                            Binding="{Binding Name}" 
-                                            CellStyle="{StaticResource st_VerticalCenteredCell}"
-                                            IsReadOnly="True"
-                                            />
-                <DataGridTemplateColumn Header="Работает" 
-                                                Width="70"
-                                                CellTemplate="{StaticResource dt_IsActive}"
-                                                CellStyle="{StaticResource st_CenteredCell}"
-                                                CanUserSort="True"
-                                                SortMemberPath="IsActive"
-                                                />
-                <DataGridTemplateColumn Header="Зона ответственности" 
-                                                MinWidth="180"
-                                                CellTemplate="{StaticResource dt_ComboBox.Positions}"
-                                                SortMemberPath="Position" 
-                                                CanUserSort="True"
-                                                />
-                <DataGridTemplateColumn Header="Ранг" 
-                                                MinWidth="180"
-                                                CellTemplate="{StaticResource dt_ComboBox.Ranks}"
-                                                SortMemberPath="Rank" 
-                                                CanUserSort="True"
-                                                />
-                <DataGridTemplateColumn Header="Курит" Width="70"
-                                    CellTemplate="{StaticResource dt_IsSmoker}"
-                                    CellStyle="{StaticResource st_CenteredCell}"
-                                    CanUserSort="True"
-                                    SortMemberPath="IsSmoker"
-                                    />
-            </DataGrid.Columns>
-        </DataGrid>
+    <Grid MaxWidth="300">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="90" />
+            <RowDefinition Height="26"/>
+            <RowDefinition Height="3*" />
+        </Grid.RowDefinitions>
 
-        <Grid Height="60" Grid.Row="2" >
+        <!-- File -->
+        <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        >
+            <Border BorderBrush="Blue" 
+                        BorderThickness="0,0,0,1" 
+                        SnapsToDevicePixels="True"
+                        >
+                <TextBlock Text="{Binding FileName}"
+                               MinWidth="200"
+                               />
+            </Border>
+
+            <Button x:Name="m_OpenFileButton" Margin="10,0,0,0" 
+                        Style="{StaticResource st_ImageButton}"
+                        Command="{Binding OpenCommand}"
+                        >
+                <Image Source="{DynamicResource im_OpenFile}" 
+                           RenderOptions.EdgeMode="Aliased"
+                           RenderOptions.BitmapScalingMode="Fant"
+                           />
+            </Button>
+        </StackPanel>
+
+        <Grid Grid.Row="2" Margin="20, 2" >
+            <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Center"
+                            >
+                <ProgressBar Height="20" Background="{StaticResource br_MainWindow.Background}" 
+                                     Value="{Binding ProgressCounter}"
+                                     Minimum="0"
+                                     Maximum="1"
+                                     Opacity="0.0"
+                                     >
+
+                    <ProgressBar.Style>
+                        <Style TargetType="ProgressBar">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsInProgress}" 
+                                                 Value="True">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.4"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.ExitActions>
+                                </DataTrigger>
+
+                            </Style.Triggers>
+                        </Style>
+                    </ProgressBar.Style>
+                </ProgressBar>
+
+                <Border Margin="0">
+                    <TextBlock Text="{Binding Message}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Top" />
+                </Border>
+            </StackPanel>
+        </Grid>
+
+        <!-- Buttons -->
+        <Grid Grid.Row="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <Button Content="Выход" Width="80" Height="26"
-                        Command="{Binding BackwardCommand}"
-                        HorizontalAlignment="Center"
-                        Margin="80,0"
-                        />
+            <Button Content="Выход" Width="80"
+                            Command="{Binding BackwardCommand}"
+                            />
 
-            <Button Grid.Column="1" Content="Далее" Width="80" Height="26"
-                        Command="{Binding ForwardCommand}"
-                        HorizontalAlignment="Center"
-                        Margin="80,0"
-                        />
+            <Button Grid.Column="1" Content="Далее" Width="80"
+                            Command="{Binding ForwardCommand}"
+                            />
+
         </Grid>
-    </StackPanel>
+    </Grid>
 </UserControl>

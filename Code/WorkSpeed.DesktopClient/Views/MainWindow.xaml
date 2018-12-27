@@ -40,8 +40,6 @@
                     </Border>
                 </TabItem.Header>
 
-                <views:ImportDataUserControl Content="{Binding ImportVm}" />
-
             </TabItem>
         </TabControl>
 

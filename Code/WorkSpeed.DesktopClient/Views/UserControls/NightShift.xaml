@@ -15,6 +15,7 @@
                     TextElement.Foreground="{StaticResource br_MainWindow.BackgroundAlternative}"
                     CanVerticallyScroll="True"
                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     
                     >
 
         <HeaderedContentControl Header="Наименование смены:">

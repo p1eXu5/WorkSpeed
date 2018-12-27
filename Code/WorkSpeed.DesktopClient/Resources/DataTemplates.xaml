@@ -93,7 +93,7 @@
             </Border>
 
 
-            <uc:FileImport Grid.Row="1" />
+            <uc:EmployeeTable Grid.Row="1" />
 
         </Grid>
     </DataTemplate>
