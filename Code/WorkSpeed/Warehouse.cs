@@ -61,6 +61,7 @@ namespace WorkSpeed
         public IEnumerable< Position > GetPositions() => _context.GetPositions();
         public IEnumerable< Rank > GetRanks() => _context.GetRanks();
         public IEnumerable < Shift > GetShifts () => _context.GetShifts();
+        public IEnumerable< ShortBreak > GetBreakList () => _context.GetBreakList();
         public IEnumerable< GatheringAction > GetGatheringActions () => _context.GetGatheringActions();
         
         /// <summary>
@@ -127,6 +128,39 @@ namespace WorkSpeed
                 FactoryEmployeeAction.AddVariableBreak( shift.Name, 
                                                         shift.LunchDuration, 
                                                         new Productivity.DayPeriod( shift.StartTime, shift.StartTime + shift.Duration ) 
+                );
+            }
+        }
+
+        public void UpdateFixedBreaks ( )
+        {
+            var breakList = _context.GetBreakList().ToArray();
+
+            var forNotSmokers = breakList.FirstOrDefault( b => b.IsForSmokers == false );
+
+            if ( forNotSmokers != null ) {
+
+                FactoryEmployeeAction.AddFixedBreaks( 
+
+                    name: forNotSmokers.Name, 
+                    duration: forNotSmokers.Duration, 
+                    interval: forNotSmokers.Interval - forNotSmokers.Duration, 
+                    offset: forNotSmokers.Shift.StartTime, 
+                    predicate: (e) => !e.IsSmoker 
+                );
+            }
+
+            var forSmokers = breakList.FirstOrDefault( b => b.IsForSmokers );
+
+            if ( forNotSmokers != null )
+            {
+                FactoryEmployeeAction.AddFixedBreaks(
+
+                    name: forNotSmokers.Name,
+                    duration: forNotSmokers.Duration,
+                    interval: forNotSmokers.Interval - forNotSmokers.Duration,
+                    offset: forNotSmokers.Shift.StartTime,
+                    predicate: ( e ) => e.IsSmoker
                 );
             }
         }

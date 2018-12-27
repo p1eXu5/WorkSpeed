@@ -16,7 +16,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="CheckBox">
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}"
+                                >
                         <Border Background="Transparent" 
                                 Width="{TemplateBinding BorderThickness, 
                                                         Converter={StaticResource conv_ThicknessToThickness}, 
@@ -44,7 +49,11 @@
                                          />
                             </Grid>
                         </Border>
-                        <ContentPresenter Margin="5,0,0,0" Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                        <ContentPresenter Margin="5,0,0,0" Content="{TemplateBinding Content}" 
+                                          VerticalAlignment="Center" 
+                                          HorizontalAlignment="Left" 
+                                          Width="Auto"
+                                          />
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>

@@ -32,5 +32,7 @@ namespace WorkSpeed.Data.BusinessContexts
         IEnumerable< Category > GetCategories ();
 
         IEnumerable< Shift > GetShifts ();
+
+        IEnumerable< ShortBreak > GetBreakList ();
     }
 }

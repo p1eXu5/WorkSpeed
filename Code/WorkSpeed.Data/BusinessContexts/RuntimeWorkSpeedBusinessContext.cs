@@ -22,6 +22,7 @@ namespace WorkSpeed.Data.BusinessContexts
         private readonly List< Rank > _ranks = new List< Rank >();
         private readonly List< Category > _categories = new List< Category >();
         private readonly List< Shift > _shifts = new List< Shift >();
+        private readonly List< ShortBreak > _breaks = new List< ShortBreak >();
 
         #endregion
 
@@ -46,7 +47,7 @@ namespace WorkSpeed.Data.BusinessContexts
             SeedPositions();
             SeedRanks();
             SeedCategories();
-            SeedShifts();
+            SeedShiftsAndShortBreakList();
         }
 
 
@@ -451,10 +452,11 @@ namespace WorkSpeed.Data.BusinessContexts
             } );
         }
 
-        private void SeedShifts ()
+        private void SeedShiftsAndShortBreakList ()
         {
             _shifts.AddRange( new [] {
                 new Shift {
+                    Id = 1,
                     Name = "Дневная смена",
                     StartTime = new TimeSpan( 8, 0, 0),
                     Duration = TimeSpan.FromHours( 12 ),
@@ -462,11 +464,31 @@ namespace WorkSpeed.Data.BusinessContexts
                     RestTime = TimeSpan.FromMinutes( 60 )
                 },
                 new Shift {
+                    Id = 2,
                     Name = "Ночная смена",
                     StartTime = new TimeSpan( 20, 0, 0),
                     Duration = TimeSpan.FromHours( 12 ),
                     LunchDuration = TimeSpan.FromMinutes( 30 ),
                     RestTime = TimeSpan.FromMinutes( 60 )
+                },
+            } );
+
+            _breaks.AddRange( new [] {
+                new ShortBreak {
+                    Id = 1,
+                    Name = "Перекуры для некурящих",
+                    Duration = TimeSpan.FromMinutes( 10 ),
+                    Interval = TimeSpan.FromHours( 2 ),
+                    IsForSmokers = false,
+                    Shift = _shifts[ 0 ]
+                },
+                new ShortBreak {
+                    Id = 2,
+                    Name = "Перекуры для курящих",
+                    Duration = TimeSpan.FromMinutes( 5 ),
+                    Interval = TimeSpan.FromHours( 1 ),
+                    IsForSmokers = true,
+                    Shift = _shifts[ 0 ]
                 },
             } );
         }
@@ -576,6 +598,11 @@ namespace WorkSpeed.Data.BusinessContexts
         public IEnumerable< Shift > GetShifts ()
         {
             return _shifts;
+        }
+
+        public IEnumerable< ShortBreak > GetBreakList ()
+        {
+            return _breaks;
         }
 
         #endregion

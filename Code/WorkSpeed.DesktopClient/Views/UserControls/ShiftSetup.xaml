@@ -15,23 +15,57 @@
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
 
-        <ListBox ItemsSource="{Binding Shifts}" 
-                 Background="{StaticResource br_MainWindow.Background}"
-                 BorderBrush="{x:Null}"
-                 ScrollViewer.CanContentScroll="False"
-                 >
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Expander Header="{Binding Name}"
-                              Background="{StaticResource br_MainWindow.Foreground}"
-                              Margin="5"
-                              Width="550"
-                              >
-                        <uc:ShiftView />
-                    </Expander>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <ScrollViewer>
+            <StackPanel>
+
+            <ListBox ItemsSource="{Binding Shifts}" 
+                     Background="{StaticResource br_MainWindow.Background}"
+                     BorderBrush="{x:Null}"
+                     ScrollViewer.CanContentScroll="False"
+                     >
+                <ListBox.Template>
+                    <ControlTemplate>
+                        <ItemsPresenter />
+                    </ControlTemplate>
+                </ListBox.Template>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Expander Header="{Binding Name}"
+                                  Background="{StaticResource br_MainWindow.Foreground}"
+                                  Margin="5"
+                                  Width="550"
+                                  >
+                            <uc:ShiftView />
+                        </Expander>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <ListBox ItemsSource="{Binding BreakList}" 
+                     Background="{StaticResource br_MainWindow.Background}"
+                     BorderBrush="{x:Null}"
+                     ScrollViewer.CanContentScroll="False"
+                     >
+                <ListBox.Template>
+                    <ControlTemplate>
+                        <ItemsPresenter />
+                    </ControlTemplate>
+                </ListBox.Template>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Expander Header="{Binding Name}"
+                                  Background="{StaticResource br_MainWindow.Foreground}"
+                                  Margin="5"
+                                  Width="550"
+                        >
+                            <uc:BreakSetup />
+                        </Expander>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+        </ScrollViewer>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>

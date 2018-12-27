@@ -64,6 +64,7 @@
     <Compile Include="Converters\EvenOddToZeroOneConverter.cs" />
     <Compile Include="TemplateSelectors\StageDataTemplateSelector.cs" />
     <Compile Include="ViewModels\EntityViewModels\ProductivityViewModel.cs" />
+    <Compile Include="ViewModels\EntityViewModels\ShortBreakViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ActionsImportStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\CategoriesThresholdStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\CheckEmployeesStageViewModel.cs" />

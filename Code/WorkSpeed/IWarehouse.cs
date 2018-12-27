@@ -21,12 +21,15 @@ namespace WorkSpeed.Interfaces
         Task<bool> HasProductsAsync ();
         void UpdateShiftBreaks ();
 
+        void UpdateFixedBreaks ();
+
         IEnumerable< Product > GetProducts ();
         IEnumerable< Employee > GetEmployees ();
         IEnumerable< Appointment > GetAppointments ();
         IEnumerable< Position > GetPositions ();
         IEnumerable< Rank > GetRanks ();
         IEnumerable< Shift > GetShifts ();
+        IEnumerable< ShortBreak > GetBreakList ();
         IEnumerable< GatheringAction > GetGatheringActions ();
 
         Task GetProductivitiesAsync ( Progress< ProductivityEmployee > progress );
