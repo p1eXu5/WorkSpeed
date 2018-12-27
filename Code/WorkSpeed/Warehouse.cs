@@ -69,7 +69,7 @@ namespace WorkSpeed
 
         public void SetThreshold ( double threshold )
         {
-            FactoryEmployeeAction.SetThreshold( double threshold );
+            FactoryEmployeeAction.SetThreshold( threshold );
         }
 
 
