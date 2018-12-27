@@ -18,6 +18,8 @@
                      Background="Transparent"
                      VerticalAlignment="Center"
                      HorizontalAlignment="Center"
+                     ItemsSource="{Binding Categories}"
+                     BorderBrush="{x:Null}"
                      >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -29,26 +31,22 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBox Margin="20,0" 
-                                 Style="{StaticResource st_HeaderContentControl.Content}"
-                                 FontWeight="Bold"
-                                 VerticalContentAlignment="Center"
-                                 >
-                                0.0
-                            </TextBox>
-
+                                     Style="{StaticResource st_HeaderContentControl.Content}"
+                                     FontWeight="Bold"
+                                     VerticalContentAlignment="Center"
+                                     Text="{Binding MinVolume}"
+                                     />
                             <TextBox Grid.Column="1" 
-                                 Style="{StaticResource st_HeaderContentControl.Content}"
-                                 FontWeight="Bold"
-                        >
-                                Категория товара от 100 до 250 литров
-                            </TextBox>
+                                     Style="{StaticResource st_HeaderContentControl.Content}"
+                                     FontWeight="Bold"
+                                     Text="{Binding Name}"
+                                     />
                             <TextBox Grid.Column="2" Margin="20,0" 
-                                 Style="{StaticResource st_HeaderContentControl.Content}"
-                                 FontWeight="Bold"
-                                 VerticalContentAlignment="Center"
-                        >
-                                250
-                            </TextBox>
+                                     Style="{StaticResource st_HeaderContentControl.Content}"
+                                     FontWeight="Bold"
+                                     VerticalContentAlignment="Center"
+                                     Text="{Binding MaxVolume}"
+                                     />
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -56,16 +54,16 @@
 
             <HeaderedContentControl Header="Длительность смены:" 
                                     FontSize="14"
-                                    Margin="0,40,0,0"
+                                    Margin="0,40"
                                     >
                 <StackPanel Orientation="Horizontal">
                     <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
                              MinWidth="24"
                              HorizontalContentAlignment="Center"
-                             Text="{}}{Binding Duration}"
+                             Text="{Binding Threshold}"
                              FontSize="14"
                              FontWeight="Bold"
-                    />
+                             />
                 </StackPanel>
             </HeaderedContentControl>
 
