@@ -31,6 +31,11 @@ namespace WorkSpeed.Interfaces
         IEnumerable< Shift > GetShifts ();
         IEnumerable< ShortBreak > GetBreakList ();
         IEnumerable< GatheringAction > GetGatheringActions ();
+        IEnumerable< Category > GetCategories ();
+
+        double GetThreshold ();
+        void SetThreshold ( double threshold );
+
 
         Task GetProductivitiesAsync ( Progress< ProductivityEmployee > progress );
     }
