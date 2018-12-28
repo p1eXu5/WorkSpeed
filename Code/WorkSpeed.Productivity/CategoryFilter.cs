@@ -11,12 +11,19 @@ namespace WorkSpeed.Productivity
 
         public CategoryFilter ( IEnumerable<Category> categories )
         {
-            CategoryList = new List< Category >( categories.Count() + 4 );
+            if ( categories == null )
+                throw new ArgumentNullException( nameof( categories ), "IEnumerable< CAtegory > cannot be null." );
+
+            var categoriesArray = categories.ToArray();
+            if ( !categoriesArray.Any() ) throw new ArgumentException();
+
+
+            CategoryList = new List< Category >( categoriesArray.Count() + 4 );
         }
 
         public List< Category > CategoryList { get; }
 
-        public void AddCategory ( Category category )
+        public virtual void AddCategory ( Category category )
         {
             throw new NotImplementedException();
         }
@@ -26,14 +33,20 @@ namespace WorkSpeed.Productivity
             throw new NotImplementedException();
         }
 
-        public bool Contains ( Category category )
+        public virtual bool Contains ( Category category )
         {
             throw new NotImplementedException();
         }
 
-        public void FillHoles ()
+        public virtual void FillHoles ()
         {
-            throw new NotImplementedException();
+            if ( !CategoryList.Any() ) {
+
+                CategoryList.Add( new Category { MinVolume = 0, MaxVolume = double.PositiveInfinity } );
+                return;
+            }
+
+
         }
     }
 }

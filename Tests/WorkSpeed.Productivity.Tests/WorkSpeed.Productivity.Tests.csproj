@@ -59,6 +59,10 @@
       <Project>{72e065c5-8769-4008-9529-11194be488e0}</Project>
       <Name>WorkSpeed.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Code\WorkSpeed.Productivity\WorkSpeed.Productivity.csproj">
+      <Project>{61c2a155-2641-4617-826e-82911531837a}</Project>
+      <Name>WorkSpeed.Productivity</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

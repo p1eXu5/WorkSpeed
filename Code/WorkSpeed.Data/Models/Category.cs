@@ -8,6 +8,15 @@ namespace WorkSpeed.Data.Models
 {
     public class Category
     {
+        public Category ()
+        { }
+
+        public Category ( int minVolume, int maxVolume )
+        {
+            MinVolume = minVolume;
+            MaxVolume = maxVolume;
+        }
+
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public string Name { get; set; }
