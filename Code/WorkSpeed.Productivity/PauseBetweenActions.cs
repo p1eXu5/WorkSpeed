@@ -10,21 +10,21 @@ namespace WorkSpeed.Productivity
 {
     public class PauseBetweenActions : IPauseBetweenActions
     {
-        private readonly HashSet< DateTime > _breaks;
+        private readonly Dictionary< DateTime, Queue< Shift >> _catchedLunches;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="breakRepository"></param>
         /// <param name="minRestBetweenShifts">Minimum pause between shifts.</param>
-        public PauseBetweenActions ( IBreakRepository breakRepository, TimeSpan minRestBetweenShifts )
+        public PauseBetweenActions ( IBreakRepository breakRepository)
         {
             BreakRepository = breakRepository ?? throw new ArgumentNullException( nameof( breakRepository ), "IBreakRepository cannot be null." );
-            MinRestBetweenShifts = minRestBetweenShifts;
-            _breaks = new HashSet< DateTime >();
+
+            _catchedLunches = new Dictionary<DateTime, Queue<Shift>> ();
         }
 
-        public TimeSpan MinRestBetweenShifts { get; set; }
+        public TimeSpan MinRestBetweenShifts { get; private set; } = TimeSpan.FromHours( 5 );
 
         public IBreakRepository BreakRepository { get; }
 
@@ -33,7 +33,7 @@ namespace WorkSpeed.Productivity
         /// </summary>
         /// <param name="lastAction"></param>
         /// <param name="action"></param>
-        /// <returns></returns>
+        /// <returns>TimeSpan.Zero if another shift.</returns>
         public TimeSpan GetPauseInterval ( EmployeeAction lastAction, EmployeeAction action )
         {
             Period pause;
@@ -45,14 +45,93 @@ namespace WorkSpeed.Productivity
                 pause = new Period( action.EndTime(), lastAction.StartTime );
             }
 
-            if ( pause.Duration == TimeSpan.Zero || pause.Duration >= MinRestBetweenShifts ) return TimeSpan.Zero;
+            var duration = pause.Duration;
 
+            if ( duration <= TimeSpan.Zero ) throw new InvalidOperationException("Pause duration less than TimeSpan.Zero");
 
-            TimeSpan resultPouse = TimeSpan.Zero;
+            if ( duration > MinRestBetweenShifts ) return TimeSpan.Zero;
 
-           
+            if ( duration < BreakRepository.ShortBreakDownLimit ) return pause.Duration;
 
-            return resultPouse;
+            if ( duration > BreakRepository.ShortBreakUpLimit ) {
+
+                var shiftList = BreakRepository.CheckLunchBreak( pause );
+
+                if ( shiftList.Any() ) {
+
+                    for ( int i = 0; i < shiftList.Length; ++i ) {
+
+                        var date = lastAction.StartTime.Date;
+
+                        if ( !_catchedLunches.ContainsKey( date )
+                             || !_catchedLunches[ date ].Contains( shiftList[ i ] )) {
+
+                            if ( duration > shiftList[ i ].LunchDuration ) {
+
+                                duration -= shiftList[ i ].LunchDuration;
+
+                                if ( !_catchedLunches.ContainsKey( date ) ) {
+                                    _catchedLunches[ date ] = new Queue< Shift >( new [] { shiftList[ i ] } );
+                                }
+                                else {
+                                    _catchedLunches[ date ].Enqueue( shiftList[ i ] );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ( duration >= BreakRepository.ShortBreakDownLimit ) {
+
+                if ( pause.Duration > duration ) {
+
+                    var leftPause = new Period( pause.Start, pause.End.Subtract( duration ) );
+                    var rightPause = new Period( pause.Start.Add( duration ), pause.End );
+
+                    var leftShortBreakRes = BreakRepository.CheckShortBreak( leftPause, lastAction.Employee );
+                    var rightShortBreakRes = BreakRepository.CheckShortBreak( rightPause, lastAction.Employee );
+
+                    (ShortBreak shortBreak, TimeSpan breakLength) resShortBreakRes = (null, TimeSpan.Zero);
+
+                    if ( leftShortBreakRes.shortBreak != null && rightShortBreakRes.shortBreak != null ) {
+
+                        if ( leftShortBreakRes.breakLength > rightShortBreakRes.breakLength ) {
+                            resShortBreakRes = leftShortBreakRes;
+                        }
+                        else {
+                            resShortBreakRes = rightShortBreakRes;
+                        }
+                    }
+                    else if ( rightShortBreakRes.shortBreak != null ) {
+                        resShortBreakRes = rightShortBreakRes;
+                    }
+                    else if ( leftShortBreakRes.shortBreak != null ) {
+                        resShortBreakRes = leftShortBreakRes;
+                    }
+
+                    duration -= resShortBreakRes.breakLength;
+
+                    while ( duration < TimeSpan.Zero ) {
+                        duration += leftShortBreakRes.shortBreak.Duration;
+                    }
+                }
+                else {
+
+                    var shortBreakRes = BreakRepository.CheckShortBreak( pause, lastAction.Employee );
+
+                    if ( shortBreakRes.shortBreak != null ) {
+
+                        duration -= shortBreakRes.breakLength;
+
+                        while ( duration < TimeSpan.Zero ) {
+                            duration += shortBreakRes.shortBreak.Duration;
+                        }
+                    }
+                }
+            }
+
+            return duration;
         }
 
     }

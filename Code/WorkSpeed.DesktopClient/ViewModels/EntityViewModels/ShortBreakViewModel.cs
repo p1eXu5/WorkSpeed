@@ -55,11 +55,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
             }
         }
 
-        public string ShiftName
+        public TimeSpan DayOffsetTime
         {
-            get => _break.Shift.Name;
+            get => _break.DayOffsetTime;
             set {
-                _break.Shift.Name = value;
+                _break.DayOffsetTime = value;
                 OnPropertyChanged();
             }
         }

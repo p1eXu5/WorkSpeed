@@ -178,7 +178,7 @@ namespace WorkSpeed.Productivity
         /// <param name="employee"></param>
         /// <param name="period"></param>
         /// <returns></returns>
-        public (ShortBreak shortBreak, TimeSpan breakLength) CheckShortBreak ( Employee employee, Period period )
+        public (ShortBreak shortBreak, TimeSpan breakLength) CheckShortBreak ( Period period, Employee employee )
         {
             if ( employee == null ) throw new ArgumentNullException();
 

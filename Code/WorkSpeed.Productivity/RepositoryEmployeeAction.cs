@@ -43,9 +43,12 @@ namespace WorkSpeed.Productivity
 
             if ( pause > _pauseThreshold ) {
 
+                // OffTime
                 _actions[ _actions.Length - 1 ].AddDetails( new EmployeeAction(), pause - _pauseThreshold );
                 pause = _pauseThreshold;
             }
+
+            if ( pause == TimeSpan.Zero ) pause = _pauseThreshold;
 
             var operation = ( int )action.GetOperationGroup();
             _actions[ operation ].AddDetails( action, pause );

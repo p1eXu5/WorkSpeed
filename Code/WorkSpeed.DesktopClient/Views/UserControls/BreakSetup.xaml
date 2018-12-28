@@ -56,12 +56,12 @@
         </HeaderedContentControl>
 
         <!-- Shift -->
-        <HeaderedContentControl Header="Привязка к смене:">
+        <HeaderedContentControl Header="Начало отсчета:">
             <StackPanel Orientation="Horizontal">
                 <TextBox Style="{StaticResource st_HeaderContentControl.Content}"
                                  MinWidth="50"
                                  HorizontalContentAlignment="Center"
-                                 Text="{Binding ShiftName}"
+                                 Text="{Binding DayOffsetTime}"
                                  />
             </StackPanel>
         </HeaderedContentControl>

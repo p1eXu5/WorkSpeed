@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Productivity;
 
-namespace WorkSpeed
+namespace WorkSpeed.Productivity
 {
     public struct Period
     {
@@ -26,7 +26,14 @@ namespace WorkSpeed
 
         public DayPeriod GetDayPeriod ()
         {
-            return new DayPeriod( Start.TimeOfDay, End.TimeOfDay );
+            var start = Start.TimeOfDay;
+            var end = End.TimeOfDay;
+
+            if ( end - start == TimeSpan.Zero && End > Start ) {
+                return new DayPeriod( Start.TimeOfDay, End.TimeOfDay + TimeSpan.FromSeconds( 1 ) );
+            }
+
+            return new DayPeriod( start, end );
         }
 
         public DateTime[] GetDays ()

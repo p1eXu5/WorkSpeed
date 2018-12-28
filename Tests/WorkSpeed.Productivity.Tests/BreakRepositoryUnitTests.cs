@@ -139,7 +139,7 @@ namespace WorkSpeed.Productivity.Tests
             breakRepo.AddFixedBreak( shortBreak, (e) => !e.IsSmoker );
 
             // Action:
-            var res = breakRepo.CheckShortBreak( employee, period );
+            var res = breakRepo.CheckShortBreak( period, employee );
 
             // Assert:
             Assert.That( shortBreak == res.shortBreak );
@@ -156,7 +156,7 @@ namespace WorkSpeed.Productivity.Tests
             breakRepo.AddFixedBreak( shortBreak, ( e ) => !e.IsSmoker );
 
             // Action:
-            var res = breakRepo.CheckShortBreak( employee, period );
+            var res = breakRepo.CheckShortBreak( period, employee );
 
             // Assert:
             Assert.That( null == res.shortBreak );
