@@ -121,6 +121,35 @@ namespace WorkSpeed.Productivity
             _fillingCategoryList.Clear();
         }
 
+        public bool HasHoles ()
+        {
+            if ( _categoryList.Count == 1 ) {
+
+                return !(_categoryList[ 0 ].MinVolume.Equals( 0.0 ) &&
+                       _categoryList[ 0 ].MaxVolume.Equals( double.PositiveInfinity ));
+            }
+
+            var categories = _categoryList.OrderBy( c => c.MinVolume ).ToArray();
+
+            if ( !categories[ 0 ].MinVolume.Equals( 0.0 ) ) {
+                return true;
+            }
+
+            if ( !categories[ categories.Length - 1 ].MaxVolume.Equals( double.PositiveInfinity ) ) {
+                return true;
+            }
+
+            for ( int i = 1; i < categories.Length; ++i )
+            {
+
+                if ( categories[ i - 1 ].MaxVolume < categories[ i ].MinVolume ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// 
         /// </summary>

@@ -388,5 +388,88 @@ namespace WorkSpeed.Productivity.Tests
 
         #endregion
 
+
+        #region HasHoles
+
+        [Test]
+        public void HasHoles__CategoryList_Single_WithoutZeroMinVolume__ReturnsTrue ()
+        {
+            // Arrange:
+            var list = new List<Category> { new Category ( 10.0, double.PositiveInfinity )  };
+
+            // Action:
+            var filter = new CategoryFilter( list );
+
+            // Assert:
+            Assert.That( filter.HasHoles );
+        }
+
+        [Test]
+        public void HasHoles__CategoryList_Single_WithoutPositiveInfinityMaxVolume__ReturnsTrue ()
+        {
+            // Arrange:
+            var list = new List<Category> { new Category( 0.0, 10.0 ) };
+
+            // Action:
+            var filter = new CategoryFilter( list );
+
+            // Assert:
+            Assert.That( filter.HasHoles );
+        }
+
+        [Test]
+        public void HasHoles__CategoryList_Single_WithZeroAndPositiveInfinityMaxVolume__ReturnsFalse ()
+        {
+            // Arrange:
+            var list = new List<Category> { new Category( 0.0, Double.PositiveInfinity ) };
+
+            // Action:
+            var filter = new CategoryFilter( list );
+
+            // Assert:
+            Assert.That( !filter.HasHoles() );
+        }
+
+        [Test]
+        public void HasHoles__CategoryList_Single_WithoutZeroAndPositiveInfinityMaxVolume__ReturnsTrue ()
+        {
+            // Arrange:
+            var list = new List<Category> { new Category( 2.0, 3.9 ) };
+
+            // Action:
+            var filter = new CategoryFilter( list );
+
+            // Assert:
+            Assert.That( filter.HasHoles );
+        }
+
+        [Test]
+        public void HasHoles__CategoryList_WithoutZeroAndPositiveInfinityMaxVolume__ReturnsTrue ()
+        {
+            // Arrange:
+            var list = new List<Category> { new Category( 2.0, 3.9 ), new Category(5, 7) };
+
+            // Action:
+            var filter = new CategoryFilter( list );
+
+            // Assert:
+            Assert.That( filter.HasHoles );
+        }
+
+        [Test]
+        public void HasHoles__CategoryList_WithHole__ReturnsTrue ()
+        {
+            // Arrange:
+            var list = new List<Category> { new Category( 0.0, 3.9 ), new Category( 5.0, Double.PositiveInfinity ) };
+
+            // Action:
+            var filter = new CategoryFilter( list );
+
+            // Assert:
+            Assert.That( filter.HasHoles );
+        }
+
+        #endregion
+
     }
 }

@@ -17,6 +17,12 @@ namespace WorkSpeed.Data.Models
             MaxVolume = maxVolume;
         }
 
+        public Category ( double minVolume, double maxVolume )
+        {
+            MinVolume = minVolume;
+            MaxVolume = maxVolume;
+        }
+
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public string Name { get; set; }

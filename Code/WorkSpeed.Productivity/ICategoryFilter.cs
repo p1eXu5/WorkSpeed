@@ -20,5 +20,7 @@ namespace WorkSpeed.Productivity
         void FillHoles ();
 
         void UndoHoles ();
+
+        bool HasHoles ();
     }
 }
