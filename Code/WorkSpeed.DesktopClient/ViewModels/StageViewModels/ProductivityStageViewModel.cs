@@ -19,6 +19,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
         private double _progressCounter;
         private double _progressStep;
 
+
         public ProductivityStageViewModel ( IFastProductivityViewModel fastProductivityViewModel, int stageNum )
             : base( fastProductivityViewModel, stageNum )
         {

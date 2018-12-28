@@ -79,43 +79,26 @@
 
                 <DataGridTextColumn Header="Набор, строчки"  
                                     MinWidth="60"
-                                    Binding="{Binding GatheringQuantity}" 
+                                    Binding="{Binding GatheringTotalLines}" 
                                     CellStyle="{StaticResource st_CenteredCell}"
                                     IsReadOnly="True"
                                     />
 
                 <DataGridTextColumn Header="Набор, объем"  
                                     MinWidth="60"
-                                    Binding="{Binding GatheringQuantity}" 
+                                    Binding="{Binding GatheringTotalWeight}" 
                                     CellStyle="{StaticResource st_CenteredCell}"
                                     IsReadOnly="True"
                                     />
 
 
-                <DataGridTemplateColumn Header="Набор по категориям" 
+                <DataGridTemplateColumn Header="Набор строчек по категориям" 
                                         Width="150"
-                                        CellTemplate="{StaticResource dt_GatheringByCategories}"
+                                        CellTemplate="{StaticResource dt_GatheringLines}"
                                         CellStyle="{StaticResource st_CenteredCell}"
                                         CanUserSort="True"
                                         SortMemberPath="IsSmoker"
                                         />
-
-                <DataGridTextColumn Header="Ск. упаковки"  
-                                    MinWidth="70"
-                                    Binding="{Binding GatheringSpeed}" 
-                                    CellStyle="{StaticResource st_CenteredCell}"
-                                    IsReadOnly="True"
-                                    />
-
-
-                <DataGridTemplateColumn Header="Упаковка" 
-                                        Width="50"
-                                        CellTemplate="{StaticResource dt_GatheringByCategories}"
-                                        CellStyle="{StaticResource st_CenteredCell}"
-                                        CanUserSort="True"
-                                        SortMemberPath="IsSmoker"
-                                        />
-
             </DataGrid.Columns>
         </DataGrid>
 

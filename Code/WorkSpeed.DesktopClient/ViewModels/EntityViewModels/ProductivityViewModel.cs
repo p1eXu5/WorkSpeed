@@ -30,7 +30,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
         public TimeSpan TotalTime => _productivity.TotalTime;
         public TimeSpan OffTime => _productivity.OffTime;
         public double GatheringSpeed => _productivity.GetSpeedLinesPerHour( OperationGroups.Gathering );
-        public int GatheringQuantity => _productivity.Quantities[ OperationGroups.Gathering ].Sum();
-        public Dictionary<string, >
+        public int GatheringTotalLines => _productivity.GetTotalLines( OperationGroups.Gathering );
+        public double GatheringTotalWeight => _productivity.GetTotalWeight( OperationGroups.Gathering );
+
+        public Dictionary< Category, int > GatheringLines => _productivity.Lines[ OperationGroups.Gathering ];
+
     }
 }
