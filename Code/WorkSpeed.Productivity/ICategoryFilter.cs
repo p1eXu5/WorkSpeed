@@ -12,5 +12,9 @@ namespace WorkSpeed.Productivity
         List< Category > CategoryList { get; }
 
         void AddCategory ( Category category );
+
+        int GetCategoryIndex ( Product product );
+
+        bool Contains ( Category category );
     }
 }
