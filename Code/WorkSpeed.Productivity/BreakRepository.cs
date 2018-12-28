@@ -10,14 +10,14 @@ namespace WorkSpeed.Productivity
 {
     public class BreakRepository : IBreakRepository
     {
-        private readonly Dictionary< Shift, TimeSpan > _variableBreaks;
+        private readonly Dictionary< Shift, DayPeriod > _variableBreaks;
         private readonly Dictionary< ShortBreak, (Predicate<Employee> predicate, List<DayPeriod> periods) > _fixedBreaks;
 
 
 
         public BreakRepository ()
         {
-            _variableBreaks = new Dictionary< Shift, TimeSpan >( 2 );
+            _variableBreaks = new Dictionary< Shift, DayPeriod>( 2 );
             _fixedBreaks = new Dictionary< ShortBreak, (Predicate<Employee> predicate, List< DayPeriod > periods) >( 2 );
         }
 
@@ -56,10 +56,7 @@ namespace WorkSpeed.Productivity
             if ( interval < ShortBreakIntervalDownLimit || interval > ShortBreakIntervalUpLimit )
                 throw new ArgumentException();
 
-            // Check shift
-            if ( shortBreak.Shift == null ) throw new ArgumentNullException( nameof( shortBreak ), "ShortBreak.Shift cannot be null" );
-
-            var offset = shortBreak.Shift.StartTime;
+            var offset = shortBreak.DayOffsetTime;
 
             if ( offset < TimeSpan.Zero || offset >= TimeSpan.FromDays( 1 ) )
                 throw new ArgumentException();
@@ -74,13 +71,23 @@ namespace WorkSpeed.Productivity
             {
                 start = end + interval;
                 end += interval + shortBreak.Duration;
-                dayPeriod = new DayPeriod( start, end );
-                dayPeriodList.Add( dayPeriod );
+
+                if ( end < TimeSpan.FromDays( 1 ) ) {
+                    dayPeriod = new DayPeriod( start, end );
+                    dayPeriodList.Add( dayPeriod );
+                }
 
             } while ( end < TimeSpan.FromDays( 1 ) );
 
-            var lastEnd = end > TimeSpan.FromDays( 1 ) ? end - TimeSpan.FromDays( 1 ) : TimeSpan.Zero;
 
+            if ( end > TimeSpan.FromDays( 1 ) ) {
+
+                end = end - TimeSpan.FromDays( 1 );
+                dayPeriod = new DayPeriod( start, end );
+                dayPeriodList.Add( dayPeriod );
+            }
+
+            var lastEnd = end;
             end = offset;
             start = end - shortBreak.Duration;
 
@@ -95,6 +102,7 @@ namespace WorkSpeed.Productivity
 
             return dayPeriodList;
         }
+
 
         public void AddFixedBreak ( ShortBreak shortBreak, Predicate< Employee > predicate )
         {
@@ -123,39 +131,50 @@ namespace WorkSpeed.Productivity
                 endTime = endTime - TimeSpan.FromDays( 1 );
             }
 
-            _variableBreaks.Add( shift, endTime );
+            _variableBreaks.Add( shift, new DayPeriod( shift.StartTime, endTime ) );
         }
 
-        public ShortBreak CheckShortBreak ( Employee employee, Period period )
-        {
-            if ( period.Start >= period.End ) {
-                return null;
-            }
 
-            if ( period.Duration < ShortBreakDownLimit ) return null;
+        public (ShortBreak shortBreak, TimeSpan breakLength) CheckShortBreak ( Employee employee, Period period )
+        {
+            if ( employee == null ) throw new ArgumentNullException();
 
             var shortBreak = _fixedBreaks.Keys
-                             .FirstOrDefault( sb => _fixedBreaks[ sb ].predicate( employee ) 
-                                                    && sb.Duration <= period.Duration
-                                                    && _fixedBreaks[ sb ].periods.Contains( period.GetDayPeriod(), new DayPeriodEqualityComparer() ) );
+                             .FirstOrDefault( sb => _fixedBreaks[ sb ].predicate( employee ) );
 
-            return shortBreak;
+            if ( shortBreak == null ) return (null, TimeSpan.Zero);
+
+            var pariodDay = period.GetDayPeriod();
+
+            var dayPeriodTimes = _fixedBreaks[ shortBreak ]
+                            .periods.Where( p => p.IsIntersects( pariodDay ) ).ToArray();
+
+            if ( !dayPeriodTimes.Any() ) return (null, TimeSpan.Zero);
+
+            var sum = TimeSpan.Zero;
+
+            var breakLenght = dayPeriodTimes.Aggregate( TimeSpan.Zero,
+                                     ( span, dayPeriod ) => span += dayPeriod.GetIntersectDuration( pariodDay ) );
+
+            return (shortBreak, breakLenght);
         }
-
-
-
-        public Shift CheckLunchBreak ( Period period )
+        
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="period"></param>
+        /// <returns></returns>
+        public Shift[] CheckLunchBreak ( Period period )
         {
-            if ( period.Start >= period.End ) {
-                return null;
-            }
-
             if ( period.Duration < LongBreakDownLimit ) return null;
 
-            var shift = _variableBreaks.Keys.FirstOrDefault( s => period.Start.TimeOfDay > s.StartTime && period.End.TimeOfDay < _variableBreaks[ s ] );
+            var periodDay = period.GetDayPeriod();
+
+
+            var shift = _variableBreaks.Keys.Where( s => period.Duration >= s.LunchDuration && _variableBreaks[ s ].GetIntersectDuration( periodDay ) >= s.LunchDuration ).ToArray();
 
             return shift;
         }
-
     }
 }

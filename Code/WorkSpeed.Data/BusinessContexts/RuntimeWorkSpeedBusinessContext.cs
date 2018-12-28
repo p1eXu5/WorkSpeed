@@ -486,7 +486,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Duration = TimeSpan.FromMinutes( 10 ),
                     Periodicity = TimeSpan.FromHours( 2 ),
                     IsForSmokers = false,
-                    Shift = _shifts[ 0 ]
+                    DayOffsetTime = new TimeSpan( 8, 5, 0 )
                 },
                 new ShortBreak {
                     Id = 2,
@@ -494,7 +494,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Duration = TimeSpan.FromMinutes( 5 ),
                     Periodicity = TimeSpan.FromHours( 1 ),
                     IsForSmokers = true,
-                    Shift = _shifts[ 0 ]
+                    DayOffsetTime = new TimeSpan( 8, 0, 0 )
                 },
             } );
         }

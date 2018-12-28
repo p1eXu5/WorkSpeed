@@ -14,7 +14,7 @@ namespace WorkSpeed.Productivity
 
         void AddFixedBreak ( ShortBreak shortBreak, Predicate< Employee > predicate );
         void AddVariableBreak ( Shift shift );
-        ShortBreak CheckShortBreak ( Employee employee, Period period );
-        Shift CheckLunchBreak ( Period period );
+        (ShortBreak shortBreak, TimeSpan breakLength) CheckShortBreak ( Employee employee, Period period );
+        Shift[] CheckLunchBreak ( Period period );
     }
 }

@@ -14,6 +14,6 @@ namespace WorkSpeed.Data.Models
         public TimeSpan Periodicity { get; set; }
         public bool IsForSmokers { get; set; }
 
-        public Shift Shift { get; set; }
+        public TimeSpan DayOffsetTime { get; set; }
     }
 }
