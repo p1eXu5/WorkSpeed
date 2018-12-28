@@ -12,16 +12,19 @@ namespace WorkSpeed.Productivity.ActionDetails
     {
         public WithScansActionDetails ( ICategoryFilter filter ) : base( filter )
         {
-            Scans = new List< int >( _filter.Count );
+            throw new NotImplementedException();
+            //Scans = new List< int >( _filter.Count );
         }
 
         public override void AddDetails ( EmployeeAction action, TimeSpan pause )
         {
+            throw new NotImplementedException();
+
             base.AddDetails( action, pause );
 
             if ( !( action is ReceptionAction reception ) ) return;
 
-            Scans[ _filter.GetCategoryIndex( reception.Product ) ] += reception.ScanQuantity;
+            //Scans[ _filter.GetCategoryIndex( reception.Product ) ] += reception.ScanQuantity;
 
         }
 

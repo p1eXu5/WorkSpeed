@@ -30,7 +30,7 @@ namespace WorkSpeed.Productivity.Tests
 
 
         [ Test ]
-        public void Ctor__Categories_Empty__DontCreateCategories ()
+        public void Ctor__Categories_Empty__Throws ()
         {
 
 
@@ -42,7 +42,7 @@ namespace WorkSpeed.Productivity.Tests
 
 
         [Test]
-        public void Ctor__Categories_NotEmpty__AddsCategories ()
+        public void Ctor__Categories_NotEmpty__CreatesNotEmptyCategoryList ()
         {
 
 
@@ -53,7 +53,7 @@ namespace WorkSpeed.Productivity.Tests
 
 
         [Test]
-        public void Ctor__Category_NegativeMinVolume__Throws ()
+        public void Ctor__Categories_NotEmpty__CallsContains ()
         {
 
 
@@ -65,7 +65,42 @@ namespace WorkSpeed.Productivity.Tests
 
 
         [Test]
-        public void Ctor__Category_NegativeMaxVolume__Throws ()
+        public void Ctor__Categories_NotEmpty__CallsAddCategory ()
+        {
+
+
+
+
+
+        }
+
+
+
+        [Test]
+        public void Ctor__Categories_NotEmpty__CallsFillHoles ()
+        {
+
+
+
+
+
+        }
+
+
+        [Test]
+        public void AddCategory__Category_NegativeMinVolume__Throws ()
+        {
+
+
+
+
+
+        }
+
+
+
+        [Test]
+        public void AddCategory__Category_NegativeMaxVolume__Throws ()
         {
 
 
@@ -78,7 +113,7 @@ namespace WorkSpeed.Productivity.Tests
 
 
         [Test]
-        public void Ctor__Category_MinVolumeLargerMaxVolume__Throws ()
+        public void AddCategory__Category_MinVolumeLargerMaxVolume__Throws ()
         {
 
 
@@ -89,7 +124,7 @@ namespace WorkSpeed.Productivity.Tests
 
 
         [Test]
-        public void Ctor__Category_MinVolumeEqualsMaxVolume__Throws ()
+        public void AddCategory__Category_MinVolumeEqualsMaxVolume__Throws ()
         {
 
 
@@ -98,7 +133,32 @@ namespace WorkSpeed.Productivity.Tests
 
         }
 
-        #region Properies
+
+        [Test]
+        public void AddCategory__Category_MinVolumeGreaterCategoryListMinVolume__Throws ()
+        {
+
+
+
+
+
+        }
+
+
+        [Test]
+        public void AddCategory__Category_MaxVolumeLessCategoryListMaxVolume__Throws ()
+        {
+
+
+
+
+
+        }
+
+
+
+
+        #region AddCategory
 
 
         [Test]
@@ -148,7 +208,64 @@ namespace WorkSpeed.Productivity.Tests
 
 
         [Test]
-        public void Category__CategoryList_NotEmpty__ReturnsNotEmptyCategories ()
+        public void CategoryList__ByDefault__ReturnsNotEmptyCategories ()
+        {
+
+
+
+
+
+        }
+
+
+
+        [Test]
+        public void GetCategoryIndex__Product_IsNull__Throws ()
+        {
+
+
+
+
+
+        }
+
+
+        [Test]
+        public void GetCategoryIndex__Product_VolumeLessZero__Throws ()
+        {
+
+
+
+
+
+        }
+
+
+        [Test]
+        public void GetCategoryIndex__Product_VolumeIsZero__RetunsNegateIndex ()
+        {
+
+
+
+
+
+        }
+
+
+
+        [Test]
+        public void GetCategoryIndex__Product_VolumeGreaterCategoryMaxVolume__RetunsNegateIndex ()
+        {
+
+
+
+
+
+        }
+
+
+        [Test]
+        public void GetCategoryIndex__Product_VolumeLessCategoryMaxVolume__RetunsNegateIndex ()
         {
 
 
@@ -160,16 +277,102 @@ namespace WorkSpeed.Productivity.Tests
 
 
 
+        [Test]
+        public void FillHoles__CategoryList_WithoutZeroMinVolume__CreatesZeroMinVolumeCategory ()
+        {
 
 
 
 
 
+        }
+
+
+        [Test]
+        public void FillHoles__CategoryList_WithoutZeroMinVolume__CreatesZeroIdCategory ()
+        {
 
 
 
 
 
+        }
+
+
+        [Test]
+        public void FillHoles__CategoryList_WithoutPositiveInfiniteMaxVolume__CreatesPositiveInfiniteMaxVolumeCategory ()
+        {
+
+
+
+
+
+        }
+
+
+        [Test]
+        public void FillHoles__CategoryList_WithoutPositiveInfiniteMaxVolume__CreatesZeroIdCategory ()
+        {
+
+
+
+
+
+        }
+
+
+
+
+        [Test]
+        public void FillHoles__CategoryList_WithVolumeHole__CreatesFillingCategory ()
+        {
+
+
+
+
+
+        }
+
+
+        [Test]
+        public void FillHoles__CategoryList_WithVolumeHole__CreatesZeroIdFillingCategory ()
+        {
+
+
+
+
+
+        }
+
+
+
+        [ Test ]
+        public void Contains__Category_VolumeInCategoryList__ReturnsTrue ()
+        {
+
+
+
+        }
+
+
+
+        [Test]
+        public void Contains__Category_VolumeNotInCategoryList__ReturnsFalse ()
+        {
+
+
+
+        }
+
+
+
+        [Test]
+        public void Contains__Category_IsNull__Throws ()
+        {
+
+
+
+        }
 
     }
 }

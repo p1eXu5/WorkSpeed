@@ -103,7 +103,7 @@ namespace WorkSpeed.Productivity
 
         public IEnumerable< Category > GetCategories ()
         {
-            return CategoryFilter.GetCategories();
+            throw new NotImplementedException();
         }
 
         public double GetThreshold () => PauseBetweenActions.MinRestBetweenShifts.Seconds;

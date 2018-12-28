@@ -28,7 +28,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
 
         public double MinVolume
         {
-            get => (double)(_category.MinVolume ?? 0.0);
+            get => _category.MinVolume;
             set {
                 _category.MinVolume = value;
                 OnPropertyChanged();

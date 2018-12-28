@@ -14,27 +14,29 @@ namespace WorkSpeed.Productivity.ActionDetails
 
         public WithProductActionDetails ( ICategoryFilter filter )
         {
+            throw new NotImplementedException();
             _filter = filter ?? throw new ArgumentNullException( nameof( filter ), "ICategoryFilter cannot be null." );
 
-            Weight = new List< double >( _filter.Count );
-            Volume = new List< double >( _filter.Count );
-            Lines = new List< int >( _filter.Count );
-            Quantity = new List< int >( _filter.Count );
+            //Weight = new List< double >( _filter.Count );
+            //Volume = new List< double >( _filter.Count );
+            //Lines = new List< int >( _filter.Count );
+            //Quantity = new List< int >( _filter.Count );
         }
 
         public override void AddDetails ( EmployeeAction action, TimeSpan pause )
         {
+            throw new NotImplementedException();
             base.AddDetails( action, pause );
 
             if ( !(action is WithProductAction withProductAction) ) return;
 
             var product = withProductAction.Product;
-            var category = _filter.GetCategoryIndex( product );
+            //var category = _filter.GetCategoryIndex( product );
 
-            Weight[ category ] += product.Weight + withProductAction.ProductQuantity;
-            Volume[ category ] += product.Volume + withProductAction.ProductQuantity;
-            Quantity[ category ] = withProductAction.ProductQuantity;
-            Lines[ category ]++;
+           // Weight[ category ] += product.Weight + withProductAction.ProductQuantity;
+            //Volume[ category ] += product.Volume + withProductAction.ProductQuantity;
+           // Quantity[ category ] = withProductAction.ProductQuantity;
+            //Lines[ category ]++;
         }
 
         public List< double > Weight { get; private set; }
