@@ -74,7 +74,7 @@ namespace WorkSpeed.Data
         {
             if ( product == null ) throw new ArgumentNullException();
 
-            return product.ItemHeight * product.ItemWidth * product.ItemLength * 1000;
+            return product.ItemHeight * product.ItemWidth * product.ItemLength;
         }
 
         /// <summary>

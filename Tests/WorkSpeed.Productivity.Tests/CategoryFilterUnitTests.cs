@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
 using WorkSpeed.Data.Models;
 
@@ -38,60 +39,18 @@ namespace WorkSpeed.Productivity.Tests
         }
 
         [Test]
-        public void Ctor__Categories_NotEmpty__CallsContains ()
-        {
-            // Arrange:
-            List<Category> list = new List<Category>();
-            list.Add( new Category( 0, 10 ) );
-
-            // Action:
-            var fakeFilter = new FakeCategoryFilter( list );
-
-            // Assert:
-            Assert.That( true == fakeFilter.ConteinsCalled );
-        }
-
-        [Test]
-        public void Ctor__Categories_NotEmpty__CallsAddCategory ()
-        {
-            // Arrange:
-            List<Category> list = new List<Category>();
-            list.Add( new Category( 0, 10 ) );
-
-            // Action:
-            var fakeFilter = new FakeCategoryFilter( list );
-
-            // Assert:
-            Assert.That( true == fakeFilter.AddCategoryCalled );
-        }
-
-        [Test]
-        public void Ctor__Categories_NotEmpty__DoesNotCallFillHoles ()
-        {
-            // Arrange:
-            List<Category> list = new List<Category>();
-            list.Add( new Category( 0, 10 ) );
-
-            // Action:
-            var fakeFilter = new FakeCategoryFilter( list );
-
-            // Assert:
-            Assert.That( false == fakeFilter.FillHolesCalled );
-        }
-
-        [Test]
         public void Ctor__Categories_NotEmpty__CreatesNotEmptyCategoryList ()
         {
             List<Category> list = new List<Category>();
             list.Add( new Category( 0, 10 ) );
 
-            Assert.That( 0 < new CategoryFilter( list ).CategoryList.Count );
+            Assert.That( new CategoryFilter( list ).CategoryList.Any() );
         }
 
         #endregion
 
 
-        #region Contains
+        #region ContainsVolume
 
         [Test]
         public void Contains__Category_IsNull__Throws ()
@@ -102,7 +61,7 @@ namespace WorkSpeed.Productivity.Tests
 
             // Action:
             // Assert:
-            Assert.Catch< ArgumentNullException >( () => filter.Contains( null ) );
+            Assert.Catch< ArgumentNullException >( () => filter.ContainsVolume( null ) );
         }
 
         [Test]
@@ -115,7 +74,7 @@ namespace WorkSpeed.Productivity.Tests
 
             // Action:
             // Assert:
-            Assert.Catch<ArgumentException>( () => filter.Contains( categoryWithMaxVolumeLessMinVolume ) );
+            Assert.Catch<ArgumentException>( () => filter.ContainsVolume( categoryWithMaxVolumeLessMinVolume ) );
         }
 
         [Test]
@@ -128,7 +87,7 @@ namespace WorkSpeed.Productivity.Tests
 
             // Action:
             // Assert:
-            Assert.Catch<ArgumentException>( () => filter.Contains( categoryWithNegativeMinVolume ) );
+            Assert.Catch<ArgumentException>( () => filter.ContainsVolume( categoryWithNegativeMinVolume ) );
         }
 
         [Test]
@@ -141,7 +100,7 @@ namespace WorkSpeed.Productivity.Tests
 
             // Action:
             // Assert:
-            Assert.Catch<ArgumentException>( () => filter.Contains( categoryWithNegativeMaxVolume ) );
+            Assert.Catch<ArgumentException>( () => filter.ContainsVolume( categoryWithNegativeMaxVolume ) );
         }
 
         [Test]
@@ -154,7 +113,7 @@ namespace WorkSpeed.Productivity.Tests
 
             // Action:
             // Assert:
-            Assert.Catch<ArgumentException>( () => filter.Contains( categoryMinVolumeEqualsMaxVolume ) );
+            Assert.Catch<ArgumentException>( () => filter.ContainsVolume( categoryMinVolumeEqualsMaxVolume ) );
         }
 
         [ TestCase( 5, 10) ]
@@ -169,11 +128,11 @@ namespace WorkSpeed.Productivity.Tests
 
             // Action:
             // Assert:
-            Assert.That( true == filter.Contains( containedCategory ) );
+            Assert.That( true == filter.ContainsVolume( containedCategory ) );
         }
 
         [TestCase( 0, 9 )]
-        [TestCase( 21, 15 )]
+        [TestCase( 21, 25 )]
         public void Contains__Category_VolumeNotInCategoryList__ReturnsFalse ( int min, int max )
         {
             // Arrange:
@@ -183,7 +142,7 @@ namespace WorkSpeed.Productivity.Tests
 
             // Action:
             // Assert:
-            Assert.That( false == filter.Contains( containedCategory ) );
+            Assert.That( false == filter.ContainsVolume( containedCategory ) );
         }
 
         #endregion
@@ -196,9 +155,10 @@ namespace WorkSpeed.Productivity.Tests
         {
             // Arrange:
             var list = new List< Category > { new Category( 10, 20) };
+            var filter = new CategoryFilter( list );
 
             // Action:
-            var filter = new CategoryFilter( list );
+            filter.FillHoles();
             var zeroMinVolumeCategory = filter.CategoryList.FirstOrDefault( c => c.MinVolume.Equals( 0.0 ) );
 
             // Assert:
@@ -210,9 +170,10 @@ namespace WorkSpeed.Productivity.Tests
         {
             // Arrange:
             var list = new List<Category> { new Category( 10, 20 ) };
+            var filter = new CategoryFilter( list );
 
             // Action:
-            var filter = new CategoryFilter( list );
+            filter.FillHoles();
             var zeroMinVolumeCategory = filter.CategoryList.FirstOrDefault( c => c.MinVolume.Equals( 0.0 ) );
 
             // Assert:
@@ -224,9 +185,10 @@ namespace WorkSpeed.Productivity.Tests
         {
             // Arrange:
             var list = new List<Category> { new Category( 10, 20 ) };
+            var filter = new CategoryFilter( list );
 
             // Action:
-            var filter = new CategoryFilter( list );
+            filter.FillHoles();
             var zeroMaxVolumeCategory = filter.CategoryList.FirstOrDefault( c => c.MaxVolume.Equals( double.PositiveInfinity ) );
 
             // Assert:
@@ -238,10 +200,11 @@ namespace WorkSpeed.Productivity.Tests
         {
             // Arrange:
             var list = new List<Category> { new Category( 10, 20 ) };
+            var filter = new CategoryFilter( list );
 
             // Action:
-            var filter = new CategoryFilter( list );
-            var zeroMaxVolumeCategory = filter.CategoryList.FirstOrDefault( c => c.MinVolume.Equals( double.PositiveInfinity ) );
+            filter.FillHoles();
+            var zeroMaxVolumeCategory = filter.CategoryList.FirstOrDefault( c => c.MaxVolume.Equals( double.PositiveInfinity ) );
 
             // Assert:
             Assert.That( 0 == zeroMaxVolumeCategory?.Id );
@@ -252,9 +215,10 @@ namespace WorkSpeed.Productivity.Tests
         {
             // Arrange:
             var list = new List<Category> { new Category( 10, 20 ), new Category( 30, 40) };
+            var filter = new CategoryFilter( list );
 
             // Action:
-            var filter = new CategoryFilter( list );
+            filter.FillHoles();
             var fillingCategory = filter.CategoryList.FirstOrDefault( c => c.MaxVolume.Equals( 30.0 ) );
 
             // Assert:
@@ -267,9 +231,10 @@ namespace WorkSpeed.Productivity.Tests
         {
             // Arrange:
             var list = new List<Category> { new Category( 10, 20 ), new Category( 30, 40 ) };
+            var filter = new CategoryFilter( list );
 
             // Action:
-            var filter = new CategoryFilter( list );
+            filter.FillHoles();
             var fillingCategory = filter.CategoryList.FirstOrDefault( c => c.MaxVolume.Equals( 30.0 ) );
 
             // Assert:
@@ -297,38 +262,6 @@ namespace WorkSpeed.Productivity.Tests
         }
 
         [Test]
-        public void AddCategory__Category_IsNotNull__CallsContains ()
-        {
-            // Arrange:
-            var list = new List<Category> { new Category( 10, 20 ) };
-
-            var fakeFilter = new FakeCategoryFilter( list );
-            fakeFilter.ResetContainsCalled();
-
-            var category = new Category( 5, 10 );
-
-            // Action:
-            fakeFilter.AddCategory( category );
-
-            // Assert:
-            Assert.That( fakeFilter.ConteinsCalled );
-        }
-
-        [Test]
-        public void AddCategory__Contains_ReturnsTrue___Throws ()
-        {
-            // Arrange:
-            var list = new List<Category> { new Category( 10, 20 ) };
-
-            var fakeFilter = new FakeCategoryFilter( list );
-            var category = new Category( 10, 20 );
-
-            // Action:
-            // Assert:
-            Assert.Catch< InvalidOperationException >( () => fakeFilter.AddCategory( category ) );
-        }
-
-        [Test]
         public void AddCategory__Category_NullName__CreatesCategoryWithNullName ()
         {
             // Arrange:
@@ -339,7 +272,7 @@ namespace WorkSpeed.Productivity.Tests
             var filter = new CategoryFilter( list );
 
             // Assert:
-            Assert.That( filter.CategoryList[0].Name, Is.Null );
+            Assert.That( filter.CategoryList.First().Name, Is.Null );
         }
 
         [Test]
@@ -353,7 +286,7 @@ namespace WorkSpeed.Productivity.Tests
             var filter = new CategoryFilter( list );
 
             // Assert:
-            Assert.That( filter.CategoryList[ 0 ].Name, Is.Not.Null );
+            Assert.That( filter.CategoryList.First().Name, Is.Not.Null );
         }
 
         [Test]
@@ -367,7 +300,7 @@ namespace WorkSpeed.Productivity.Tests
             var filter = new CategoryFilter( list );
 
             // Assert:
-            Assert.That( 5 == filter.CategoryList[ 0 ].Id );
+            Assert.That( 5 == filter.CategoryList.First().Id );
         }
 
         [Test]
@@ -382,7 +315,7 @@ namespace WorkSpeed.Productivity.Tests
             var filter = new CategoryFilter( list );
 
             // Assert:
-            Assert.That( filter.CategoryList[ 0 ].Date.Equals( date ) );
+            Assert.That( filter.CategoryList.First().Date.Equals( date ) );
         }
 
         #endregion
@@ -399,21 +332,6 @@ namespace WorkSpeed.Productivity.Tests
 
             // Action:
             var filter = new CategoryFilter( list );
-
-            // Assert:
-            Assert.That( filter.CategoryList.Any() );
-        }
-
-        [Test]
-        public void CategoryList__Clear__DoesNotClearCategoryList ()
-        {
-            // Arrange:
-            var category = new Category( 10, 20 ) { Id = 5 };
-            var list = new List<Category> { category };
-            var filter = new CategoryFilter( list );
-
-            // Action:
-            filter.CategoryList.Clear();
 
             // Assert:
             Assert.That( filter.CategoryList.Any() );
@@ -470,42 +388,5 @@ namespace WorkSpeed.Productivity.Tests
 
         #endregion
 
-
-        #region Factory
-
-        class FakeCategoryFilter : CategoryFilter
-        {
-            public FakeCategoryFilter ( IEnumerable< Category > categories ) : base( categories ) { }
-
-            public bool ConteinsCalled { get; private set; }
-            public bool AddCategoryCalled { get; private set; }
-            public bool FillHolesCalled { get; private set; }
-
-            public override bool Contains ( Category category )
-            {
-                ConteinsCalled = true;
-
-                return base.Contains( category );
-            }
-
-            public override void AddCategory ( Category category )
-            {
-                AddCategoryCalled = true;
-                base.AddCategory( category );
-            }
-
-            public override void FillHoles ()
-            {
-                FillHolesCalled = true;
-                base.FillHoles();
-            }
-
-            public void ResetContainsCalled ()
-            {
-                ConteinsCalled = false;
-            }
-        }
-
-        #endregion
     }
 }

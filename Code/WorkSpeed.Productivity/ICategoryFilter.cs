@@ -9,14 +9,16 @@ namespace WorkSpeed.Productivity
 {
     public interface ICategoryFilter
     {
-        List< Category > CategoryList { get; }
+        IEnumerable<Category> CategoryList { get; }
 
         void AddCategory ( Category category );
 
         int GetCategoryIndex ( Product product );
 
-        bool Contains ( Category category );
+        bool ContainsVolume ( Category category );
 
         void FillHoles ();
+
+        void UndoHoles ();
     }
 }

@@ -8,6 +8,8 @@ namespace WorkSpeed.Productivity
 {
     public class CategoryFilter : ICategoryFilter
     {
+        private readonly List< Category > _categoryList;
+        private readonly List< Category > _fillingCategoryList;
 
         public CategoryFilter ( IEnumerable<Category> categories )
         {
@@ -17,36 +19,119 @@ namespace WorkSpeed.Productivity
             var categoriesArray = categories.ToArray();
             if ( !categoriesArray.Any() ) throw new ArgumentException();
 
+            _categoryList = new List< Category >( categoriesArray.Count() );
+            _fillingCategoryList = new List< Category >();
 
-            CategoryList = new List< Category >( categoriesArray.Count() + 4 );
+            foreach ( Category category in categoriesArray ) {
+                AddCategory( category );
+            }
         }
 
-        public List< Category > CategoryList { get; }
 
-        public virtual void AddCategory ( Category category )
+        public IEnumerable< Category > CategoryList => _categoryList;
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="category"></param>
+        public void AddCategory ( Category category )
         {
-            throw new NotImplementedException();
+            CheckCategory( category );
+
+            _categoryList.Add( category );
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
         public int GetCategoryIndex ( Product product )
         {
-            throw new NotImplementedException();
+            if ( product == null ) throw new ArgumentNullException( nameof( product ), "Product cannot be null." );
+
+            var volume = product.GetVolume();
+            var category = _categoryList.FirstOrDefault( c => volume >= c.MinVolume && volume < c.MaxVolume );
+
+            if ( null == category ) return -1;
+
+            return _categoryList.IndexOf( category );
         }
 
-        public virtual bool Contains ( Category category )
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
+        public bool ContainsVolume ( Category category )
         {
-            throw new NotImplementedException();
+            CheckCategory( category );
+
+            if ( _categoryList.Any( c => category.MinVolume >= c.MinVolume && category.MinVolume < c.MaxVolume  )
+                || _categoryList.Any( (c => category.MaxVolume >=  c.MinVolume && category.MaxVolume < c.MaxVolume ) ) ) {
+
+                return true;
+            }
+
+            return false;
         }
 
-        public virtual void FillHoles ()
+        /// <summary>
+        /// 
+        /// </summary>
+        public void FillHoles ()
         {
-            if ( !CategoryList.Any() ) {
+            if ( !_categoryList.Any() ) {
 
-                CategoryList.Add( new Category { MinVolume = 0, MaxVolume = double.PositiveInfinity } );
+                _categoryList.Add( new Category { MinVolume = 0, MaxVolume = double.PositiveInfinity } );
+                _fillingCategoryList.Add( _categoryList.Last() );
                 return;
             }
 
+            var categories = _categoryList.OrderBy( c => c.MinVolume ).ToArray();
 
+            if ( categories[ 0 ].MinVolume > 0 ) {
+                _categoryList.Add( new Category { MinVolume = 0, MaxVolume = categories[ 0 ].MinVolume } );
+                _fillingCategoryList.Add( _categoryList.Last() );
+            }
+
+            if ( categories[ categories.Length - 1 ].MaxVolume < double.PositiveInfinity ) {
+                _categoryList.Add( new Category { MinVolume = categories[ categories.Length - 1 ].MaxVolume, MaxVolume = double.PositiveInfinity } );
+                _fillingCategoryList.Add( _categoryList.Last() );
+            }
+
+            for ( int i = 1; i < categories.Length; ++i ) {
+
+                if ( categories[ i - 1 ].MaxVolume < categories[ i ].MinVolume ) {
+                    _categoryList.Add( new Category { MinVolume = categories[ i - 1 ].MaxVolume, MaxVolume = categories[ i ].MinVolume } );
+                    _fillingCategoryList.Add( _categoryList.Last() );
+                }
+            }
+        }
+
+        public void UndoHoles ()
+        {
+            if ( !_fillingCategoryList.Any() ) throw new InvalidOperationException();
+
+            foreach ( var category in _fillingCategoryList ) {
+                _categoryList.Remove( category );
+            }
+
+            _fillingCategoryList.Clear();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="category"></param>
+        private void CheckCategory ( Category category )
+        {
+            if ( category == null ) throw new ArgumentNullException( nameof( category ) );
+
+            if ( category.MaxVolume <= category.MinVolume
+                 || category.MinVolume < 0
+                 || category.MaxVolume < 0 ) throw new ArgumentException();
         }
     }
 }
