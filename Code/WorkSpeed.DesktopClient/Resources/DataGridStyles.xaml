@@ -98,6 +98,8 @@
         <Setter Property="BorderBrush" Value="{StaticResource br_MainWindow.Background}" />
         <Setter Property="Width" Value="14" />
         <Setter Property="Height" Value="14" />
+        <Setter Property="BorderThickness" Value="15,15,2,7" />
+
     </Style>
 
     <Style TargetType="ComboBox" x:Key="st_TableComboBox" BasedOn="{StaticResource {x:Type ComboBox}}" >

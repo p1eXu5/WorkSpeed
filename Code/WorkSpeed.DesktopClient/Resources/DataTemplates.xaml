@@ -48,7 +48,7 @@
 
     <!-- ComboBoxes -->
     <DataTemplate x:Key="dt_ComboBox.Appointments">
-        <ComboBox ItemsSource="{Binding Content.Appointments, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=3}}"
+        <ComboBox ItemsSource="{Binding Content.Appointments, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=4}}"
                   DisplayMemberPath="InnerName"
                   SelectedItem="{Binding Appointment}" 
                   Style="{StaticResource st_TableComboBox}"
@@ -56,7 +56,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="dt_ComboBox.Positions">
-        <ComboBox ItemsSource="{Binding Content.Positions, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=3}}" 
+        <ComboBox ItemsSource="{Binding Content.Positions, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=4}}" 
                   DisplayMemberPath="Name"
                   SelectedItem="{Binding Position}"
                   Style="{StaticResource st_TableComboBox}"
@@ -64,7 +64,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="dt_ComboBox.Ranks">
-        <ComboBox ItemsSource="{Binding Content.Ranks, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=3}}"
+        <ComboBox ItemsSource="{Binding Content.Ranks, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=4}}"
                   DisplayMemberPath="Number"
                   SelectedItem="{Binding Rank}"
                   Style="{StaticResource st_TableComboBox}"
@@ -122,6 +122,8 @@
                            Text="{Binding Header}"
                 />
             </Border>
+
+            <uc:ProductivityTable Grid.Row="1" />
 
         </Grid>
     </DataTemplate>

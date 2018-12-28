@@ -14,46 +14,46 @@ namespace WorkSpeed.Productivity
 
         public Dictionary< OperationGroups, TimeSpan > OperationTimes { get; set; }
 
-        public Dictionary< OperationGroups, int[] > Lines { get; set; }
-        public Dictionary< OperationGroups, int[] > Quantities { get; set; }
-        public Dictionary< OperationGroups, int[] > Scans { get; set; }
-        public Dictionary< OperationGroups, double[] > Weight { get; set; }
-        public Dictionary< OperationGroups, double[] > Volume { get; set; }
+        public Dictionary< OperationGroups, Dictionary< Category, int >> Lines { get; set; }
+        public Dictionary< OperationGroups, Dictionary<Category, int>> Quantities { get; set; }
+        public Dictionary< OperationGroups, Dictionary<Category, int>> Scans { get; set; }
+        public Dictionary< OperationGroups, Dictionary<Category, double>> Weight { get; set; }
+        public Dictionary< OperationGroups, Dictionary<Category, double>> Volume { get; set; }
         public Dictionary<TimeSpan, int> Pauses { get; set; }
 
         public double GetSpeedLinesPerHour ( OperationGroups operation )
         {
             if ( !Lines.ContainsKey( operation ) ) return 0.0;
 
-            return Lines[ operation ].Sum() / OperationTimes[ operation ].TotalHours;
+            return Lines[ operation ].Values.Sum() / OperationTimes[ operation ].TotalHours;
         }
 
         public double GetSpeedQuantitiesPerHour ( OperationGroups operation )
         {
             if ( !Quantities.ContainsKey( operation ) ) return 0.0;
 
-            return Quantities[ operation ].Sum() / OperationTimes[ operation ].TotalHours;
+            return Quantities[ operation ].Values.Sum() / OperationTimes[ operation ].TotalHours;
         }
 
         public double GetSpeedScansPerHour ( OperationGroups operation )
         {
             if ( !Scans.ContainsKey( operation ) ) return 0.0;
 
-            return Scans[ operation ].Sum() / OperationTimes[ operation ].TotalHours;
+            return Scans[ operation ].Values.Sum() / OperationTimes[ operation ].TotalHours;
         }
 
         public double GetSpeedWeightPerHour ( OperationGroups operation )
         {
             if ( !Weight.ContainsKey( operation ) ) return 0.0;
 
-            return Weight[ operation ].Sum() / OperationTimes[ operation ].TotalHours;
+            return Weight[ operation ].Values.Sum() / OperationTimes[ operation ].TotalHours;
         }
 
         public double GetSpeedVolumePerHour ( OperationGroups operation )
         {
             if ( !Volume.ContainsKey( operation ) ) return 0.0;
 
-            return Volume[ operation ].Sum() / OperationTimes[ operation ].TotalHours;
+            return Volume[ operation ].Values.Sum() / OperationTimes[ operation ].TotalHours;
         }
     }
 }

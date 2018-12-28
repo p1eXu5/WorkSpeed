@@ -98,6 +98,9 @@
     <Compile Include="Views\UserControls\CategoriesThreshold.xaml.cs">
       <DependentUpon>CategoriesThreshold.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UserControls\ProductivityTable.xaml.cs">
+      <DependentUpon>ProductivityTable.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControls\ShiftView.xaml.cs">
       <DependentUpon>ShiftView.xaml</DependentUpon>
     </Compile>
@@ -183,6 +186,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\CategoriesThreshold.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\ProductivityTable.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
