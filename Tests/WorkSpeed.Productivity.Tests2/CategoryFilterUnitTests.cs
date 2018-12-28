@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Productivity.Tests
 {
@@ -22,7 +21,7 @@ namespace WorkSpeed.Productivity.Tests
         [Test]
         public void Ctor_CategoriesIsNull_Throws ()
         {
-            List< Category > list = new List< Category >();
+
 
 
         }
