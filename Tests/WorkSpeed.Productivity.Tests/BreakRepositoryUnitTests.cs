@@ -67,7 +67,7 @@ namespace WorkSpeed.Productivity.Tests
         public void AddVariableBreak__Shift_Valid__AddsShift ()
         {
             // Arrange:
-            var shift = GetShift();
+            var shift = GetDayShift();
             var breakRepo = GetBreakRepository();
 
             // Action:
@@ -145,13 +145,30 @@ namespace WorkSpeed.Productivity.Tests
             Assert.That( shortBreak == res.shortBreak );
         }
 
+        [Test]
+        public void CheckShortBreak__Period_OutOfBreakInterval_Employee_Valid__ReturnsNullShortBreak ()
+        {
+            // Arrange:
+            var shortBreak = GetShortBreakForNotSmokers();
+            var employee = GetEmployeeNotSmoker();
+            var period = new Period( new DateTime( 2018, 12, 12, 9, 35, 0 ), new DateTime( 2018, 12, 12, 9, 46, 0 ) );
+            var breakRepo = GetBreakRepository();
+            breakRepo.AddFixedBreak( shortBreak, ( e ) => !e.IsSmoker );
+
+            // Action:
+            var res = breakRepo.CheckShortBreak( employee, period );
+
+            // Assert:
+            Assert.That( null == res.shortBreak );
+        }
+
 
 
         [Test]
         public void CheckLongBreak__Period_InBreakPeriod__ReturnsShift ()
         {
             // Arrange:
-            var shift = GetShift();
+            var shift = GetDayShift();
             var breakRepo = GetBreakRepository();
             breakRepo.AddVariableBreak( shift );
             var period = new Period( new DateTime( 2018, 12, 12, 14, 15, 0 ), new DateTime( 2018, 12, 12, 14, 46, 0 ) );
@@ -162,6 +179,22 @@ namespace WorkSpeed.Productivity.Tests
             // Assert:
             Assert.That( shift == res[ 0 ] );
 
+        }
+
+        [Test]
+        public void CheckLongBreak__Period_OutOfBreakPeriod__ReturnsNull ()
+        {
+            // Arrange:
+            var shift = GetDayShift();
+            var breakRepo = GetBreakRepository();
+            breakRepo.AddVariableBreak( shift );
+            var period = new Period( new DateTime( 2018, 12, 12, 22, 15, 0 ), new DateTime( 2018, 12, 12, 23, 0, 0 ) );
+
+            // Action:
+            var res = breakRepo.CheckLunchBreak( period );
+
+            // Assert:
+            Assert.That( !res.Any() );
         }
 
 
@@ -181,7 +214,7 @@ namespace WorkSpeed.Productivity.Tests
             return new BreakRepository();
         }
 
-        private Shift GetShift ()
+        private Shift GetDayShift ()
         {
             var shift = new Shift() {
                 Id = 1,

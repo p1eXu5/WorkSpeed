@@ -27,86 +27,100 @@ namespace WorkSpeed.Productivity
             if ( other.Start >= TimeSpan.FromDays( 1 ) || other.Start < TimeSpan.Zero ) throw new ArgumentException();
             if ( other.End >= TimeSpan.FromDays( 1 ) || other.End < TimeSpan.Zero ) throw new ArgumentException();
 
+            // 1
             if ( Start > End && other.Start > other.End ) {
 
+                // 1-1
                 if ( other.Start <= Start && other.End >= End ) {
                     return (TimeSpan.FromDays( 1 ) - Start) + End;
                 }
 
+                // 1-2
                 if ( other.Start > Start && other.End >= End ) {
                     return (TimeSpan.FromDays( 1 ) - other.Start) + End;
                 }
 
-
+                // 1-3
                 if ( other.Start <= Start && other.End < End )
                 {
                     return (TimeSpan.FromDays( 1 ) - Start) + other.End;
                 }
 
+                // 1-4
                 if ( other.Start > Start && other.End < End )
                 {
                     return (TimeSpan.FromDays( 1 ) - other.Start) + other.End;
                 }
             }
 
+            // 2
             if ( Start > End && other.Start < other.End )
             {
-
+                // 2-1
                 if ( other.Start <= Start && other.End > Start )
                 {
                     return other.End - Start;
                 }
 
+                // 2-2
                 if ( other.Start > Start && other.End > Start )
                 {
                     return other.End - other.Start;
                 }
 
-
+                // 2-3
                 if ( other.Start < End && other.End >= End )
                 {
                     return End - other.Start;
                 }
 
+                // 2-4
                 if ( other.Start < End && other.End <= End )
                 {
                     return other.End + other.Start;
                 }
             }
 
+            // 3
             if ( Start < End && other.Start < other.End ) {
 
+                // 3-1
                 if ( other.Start <= Start && other.End >= End ) {
                     return End - Start;
                 }
 
-                if ( other.Start > Start && other.End >= End ) {
+                // 3-2
+                if ( other.Start > Start && other.Start < End && other.End >= End ) {
                     return End - other.Start;
                 }
 
-
-                if ( other.Start <= Start && other.End < End ) {
+                // 3-3
+                if ( other.Start <= Start && other.End < End && other.End > Start ) {
                     return other.End + Start;
                 }
 
+                // 3-4
                 if ( other.Start > Start && other.End < End ) {
                     return other.End - other.Start;
                 }
             }
 
+            // 4
             if ( Start < End && other.Start > other.End )
             {
-
+                // 4-1
                 if ( other.Start <= End && other.End >= Start )
                 {
                     return (End - other.Start) + (other.End - Start);
                 }
 
+                // 4-2
                 if ( other.Start <= End && other.End < Start )
                 {
                     return End - other.Start;
                 }
 
+                // 4-3
                 if ( other.Start > End && other.End >= Start ) {
                     return other.End + Start;
                 }
@@ -120,94 +134,106 @@ namespace WorkSpeed.Productivity
             if ( other.Start >= TimeSpan.FromDays( 1 ) || other.Start < TimeSpan.Zero ) throw new ArgumentException();
             if ( other.End >= TimeSpan.FromDays( 1 ) || other.End < TimeSpan.Zero ) throw new ArgumentException();
 
+            // 1
             if ( Start > End && other.Start > other.End )
             {
-
+                // 1-1
                 if ( other.Start <= Start && other.End >= End )
                 {
                     return true;
                 }
 
+                // 1-2
                 if ( other.Start > Start && other.End >= End )
                 {
                     return true;
                 }
 
-
+                // 1-3
                 if ( other.Start <= Start && other.End < End )
                 {
                     return true;
                 }
 
+                // 1-4
                 if ( other.Start > Start && other.End < End )
                 {
                     return true;
                 }
             }
 
+            // 2
             if ( Start > End && other.Start < other.End )
             {
-
+                // 2-1
                 if ( other.Start <= Start && other.End > Start )
                 {
                     return true;
                 }
 
+                // 2-2
                 if ( other.Start > Start && other.End > Start )
                 {
                     return true;
                 }
 
-
+                // 2-3
                 if ( other.Start < End && other.End >= End )
                 {
                     return true;
                 }
 
+                // 2-4
                 if ( other.Start < End && other.End <= End )
                 {
                     return true;
                 }
             }
 
+            // 3
             if ( Start < End && other.Start < other.End )
             {
-
+                // 3-1
                 if ( other.Start <= Start && other.End >= End )
                 {
                     return true;
                 }
 
-                if ( other.Start > Start && other.End >= End )
+                // 3-2
+                if ( other.Start > Start && other.Start < End && other.End >= End )
                 {
                     return true;
                 }
 
-
-                if ( other.Start <= Start && other.End < End )
+                // 3-3
+                if ( other.Start <= Start && other.End < End && other.End > Start )
                 {
                     return true;
                 }
 
+                // 3-4
                 if ( other.Start > Start && other.End < End )
                 {
                     return true;
                 }
             }
 
+            // 4
             if ( Start < End && other.Start > other.End )
             {
-
+                // 4-1
                 if ( other.Start <= End && other.End >= Start )
                 {
                     return true;
                 }
 
+                // 4-2
                 if ( other.Start <= End && other.End < Start )
                 {
                     return true;
                 }
 
+                // 4-3
                 if ( other.Start > End && other.End >= Start )
                 {
                     return true;

@@ -10,18 +10,19 @@ namespace WorkSpeed.Productivity
 {
     public class BreakRepository : IBreakRepository
     {
-        private readonly Dictionary< Shift, DayPeriod > _variableBreaks;
-        private readonly Dictionary< ShortBreak, (Predicate<Employee> predicate, List<DayPeriod> periods) > _fixedBreaks;
+        private readonly Dictionary<Shift, DayPeriod> _variableBreaks;
+        private readonly Dictionary<ShortBreak, (Predicate<Employee> predicate, List<DayPeriod> periods)> _fixedBreaks;
 
 
 
         public BreakRepository ()
         {
-            _variableBreaks = new Dictionary< Shift, DayPeriod>( 2 );
-            _fixedBreaks = new Dictionary< ShortBreak, (Predicate<Employee> predicate, List< DayPeriod > periods) >( 2 );
+            _variableBreaks = new Dictionary<Shift, DayPeriod>( 2 );
+            _fixedBreaks = new Dictionary<ShortBreak, (Predicate<Employee> predicate, List<DayPeriod> periods)>( 2 );
         }
 
 
+        #region Properties
 
         public TimeSpan ShortBreakDownLimit { get; private set; } = TimeSpan.FromMinutes( 5 );
         public TimeSpan ShortBreakUpLimit { get; private set; } = TimeSpan.FromMinutes( 10 );
@@ -37,17 +38,23 @@ namespace WorkSpeed.Productivity
         public TimeSpan ShiftDurationUpLimit { get; private set; } = TimeSpan.FromHours( 12 );
 
 
-        public IEnumerable< Shift > ShiftCollection => _variableBreaks.Keys;
-        public IEnumerable< ShortBreak > ShortBreakCollection => _fixedBreaks.Keys;
+        public IEnumerable<Shift> ShiftCollection => _variableBreaks.Keys;
+        public IEnumerable<ShortBreak> ShortBreakCollection => _fixedBreaks.Keys;
+
+        #endregion
 
 
-
-        public List< DayPeriod > GetDayPeriods ( ShortBreak shortBreak )
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="shortBreak"></param>
+        /// <returns></returns>
+        public List<DayPeriod> GetDayPeriods ( ShortBreak shortBreak )
         {
             if ( shortBreak == null ) throw new ArgumentNullException( nameof( shortBreak ), "ShortBreak cannot be null" );
 
             // Check duration
-            if ( shortBreak.Duration < ShortBreakDownLimit || shortBreak.Duration > ShortBreakUpLimit)
+            if ( shortBreak.Duration < ShortBreakDownLimit || shortBreak.Duration > ShortBreakUpLimit )
                 throw new ArgumentException();
 
             // Check interval
@@ -61,7 +68,7 @@ namespace WorkSpeed.Productivity
             if ( offset < TimeSpan.Zero || offset >= TimeSpan.FromDays( 1 ) )
                 throw new ArgumentException();
 
-            var dayPeriodList = new List< DayPeriod >();
+            var dayPeriodList = new List<DayPeriod>();
 
             TimeSpan start;
             TimeSpan end = offset;
@@ -72,7 +79,8 @@ namespace WorkSpeed.Productivity
                 start = end + interval;
                 end += interval + shortBreak.Duration;
 
-                if ( end < TimeSpan.FromDays( 1 ) ) {
+                if ( end < TimeSpan.FromDays( 1 ) )
+                {
                     dayPeriod = new DayPeriod( start, end );
                     dayPeriodList.Add( dayPeriod );
                 }
@@ -80,7 +88,8 @@ namespace WorkSpeed.Productivity
             } while ( end < TimeSpan.FromDays( 1 ) );
 
 
-            if ( end > TimeSpan.FromDays( 1 ) ) {
+            if ( end > TimeSpan.FromDays( 1 ) )
+            {
 
                 end = end - TimeSpan.FromDays( 1 );
                 dayPeriod = new DayPeriod( start, end );
@@ -103,8 +112,12 @@ namespace WorkSpeed.Productivity
             return dayPeriodList;
         }
 
-
-        public void AddFixedBreak ( ShortBreak shortBreak, Predicate< Employee > predicate )
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="shortBreak"></param>
+        /// <param name="predicate"></param>
+        public void AddFixedBreak ( ShortBreak shortBreak, Predicate<Employee> predicate )
         {
             if ( predicate == null ) throw new ArgumentNullException( nameof( predicate ), "Predicate cannot be null" );
             var dayPerioList = GetDayPeriods( shortBreak );
@@ -112,6 +125,10 @@ namespace WorkSpeed.Productivity
             _fixedBreaks.Add( shortBreak, (predicate, dayPerioList) );
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="shift"></param>
         public void AddVariableBreak ( Shift shift )
         {
             if ( shift == null ) throw new ArgumentNullException( nameof( shift ), "ShortBreak cannot be null" );
@@ -127,7 +144,8 @@ namespace WorkSpeed.Productivity
 
             var endTime = shift.StartTime + shift.ShiftDuration;
 
-            if ( endTime > TimeSpan.FromDays( 1 ) ) {
+            if ( endTime > TimeSpan.FromDays( 1 ) )
+            {
                 endTime = endTime - TimeSpan.FromDays( 1 );
             }
 
@@ -135,31 +153,7 @@ namespace WorkSpeed.Productivity
         }
 
 
-        public (ShortBreak shortBreak, TimeSpan breakLength) CheckShortBreak ( Employee employee, Period period )
-        {
-            if ( employee == null ) throw new ArgumentNullException();
 
-            var shortBreak = _fixedBreaks.Keys
-                             .FirstOrDefault( sb => _fixedBreaks[ sb ].predicate( employee ) );
-
-            if ( shortBreak == null ) return (null, TimeSpan.Zero);
-
-            var pariodDay = period.GetDayPeriod();
-
-            var dayPeriodTimes = _fixedBreaks[ shortBreak ]
-                            .periods.Where( p => p.IsIntersects( pariodDay ) ).ToArray();
-
-            if ( !dayPeriodTimes.Any() ) return (null, TimeSpan.Zero);
-
-            var sum = TimeSpan.Zero;
-
-            var breakLenght = dayPeriodTimes.Aggregate( TimeSpan.Zero,
-                                     ( span, dayPeriod ) => span += dayPeriod.GetIntersectDuration( pariodDay ) );
-
-            return (shortBreak, breakLenght);
-        }
-        
-        
         /// <summary>
         /// 
         /// </summary>
@@ -176,5 +170,37 @@ namespace WorkSpeed.Productivity
 
             return shift;
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <param name="period"></param>
+        /// <returns></returns>
+        public (ShortBreak shortBreak, TimeSpan breakLength) CheckShortBreak ( Employee employee, Period period )
+        {
+            if ( employee == null ) throw new ArgumentNullException();
+
+            var shortBreak = _fixedBreaks.Keys
+                                         .FirstOrDefault( sb => _fixedBreaks[ sb ].predicate( employee ) );
+
+            if ( shortBreak == null ) return (null, TimeSpan.Zero);
+
+            var pariodDay = period.GetDayPeriod();
+
+            var dayPeriodTimes = _fixedBreaks[ shortBreak ]
+                                 .periods.Where( p => p.IsIntersects( pariodDay ) ).ToArray();
+
+            if ( !dayPeriodTimes.Any() ) return (null, TimeSpan.Zero);
+
+            var breakLenght = dayPeriodTimes.Aggregate( TimeSpan.Zero,
+                                                       ( span, dayPeriod ) =>
+                                                           span += dayPeriod.GetIntersectDuration( pariodDay ) );
+
+            return (shortBreak, breakLenght);
+        }
+
+
     }
 }
