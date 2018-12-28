@@ -46,6 +46,7 @@
     <Compile Include="ActionDetails\WithProductActionDetails.cs" />
     <Compile Include="BreakRepository.cs" />
     <Compile Include="CategoryFilter.cs" />
+    <Compile Include="Comparers\DayPeriodEqualityComparer.cs" />
     <Compile Include="DayPeriod.cs" />
     <Compile Include="IBreakRepository.cs" />
     <Compile Include="ICategoryFilter.cs" />

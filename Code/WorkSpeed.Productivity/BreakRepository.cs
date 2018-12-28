@@ -4,36 +4,58 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Productivity.Comparers;
 
 namespace WorkSpeed.Productivity
 {
     public class BreakRepository : IBreakRepository
     {
+        private readonly List< Shift > _shiftCollection;
+        private readonly List< ShortBreak > _shortBreakCollection;
+
         private readonly Dictionary< TimeSpan, ( string name, DayPeriod period) > _variableBreaks;
-        private readonly Dictionary< Predicate<Employee>, (string name, List< DayPeriod > breakList) > _fixedBreaks;
+        private readonly Dictionary< ShortBreak, (Predicate<Employee> predicate, List<DayPeriod> periods) > _fixedBreaks;
 
         public BreakRepository ()
         {
             _variableBreaks = new Dictionary< TimeSpan, (string, DayPeriod period) >( 2 );
-            _fixedBreaks = new Dictionary< Predicate<Employee>, (string name, List<DayPeriod> period) >( 2 );
+            _fixedBreaks = new Dictionary< ShortBreak, (Predicate<Employee> predicate, List< DayPeriod > periods) >( 2 );
+
+            _shiftCollection = new List< Shift >( 2 );
+            _shortBreakCollection = new List< ShortBreak >( 2 );
         }
 
-        public TimeSpan GetLongest ( Period period )
+        public IEnumerable< Shift > ShiftCollection => _shiftCollection;
+        public IEnumerable< ShortBreak > ShortBreakCollection => _shortBreakCollection;
+
+        public object CheckForABreak ( Period period )
         {
-            return _variableBreaks.Where( v => period.Duration >= v.Key && v.Value.period.IsIntersects( period.GetDayPeriod() ) )
-                                  .OrderBy( v => v.Key )
-                                  .Select( v => v.Key )
-                                  .FirstOrDefault();
+
         }
 
-        public TimeSpan GetShortest ( Employee employee )
+        public bool HasShortBreak ( Employee employee, Period period )
         {
-            var fixedBreaks = _fixedBreaks.FirstOrDefault( f => f.Key( employee ) );
+            if ( period.Start >= period.End ) {
+                return false;
+            }
 
-            if ( fixedBreaks.Key ==  null ) return TimeSpan.Zero;
+            if ( period.Duration < ShortBreakDownLimit && period.Duration > ShortBreakUpLimit ) return false;
 
-            return fixedBreaks.Value.breakList[ 0 ].Duration;
+            var shortBreak = _fixedBreaks.Keys
+                             .FirstOrDefault( sb => _fixedBreaks[ sb ].predicate( employee ) 
+                                                    && sb.Duration >= period.Duration
+                                                    && _fixedBreaks[ sb ].periods.Contains( period.GetDayPeriod(), new DayPeriodEqualityComparer() ) );
+
+            if ( shortBreak == null ) return false;
+
+            return true;
         }
+
+        public TimeSpan ShortBreakDownLimit { get; set; } = TimeSpan.FromMinutes( 5 );
+        public TimeSpan ShortBreakUpLimit { get; set; } = TimeSpan.FromMinutes( 10 );
+
+        public TimeSpan LongBreakDownLimit { get; set; } = TimeSpan.FromMinutes( 15 );
+        public TimeSpan LongBreakUpLimit { get; set; } = TimeSpan.FromHours( 2 );
 
         public TimeSpan CheckFixed ( Period period, Employee employee )
         {

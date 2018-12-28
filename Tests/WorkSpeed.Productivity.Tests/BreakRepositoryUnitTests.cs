@@ -10,62 +10,34 @@ namespace WorkSpeed.Productivity.Tests
     [ TestFixture]
     public class BreakRepositoryUnitTests
     {
+        [ Test ]
+        public void ShiftCollection__ByDefault__IsEmpty ()
+        {
+            var repo = new BreakRepository();
+
+            Assert.That( !repo.ShiftCollection.Any() );
+        }
+
+        [Test]
+        public void ShortBreakCollection__ByDefault__IsEmpty ()
+        {
+            var repo = new BreakRepository();
+
+            Assert.That( !repo.ShortBreakCollection.Any() );
+        }
+
+
+        [Test]
+        public void AddVariableBreak__Shift_IsNull__Throw ()
+        {
+
+
+
+
+        }
 
         [ Test ]
-        public void Ctor__Shift_IsNull__Throws ()
-        {
-
-
-
-
-        }
-
-
-        [Test]
-        public void Ctor__Shift__CallsAddVariableBreak ()
-        {
-
-
-
-
-        }
-
-
-        [Test]
-        public void Ctor__ShortBreak_IsNull__Throws ()
-        {
-
-
-
-
-        }
-
-
-        [Test]
-        public void Ctor__ShortBreak__CallsAddFixedBreak ()
-        {
-
-
-
-
-        }
-
-
-
-
-        [Test]
-        public void AddVariableBreak__Shift_IsNull__Throws ()
-        {
-
-
-
-
-        }
-
-
-
-        [Test]
-        public void AddVariableBreak__Shift__AddsVariableBreak ()
+        public void AddVariableBreak__Shift_DurationIsNotPositive__Throw ()
         {
 
 
@@ -87,7 +59,7 @@ namespace WorkSpeed.Productivity.Tests
 
 
         [Test]
-        public void AddFixedBreak__ShortBreak__AddsFixedBreak ()
+        public void AddFixedBreak__ShortBreak_IsNotPositive__Throws ()
         {
 
 
@@ -112,25 +84,6 @@ namespace WorkSpeed.Productivity.Tests
         public void CheckForABreak__Period_EqualsFirstShortBreakDuration__ReturnsShortBreak ()
         {
 
-
-
-
-        }
-
-
-
-        [ Test ]
-        public void VariableBreakList__ByDefault__Empty ()
-        {
-
-
-
-        }
-
-
-        [Test]
-        public void FixedBreakList__ByDefault__Empty ()
-        {
 
 
 

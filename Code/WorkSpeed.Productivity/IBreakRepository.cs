@@ -9,8 +9,6 @@ namespace WorkSpeed.Productivity
 {
     public interface IBreakRepository
     {
-        TimeSpan GetLongest ( Period period );
-        TimeSpan GetShortest ( Employee employee );
         TimeSpan CheckFixed ( Period period, Employee employee );
 
         void SetVariableBreak ( string name, TimeSpan breakDuration, DayPeriod dayPeriod );
