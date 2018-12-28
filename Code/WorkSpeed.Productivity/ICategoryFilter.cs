@@ -16,5 +16,7 @@ namespace WorkSpeed.Productivity
         int GetCategoryIndex ( Product product );
 
         bool Contains ( Category category );
+
+        void FillHoles ();
     }
 }

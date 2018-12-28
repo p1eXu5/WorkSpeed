@@ -11,12 +11,27 @@ namespace WorkSpeed.Productivity
 
         public CategoryFilter ( IEnumerable<Category> categories )
         {
-
+            CategoryList = new List< Category >( categories.Count() + 4 );
         }
 
         public List< Category > CategoryList { get; }
 
         public void AddCategory ( Category category )
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetCategoryIndex ( Product product )
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Contains ( Category category )
+        {
+            throw new NotImplementedException();
+        }
+
+        public void FillHoles ()
         {
             throw new NotImplementedException();
         }
