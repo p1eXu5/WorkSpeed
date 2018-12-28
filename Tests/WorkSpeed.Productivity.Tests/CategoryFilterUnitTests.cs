@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
 using NUnit.Framework;
 using WorkSpeed.Data.Models;
 
@@ -335,6 +332,27 @@ namespace WorkSpeed.Productivity.Tests
 
             // Assert:
             Assert.That( filter.CategoryList.Any() );
+        }
+
+        [Test]
+        public void CategoryList__ByDefault__ReturnsCategoriesInSameOrder ()
+        {
+            // Arrange:
+            var category1 = new Category( 10, 20 ) { Id = 5 };
+            var category2 = new Category( 1, 10 ) { Id = 3 };
+            var category3 = new Category( 20, 30 ) { Id = 1 };
+            var list = new List<Category> { category1, category2, category3 };
+
+            // Action:
+            var filter = new CategoryFilter( list );
+            filter.FillHoles();
+            var listRes = filter.CategoryList.ToArray();
+
+            // Assert:
+            Assert.That( list[0] == listRes[0] );
+            Assert.That( list[1] == listRes[1] );
+            Assert.That( list[2] == listRes[2] );
+            Assert.That( 5 == listRes.Length );
         }
 
         #endregion
