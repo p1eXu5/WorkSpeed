@@ -11,16 +11,12 @@ namespace WorkSpeed.Productivity
 
         ProductivityEmployee GetProductivity ( Employee employee );
 
-        void AddVariableBreak ( string name, TimeSpan breakDuration, DayPeriod dayPeriod );
+        void AddVariableBreak ( Shift shift );
 
-        void AddFixedBreaks ( string name,
-                              TimeSpan duration,
-                              TimeSpan interval,
-                              TimeSpan offset,
-                              Predicate<Employee> predicate );
+        void AddFixedBreaks ( ShortBreak shortBreak );
 
         IEnumerable< Category > GetCategories ();
-        double GetThreshold ();
-        void SetThreshold ( double threshold );
+        TimeSpan GetThreshold ();
+        void SetThreshold ( TimeSpan threshold );
     }
 }

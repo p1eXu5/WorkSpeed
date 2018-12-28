@@ -9,14 +9,12 @@ namespace WorkSpeed.Productivity
 {
     public interface IBreakRepository
     {
-        TimeSpan CheckFixed ( Period period, Employee employee );
+        IEnumerable<Shift> ShiftCollection { get; }
+        IEnumerable<ShortBreak> ShortBreakCollection { get; }
 
-        void SetVariableBreak ( string name, TimeSpan breakDuration, DayPeriod dayPeriod );
-
-        void SetFixedBreaks ( string name,
-                              TimeSpan duration,
-                              TimeSpan interval,
-                              TimeSpan offset,
-                              Predicate< Employee > predicate );
+        void AddFixedBreak ( ShortBreak shortBreak, Predicate< Employee > predicate );
+        void AddVariableBreak ( Shift shift );
+        ShortBreak CheckShortBreak ( Employee employee, Period period );
+        Shift CheckLunchBreak ( Period period );
     }
 }

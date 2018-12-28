@@ -26,7 +26,7 @@ namespace WorkSpeed
 
         public DayPeriod GetDayPeriod ()
         {
-            return new DayPeriod( Start.TimeOfDay, End.TimeOfDay );
+            return new DayPeriod( Start.TimeOfDay, End - Start );
         }
 
         public DateTime[] GetDays ()

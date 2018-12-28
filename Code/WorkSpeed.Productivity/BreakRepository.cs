@@ -10,140 +10,152 @@ namespace WorkSpeed.Productivity
 {
     public class BreakRepository : IBreakRepository
     {
-        private readonly List< Shift > _shiftCollection;
-        private readonly List< ShortBreak > _shortBreakCollection;
-
-        private readonly Dictionary< TimeSpan, ( string name, DayPeriod period) > _variableBreaks;
+        private readonly Dictionary< Shift, TimeSpan > _variableBreaks;
         private readonly Dictionary< ShortBreak, (Predicate<Employee> predicate, List<DayPeriod> periods) > _fixedBreaks;
+
+
 
         public BreakRepository ()
         {
-            _variableBreaks = new Dictionary< TimeSpan, (string, DayPeriod period) >( 2 );
+            _variableBreaks = new Dictionary< Shift, TimeSpan >( 2 );
             _fixedBreaks = new Dictionary< ShortBreak, (Predicate<Employee> predicate, List< DayPeriod > periods) >( 2 );
-
-            _shiftCollection = new List< Shift >( 2 );
-            _shortBreakCollection = new List< ShortBreak >( 2 );
         }
 
-        public IEnumerable< Shift > ShiftCollection => _shiftCollection;
-        public IEnumerable< ShortBreak > ShortBreakCollection => _shortBreakCollection;
 
-        public object CheckForABreak ( Period period )
+
+        public TimeSpan ShortBreakDownLimit { get; private set; } = TimeSpan.FromMinutes( 5 );
+        public TimeSpan ShortBreakUpLimit { get; private set; } = TimeSpan.FromMinutes( 10 );
+
+        public TimeSpan ShortBreakIntervalDownLimit { get; private set; } = TimeSpan.FromMinutes( 50 );
+        public TimeSpan ShortBreakIntervalUpLimit { get; private set; } = TimeSpan.FromHours( 2 );
+
+
+        public TimeSpan LongBreakDownLimit { get; private set; } = TimeSpan.FromMinutes( 15 );
+        public TimeSpan LongBreakUpLimit { get; private set; } = TimeSpan.FromHours( 2 );
+
+        public TimeSpan ShiftDurationDownLimit { get; private set; } = TimeSpan.FromHours( 4 );
+        public TimeSpan ShiftDurationUpLimit { get; private set; } = TimeSpan.FromHours( 12 );
+
+
+        public IEnumerable< Shift > ShiftCollection => _variableBreaks.Keys;
+        public IEnumerable< ShortBreak > ShortBreakCollection => _fixedBreaks.Keys;
+
+
+
+        public List< DayPeriod > GetDayPeriods ( ShortBreak shortBreak )
         {
+            if ( shortBreak == null ) throw new ArgumentNullException( nameof( shortBreak ), "ShortBreak cannot be null" );
 
-        }
+            // Check duration
+            if ( shortBreak.Duration < ShortBreakDownLimit || shortBreak.Duration > ShortBreakUpLimit)
+                throw new ArgumentException();
 
-        public bool HasShortBreak ( Employee employee, Period period )
-        {
-            if ( period.Start >= period.End ) {
-                return false;
-            }
+            // Check interval
+            var interval = shortBreak.Periodicity - shortBreak.Duration;
 
-            if ( period.Duration < ShortBreakDownLimit && period.Duration > ShortBreakUpLimit ) return false;
+            if ( interval < ShortBreakIntervalDownLimit || interval > ShortBreakIntervalUpLimit )
+                throw new ArgumentException();
 
-            var shortBreak = _fixedBreaks.Keys
-                             .FirstOrDefault( sb => _fixedBreaks[ sb ].predicate( employee ) 
-                                                    && sb.Duration >= period.Duration
-                                                    && _fixedBreaks[ sb ].periods.Contains( period.GetDayPeriod(), new DayPeriodEqualityComparer() ) );
+            // Check shift
+            if ( shortBreak.Shift == null ) throw new ArgumentNullException( nameof( shortBreak ), "ShortBreak.Shift cannot be null" );
 
-            if ( shortBreak == null ) return false;
+            var offset = shortBreak.Shift.StartTime;
 
-            return true;
-        }
+            if ( offset < TimeSpan.Zero || offset >= TimeSpan.FromDays( 1 ) )
+                throw new ArgumentException();
 
-        public TimeSpan ShortBreakDownLimit { get; set; } = TimeSpan.FromMinutes( 5 );
-        public TimeSpan ShortBreakUpLimit { get; set; } = TimeSpan.FromMinutes( 10 );
-
-        public TimeSpan LongBreakDownLimit { get; set; } = TimeSpan.FromMinutes( 15 );
-        public TimeSpan LongBreakUpLimit { get; set; } = TimeSpan.FromHours( 2 );
-
-        public TimeSpan CheckFixed ( Period period, Employee employee )
-        {
-            var fixedBreaks = _fixedBreaks.FirstOrDefault( f => f.Key( employee ) );
-
-            if ( fixedBreaks.Key == null ) return period.Duration;
-
-            var duration = period.Duration;
-            var days = period.GetDays();
-
-            foreach ( var theBreak in fixedBreaks.Value.breakList ) {
-
-                if ( days.Length > 1 ) {
-
-                    foreach ( var day in days ) {
-
-                        if ( period.Contains( theBreak.GetDatePeriod( day ) ) ) {
-                            duration -= theBreak.Duration;
-                        }
-                    }
-                }
-                else if ( period.Contains( theBreak.GetDatePeriod( period.Start ) ) ) {
-                    duration -= theBreak.Duration;
-                }
-            }
-
-            return duration;
-        }
-
-        public void SetVariableBreak ( string name, TimeSpan breakDuration, DayPeriod dayPeriod )
-        {
-            if ( breakDuration < TimeSpan.Zero ) throw new ArgumentException();
-
-            _variableBreaks[ breakDuration ] = (name, dayPeriod);
-        }
-
-        public void SetFixedBreaks ( string name, 
-                                     TimeSpan duration, 
-                                     TimeSpan interval, 
-                                     TimeSpan offset, 
-                                     Predicate<Employee> predicate )
-        {
-            if ( String.IsNullOrWhiteSpace( name ) ) throw new ArgumentException( "name is null or empty or whitespaces." );
-
-            if ( duration < TimeSpan.Zero && offset >= TimeSpan.FromDays( 1 ) )
-                throw new ArgumentException( "breakDuration must be greater than zero and less than full day", nameof( duration ));
-            if ( interval < TimeSpan.Zero && offset >= TimeSpan.FromDays( 1 ) )
-                throw new ArgumentException( "interval must be greater than zero and less than full day", nameof( interval ));
-            if ( offset < TimeSpan.Zero && offset >= TimeSpan.FromDays( 1 ) )
-                throw new ArgumentException( "interval must be greater than zero and less than full day", nameof( interval ));
-
-            if ( predicate == null ) throw new ArgumentNullException(nameof( predicate ), "predicate cannot be null");
-
-            var periodList = new List< DayPeriod >();
+            var dayPeriodList = new List< DayPeriod >();
 
             TimeSpan start;
             TimeSpan end = offset;
-            DayPeriod period;
+            DayPeriod dayPeriod;
 
-            do {
+            do
+            {
                 start = end + interval;
-                end += interval + duration;
-                period = new DayPeriod( start, end );
-                periodList.Add( period );
+                end += interval + shortBreak.Duration;
+                dayPeriod = new DayPeriod( start, end );
+                dayPeriodList.Add( dayPeriod );
 
             } while ( end < TimeSpan.FromDays( 1 ) );
 
-            var lastEnd = end > TimeSpan.FromDays( 1 ) ? end - TimeSpan.FromDays( 1 ) : TimeSpan.Zero ;
+            var lastEnd = end > TimeSpan.FromDays( 1 ) ? end - TimeSpan.FromDays( 1 ) : TimeSpan.Zero;
 
             end = offset;
-            start = end - duration;
+            start = end - shortBreak.Duration;
 
-            while ( start > lastEnd ) {
+            while ( start > lastEnd )
+            {
 
-                period = new DayPeriod( start, end );
-                periodList.Add( period );
+                dayPeriod = new DayPeriod( start, end );
+                dayPeriodList.Add( dayPeriod );
                 end = start - interval;
-                start = end - duration;
+                start = end - shortBreak.Duration;
             }
 
-            _fixedBreaks[ predicate ] = (name, periodList);
+            return dayPeriodList;
         }
 
-        public DayPeriod[] GetFixedBreaks ( string name )
+        public void AddFixedBreak ( ShortBreak shortBreak, Predicate< Employee > predicate )
         {
-            if ( String.IsNullOrWhiteSpace( name ) ) throw new ArgumentException("name is null or empty or whitespaces.");
+            if ( predicate == null ) throw new ArgumentNullException( nameof( predicate ), "Predicate cannot be null" );
+            var dayPerioList = GetDayPeriods( shortBreak );
 
-            return _fixedBreaks.Where( fb => fb.Value.name.Equals( name ) ).Select( fb => fb.Value.breakList ).First().ToArray();
+            _fixedBreaks.Add( shortBreak, (predicate, dayPerioList) );
         }
+
+        public void AddVariableBreak ( Shift shift )
+        {
+            if ( shift == null ) throw new ArgumentNullException( nameof( shift ), "ShortBreak cannot be null" );
+
+            if ( shift.ShiftDuration < ShiftDurationDownLimit || shift.ShiftDuration > ShiftDurationUpLimit )
+                throw new ArgumentException();
+
+            if ( shift.LunchDuration < LongBreakDownLimit || shift.LunchDuration > LongBreakUpLimit )
+                throw new ArgumentException();
+
+            if ( shift.StartTime < TimeSpan.Zero || shift.StartTime >= TimeSpan.FromDays( 1 ) )
+                throw new ArgumentException();
+
+            var endTime = shift.StartTime + shift.ShiftDuration;
+
+            if ( endTime > TimeSpan.FromDays( 1 ) ) {
+                endTime = endTime - TimeSpan.FromDays( 1 );
+            }
+
+            _variableBreaks.Add( shift, endTime );
+        }
+
+        public ShortBreak CheckShortBreak ( Employee employee, Period period )
+        {
+            if ( period.Start >= period.End ) {
+                return null;
+            }
+
+            if ( period.Duration < ShortBreakDownLimit ) return null;
+
+            var shortBreak = _fixedBreaks.Keys
+                             .FirstOrDefault( sb => _fixedBreaks[ sb ].predicate( employee ) 
+                                                    && sb.Duration <= period.Duration
+                                                    && _fixedBreaks[ sb ].periods.Contains( period.GetDayPeriod(), new DayPeriodEqualityComparer() ) );
+
+            return shortBreak;
+        }
+
+
+
+        public Shift CheckLunchBreak ( Period period )
+        {
+            if ( period.Start >= period.End ) {
+                return null;
+            }
+
+            if ( period.Duration < LongBreakDownLimit ) return null;
+
+            var shift = _variableBreaks.Keys.FirstOrDefault( s => period.Start.TimeOfDay > s.StartTime && period.End.TimeOfDay < _variableBreaks[ s ] );
+
+            return shift;
+        }
+
     }
 }

@@ -11,7 +11,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 {
     public class CategoriesThresholdStageViewModel : StageViewModel
     {
-        private double _threshold;
+        private TimeSpan _threshold;
 
         public CategoriesThresholdStageViewModel ( IFastProductivityViewModel fastProductivityViewModel, int stageNum )
             : base( fastProductivityViewModel, stageNum )
@@ -26,7 +26,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
         public ObservableCollection< CategoryViewModel > Categories { get; set; }
 
-        public double Threshold
+        public TimeSpan Threshold
         {
             get => _threshold;
             set {

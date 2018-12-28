@@ -87,31 +87,31 @@ namespace WorkSpeed.Productivity
             return productivity;
         }
 
-        public void AddVariableBreak ( string name, TimeSpan breakDuration, DayPeriod dayPeriod )
+        public void AddVariableBreak ( Shift shift )
         {
-            PauseBetweenActions.BreakRepository.SetVariableBreak( name, breakDuration, dayPeriod );
+            PauseBetweenActions.BreakRepository.AddVariableBreak( shift );
         }
 
-        public void AddFixedBreaks ( string name, 
-                                     TimeSpan duration, 
-                                     TimeSpan interval, 
-                                     TimeSpan offset, 
-                                     Predicate< Employee > predicate )
+        public void AddFixedBreaks ( ShortBreak shortBreak )
         {
-            PauseBetweenActions.BreakRepository.SetFixedBreaks( name, duration, interval, offset, predicate );
+            if ( shortBreak.IsForSmokers ) {
+                PauseBetweenActions.BreakRepository.AddFixedBreak( shortBreak, (e) => e.IsSmoker );
+                return;
+            }
+
+            PauseBetweenActions.BreakRepository.AddFixedBreak( shortBreak, ( e ) => !e.IsSmoker );
         }
 
         public IEnumerable< Category > GetCategories ()
         {
-            throw new NotImplementedException();
+            return CategoryFilter.CategoryList;
         }
+        public TimeSpan GetThreshold () => PauseBetweenActions.MinRestBetweenShifts;
 
-        public double GetThreshold () => PauseBetweenActions.MinRestBetweenShifts.Seconds;
-
-        public void SetThreshold ( double threshold )
+        public void SetThreshold ( TimeSpan threshold )
         {
             ClearActions();
-            PauseBetweenActions.MinRestBetweenShifts = TimeSpan.FromSeconds( threshold );
+            PauseBetweenActions.MinRestBetweenShifts = threshold;
         }
 
         public void ClearActions ()

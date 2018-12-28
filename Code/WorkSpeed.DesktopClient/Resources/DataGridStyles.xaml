@@ -73,7 +73,7 @@
     </Style>
 
 
-    <Style TargetType="DataGrid">
+    <Style TargetType="DataGrid" x:Key="st_EmployeeDataGrid">
         <Setter Property="AlternatingRowBackground" Value="{StaticResource br_DataGrid.EvenRow}" />
         <Setter Property="RowBackground" Value="{StaticResource br_DataGrid.OddRow}" />
         <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource br_MainWindow.Background}" />

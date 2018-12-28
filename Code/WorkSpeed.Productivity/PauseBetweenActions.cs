@@ -25,6 +25,7 @@ namespace WorkSpeed.Productivity
         }
 
         public TimeSpan MinRestBetweenShifts { get; set; }
+
         public IBreakRepository BreakRepository { get; }
 
         /// <summary>
@@ -49,32 +50,7 @@ namespace WorkSpeed.Productivity
 
             TimeSpan resultPouse = TimeSpan.Zero;
 
-            var longBreakDuration = BreakRepository.GetLongest( pause );
-            var shortBreakDuration = BreakRepository.GetShortest( action.Employee );
-
-            if ( longBreakDuration > TimeSpan.Zero 
-                 && !_breaks.Contains( pause.Start.Date ) 
-                 && pause.Duration >= longBreakDuration ) {
-
-                // Check both intervals on fixed breaks, [Start + Longest : End] and [Start : End - Longest]
-
-                var pauseAfter = BreakRepository.CheckFixed( 
-                    new Period( pause.Start.Add( longBreakDuration ), pause.End ), action.Employee 
-                );
-
-                var pauseBefore = BreakRepository.CheckFixed(
-                    new Period( pause.Start, pause.End.Subtract( longBreakDuration ) ), action.Employee
-                );
-
-                resultPouse = pauseAfter < pauseBefore
-                                       ? (pause.Duration - longBreakDuration) + pauseAfter
-                                       : (pause.Duration - longBreakDuration) + pauseBefore;
-            }
-            else if ( shortBreakDuration > TimeSpan.Zero
-                      && pause.Duration >= shortBreakDuration ) {
-
-                resultPouse = BreakRepository.CheckFixed( pause, action.Employee );
-            }
+           
 
             return resultPouse;
         }

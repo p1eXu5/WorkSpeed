@@ -33,8 +33,8 @@ namespace WorkSpeed.Interfaces
         IEnumerable< GatheringAction > GetGatheringActions ();
         IEnumerable< Category > GetCategories ();
 
-        double GetThreshold ();
-        void SetThreshold ( double threshold );
+        TimeSpan GetThreshold ();
+        void SetThreshold ( TimeSpan threshold );
 
 
         Task GetProductivitiesAsync ( Progress< ProductivityEmployee > progress );

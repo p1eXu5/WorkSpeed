@@ -7,9 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="1000">
 
-    <StackPanel VerticalAlignment="Center">
+    <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <DataGrid ItemsSource="{Binding Employees}"
                   VerticalAlignment="Top"
+                  Style="{StaticResource st_EmployeeDataGrid}"
                   >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Код" 

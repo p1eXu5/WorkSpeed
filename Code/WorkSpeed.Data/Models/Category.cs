@@ -27,11 +27,13 @@ namespace WorkSpeed.Data.Models
         public DateTime Date { get; set; }
         public string Name { get; set; }
 
+        /// <summary>
+        /// Minimum volume in liters.
+        /// </summary>
         public double MinVolume { get; set; }
 
         /// <summary>
-        /// if it's zero, than MaxVolume equal to positive infinity or
-        /// next MinVolume.
+        /// Maximum volume in liters.
         /// </summary>
         public double MaxVolume { get; set; }
     }

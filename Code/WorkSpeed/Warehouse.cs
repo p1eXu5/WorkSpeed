@@ -65,9 +65,9 @@ namespace WorkSpeed
         public IEnumerable< GatheringAction > GetGatheringActions () => _context.GetGatheringActions();
         public IEnumerable< Category > GetCategories () => FactoryEmployeeAction.GetCategories ();
 
-        public double GetThreshold () => FactoryEmployeeAction.GetThreshold();
+        public TimeSpan GetThreshold () => FactoryEmployeeAction.GetThreshold();
 
-        public void SetThreshold ( double threshold )
+        public void SetThreshold ( TimeSpan threshold )
         {
             FactoryEmployeeAction.SetThreshold( threshold );
         }
@@ -129,11 +129,7 @@ namespace WorkSpeed
             var shifts = _context.GetShifts();
 
             foreach ( var shift in shifts ) {
-
-                FactoryEmployeeAction.AddVariableBreak( shift.Name, 
-                                                        shift.LunchDuration, 
-                                                        new Productivity.DayPeriod( shift.StartTime, shift.StartTime + shift.Duration ) 
-                );
+                FactoryEmployeeAction.AddVariableBreak( shift );
             }
         }
 
@@ -145,28 +141,14 @@ namespace WorkSpeed
 
             if ( forNotSmokers != null ) {
 
-                FactoryEmployeeAction.AddFixedBreaks( 
-
-                    name: forNotSmokers.Name, 
-                    duration: forNotSmokers.Duration, 
-                    interval: forNotSmokers.Interval - forNotSmokers.Duration, 
-                    offset: forNotSmokers.Shift.StartTime, 
-                    predicate: (e) => !e.IsSmoker 
-                );
+                FactoryEmployeeAction.AddFixedBreaks( forNotSmokers );
             }
 
             var forSmokers = breakList.FirstOrDefault( b => b.IsForSmokers );
 
             if ( forNotSmokers != null )
             {
-                FactoryEmployeeAction.AddFixedBreaks(
-
-                    name: forNotSmokers.Name,
-                    duration: forNotSmokers.Duration,
-                    interval: forNotSmokers.Interval - forNotSmokers.Duration,
-                    offset: forNotSmokers.Shift.StartTime,
-                    predicate: ( e ) => e.IsSmoker
-                );
+                FactoryEmployeeAction.AddFixedBreaks( forSmokers );
             }
         }
 

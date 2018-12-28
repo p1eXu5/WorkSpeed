@@ -11,7 +11,7 @@ namespace WorkSpeed.Data.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public TimeSpan Duration { get; set; }
-        public TimeSpan Interval { get; set; }
+        public TimeSpan Periodicity { get; set; }
         public bool IsForSmokers { get; set; }
 
         public Shift Shift { get; set; }

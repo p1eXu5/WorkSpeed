@@ -417,37 +417,43 @@ namespace WorkSpeed.Data.BusinessContexts
                     Id = 1,
                     Date = DateTime.Now,
                     Name = "Товары до 2,5 литров",
-                    MaxVolume = ( float )(2.5 / 1000)
+                    MinVolume = 0.0,
+                    MaxVolume = 2.5
                 },
                 new Category {
                     Id = 1,
                     Date = DateTime.Now,
                     Name = "Товары до 5 литров",
-                    MaxVolume = ( float )(5.0 / 1000)
+                    MinVolume = 2.5,
+                    MaxVolume = 5.0,
                 },
                 new Category {
                     Id = 1,
                     Date = DateTime.Now,
                     Name = "Товары до 25 литров",
-                    MaxVolume = ( float )(25.0 / 1000)
+                    MinVolume = 5.0,
+                    MaxVolume = 25.0,
                 },
                 new Category {
                     Id = 1,
                     Date = DateTime.Now,
                     Name = "Товары до 100 литров",
-                    MaxVolume = ( float )(100.0 / 1000)
+                    MinVolume = 25.0,
+                    MaxVolume = 100.0,
                 },
                 new Category {
                     Id = 1,
                     Date = DateTime.Now,
                     Name = "Товары до 250 литров",
-                    MaxVolume = ( float )(250.0 / 1000)
+                    MinVolume = 100.0,
+                    MaxVolume = 250.0,
                 },
                 new Category {
                     Id = 1,
                     Date = DateTime.Now,
                     Name = "Товары от 250 литров",
-                    MinVolume = ( float )(250.0 / 1000)
+                    MinVolume = 250.0,
+                    MaxVolume = double.PositiveInfinity,
                 },
             } );
         }
@@ -459,7 +465,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Id = 1,
                     Name = "Дневная смена",
                     StartTime = new TimeSpan( 8, 0, 0),
-                    Duration = TimeSpan.FromHours( 12 ),
+                    ShiftDuration = TimeSpan.FromHours( 12 ),
                     LunchDuration = TimeSpan.FromMinutes( 30 ),
                     RestTime = TimeSpan.FromMinutes( 60 )
                 },
@@ -467,7 +473,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Id = 2,
                     Name = "Ночная смена",
                     StartTime = new TimeSpan( 20, 0, 0),
-                    Duration = TimeSpan.FromHours( 12 ),
+                    ShiftDuration = TimeSpan.FromHours( 12 ),
                     LunchDuration = TimeSpan.FromMinutes( 30 ),
                     RestTime = TimeSpan.FromMinutes( 60 )
                 },
@@ -478,7 +484,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Id = 1,
                     Name = "Перекуры для некурящих",
                     Duration = TimeSpan.FromMinutes( 10 ),
-                    Interval = TimeSpan.FromHours( 2 ),
+                    Periodicity = TimeSpan.FromHours( 2 ),
                     IsForSmokers = false,
                     Shift = _shifts[ 0 ]
                 },
@@ -486,7 +492,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Id = 2,
                     Name = "Перекуры для курящих",
                     Duration = TimeSpan.FromMinutes( 5 ),
-                    Interval = TimeSpan.FromHours( 1 ),
+                    Periodicity = TimeSpan.FromHours( 1 ),
                     IsForSmokers = true,
                     Shift = _shifts[ 0 ]
                 },

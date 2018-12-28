@@ -27,10 +27,16 @@
 
         <Storyboard x:Key="an_Appearance">
             <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:.4" />
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="IsHitTestVisible" Duration="0:0:0.1">
+                <DiscreteBooleanKeyFrame Value="True" KeyTime="0" />
+            </BooleanAnimationUsingKeyFrames>
         </Storyboard>
 
         <Storyboard x:Key="an_Disappearance">
             <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.0" Duration="0:0:.4" />
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="IsHitTestVisible" Duration="0:0:0.1">
+                <DiscreteBooleanKeyFrame Value="False" KeyTime="0" />
+            </BooleanAnimationUsingKeyFrames>
         </Storyboard>
 
         <Style x:Key="{x:Type ListBoxItem}" TargetType="ListBoxItem">
@@ -215,6 +221,7 @@
                 <ContentControl.Style>
                     <Style TargetType="ContentControl">
                         <Setter Property="Opacity" Value="0.0" />
+                        <Setter Property="IsHitTestVisible" Value="False" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window},
                                                            Converter={StaticResource conv_EvenOddToZeroOne},
@@ -240,6 +247,7 @@
                 <ContentControl.Style>
                     <Style TargetType="ContentControl">
                         <Setter Property="Opacity" Value="0.0" />
+                        <Setter Property="IsHitTestVisible" Value="False" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window},
                                                            Converter={StaticResource conv_EvenOddToZeroOne},

@@ -39,9 +39,9 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
 
         public TimeSpan Interval
         {
-            get => _break.Interval;
+            get => _break.Periodicity;
             set {
-                _break.Interval = value;
+                _break.Periodicity = value;
                 OnPropertyChanged();
             }
         }

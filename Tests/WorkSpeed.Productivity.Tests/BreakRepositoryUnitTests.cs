@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Productivity.Tests
 {
@@ -28,12 +29,38 @@ namespace WorkSpeed.Productivity.Tests
 
 
         [Test]
-        public void AddVariableBreak__Shift_IsNull__Throw ()
+        public void GetDayPeriods__ShortBreak_IsNull__Throw ()
         {
+            var repo = new BreakRepository();
+            Assert.Catch< ArgumentNullException >( () => repo.GetDayPeriods( null ) );
+        }
 
+        [Test]
+        public void GetDayPeriods__ShortBreak_DurationLessShortBreakDownLimit__Throw ()
+        {
+            var repo = new BreakRepository();
 
+            var shortBreak = new ShortBreak()
+            {
+                Duration = repo.ShortBreakDownLimit - TimeSpan.FromSeconds( 1 ),
+                Periodicity = repo.ShortBreakIntervalUpLimit,
+            };
 
+            Assert.Catch<ArgumentException>( () => new BreakRepository().GetDayPeriods( shortBreak ) );
+        }
 
+        [Test]
+        public void GetDayPeriods__ShortBreak_DurationGreaterShortBreakUpLimit__Throw ()
+        {
+            var repo = new BreakRepository();
+
+            var shortBreak = new ShortBreak()
+            {
+                Duration = repo.ShortBreakUpLimit + TimeSpan.FromSeconds( 1 ),
+                Periodicity = repo.ShortBreakIntervalUpLimit,
+            };
+
+            Assert.Catch<ArgumentException>( () => repo.GetDayPeriods( shortBreak ) );
         }
 
         [ Test ]
