@@ -33,6 +33,8 @@ namespace WorkSpeed.Productivity.ActionDetails
             var product = withProductAction.Product;
             var category = _filter.GetCategoryIndex( product );
 
+            if ( category < 0) return;
+
             Weight[ category ] += product.Weight + withProductAction.ProductQuantity;
             Volume[ category ] += product.Volume + withProductAction.ProductQuantity;
             Quantity[ category ] = withProductAction.ProductQuantity;
@@ -43,5 +45,56 @@ namespace WorkSpeed.Productivity.ActionDetails
         public List< double > Volume { get; private set; }
         public List< int > Lines { get; private set; }
         public List< int > Quantity { get; private set; }
+
+        public Dictionary< Category, int > GetQuantityMap ()
+        {
+            var res = new Dictionary< Category, int >();
+            var categories = _filter.CategoryList.ToArray();
+
+            for ( int i = 0; i < categories.Length; i++ ) {
+                res.Add( categories[ i ], Quantity[ i ] );
+            }
+
+            return res;
+        }
+
+        public Dictionary< Category, int > GetLinesMap ()
+        {
+            var res = new Dictionary<Category, int>();
+            var categories = _filter.CategoryList.ToArray();
+
+            for ( int i = 0; i < categories.Length; i++ )
+            {
+                res.Add( categories[ i ], Lines[ i ] );
+            }
+
+            return res;
+        }
+
+        public Dictionary< Category, double > GetWeightMap ()
+        {
+            var res = new Dictionary<Category, double>();
+            var categories = _filter.CategoryList.ToArray();
+
+            for ( int i = 0; i < categories.Length; i++ )
+            {
+                res.Add( categories[ i ], Weight[ i ] );
+            }
+
+            return res;
+        }
+
+        public Dictionary< Category, double > GetVolumeMap ()
+        {
+            var res = new Dictionary<Category, double>();
+            var categories = _filter.CategoryList.ToArray();
+
+            for ( int i = 0; i < categories.Length; i++ )
+            {
+                res.Add( categories[ i ], Volume[ i ] );
+            }
+
+            return res;
+        }
     }
 }

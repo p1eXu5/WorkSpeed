@@ -42,7 +42,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
             }
         }
 
-
         public ICommand GenerateCommand => new MvvmCommand( Generate );
 
         private async void Generate ( object obj )

@@ -99,16 +99,16 @@ namespace WorkSpeed.Productivity
         /// 
         /// </summary>
         /// <returns></returns>
-        public Dictionary< OperationGroups, int[] > GetLines ()
+        public Dictionary< OperationGroups, Dictionary< Category, int >> GetLines ()
         {
-            var lines = new Dictionary<OperationGroups, int[]>();
+            var lines = new Dictionary<OperationGroups, Dictionary<Category, int>>();
 
             foreach ( var operation in Enum.GetValues( typeof( OperationGroups ) ) ) {
 
                 var index = ( int )operation;
 
                 if ( _actions[ index ] is WithProductActionDetails withProductActions ) {
-                    lines[ ( OperationGroups )index ] = withProductActions.Lines.ToArray();
+                    lines[ ( OperationGroups )index ] = withProductActions.GetLinesMap();
                 }
             }
 
@@ -119,18 +119,18 @@ namespace WorkSpeed.Productivity
         /// 
         /// </summary>
         /// <returns></returns>
-        public Dictionary< OperationGroups, int[] > GetQuantities ()
+        public Dictionary< OperationGroups, Dictionary< Category, int >> GetQuantities ()
         {
-            var quantities = new Dictionary<OperationGroups, int[]>();
+            var quantities = new Dictionary <OperationGroups, Dictionary< Category, int >>();
 
             foreach ( var operation in Enum.GetValues( typeof( OperationGroups ) ) )
             {
 
                 var index = ( int )operation;
 
-                if ( _actions[ index ] is WithProductActionDetails withProductActions )
-                {
-                    quantities[ ( OperationGroups )index ] = withProductActions.Quantity.ToArray();
+                if ( _actions[ index ] is WithProductActionDetails withProductActions ) {
+
+                    quantities[ ( OperationGroups )index ] = withProductActions.GetQuantityMap();
                 }
             }
 
@@ -141,9 +141,9 @@ namespace WorkSpeed.Productivity
         /// 
         /// </summary>
         /// <returns></returns>
-        public Dictionary< OperationGroups, int[] > GetScans ()
+        public Dictionary< OperationGroups, Dictionary< Category, int >> GetScans ()
         {
-            var scans = new Dictionary<OperationGroups, int[]>();
+            var scans = new Dictionary< OperationGroups, Dictionary< Category, int >>();
 
             foreach ( var operation in Enum.GetValues( typeof( OperationGroups ) ) ) {
 
@@ -151,7 +151,7 @@ namespace WorkSpeed.Productivity
 
                 if ( _actions[ index ] is WithScansActionDetails withScansActions )
                 {
-                    scans[ ( OperationGroups )index ] = withScansActions.Scans.ToArray();
+                    scans[ ( OperationGroups )index ] = withScansActions.GetScansMap();
                 }
             }
 
@@ -162,19 +162,24 @@ namespace WorkSpeed.Productivity
         /// 
         /// </summary>
         /// <returns></returns>
-        public Dictionary<OperationGroups, double[]> GetWeights ()
+        public Dictionary<OperationGroups, Dictionary< Category, double >> GetWeights ()
         {
-            var weights = new Dictionary<OperationGroups, double[]>();
+            var weights = new Dictionary<OperationGroups, Dictionary<Category, double>>();
             
             foreach ( var operation in Enum.GetValues( typeof( OperationGroups ) ) ) {
 
                 var index = ( int )operation;
 
                 if ( _actions[ index ] is WithProductActionDetails withScansActions ) {
-                    weights[ ( OperationGroups )index ] = withScansActions.Weight.ToArray();
+
+                    weights[ ( OperationGroups )index ] = withScansActions.GetWeightMap();
                 }
                 else if ( _actions[ index ] is ShipmentActionDetails shipmentActions ) {
-                    weights[ ( OperationGroups )index ] = new double[] { shipmentActions.Weight };
+
+                    var map = new Dictionary<Category, double>();
+                    map.Add( new Category( 0.0, double.PositiveInfinity ) { Name = "Без категорий" }, shipmentActions.Weight );
+
+                    weights[ ( OperationGroups )index ] = map;
                 }
             }
 
@@ -185,22 +190,25 @@ namespace WorkSpeed.Productivity
         /// 
         /// </summary>
         /// <returns></returns>
-        public Dictionary<OperationGroups, double[]> GetVolumes ()
+        public Dictionary<OperationGroups, Dictionary<Category, double>> GetVolumes ()
         {
-            var volumes = new Dictionary<OperationGroups, double[]>();
+            var volumes = new Dictionary<OperationGroups, Dictionary< Category, double >>();
 
             foreach ( var operation in Enum.GetValues( typeof( OperationGroups ) ) )
             {
 
                 var index = ( int )operation;
 
-                if ( _actions[ index ] is WithProductActionDetails withScansActions )
-                {
-                    volumes[ ( OperationGroups )index ] = withScansActions.Volume.ToArray();
+                if ( _actions[ index ] is WithProductActionDetails withScansActions ) {
+
+                    volumes[ ( OperationGroups )index ] = withScansActions.GetVolumeMap();
                 }
-                else if ( _actions[ index ] is ShipmentActionDetails shipmentActions )
-                {
-                    volumes[ ( OperationGroups )index ] = new double[] { shipmentActions.Volume };
+                else if ( _actions[ index ] is ShipmentActionDetails shipmentActions ) {
+
+                    var map = new Dictionary< Category, double >();
+                    map.Add( new Category( 0.0, double.PositiveInfinity ) { Name = "Без категорий" }, shipmentActions.Volume );
+
+                    volumes[ ( OperationGroups )index ] = map;
                 }
             }
 

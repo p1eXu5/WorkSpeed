@@ -29,5 +29,18 @@ namespace WorkSpeed.Productivity.ActionDetails
         }
 
         public List< int > Scans { get; private set; }
+
+        public Dictionary<Category, int> GetScansMap ()
+        {
+            var res = new Dictionary<Category, int>();
+            var categories = _filter.CategoryList.ToArray();
+
+            for ( int i = 0; i < categories.Length; i++ )
+            {
+                res.Add( categories[ i ], Scans[ i ] );
+            }
+
+            return res;
+        }
     }
 }
