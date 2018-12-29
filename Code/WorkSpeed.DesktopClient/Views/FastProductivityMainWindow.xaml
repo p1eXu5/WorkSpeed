@@ -215,7 +215,6 @@
             <!-- Import Products -->
             <ContentControl Grid.Column="0"
                             Content="{Binding StageViewModel}"
-                            
                             ContentTemplateSelector="{DynamicResource dt_StageTemplateSelector}"
                             >
                 <ContentControl.Style>
