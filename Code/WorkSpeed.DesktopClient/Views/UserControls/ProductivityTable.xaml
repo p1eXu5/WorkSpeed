@@ -8,12 +8,19 @@
              d:DesignHeight="450" d:DesignWidth="2000">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
             <RowDefinition Height="*" />
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
 
-        <DataGrid ItemsSource="{Binding Employees}"
+        <Button HorizontalAlignment="Center" Content="Сформировать" 
+                Width="100"
+                Command="{Binding GenerateCommand}"
+                />
+
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Productivities}"
                   Style="{StaticResource st_EmployeeDataGrid}"
+                  VerticalAlignment="Top"
                   >
             <DataGrid.Columns>
 
@@ -48,7 +55,7 @@
 
                 <DataGridTemplateColumn Header="Курит" 
                                         Width="50"
-                                        CellTemplate="{StaticResource dt_IsSmoker}"
+                                        CellTemplate="{StaticResource dt_Productivity.IsSmoker}"
                                         CellStyle="{StaticResource st_CenteredCell}"
                                         CanUserSort="True"
                                         SortMemberPath="IsSmoker"
@@ -102,7 +109,7 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />

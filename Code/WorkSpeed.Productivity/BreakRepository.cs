@@ -161,7 +161,7 @@ namespace WorkSpeed.Productivity
         /// <returns></returns>
         public Shift[] CheckLunchBreak ( Period period )
         {
-            if ( period.Duration < LongBreakDownLimit ) return null;
+            if ( period.Duration < LongBreakDownLimit ) return new Shift[0];
 
             var periodDay = period.GetDayPeriod();
 

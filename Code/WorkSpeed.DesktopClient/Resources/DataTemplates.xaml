@@ -102,6 +102,31 @@
 
     <!-- _______________ Productivity Table Templates _______________ -->
 
+
+    <DataTemplate x:Key="dt_GatheringLines">
+        <ListBox ItemsSource="{Binding GatheringLines}"
+                 Width="100" Height="Auto"
+                 >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock >
+                            <Run Text="{Binding Key.Id, Mode=OneWay}" />:
+                            <Run Text=" " /><Run Text="{Binding Value, Mode=OneWay}" />
+                        </TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DataTemplate>
+
+    <DataTemplate x:Key="dt_Productivity.IsSmoker">
+        <CheckBox IsChecked="{Binding IsSmoker, Mode=OneWay}"
+                  IsEnabled="False"
+                  Style="{StaticResource st_TableCheckBox}"
+        />
+    </DataTemplate>
+
     <!-- Productivity DataGrid -->
     <DataTemplate x:Key="dt_ProductivityTable">
         <Grid Width="Auto" Height="Auto" Margin="5" 

@@ -88,7 +88,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                 new Operation {
                     Id = 5,
-                    Name = "Подбор товара покупателей",
+                    Name = "Подбор товаров покупателей",
                     OperationGroupId = 4,
                     Group = _operationGroups.First( o => o.Id == 4 ),
                     Complexity = (float) 1.0
@@ -520,7 +520,7 @@ namespace WorkSpeed.Data.BusinessContexts
             }
         }
 
-        public IEnumerable< GatheringAction > GetGatheringActions () => _gatheringActions;
+        public IEnumerable< GatheringAction > GetGatheringActions () => _gatheringActions.OrderBy( a => a.StartTime );
 
         public IEnumerable< GatheringAction > GetGatheringActions ( Employee employee )
         {

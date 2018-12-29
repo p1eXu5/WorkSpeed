@@ -34,9 +34,8 @@ namespace WorkSpeed.Interfaces
         IEnumerable< Category > GetCategories ();
 
         TimeSpan GetThreshold ();
-        void SetThreshold ( TimeSpan threshold );
 
 
-        Task GetProductivitiesAsync ( Progress< ProductivityEmployee > progress );
+        Task GetProductivitiesAsync ( IProgress< ProductivityEmployee > progress );
     }
 }

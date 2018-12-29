@@ -17,6 +17,8 @@ namespace WorkSpeed.Productivity
 
         IEnumerable< Category > GetCategories ();
         TimeSpan GetThreshold ();
-        void SetThreshold ( TimeSpan threshold );
+
+        bool HasOperations ( Employee employee );
+
     }
 }

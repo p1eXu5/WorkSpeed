@@ -108,12 +108,6 @@ namespace WorkSpeed.Productivity
         }
         public TimeSpan GetThreshold () => PauseBetweenActions.MinRestBetweenShifts;
 
-        public void SetThreshold ( TimeSpan threshold )
-        {
-            ClearActions();
-            PauseBetweenActions.MinRestBetweenShifts = threshold;
-        }
-
         public void ClearActions ()
         {
             _actionRepositories.Clear();

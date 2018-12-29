@@ -18,10 +18,10 @@ namespace WorkSpeed.Productivity.ActionDetails
 
             var categoryCount = _filter.CategoryList.Count();
 
-            Weight = new List<double>( categoryCount );
-            Volume = new List<double>( categoryCount );
-            Lines = new List<int>( categoryCount );
-            Quantity = new List<int>( categoryCount );
+            Weight = new double[ categoryCount ];
+            Volume = new double[ categoryCount ];
+            Lines = new int[ categoryCount ];
+            Quantity = new int[ categoryCount ];
         }
 
         public override void AddDetails ( EmployeeAction action, TimeSpan pause )
@@ -41,10 +41,10 @@ namespace WorkSpeed.Productivity.ActionDetails
             Lines[ category ]++;
         }
 
-        public List< double > Weight { get; private set; }
-        public List< double > Volume { get; private set; }
-        public List< int > Lines { get; private set; }
-        public List< int > Quantity { get; private set; }
+        public double[] Weight { get; private set; }
+        public double[] Volume { get; private set; }
+        public int[] Lines { get; private set; }
+        public int[] Quantity { get; private set; }
 
         public Dictionary< Category, int > GetQuantityMap ()
         {

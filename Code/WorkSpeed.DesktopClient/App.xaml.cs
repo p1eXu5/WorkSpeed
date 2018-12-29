@@ -26,7 +26,7 @@ namespace WorkSpeed.DesktopClient
         {
             var context = new RuntimeWorkSpeedBusinessContext();
             var categoryFilter = new CategoryFilter( context.GetCategories() );
-            var pauseBetween = new PauseBetweenActions( new BreakRepository(), TimeSpan.FromHours( 4 ) );
+            var pauseBetween = new PauseBetweenActions( new BreakRepository() );
 
             var factoryEmployeeAction = new FactoryEmployeeAction( pauseBetween, categoryFilter, TimeSpan.FromMinutes( 2 ) );
 

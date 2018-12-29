@@ -90,22 +90,24 @@ namespace NpoiExcel
                 var propertyNamesMap = _typeDictionary[ type ];
                 if ( propertyNamesMap.Count > headerMapArray.Length ) continue;
 
+                var iPropertyNamesMap = _typeDictionary[ type ].Keys.ToList();
+
                 foreach ( var headerMap in headerMapArray.ToArray() ) {
 
                     var checkedHeader = headerMap.header.RemoveWhitespaces().ToUpperInvariant();
 
-                    foreach ( var propertyIdentity in propertyNamesMap.Keys.OrderBy( a => a.Length ) ) {
+                    foreach ( var propertyIdentity in iPropertyNamesMap.OrderBy( a => a.Length ) ) {
 
                         if ( propertyIdentity.Any( p => p.Equals( checkedHeader ) ) ) {
 
                             propertyToSheetMap[ propertyNamesMap[ propertyIdentity ] ] = headerMap;
-                            propertyNamesMap.Remove( propertyIdentity );
+                            iPropertyNamesMap.Remove( propertyIdentity );
                             break;
                         }
                     }
                 }
 
-                if ( 0 == propertyNamesMap.Count ) return (type, propertyToSheetMap);
+                if ( 0 == iPropertyNamesMap.Count ) return (type, propertyToSheetMap);
             }
 
             return (null, null);

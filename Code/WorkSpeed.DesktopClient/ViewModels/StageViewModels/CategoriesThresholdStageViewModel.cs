@@ -37,7 +37,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
 
         protected override void Forward ( object obj )
         {
-            Warehouse.SetThreshold( _threshold );
             base.Forward( obj );
         }
     }

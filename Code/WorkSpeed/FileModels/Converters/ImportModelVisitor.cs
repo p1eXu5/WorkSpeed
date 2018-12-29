@@ -176,6 +176,13 @@ namespace WorkSpeed.FileModels.Converters
 
                     Id = withProductModel.ImmadiateProductId,
                     Name = withProductModel.ImmadiateProduct,
+
+                    Parent = new Product
+                    {
+
+                        Id = withProductModel.ImmadiateProductId,
+                        Name = withProductModel.ImmadiateProduct,
+                    }
                 }
             };
 

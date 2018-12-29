@@ -67,11 +67,6 @@ namespace WorkSpeed
 
         public TimeSpan GetThreshold () => FactoryEmployeeAction.GetThreshold();
 
-        public void SetThreshold ( TimeSpan threshold )
-        {
-            FactoryEmployeeAction.SetThreshold( threshold );
-        }
-
 
         public Task<bool> HasProductsAsync () => _context.HasProductsAsync();
 
@@ -107,16 +102,25 @@ namespace WorkSpeed
             return await Task<bool>.Factory.StartNew (() => Import (fileName), TaskCreationOptions.LongRunning);
         }
 
-        public async Task GetProductivitiesAsync ( Progress< ProductivityEmployee > progress )
+        public async Task GetProductivitiesAsync ( IProgress< ProductivityEmployee > progress )
         {
             await Task.Run( () => GetProductivities( progress ) );
         }
 
-        private void GetProductivities ( Progress< ProductivityEmployee > progress )
+        private void GetProductivities ( IProgress< ProductivityEmployee > progress )
         {
-            foreach ( var employee in _context.GetGatheringActions().Select( a => a.Employee ).Distinct() ) {
-                
+            foreach ( var action in _context.GetGatheringActions().ToArray() ) {
+                FactoryEmployeeAction.AddAction( action );
             }
+
+            foreach ( var employee in _context.GetEmployees().ToArray() ) {
+
+                if ( FactoryEmployeeAction.HasOperations( employee ) ) {
+
+                    progress.Report( FactoryEmployeeAction.GetProductivity( employee ) );
+                }
+            }
+
         }
 
         public (DateTime, DateTime) GetActionsPeriod ()

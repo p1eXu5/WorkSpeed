@@ -21,13 +21,10 @@ namespace WorkSpeed.Productivity.ActionDetails
             End = action.StartTime.Add( action.Duration );
 
             if ( Duration == TimeSpan.Zero ) {
-
                 Start = action.StartTime;
-                Duration = action.Duration;
             }
-            else {
-                Duration += pause + action.Duration;
-            }
+
+            Duration += pause + action.Duration;
         }
 
         public DateTime Start { get; set; }

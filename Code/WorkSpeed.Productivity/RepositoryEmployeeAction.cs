@@ -13,11 +13,14 @@ namespace WorkSpeed.Productivity
 {
     public class RepositoryEmployeeAction
     {
-        private EmployeeAction _lastAction;
         private readonly IPauseBetweenActions _pause;
-        private TimeActionDetails[] _actions;
+
         private readonly TimeSpan _pauseThreshold;
         private readonly Queue< TimeSpan > _pauses;
+
+        private EmployeeAction _lastAction;
+        private TimeActionDetails[] _actions;
+
 
         public RepositoryEmployeeAction ( IPauseBetweenActions pause, ICategoryFilter categoryFilter, TimeSpan pauseThreshold )
         {
@@ -48,7 +51,7 @@ namespace WorkSpeed.Productivity
                 pause = _pauseThreshold;
             }
 
-            if ( pause == TimeSpan.Zero ) pause = _pauseThreshold;
+            if ( pause < TimeSpan.Zero ) pause = _pauseThreshold;
 
             var operation = ( int )action.GetOperationGroup();
             _actions[ operation ].AddDetails( action, pause );
@@ -64,7 +67,7 @@ namespace WorkSpeed.Productivity
         {
             var totalTime = TimeSpan.Zero;
 
-            foreach ( var action in _actions ) {
+            foreach ( var action in _actions.Where( a => a != null ) ) {
                 totalTime += action.Duration;
             }
 

@@ -36,22 +36,31 @@ namespace WorkSpeed.Productivity
         /// <returns>TimeSpan.Zero if another shift.</returns>
         public TimeSpan GetPauseInterval ( EmployeeAction lastAction, EmployeeAction action )
         {
+            if ( lastAction == null || lastAction.StartTime == action.StartTime ) return TimeSpan.Zero;
+
             Period pause;
 
             if ( action.StartTime > lastAction.StartTime ) {
+
+                if ( lastAction.EndTime() > action.StartTime ) {
+                    return TimeSpan.Zero;
+                }
                 pause = new Period( lastAction.EndTime(), action.StartTime );
             }
             else {
+                if ( action.EndTime() > lastAction.StartTime ) {
+                    return TimeSpan.Zero;
+                }
                 pause = new Period( action.EndTime(), lastAction.StartTime );
             }
 
             var duration = pause.Duration;
 
-            if ( duration <= TimeSpan.Zero ) throw new InvalidOperationException("Pause duration less than TimeSpan.Zero");
-
-            if ( duration > MinRestBetweenShifts ) return TimeSpan.Zero;
-
+            if ( duration < TimeSpan.Zero ) throw new InvalidOperationException("Pause duration less than TimeSpan.Zero");
             if ( duration < BreakRepository.ShortBreakDownLimit ) return pause.Duration;
+
+            if ( duration > MinRestBetweenShifts ) return TimeSpan.FromSeconds( -1 );
+
 
             if ( duration > BreakRepository.ShortBreakUpLimit ) {
 

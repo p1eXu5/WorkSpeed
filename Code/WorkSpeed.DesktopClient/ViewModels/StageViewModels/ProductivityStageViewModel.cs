@@ -15,7 +15,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
     public class ProductivityStageViewModel : StageViewModel
     {
         private readonly ObservableCollection< ProductivityViewModel > _productivities;
-        private Progress< ProductivityEmployee > _progress;
+        private IProgress< ProductivityEmployee > _progress;
         private double _progressCounter;
         private double _progressStep;
 
