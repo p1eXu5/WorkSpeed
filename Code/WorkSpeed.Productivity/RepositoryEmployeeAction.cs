@@ -219,9 +219,9 @@ namespace WorkSpeed.Productivity
 
                 var index = ( int )operation;
 
-                if ( _actions[ index ] is WithProductActionDetails withScansActions ) {
+                if ( _actions[ index ] is WithProductActionDetails productActionDetails ) {
 
-                    volumes[ ( OperationGroups )index ] = withScansActions.GetVolumeMap();
+                    volumes[ ( OperationGroups )index ] = productActionDetails.GetVolumeMap();
                 }
                 else if ( _actions[ index ] is ShipmentActionDetails shipmentActions ) {
 

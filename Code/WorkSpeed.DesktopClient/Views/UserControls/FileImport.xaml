@@ -10,7 +10,7 @@
              VerticalAlignment="Stretch"
              >
 
-    <Grid MaxWidth="300">
+    <Grid MaxWidth="500">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto"/>

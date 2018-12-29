@@ -21,6 +21,7 @@
         <DataGrid Grid.Row="1" ItemsSource="{Binding Productivities}"
                   Style="{StaticResource st_EmployeeDataGrid}"
                   VerticalAlignment="Top"
+                  ScrollViewer.CanContentScroll="False"
                   >
             <DataGrid.Columns>
 
@@ -79,7 +80,7 @@
 
                 <DataGridTextColumn Header="Ск. набора"  
                                     MinWidth="60"
-                                    Binding="{Binding GatheringSpeed}" 
+                                    Binding="{Binding GatheringSpeed, StringFormat={}{0:F}}" 
                                     CellStyle="{StaticResource st_CenteredCell}"
                                     IsReadOnly="True"
                                     />
@@ -93,7 +94,7 @@
 
                 <DataGridTextColumn Header="Набор, объем"  
                                     MinWidth="60"
-                                    Binding="{Binding GatheringTotalWeight}" 
+                                    Binding="{Binding GatheringTotalWeight, StringFormat={}{0:F}}" 
                                     CellStyle="{StaticResource st_CenteredCell}"
                                     IsReadOnly="True"
                                     />

@@ -36,9 +36,9 @@ namespace WorkSpeed.Productivity.ActionDetails
 
             if ( category < 0) return;
 
-            Weight[ category ] += product.Weight + withProductAction.ProductQuantity;
-            Volume[ category ] += product.GetVolume() + withProductAction.ProductQuantity;
-            Quantity[ category ] = withProductAction.ProductQuantity;
+            Weight[ category ] += product.Weight * withProductAction.ProductQuantity;
+            Volume[ category ] += product.GetVolume() * withProductAction.ProductQuantity;
+            Quantity[ category ] += withProductAction.ProductQuantity;
             Lines[ category ]++;
         }
 
@@ -84,6 +84,7 @@ namespace WorkSpeed.Productivity.ActionDetails
 
             return res;
         }
+
 
         public Dictionary< Category, double > GetVolumeMap ()
         {
