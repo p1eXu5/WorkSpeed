@@ -36,13 +36,13 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
             _stageQueue = new TwoDirectionQueue< Func< IStageViewModel >>();
 
-            //_stageQueue.Enqueue( () => new ShiftSetupStageViewModel( this, 0 ) );
-            //_stageQueue.Enqueue( () => new CategoriesThresholdStageViewModel( this, 1 ) );
+            _stageQueue.Enqueue( () => new ShiftSetupStageViewModel( this, 0 ) );
+            _stageQueue.Enqueue( () => new CategoriesThresholdStageViewModel( this, 1 ) );
             _stageQueue.Enqueue( () => new ProductsImportStageViewModel( this, 2 ) );
             _stageQueue.Enqueue( () => new EmployeesImportStageViewModel( this, 3 ) );
-            //_stageQueue.Enqueue( () => new CheckEmployeesStageViewModel( this, 4 ) );
+            _stageQueue.Enqueue( () => new CheckEmployeesStageViewModel( this, 4 ) );
             _stageQueue.Enqueue( () => new ActionsImportStageViewModel( this, 5 ) );
-            //_stageQueue.Enqueue( () => new ProductivityStageViewModel( this, 6 ) );
+            _stageQueue.Enqueue( () => new ProductivityStageViewModel( this, 6 ) );
 
             SetStageViewModel( GetNextStageViewModel( _stageQueue ) );
         }

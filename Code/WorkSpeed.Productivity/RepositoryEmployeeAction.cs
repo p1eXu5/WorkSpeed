@@ -41,6 +41,20 @@ namespace WorkSpeed.Productivity
         /// <param name="action"></param>
         public void AddAction ( EmployeeAction action )
         {
+            if ( _lastAction != null ) {
+
+                var lastActionEnd = _lastAction.StartTime.Add( _lastAction.Duration );
+
+                if ( lastActionEnd > action.StartTime ) {
+
+                    var diff = lastActionEnd - action.StartTime;
+                    _lastAction.Duration -= diff;
+
+                    var lastOperation = ( int )_lastAction.GetOperationGroup();
+                    _actions[ lastOperation ].Duration -= diff;
+                }
+            }
+
             var pause = _pause.GetPauseInterval( _lastAction, action );
             _pauses.Enqueue( pause );
 

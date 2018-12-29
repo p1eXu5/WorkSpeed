@@ -550,9 +550,18 @@ namespace WorkSpeed.Data.BusinessContexts
             gatheringAction.Operation = operation;
 
             var product = _products.FirstOrDefault( p => p.Id == gatheringAction.Product.Id ) ?? gatheringAction.Product;
+
             if ( product.Parent == null ) {
+
                 product.Parent = _products.FirstOrDefault( p => p.Id == gatheringAction.Product.Parent.Id ) ?? gatheringAction.Product.Parent;
+
+                if ( product.Parent.Parent == null ) {
+
+                    product.Parent.Parent = _products.FirstOrDefault( p => p.Id == gatheringAction.Product.Parent.Parent.Id ) ?? gatheringAction.Product.Parent;
+                }
             }
+
+            gatheringAction.Product = product;
 
             _gatheringActions.Add( gatheringAction );
         }

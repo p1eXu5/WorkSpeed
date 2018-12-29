@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkSpeed.Data;
 using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.Data.Models;
 
@@ -36,7 +37,7 @@ namespace WorkSpeed.Productivity.ActionDetails
             if ( category < 0) return;
 
             Weight[ category ] += product.Weight + withProductAction.ProductQuantity;
-            Volume[ category ] += product.Volume + withProductAction.ProductQuantity;
+            Volume[ category ] += product.GetVolume() + withProductAction.ProductQuantity;
             Quantity[ category ] = withProductAction.ProductQuantity;
             Lines[ category ]++;
         }
