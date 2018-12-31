@@ -127,14 +127,14 @@ namespace NpoiExcel
             return (null, null);
         }
 
-        public static Dictionary< string, (string header, int column) > GetEmptyProipertyMap () => new Dictionary< string, (string header, int column) >();
+        public static Dictionary< string, (string header, int column) > GetEmptyPropertyMap () => new Dictionary< string, (string header, int column) >();
 
         public static bool TryGetPropertyMap ( SheetTable sheetTable, Type type, out Dictionary< string, (string header, int column) > propertyMap )
         {
             if ( type == null ) { throw new ArgumentNullException( nameof( type ), "Type cannot be null." ); }
 
             var sheetHeaderMap = sheetTable.SheetHeaderMap;
-            var propertyToSheetMap = GetEmptyProipertyMap();
+            var propertyToSheetMap = GetEmptyPropertyMap();
 
             var propertyNamesMap = GetPropertyMap( 
 
