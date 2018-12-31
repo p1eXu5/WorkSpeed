@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Moq;
 using NpoiExcel.Attributes;
+using NpoiExcel.Tests.Factory;
 using NPOI.SS.UserModel;
 using NUnit.Framework;
 // ReSharper disable RedundantBoolCompare
@@ -217,6 +218,19 @@ namespace NpoiExcel.Tests.UnitTests
             Assert.That( typeMap.Equals( (null, null) ) );
         }
 
+
+        [ Test ]
+        public void TryGetPropertyMap_TypeValid_ReturnsPropertyMap ()
+        {
+            var type = GetTestType();
+            var propertyMap = TypeRepository.GetPropertyMap( type );
+            var sheet = MockedSheetFactory.GetMockedSheet( propertyMap.Keys.Select( k => k.First() ).ToArray() );
+            var sheetTable = new SheetTable( sheet );
+
+            var res = TypeRepository.TryGetPropertyMap( sheetTable, type, out var map );
+
+            Assert.That( res );
+        }
 
         #region Factory
 

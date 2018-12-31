@@ -349,7 +349,7 @@ namespace NpoiExcel.Tests.Factory
         public static ISheet GetMockedSheet ( string[] headers )
         {
             if ( headers == null ) throw new ArgumentNullException( nameof( headers ), "Headers cannot be null." );
-            if ( headers.Length <= 0 ) throw new NotImplementedException( "Empty ISheet not implemented." );
+            if ( headers.Length <= 0 ) return EmptySheet;
 
             var columnMap = new HashSet< int >( Enumerable.Range( 0, headers.Length ) );
 
