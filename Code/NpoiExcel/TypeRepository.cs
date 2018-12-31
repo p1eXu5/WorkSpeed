@@ -100,28 +100,8 @@ namespace NpoiExcel
                 var propertyNamesMap = _typeDictionary[ type ];
                 if ( propertyNamesMap.Count > sheetHeaderMap.Length ) continue;
 
-                // main loop
-                var propertyToSheetMap = new Dictionary< string, (string header, int column) >();
-
                 // successfull token
-                var iPropertyNamesMap = _typeDictionary[ type ].Keys.ToList();
-
-                foreach ( var headerMap in sheetHeaderMap.ToArray() ) {
-
-                    var checkedHeader = headerMap.header.RemoveWhitespaces().ToUpperInvariant();
-
-                    foreach ( var propertyIdentity in iPropertyNamesMap.OrderBy( a => a.Length ) ) {
-
-                        if ( propertyIdentity.Any( p => p.Equals( checkedHeader ) ) ) {
-
-                            propertyToSheetMap[ propertyNamesMap[ propertyIdentity ] ] = headerMap;
-                            iPropertyNamesMap.Remove( propertyIdentity );
-                            break;
-                        }
-                    }
-                }
-
-                if ( 0 == iPropertyNamesMap.Count ) return (type, propertyToSheetMap);
+                if ( TryGetPropertyMap( sheetTable, propertyNamesMap, out var propertyToSheetMap ) ) return (type, propertyToSheetMap);
             }
 
             return (null, null);
@@ -129,12 +109,16 @@ namespace NpoiExcel
 
         public static Dictionary< string, (string header, int column) > GetEmptyPropertyMap () => new Dictionary< string, (string header, int column) >();
 
+        /// <summary>
+        /// Tries to get property map.
+        /// </summary>
+        /// <param name="sheetTable"></param>
+        /// <param name="type"></param>
+        /// <param name="propertyMap"></param>
+        /// <returns></returns>
         public static bool TryGetPropertyMap ( SheetTable sheetTable, Type type, out Dictionary< string, (string header, int column) > propertyMap )
         {
             if ( type == null ) { throw new ArgumentNullException( nameof( type ), "Type cannot be null." ); }
-
-            var sheetHeaderMap = sheetTable.SheetHeaderMap;
-            var propertyToSheetMap = GetEmptyPropertyMap();
 
             var propertyNamesMap = GetPropertyMap( 
 
@@ -143,16 +127,21 @@ namespace NpoiExcel
                 excludeAttribute: typeof( HiddenAttribute ) 
             );
 
+            return TryGetPropertyMap( sheetTable, propertyNamesMap, out propertyMap );
+        }
+
+        private static bool TryGetPropertyMap ( SheetTable sheetTable, Dictionary< string[], string > propertyNamesMap, out Dictionary< string, (string header, int column) > propertyMap )
+        {
+            var propertyToSheetMap = GetEmptyPropertyMap();
+
+            var sheetHeaderMap = sheetTable.SheetHeaderMap;
             var iPropertyNamesMap = propertyNamesMap.Keys.ToList();
 
             foreach ( var headerMap in sheetHeaderMap.ToArray() ) {
-
                 var checkedHeader = headerMap.header.RemoveWhitespaces().ToUpperInvariant();
 
                 foreach ( var propertyIdentity in iPropertyNamesMap.OrderBy( a => a.Length ) ) {
-
                     if ( propertyIdentity.Any( p => p.Equals( checkedHeader ) ) ) {
-
                         propertyToSheetMap[ propertyNamesMap[ propertyIdentity ] ] = headerMap;
                         iPropertyNamesMap.Remove( propertyIdentity );
                         break;
@@ -161,7 +150,6 @@ namespace NpoiExcel
             }
 
             if ( 0 == iPropertyNamesMap.Count ) {
-
                 propertyMap = propertyToSheetMap;
                 return true;
             }
