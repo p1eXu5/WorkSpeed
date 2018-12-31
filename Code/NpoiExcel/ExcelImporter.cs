@@ -109,8 +109,11 @@ namespace NpoiExcel
         /// <returns></returns>
         public static IEnumerable< TOut > GetEnumerable< TOut > ( SheetTable sheetTable )
         {
-            var propertyMap = TypeRepository.GetPropertyMap( sheetTable );
-            return FillModelCollection( sheetTable, typeof( TOut ), propertyMap ).Cast< TOut >();
+            if ( TypeRepository.TryGetPropertyMap( sheetTable, typeof( TOut ), out var propertyMap ) ) {
+                return FillModelCollection( sheetTable, typeof( TOut ), propertyMap ).Cast< TOut >();
+            }
+
+            return GetEmptyCollection( typeof( TOut ) ).Cast< TOut >();
         }
 
 
