@@ -346,23 +346,23 @@ namespace NpoiExcel.Tests.Factory
             return GetSheetMock( rowsMap );
         }
 
-        public static ISheet GetMockedSheet ( string[] headers )
+        public static ISheet GetMockedSheet ( string[,] tableData )
         {
-            if ( headers == null ) throw new ArgumentNullException( nameof( headers ), "Headers cannot be null." );
-            if ( headers.Length <= 0 ) return EmptySheet;
+            if ( tableData == null ) throw new ArgumentNullException( nameof( tableData ), "Headers cannot be null." );
+            if ( tableData.Length <= 0 ) return EmptySheet;
 
-            var columnMap = new HashSet< int >( Enumerable.Range( 0, headers.Length ) );
+            var columnMap = new HashSet< int >( Enumerable.Range( 0, tableData.GetLength( 1 ) ) );
 
-            var rowsMap = new Dictionary< int, HashSet< int > > {
+            var rowsMap = new Dictionary< int, HashSet< int > > ();
 
-                [0] = columnMap,
-                [1] = columnMap
-            };
+            for ( int i = 0; i < tableData.GetLength( 0 ); ++i ) {
+                rowsMap[ i ] = columnMap;
+            }
 
-            return GetSheetMock( rowsMap, headers );
+            return GetSheetMock( rowsMap, tableData );
         }
 
-        private static ISheet GetSheetMock ( Dictionary< int, HashSet< int > > rowsMap, string[] headers )
+        private static ISheet GetSheetMock ( Dictionary< int, HashSet< int > > rowsMap, string[,] data )
         {
             // см. типы передаваемых параметров, а не возвращаемых!
             var sheetMock = new Mock< ISheet >();
@@ -377,19 +377,19 @@ namespace NpoiExcel.Tests.Factory
                                    rowMock.Setup( s => s.FirstCellNum ).Returns( ( short )rowsMap[ r ].Min() );
                                    rowMock.Setup( s => s.LastCellNum ).Returns( ( short )(rowsMap[ r ].Max() + 1) );
                                    rowMock.Setup( row => row.GetCell( It.Is< int >( c => rowsMap[ r ].Contains( c ) ) ) )
-                                          .Returns( ( int c ) => ReturnMockedStringCell( headers, c ) );
+                                          .Returns( ( int c ) => ReturnMockedStringCell( data, r, c ) );
                                    return rowMock.Object;
                                } );
 
             return sheetMock.Object;
         }
 
-        private static ICell ReturnMockedStringCell ( string[] headers, int index )
+        private static ICell ReturnMockedStringCell ( string[,] data, int row, int column )
         {
             var stringCellMock = new Mock<ICell>();
 
             stringCellMock.Setup( c => c.CellType ).Returns( CellType.String );
-            stringCellMock.Setup( c => c.StringCellValue ).Returns( headers[ index ] );
+            stringCellMock.Setup( c => c.StringCellValue ).Returns( data[ row, column ] );
 
             return stringCellMock.Object;
         }

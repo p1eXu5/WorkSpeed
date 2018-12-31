@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Moq;
@@ -24,24 +25,10 @@ namespace NpoiExcel.Tests.UnitTests
 
 
         [ Test ]
-        public void RegisterTypeGeneric_PassedAllParameters_CallsRegisterTypeWithAllParameters ()
-        {
-            // Arrange:
-            var typeRepository = GetFakeTypeRepository();
-
-            // Action:
-            typeRepository.RegisterType< FakeTypeReposytory >( typeof( HeaderAttribute), typeof( HiddenAttribute ) );
-
-            // Assert:
-            Assert.That( true == typeRepository.IsAllParamsPassed );
-        }
-
-
-        [ Test ]
         public void RegisterType_TypeIsNull_Throws ()
         {
             // Arrange:
-            var typeRepository = GetFakeTypeRepository();
+            var typeRepository = GetTypeRepository();
 
             // Action:
             var ex = Assert.Catch<ArgumentNullException>( () => typeRepository.RegisterType( null ) );
@@ -54,10 +41,10 @@ namespace NpoiExcel.Tests.UnitTests
         public void RegisterType_TypeNotNull_AddsTypeToDictionary ()
         {
             // Arrange:
-            var typeRepository = GetFakeTypeRepository();
+            var typeRepository = GetTypeRepository();
 
             // Action:
-            typeRepository.RegisterType( typeof( FakeTypeReposytory ) );
+            typeRepository.RegisterType( typeof( TestType3 ) );
 
             // Assert:
             Assert.That( typeRepository.GetRegistredTypes().Any() );
@@ -67,85 +54,66 @@ namespace NpoiExcel.Tests.UnitTests
         public void RegisterType__TypeNotNull_ElseParametersByDefault__AddsAllPublicPropertiesWithPublicSetter ()
         {
             // Arrange:
-            var typeRepository = GetFakeTypeRepository();
+            var typeRepository = GetTypeRepository();
+            typeRepository.RegisterType( typeof( TestType3 ) );
 
             // Action:
-            typeRepository.RegisterType( typeof( FakeTypeReposytory ) );
+            var registredProperties = typeRepository.GetPropertyNames( typeof( TestType3 ) );
 
             // Assert:
 
-            Assert.That( 
-                typeRepository.GetPropertyNames( typeof( FakeTypeReposytory ) )
-                              .First()
-                              .Equals( nameof( FakeTypeReposytory.PublicPropertyWithoutAttribute ) ) 
-            );
-        }
-
-        [ Test ]
-        public void RegisterType__TypeNotNull_ElseParametersByDefault__DoNotAddPublicPropertiesWithPrivateSetter ()
-        {
-            // Arrange:
-            var typeRepository = GetFakeTypeRepository();
-
-            // Action:
-            typeRepository.RegisterType( typeof( FakeTypeReposytory ) );
-            var propertiNames = typeRepository.GetPropertyNames( typeof( FakeTypeReposytory ) );
-
-            // Assert:
-
-            Assert.That( propertiNames, Has.No.Member( nameof( FakeTypeReposytory.IsAllParamsPassed ) ) );
+            Assert.That( registredProperties, Is.EquivalentTo( TestType3.WithHiddenPropertyNames ) );
         }
 
         [ Test ]
         public void RegisterType__TypeNotNull_IncludAttribute__AddsPublicPropertiesWithPublicSetter ()
         {
             // Arrange:
-            var typeRepository = GetFakeTypeRepository();
-
-            var expectedColl = new[] {
-
-                nameof( FakeTypeReposytory.PublicPropertyWithoutAttribute ),
-                nameof( FakeTypeReposytory.PublicPropertyWithIncludedAttribute ),
-                nameof( FakeTypeReposytory.PublicPropertyWithExcludedAttribute ),
-            };
+            var typeRepository = GetTypeRepository();
 
             // Action:
-            typeRepository.RegisterType( typeof( FakeTypeReposytory ), typeof( HeaderAttribute ) );
-            var propertiNames = typeRepository.GetPropertyNames( typeof( FakeTypeReposytory ) );
+            typeRepository.RegisterType( typeof( TestType3 ), typeof( HeaderAttribute ) );
+            var propertiNames = typeRepository.GetPropertyNames( typeof( TestType3 ) );
 
             // Assert:
 
-            Assert.That( propertiNames, Is.EquivalentTo( expectedColl ) );
+            Assert.That( propertiNames, Is.EquivalentTo( TestType3.WithHiddenPropertyNames ) );
         }
 
         [ Test ]
         public void RegisterType__TypeNotNull_ExcludAttribute__AddsPublicPropertiesWithPublicSetterExceptPropertiesWithExcludeAttribute ()
         {
             // Arrange:
-            var typeRepository = GetFakeTypeRepository();
-
-            var expectedColl = new[] {
-
-                nameof( FakeTypeReposytory.PublicPropertyWithoutAttribute ),
-                nameof( FakeTypeReposytory.PublicPropertyWithIncludedAttribute ),
-            };
+            var typeRepository = GetTypeRepository();
 
             // Action:
-            typeRepository.RegisterType( typeof( FakeTypeReposytory ), typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-            var propertiNames = typeRepository.GetPropertyNames( typeof( FakeTypeReposytory ) );
+            typeRepository.RegisterType( typeof( TestType3 ), typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            var propertiNames = typeRepository.GetPropertyNames( typeof( TestType3 ) );
 
             // Assert:
 
-            Assert.That( propertiNames, Is.EquivalentTo( expectedColl ) );
+            Assert.That( propertiNames, Is.EquivalentTo( TestType3.HiddenlessPropertyNames ) );
         }
 
+        [ Test ]
+        public void GetPropertyMap__TypeNotNull_IncludeAndExcludeAttributesAreSetted__RegistersAttributesWithPropertyNames ()
+        {
+            // Arrange:
+            var type = typeof( TestType );
+
+            // Action:
+            var propertyMap = TypeRepository.GetPropertyMap( type, typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+
+            // Assert:
+            Assert.That( propertyMap.Keys, Is.EquivalentTo( TestType.PropertyAttributesCollection ) );
+        }
 
         [ Test ]
         public void GetTypeWithMap_HasNoTypesInTypeReposytory_ReturnsTupleWithNulls ()
         {
             // Arrange:
-            var sheetTable = GetMockedSheetTable();
-            var typeRepository = GetFakeTypeRepository();
+            var sheetTable = GetMockedSheetTable( TestType.TableData );
+            var typeRepository = GetTypeRepository();
 
             // Action:
             var resTuple = typeRepository.GetTypeWithMap( sheetTable );
@@ -158,9 +126,10 @@ namespace NpoiExcel.Tests.UnitTests
         public void GetTypeWithMap_HasNoTypeCorrespondedSheetTableHeaders_ReturnsTupleWithNulls ()
         {
             // Arrange:
-            var sheetTable = GetMockedSheetTable();
-            var typeRepository = GetFakeTypeRepository();
-            typeRepository.RegisterType( typeof( FakeTypeReposytory ) );
+            string[,] table = new string[,] { { "Name" }, { "SomeName" } };
+            var sheetTable = GetMockedSheetTable( table );
+            var typeRepository = GetTypeRepository();
+            typeRepository.RegisterType( typeof( TestType ) );
 
             // Action:
             var resTuple = typeRepository.GetTypeWithMap( sheetTable );
@@ -173,42 +142,42 @@ namespace NpoiExcel.Tests.UnitTests
         public void GetTypeWithMap_HasTypeCorrespondedSheetTableHeaders_ReturnsTuple ()
         {
             // Arrange:
-            var testType = GetTestType();
-            var sheetTable = GetMockedSheetTable();
-            var typeRepository = GetFakeTypeRepository();
+            var testType = typeof( TestType );
+            var sheetTable = GetMockedSheetTable( TestType.TableData );
+            var typeRepository = GetTypeRepository();
             typeRepository.RegisterType( testType, typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
 
             // Action:
             var resTuple = typeRepository.GetTypeWithMap( sheetTable );
 
             // Assert:
-            Assert.That( testType == resTuple.type );
+            Assert.That( testType == resTuple.type, $"Returned type is { resTuple.type?.Name ?? "null" }\n" );
         }
 
         [ Test ]
         public void GetTypeWithMap_AllTypesCorrespondsSheetTableHeaders_ReturnsMoreFullCorrespondedType ()
         {
             // Arrange:
-            var repository = GetFakeTypeRepository();
+            var repository = GetTypeRepository();
             repository.RegisterType( typeof( TestType ), typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
             repository.RegisterType( typeof( TestType2 ), typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
             repository.RegisterType( typeof( TestType3 ), typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
 
-            var sheetTable = GetMockedSheetTable();
+            var sheetTable = GetMockedSheetTable( TestType.TableData );
 
             // Action:
             var typeMap = repository.GetTypeWithMap( sheetTable );
 
             // Assert:
-            Assert.That( typeMap.type.IsAssignableFrom( typeof( TestType3 ) ), $"It was {typeMap.type.Name}" );
+            Assert.That( typeMap.type.IsAssignableFrom( typeof( TestType ) ), $"It was {typeMap.type.Name}" );
         }
 
         [ Test ]
         public void GetTypeWithMap_SheetHasLessColumnsThanTypeHasProperties_ReturnsTupleWithNulls ()
         {
             // Arrange:
-            var sheetTable = GetMockedSheetTable();
-            var repository = GetFakeTypeRepository();
+            var sheetTable = GetMockedSheetTable( TestType.TableData );
+            var repository = GetTypeRepository();
             repository.RegisterType( typeof( TestType4 ), typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
 
             // Action:
@@ -222,9 +191,9 @@ namespace NpoiExcel.Tests.UnitTests
         [ Test ]
         public void TryGetPropertyMap_TypeValid_ReturnsPropertyMap ()
         {
-            var type = GetTestType();
+            var type = typeof( TestType );
             var propertyMap = TypeRepository.GetPropertyMap( type );
-            var sheet = MockedSheetFactory.GetMockedSheet( propertyMap.Keys.Select( k => k.First() ).ToArray() );
+            var sheet = MockedSheetFactory.GetMockedSheet( TestType.TableData );
             var sheetTable = new SheetTable( sheet );
 
             var res = TypeRepository.TryGetPropertyMap( sheetTable, type, out var map );
@@ -235,53 +204,31 @@ namespace NpoiExcel.Tests.UnitTests
 
         #region Factory
 
-        private FakeTypeReposytory GetFakeTypeRepository ()
+        private TypeRepository GetTypeRepository ()
         {
-            return new FakeTypeReposytory();
+            return new TypeRepository();
         }
 
         private Type GetTestType () => typeof( TestType ); 
 
-        private SheetTable GetMockedSheetTable ()
+        private SheetTable GetMockedSheetTable ( string[,] tableData )
         {
-            string[,] sheetData = {
-                { "Имя клиента", "Address", "Какой-то столбец", "Почтовый Индекс ", "№ чего-то там" },
-                {        "Вася", "Коробка",                 "",           "134567",     "sdfdsf-sd" }
-            };
-
-            var mockISheet = new Mock< ISheet >();
-            mockISheet.Setup( s => s.FirstRowNum ).Returns( 0 );
-            mockISheet.Setup( s => s.LastRowNum ).Returns( 1 );
-
-            mockISheet.Setup( s => s.GetRow( It.Is< int >( r => r >= 0 && r < sheetData.GetLength( 0 ) ) ) )
-                      .Returns( ( int row ) =>
-                                {
-                                    var mockIRow = new Mock< IRow >();
-
-                                    mockIRow.Setup( r => r.FirstCellNum ).Returns( ( short )0 );
-                                    mockIRow.Setup( r => r.LastCellNum ).Returns( ( short )sheetData.GetLength( 1 ) );
-                                    mockIRow
-                                        .Setup( r => r.GetCell( It.Is< int >( c => c >= 0 && c <
-                                                                                   sheetData.GetLength( 1 ) ) ) )
-                                        .Returns( ( int cell ) =>
-                                                  {
-                                                      var mockICell = new Mock< ICell >();
-
-                                                      mockICell.Setup( c => c.CellType ).Returns( CellType.String );
-                                                      mockICell.Setup( c => c.StringCellValue )
-                                                               .Returns( sheetData[ row, cell ] );
-
-                                                      return mockICell.Object;
-                                                  } );
-
-                                    return mockIRow.Object;
-                                } );
-
-            return new SheetTable( mockISheet.Object );
+            return new SheetTable( MockedSheetFactory.GetMockedSheet( tableData ) );
         }
 
         class TestType
         {
+            public static readonly string[,] TableData = {
+                { "Имя клиента", "Address", "Какой-то столбец", "Почтовый Индекс " },
+                {        "Вася", "Коробка",                 "",           "134567" }
+            };
+
+            public static readonly List< string[] > PropertyAttributesCollection = new List< string[] > {
+                new[] { "ИМЯ", "ИМЯКЛИЕНТА", "NAME" },
+                new[] { "ADDRESS" },
+                new[] { "ПОЧТОВЫЙИНДЕКС", "POSTCODE" },
+            };
+
             [ Header( "Имя" ) ]
             [ Header( "Имя клиента" ) ]
             public string Name { get; set; }
@@ -297,6 +244,11 @@ namespace NpoiExcel.Tests.UnitTests
 
         class TestType2
         {
+            public static readonly string[,] TableData = {
+                { "Имя клиента", "Address", "Какой-то столбец", "Почтовый Индекс ", "№ чего-то там" },
+                {        "Вася", "Коробка",                 "",           "134567",     "sdfdsf-sd" }
+            };
+
             [ Header( "Имя" ) ]
             [ Header( "Имя клиента" ) ]
             public string Name { get; set; }
@@ -315,6 +267,25 @@ namespace NpoiExcel.Tests.UnitTests
 
         class TestType3
         {
+            public static readonly string[] HiddenlessPropertyNames = new[] {
+
+                nameof( Name ),
+                nameof( Address ),
+                nameof( PostCode ),
+                nameof( SomeProperty ),
+                nameof( ElseOneSomeProperty )
+            };
+
+            public static readonly string[] WithHiddenPropertyNames = new[] {
+
+                nameof( Name ),
+                nameof( Address ),
+                nameof( PostCode ),
+                nameof( SomeType ),
+                nameof( SomeProperty ),
+                nameof( ElseOneSomeProperty )
+            };
+
             [ Header( "Имя" ) ]
             [ Header( "Имя клиента" ) ]
             public string Name { get; set; }
@@ -332,6 +303,8 @@ namespace NpoiExcel.Tests.UnitTests
 
             [ Header( "Какой-то столбец" ) ]
             public string ElseOneSomeProperty { get; set; }
+
+            public string PrivateSetProperty { get; private set; }
         }
 
         class TestType4
@@ -355,29 +328,6 @@ namespace NpoiExcel.Tests.UnitTests
             public string ElseOneSomeProperty { get; set; }
 
             public int ExcessProperty { get; set; }
-        }
-
-        // ReSharper disable once UnusedAutoPropertyAccessor.Local
-        // ReSharper disable once MemberCanBePrivate.Local
-        class FakeTypeReposytory : TypeRepository
-        {
-            public bool IsAllParamsPassed { get; private set; }
-            public int PublicPropertyWithoutAttribute { get; set; }
-
-            [ Header( "Included Attribute" ) ]
-            public int PublicPropertyWithIncludedAttribute { get; set; }
-
-            [ Hidden ]
-            public int PublicPropertyWithExcludedAttribute { get; set; }
-
-            public override void RegisterType ( Type type, Type includeAttribute = null, Type excludeAttribute = null )
-            {
-                if ( type != null && includeAttribute != null && excludeAttribute != null ) {
-                    IsAllParamsPassed = true;
-                }
-
-                base.RegisterType( type, includeAttribute, excludeAttribute );
-            }
         }
 
         #endregion

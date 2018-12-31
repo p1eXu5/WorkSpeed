@@ -46,11 +46,11 @@ namespace NpoiExcel
         /// <param name="includeAttribute"></param>
         /// <param name="excludeAttribute"></param>
         /// <exception cref="ArgumentNullException">When type is null.</exception>
-        public virtual void RegisterType( Type type, Type includeAttribute = null, Type excludeAttribute = null )
+        public void RegisterType( Type type, Type includeAttribute = null, Type excludeAttribute = null )
         {
             if ( type == null ) throw new ArgumentNullException();
 
-            _typeDictionary[ type ] = GetPropertyMap( type );
+            _typeDictionary[ type ] = GetPropertyMap( type, includeAttribute, excludeAttribute );
         }
 
         public static Dictionary< string[], string > GetPropertyMap ( Type type,
@@ -90,7 +90,7 @@ namespace NpoiExcel
         /// </summary>
         /// <param name="sheetTable"><see cref="SheetTable"/></param>
         /// <returns>Tuple of Type and Dictionary&lt; propertyName, header &gt;</returns>
-        public virtual (Type type, Dictionary< string, (string header, int column) > propertyMap) GetTypeWithMap ( SheetTable sheetTable )
+        public (Type type, Dictionary< string, (string header, int column) > propertyMap) GetTypeWithMap ( SheetTable sheetTable )
         {
             var sheetHeaderMap = sheetTable.SheetHeaderMap.ToArray();
 
@@ -101,7 +101,7 @@ namespace NpoiExcel
                 if ( propertyNamesMap.Count > sheetHeaderMap.Length ) continue;
 
                 // successfull token
-                if ( TryGetPropertyMap( sheetTable, propertyNamesMap, out var propertyToSheetMap ) ) return (type, propertyToSheetMap);
+                if ( TryGetPropertyMap( sheetHeaderMap, propertyNamesMap, out var propertyToSheetMap ) ) return (type, propertyToSheetMap);
             }
 
             return (null, null);
@@ -127,21 +127,24 @@ namespace NpoiExcel
                 excludeAttribute: typeof( HiddenAttribute ) 
             );
 
-            return TryGetPropertyMap( sheetTable, propertyNamesMap, out propertyMap );
+            var sheetHeaderMap = sheetTable.SheetHeaderMap.ToArray();
+
+            return TryGetPropertyMap( sheetHeaderMap, propertyNamesMap, out propertyMap );
         }
 
-        private static bool TryGetPropertyMap ( SheetTable sheetTable, Dictionary< string[], string > propertyNamesMap, out Dictionary< string, (string header, int column) > propertyMap )
+        private static bool TryGetPropertyMap ( (string header, int column)[] sheetHeaderMap, Dictionary< string[], string > propertyNamesMap, out Dictionary< string, (string header, int column) > propertyMap )
         {
             var propertyToSheetMap = GetEmptyPropertyMap();
-
-            var sheetHeaderMap = sheetTable.SheetHeaderMap;
             var iPropertyNamesMap = propertyNamesMap.Keys.ToList();
 
-            foreach ( var headerMap in sheetHeaderMap.ToArray() ) {
+            foreach ( var headerMap in sheetHeaderMap) {
+
                 var checkedHeader = headerMap.header.RemoveWhitespaces().ToUpperInvariant();
 
                 foreach ( var propertyIdentity in iPropertyNamesMap.OrderBy( a => a.Length ) ) {
+
                     if ( propertyIdentity.Any( p => p.Equals( checkedHeader ) ) ) {
+
                         propertyToSheetMap[ propertyNamesMap[ propertyIdentity ] ] = headerMap;
                         iPropertyNamesMap.Remove( propertyIdentity );
                         break;
