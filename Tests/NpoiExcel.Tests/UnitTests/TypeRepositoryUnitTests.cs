@@ -230,6 +230,7 @@ namespace NpoiExcel.Tests.UnitTests
             var res = TypeRepository.TryGetPropertyMap( sheetTable, type, out var map );
 
             Assert.That( res );
+            Assert.That( propertyMap.Keys.All( k => !String.IsNullOrWhiteSpace( k[0] ) ));
         }
 
         #region Factory
