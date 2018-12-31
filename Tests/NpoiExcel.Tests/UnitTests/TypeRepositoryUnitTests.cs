@@ -119,7 +119,7 @@ namespace NpoiExcel.Tests.UnitTests
         }
 
         [ Test ]
-        public void RegisterType__TypeNotNull_ExcludAttribute__AddsPublicPropertiesWithPublicSetterExceptPropertiesWithExcludettribute ()
+        public void RegisterType__TypeNotNull_ExcludAttribute__AddsPublicPropertiesWithPublicSetterExceptPropertiesWithExcludeAttribute ()
         {
             // Arrange:
             var typeRepository = GetFakeTypeRepository();
