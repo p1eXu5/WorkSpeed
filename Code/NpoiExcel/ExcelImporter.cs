@@ -58,6 +58,10 @@ namespace NpoiExcel
 
         public static ICollection ImportData (Stream source, Type type, int sheetIndex = 0)
         {
+            if ( source == null ) throw new ArgumentNullException( nameof( source ), "Source cannot be null." );
+            if ( type == null ) throw new ArgumentNullException( nameof( type ), "Type cannot be null." );
+            if ( sheetIndex < 0 ) throw new ArgumentException( "Index of sheet cannot be less than zero.", nameof( sheetIndex ) );
+
             SheetTable sheetTable;
 
             try {

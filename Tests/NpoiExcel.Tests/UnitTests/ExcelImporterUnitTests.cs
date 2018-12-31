@@ -94,7 +94,7 @@ namespace NpoiExcel.Tests.UnitTests
             var stream = new MemoryStream(new byte[1]);
             var ex = Assert.Catch<ArgumentNullException>(() => ExcelImporter.ImportData(stream, null, 0));
 
-            StringAssert.Contains("type can't be null.", ex.Message);
+            StringAssert.Contains("Type cannot be null.", ex.Message);
         }
 
         [Test]
@@ -114,7 +114,7 @@ namespace NpoiExcel.Tests.UnitTests
             var stream = new MemoryStream(new byte[1]);
             var ex = Assert.Catch<ArgumentException>(() => ExcelImporter.ImportData(stream, type, -1));
 
-            StringAssert.Contains("sheetIndex must be equal or greater than zero.", ex.Message);
+            StringAssert.Contains("Index of sheet cannot be less than zero.", ex.Message);
         }
 
         [Test]

@@ -24,6 +24,7 @@ namespace NpoiExcel.Tests.UnitTests
         }
 
 
+
         [ Test ]
         public void RegisterType_TypeIsNull_Throws ()
         {
@@ -95,6 +96,8 @@ namespace NpoiExcel.Tests.UnitTests
             Assert.That( propertiNames, Is.EquivalentTo( TestType3.HiddenlessPropertyNames ) );
         }
 
+
+
         [ Test ]
         public void GetPropertyMap__TypeNotNull_IncludeAndExcludeAttributesAreSetted__RegistersAttributesWithPropertyNames ()
         {
@@ -107,6 +110,8 @@ namespace NpoiExcel.Tests.UnitTests
             // Assert:
             Assert.That( propertyMap.Keys, Is.EquivalentTo( TestType.PropertyAttributesCollection ) );
         }
+
+
 
         [ Test ]
         public void GetTypeWithMap_HasNoTypesInTypeReposytory_ReturnsTupleWithNulls ()
@@ -188,6 +193,7 @@ namespace NpoiExcel.Tests.UnitTests
         }
 
 
+
         [ Test ]
         public void TryGetPropertyMap_TypeValid_ReturnsPropertyMap ()
         {
@@ -201,6 +207,8 @@ namespace NpoiExcel.Tests.UnitTests
             Assert.That( res );
             Assert.That( propertyMap.Keys.All( k => !String.IsNullOrWhiteSpace( k[0] ) ));
         }
+
+
 
         #region Factory
 
