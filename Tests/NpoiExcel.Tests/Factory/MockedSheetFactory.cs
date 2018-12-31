@@ -325,45 +325,96 @@ namespace NpoiExcel.Tests.Factory
 
         public static ISheet GetMockedSheet ( short firstColumn, int firsrtRow, int[,] area )
         {
-            var rows = new Dictionary<int, HashSet<int>>();
+            var rowsMap = new Dictionary<int, HashSet<int>>();
 
             for ( int j = 0; j < area.GetLength( 0 ); j++ ) {
                 for ( short i = 0; i < area.GetLength( 1 ); ++i ) {
 
                     if ( area[ j, i ] != 0 ) {
 
-                        var r = j + firsrtRow;
+                        var rowNumber = j + firsrtRow;
 
-                        if ( !rows.Keys.Contains( r ) ) {
-                            rows[ r ] = new HashSet<int>();
+                        if ( !rowsMap.Keys.Contains( rowNumber ) ) {
+                            rowsMap[ rowNumber ] = new HashSet<int>();
                         }
 
-                        rows[ r ].Add( i + firstColumn );
+                        rowsMap[ rowNumber ].Add( i + firstColumn );
                     }
                 }
             }
 
+            return GetSheetMock( rowsMap );
+        }
+
+        public static ISheet GetMockedSheet ( string[] headers )
+        {
+            if ( headers == null ) throw new ArgumentNullException( nameof( headers ), "Headers cannot be null." );
+            if ( headers.Length <= 0 ) throw new NotImplementedException( "Empty ISheet not implemented." );
+
+            var columnMap = new HashSet< int >( Enumerable.Range( 0, headers.Length ) );
+
+            var rowsMap = new Dictionary< int, HashSet< int > > {
+
+                [0] = columnMap,
+                [1] = columnMap
+            };
+
+            return GetSheetMock( rowsMap, headers );
+        }
+
+        private static ISheet GetSheetMock ( Dictionary< int, HashSet< int > > rowsMap, string[] headers )
+        {
             // см. типы передаваемых параметров, а не возвращаемых!
-            var sheetMock = new Mock<ISheet>();
+            var sheetMock = new Mock< ISheet >();
 
-            sheetMock.Setup( s => s.FirstRowNum ).Returns( rows.Keys.Min() );
-            sheetMock.Setup( s => s.LastRowNum ).Returns( rows.Keys.Max() );
+            sheetMock.Setup( s => s.FirstRowNum ).Returns( rowsMap.Keys.Min() );
+            sheetMock.Setup( s => s.LastRowNum ).Returns( rowsMap.Keys.Max() );
 
-            sheetMock.Setup( s => s.GetRow( It.Is<int>( r => rows.Keys.Contains( r ) ) ) )
+            sheetMock.Setup( s => s.GetRow( It.Is< int >( r => rowsMap.Keys.Contains( r ) ) ) )
                      .Returns( ( int r ) =>
-                     {
-                         var rowMock = new Mock<IRow>();
-                         rowMock.Setup( s => s.FirstCellNum ).Returns( ( short )rows[ r ].Min() );
-                         rowMock.Setup( s => s.LastCellNum ).Returns( ( short )( rows[ r ].Max() + 1 ) );
-                         rowMock.Setup( row => row.GetCell( It.Is<int>( c => rows[ r ].Contains( c ) ) ) )
-                                .Returns( ReturnMockedStringCell() );
-                         return rowMock.Object;
-                     } );
+                               {
+                                   var rowMock = new Mock< IRow >();
+                                   rowMock.Setup( s => s.FirstCellNum ).Returns( ( short )rowsMap[ r ].Min() );
+                                   rowMock.Setup( s => s.LastCellNum ).Returns( ( short )(rowsMap[ r ].Max() + 1) );
+                                   rowMock.Setup( row => row.GetCell( It.Is< int >( c => rowsMap[ r ].Contains( c ) ) ) )
+                                          .Returns( ( int c ) => ReturnMockedStringCell( headers, c ) );
+                                   return rowMock.Object;
+                               } );
 
             return sheetMock.Object;
         }
 
+        private static ICell ReturnMockedStringCell ( string[] headers, int index )
+        {
+            var stringCellMock = new Mock<ICell>();
 
+            stringCellMock.Setup( c => c.CellType ).Returns( CellType.String );
+            stringCellMock.Setup( c => c.StringCellValue ).Returns( headers[ index ] );
+
+            return stringCellMock.Object;
+        }
+
+        private static ISheet GetSheetMock ( Dictionary< int, HashSet< int > > rowsMap )
+        {
+            // см. типы передаваемых параметров, а не возвращаемых!
+            var sheetMock = new Mock< ISheet >();
+
+            sheetMock.Setup( s => s.FirstRowNum ).Returns( rowsMap.Keys.Min() );
+            sheetMock.Setup( s => s.LastRowNum ).Returns( rowsMap.Keys.Max() );
+
+            sheetMock.Setup( s => s.GetRow( It.Is< int >( r => rowsMap.Keys.Contains( r ) ) ) )
+                     .Returns( ( int r ) =>
+                               {
+                                   var rowMock = new Mock< IRow >();
+                                   rowMock.Setup( s => s.FirstCellNum ).Returns( ( short )rowsMap[ r ].Min() );
+                                   rowMock.Setup( s => s.LastCellNum ).Returns( ( short )(rowsMap[ r ].Max() + 1) );
+                                   rowMock.Setup( row => row.GetCell( It.Is< int >( c => rowsMap[ r ].Contains( c ) ) ) )
+                                          .Returns( ReturnMockedStringCell() );
+                                   return rowMock.Object;
+                               } );
+
+            return sheetMock.Object;
+        }
 
 
         private static ICell ReturnMockedStringCell ()
