@@ -22,7 +22,7 @@ namespace NpoiExcel
     {
         #region ImportData
 
-        public static SheetTable ImportData (string fileName, int sheetIndex)
+        public static SheetTable ImportData (string fileName, int sheetIndex = 0)
         {
             using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
 
@@ -30,7 +30,7 @@ namespace NpoiExcel
             }
         }
 
-        public static SheetTable ImportData (Stream stream, int sheetIndex)
+        public static SheetTable ImportData (Stream stream, int sheetIndex = 0)
         {
             if (sheetIndex < 0) throw new ArgumentException("sheetIndex must be equal or greater than zero.", nameof(sheetIndex));
 
@@ -48,7 +48,7 @@ namespace NpoiExcel
         }
 
 
-        public static ICollection ImportData (string fileName, Type type, int sheetIndex)
+        public static ICollection ImportData (string fileName, Type type, int sheetIndex = 0)
         {
             using (var stream = new FileStream (fileName, FileMode.Open, FileAccess.Read)) {
 
@@ -56,7 +56,7 @@ namespace NpoiExcel
             }
         }
 
-        public static ICollection ImportData (Stream source, Type type, int sheetIndex)
+        public static ICollection ImportData (Stream source, Type type, int sheetIndex = 0)
         {
             SheetTable sheetTable;
 
@@ -91,7 +91,7 @@ namespace NpoiExcel
         /// <param name="typeConverter">Type typeConverter</param>
         /// <param name="progressFunc"></param>
         /// <returns></returns>
-        public static IEnumerable< TOutType > GetEnumerable< TIn, TOutType>( SheetTable sheetTable,
+        public static IEnumerable< TOutType > GetEnumerable< TOutType, TIn >( SheetTable sheetTable,
                                                                              Dictionary< string, (string header, int column) > propertyMap,  
                                                                              ITypeConverter< TIn, TOutType > typeConverter )
         {
@@ -99,6 +99,18 @@ namespace NpoiExcel
             var typedCollection = typeCollection.Cast< TIn >().Select( typeConverter.Convert ).ToArray();
 
             return typedCollection;
+        }
+
+        /// <summary>
+        /// Returns Collection with TOut type elements.
+        /// </summary>
+        /// <typeparam name="TOut"></typeparam>
+        /// <param name="sheetTable"></param>
+        /// <returns></returns>
+        public static IEnumerable< TOut > GetEnumerable< TOut > ( SheetTable sheetTable )
+        {
+            var propertyMap = TypeRepository.GetPropertyMap( sheetTable );
+            return FillModelCollection( sheetTable, typeof( TOut ), propertyMap ).Cast< TOut >();
         }
 
 

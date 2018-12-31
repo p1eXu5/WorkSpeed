@@ -363,6 +363,9 @@ namespace NpoiExcel.Tests.Factory
             return sheetMock.Object;
         }
 
+
+
+
         private static ICell ReturnMockedStringCell ()
         {
             var stringCellMock = new Mock<ICell>();

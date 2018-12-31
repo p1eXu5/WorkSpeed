@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Helpers;
+using NpoiExcel.Attributes;
 
 namespace NpoiExcel
 {
@@ -49,6 +50,15 @@ namespace NpoiExcel
         {
             if ( type == null ) throw new ArgumentNullException();
 
+            _typeDictionary[ type ] = GetPropertyMap( type );
+        }
+
+        public static Dictionary< string[], string > GetPropertyMap ( Type type,
+                                                                      Type includeAttribute = null, 
+                                                                      Type excludeAttribute = null )
+        {
+            if ( type == null ) throw new ArgumentNullException();
+
             // Key in dictionary is a list of attribute values.
             var propertyMap = new Dictionary< string[], string >();
 
@@ -62,17 +72,17 @@ namespace NpoiExcel
                 }
 
                 List< string > attributeValues = includeAttribute != null 
-                                               ? propertyInfo.GetCustomAttributes( includeAttribute, true )
-                                                             .Select( a => a.ToString().RemoveWhitespaces().ToUpperInvariant() )
-                                                             .ToList() 
-                                               : new List< string >();
+                                                     ? propertyInfo.GetCustomAttributes( includeAttribute, true )
+                                                                   .Select( a => a.ToString().RemoveWhitespaces().ToUpperInvariant() )
+                                                                   .ToList() 
+                                                     : new List< string >();
 
                 attributeValues.Add( propertyInfo.Name.ToUpperInvariant() );
 
                 propertyMap[ attributeValues.ToArray() ] = propertyInfo.Name;
             }
 
-            _typeDictionary[ type ] = propertyMap;
+            return propertyMap;
         }
 
         /// <summary>
@@ -80,19 +90,23 @@ namespace NpoiExcel
         /// </summary>
         /// <param name="sheetTable"><see cref="SheetTable"/></param>
         /// <returns>Tuple of Type and Dictionary&lt; propertyName, header &gt;</returns>
-        public virtual (Type type, Dictionary< string, (string header, int column) > propertyMap) GetTypeWithMap( SheetTable sheetTable )
+        public virtual (Type type, Dictionary< string, (string header, int column) > propertyMap) GetTypeWithMap ( SheetTable sheetTable )
         {
-            var headerMapArray = sheetTable.HeaderMapSet.ToArray();
+            var sheetHeaderMap = sheetTable.SheetHeaderMap.ToArray();
 
             foreach ( var type in _typeDictionary.OrderByDescending( t => t.Value.Count ).Select( t => t.Key ) ) {
 
-                var propertyToSheetMap = new Dictionary< string, (string header, int column) >();
+                // check for speed
                 var propertyNamesMap = _typeDictionary[ type ];
-                if ( propertyNamesMap.Count > headerMapArray.Length ) continue;
+                if ( propertyNamesMap.Count > sheetHeaderMap.Length ) continue;
 
+                // main loop
+                var propertyToSheetMap = new Dictionary< string, (string header, int column) >();
+
+                // successfull token
                 var iPropertyNamesMap = _typeDictionary[ type ].Keys.ToList();
 
-                foreach ( var headerMap in headerMapArray.ToArray() ) {
+                foreach ( var headerMap in sheetHeaderMap.ToArray() ) {
 
                     var checkedHeader = headerMap.header.RemoveWhitespaces().ToUpperInvariant();
 
@@ -111,6 +125,49 @@ namespace NpoiExcel
             }
 
             return (null, null);
+        }
+
+        public static Dictionary< string, (string header, int column) > GetEmptyProipertyMap () => new Dictionary< string, (string header, int column) >();
+
+        public static bool TryGetPropertyMap ( SheetTable sheetTable, Type type, out Dictionary< string, (string header, int column) > propertyMap )
+        {
+            if ( type == null ) { throw new ArgumentNullException( nameof( type ), "Type cannot be null." ); }
+
+            var sheetHeaderMap = sheetTable.SheetHeaderMap;
+            var propertyToSheetMap = GetEmptyProipertyMap();
+
+            var propertyNamesMap = GetPropertyMap( 
+
+                type, 
+                includeAttribute: typeof( HeaderAttribute), 
+                excludeAttribute: typeof( HiddenAttribute ) 
+            );
+
+            var iPropertyNamesMap = propertyNamesMap.Keys.ToList();
+
+            foreach ( var headerMap in sheetHeaderMap.ToArray() ) {
+
+                var checkedHeader = headerMap.header.RemoveWhitespaces().ToUpperInvariant();
+
+                foreach ( var propertyIdentity in iPropertyNamesMap.OrderBy( a => a.Length ) ) {
+
+                    if ( propertyIdentity.Any( p => p.Equals( checkedHeader ) ) ) {
+
+                        propertyToSheetMap[ propertyNamesMap[ propertyIdentity ] ] = headerMap;
+                        iPropertyNamesMap.Remove( propertyIdentity );
+                        break;
+                    }
+                }
+            }
+
+            if ( 0 == iPropertyNamesMap.Count ) {
+
+                propertyMap = propertyToSheetMap;
+                return true;
+            }
+
+            propertyMap = new Dictionary< string, (string header, int column) >();
+            return false;
         }
     }
 }
