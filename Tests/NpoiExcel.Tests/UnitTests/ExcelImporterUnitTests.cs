@@ -86,6 +86,7 @@ namespace NpoiExcel.Tests.UnitTests
 
         #endregion
 
+
         #region ImportData With Stream
 
         [Test]
@@ -101,7 +102,7 @@ namespace NpoiExcel.Tests.UnitTests
         public void ImportData_TypeWithoutPublicParameterlessCtor_Throws()
         {
             var type = TypeExcelFactory.ClassWithParameterizedCtor;
-            var stream = new MemoryStream(new byte[1]);
+            var stream = StreamFactory.GetExcelMemoryStream();
             var ex = Assert.Catch<TypeAccessException> (() => ExcelImporter.ImportData (stream, type, 0));
 
             StringAssert.Contains("has no public parameterless constructor!", ex.Message);

@@ -37,14 +37,35 @@ namespace NpoiExcel
 
             if ( _cell.CellType == CellType.String ) {
 
-                var stringValue = _cell.StringCellValue.ToUpperInvariant();
+                var stringValue = _cell.StringCellValue.Trim();
 
-                if ( !Double.TryParse( stringValue, out _doubleValue ) ) { 
+                if ( stringValue.Length > 0 ) {
 
-                    if ( stringValue.ToUpperInvariant().Equals( "ДА" )
-                         || stringValue.ToUpperInvariant().Equals( "YES" ) ) {
+                    CultureInfo culture = null;
 
-                        _doubleValue = 1.0;
+                    culture = CultureInfo.CreateSpecificCulture( "ru-RU" );
+
+                    try {
+                        _doubleValue = double.Parse( stringValue, culture );
+                    }
+                    catch ( FormatException ) {
+
+                        culture = CultureInfo.CreateSpecificCulture( "en-US" );
+
+                        try {
+                            _doubleValue = double.Parse( stringValue, culture );
+                        }
+                        catch ( FormatException ) { }
+                    }
+
+
+                    if ( _doubleValue.Equals( default( double ) ) ) {
+
+                        if ( stringValue.ToUpperInvariant().Equals( "ДА" )
+                             || stringValue.ToUpperInvariant().Equals( "YES" ) ) {
+
+                            _doubleValue = 1.0;
+                        }
                     }
                 }
             }
@@ -87,7 +108,7 @@ namespace NpoiExcel
 
             if ( _cell.CellType == CellType.String ) return _cell.StringCellValue;
             if ( _cell.CellType == CellType.Boolean ) return _cell.BooleanCellValue ? "Да" : "Нет";
-            if ( _cell.CellType == CellType.Numeric ) return _cell.NumericCellValue.ToString( CultureInfo.CurrentCulture );
+            if ( _cell.CellType == CellType.Numeric ) return _cell.NumericCellValue.ToString( CultureInfo.InvariantCulture );
 
             return _stringValue;
         }

@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Factory\MockedSheetFactory.cs" />
+    <Compile Include="Factory\StreamFactory.cs" />
     <Compile Include="Factory\TypeExcelFactory.cs" />
     <Compile Include="IntegrationalTests\ExcelImporterIntegrationalTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
