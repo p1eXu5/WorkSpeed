@@ -37,9 +37,8 @@ namespace Helpers
 
         public static string AppendAssemblyPath(this string fileName, string subpath = "")
         {
-            return new StringBuilder().Append(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location))
-                                      .Append ("\\")
-                                      .Append(subpath.ConvertToDirName())
+            return new StringBuilder().Append( Path.GetDirectoryName( System.Reflection.Assembly.GetExecutingAssembly().Location ) )
+                                      .Append( subpath.ConvertToDirName() )
                                       .Append ("\\")
                                       .Append(fileName).ToString();
         }
