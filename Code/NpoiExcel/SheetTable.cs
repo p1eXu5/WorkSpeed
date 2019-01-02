@@ -39,17 +39,17 @@ namespace NpoiExcel
         {
             _sheet = sheet ?? throw new ArgumentNullException(nameof(sheet), "sheet can't be null!");
 
-            (short minColumn, short maxColumn) boundColumns;
+            (short minColumn, short maxColumn, int lastRow) bounds;
 
             try {
-                boundColumns = GetBoundColumns (_sheet);
+                bounds = GetBound (_sheet);
             }
             catch (NullReferenceException) {
                 throw new ArgumentException("sheet has no data", nameof(sheet));
             }
 
-            if ((_startCell = FindStartCell (_sheet, boundColumns.minColumn)) < CellPoint.ZeroPoint) throw new ArgumentException("_sheet has no data", nameof(sheet));
-            _endCell = FindEndCell (_sheet, boundColumns.maxColumn);
+            if ( (_startCell = FindStartCell( _sheet, bounds.minColumn, bounds.lastRow ) ) < CellPoint.ZeroPoint) throw new ArgumentException("_sheet has no data", nameof(sheet));
+            _endCell = FindEndCell( _sheet, bounds.maxColumn, bounds.lastRow );
 
             // Row #0 is headers not counted
             RowCount = _endCell.Row - _startCell.Row - 1;
@@ -90,12 +90,22 @@ namespace NpoiExcel
             }
         }
 
-        private static (short minColumn, short maxColumn) GetBoundColumns(ISheet sheet)
+        private static (short minColumn, short maxColumn, int lastRow) GetBound(ISheet sheet)
         {
             var minColumn = sheet.GetRow (sheet.FirstRowNum).FirstCellNum;
-            var maxColumn = sheet.GetRow (sheet.LastRowNum).LastCellNum;
+            short maxColumn;
+            int lastRow = sheet.LastRowNum;
 
-            for (int i = sheet.FirstRowNum; i <= sheet.LastRowNum; i++) {
+            do {
+                maxColumn = sheet.GetRow( lastRow-- )?.LastCellNum ?? -1;
+
+            } while ( maxColumn < 0 && lastRow > 0 );
+
+            if ( maxColumn < minColumn ) throw new Exception( " maxColumn < minColumn " );
+
+            ++lastRow;
+
+            for (int i = sheet.FirstRowNum; i <= lastRow; i++) {
 
                 var row = sheet.GetRow (i);
                 if (null == row) continue;
@@ -109,10 +119,17 @@ namespace NpoiExcel
                 }
             }
 
-            return (minColumn, maxColumn);
+            return (minColumn, maxColumn, lastRow);
         }
 
-        private static CellPoint FindStartCell (ISheet sheet, short minColumn)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <param name="minColumn"></param>
+        /// <param name="lastRaw"></param>
+        /// <returns></returns>
+        private static CellPoint FindStartCell ( ISheet sheet, short minColumn, int lastRaw )
         {
             int row = sheet.FirstRowNum;
             short column = minColumn;
@@ -122,7 +139,7 @@ namespace NpoiExcel
 
                 ++row;
 
-                if (row > sheet.LastRowNum) {
+                if (row > lastRaw) {
 
                     row = sheet.FirstRowNum;
                     ++column;
@@ -156,9 +173,15 @@ namespace NpoiExcel
             return new CellPoint(startColumn, row);
         }
 
-        private static CellPoint FindEndCell(ISheet sheet, short maxColumn)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <param name="maxColumn"></param>
+        /// <returns></returns>
+        private static CellPoint FindEndCell(ISheet sheet, short maxColumn, int lastRow )
         {
-            int row = sheet.LastRowNum;
+            int row = lastRow;
             short column = maxColumn;
 
             while (sheet.GetRow(row)?.GetCell(column) == null
@@ -168,7 +191,7 @@ namespace NpoiExcel
 
                 if (row < sheet.FirstRowNum) {
 
-                    row = sheet.LastRowNum;
+                    row = lastRow;
                     --column;
 
                     if (column < sheet.GetRow(row).FirstCellNum) {
@@ -178,12 +201,12 @@ namespace NpoiExcel
                 }
             }
             
-            if (row == sheet.LastRowNum) {
+            if (row == lastRow) {
                 return new CellPoint((short)(column + 1), row + 1);
             }
 
             var lastColumn = column;
-            row = sheet.LastRowNum;
+            row = lastRow;
 
             while (sheet.GetRow(row)?.GetCell(column) == null
                    || sheet.GetRow(row).GetCell(column).CellType == CellType.Blank) {
@@ -231,6 +254,33 @@ namespace NpoiExcel
             if ( null == header ) throw new ArgumentNullException();
 
             return _sheetHeaderMap.Where( h => h.header.Equals( header ) ).Select( h => h.column ).ToArray();
+        }
+
+
+        public override bool Equals ( object obj )
+        {
+            if ( ReferenceEquals( null, obj ) ) return false;
+            return obj is SheetTable other && Equals( other );
+        }
+
+        public override int GetHashCode ()
+        {
+            return _sheet != null ? _sheet.GetHashCode() : 0;
+        }
+
+        public bool Equals ( SheetTable other )
+        {
+            return ReferenceEquals( _sheet, other._sheet ) || _sheet.Equals( other._sheet );
+        }
+
+        public static bool operator == ( SheetTable sheetTableA, SheetTable sheetTableB )
+        {
+            return sheetTableA.Equals( sheetTableB );
+        }
+
+        public static bool operator != ( SheetTable sheetTableA, SheetTable sheetTableB )
+        {
+            return !sheetTableA.Equals( sheetTableB );
         }
 
         #endregion
