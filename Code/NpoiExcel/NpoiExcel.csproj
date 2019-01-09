@@ -48,6 +48,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,8 +63,11 @@
     <Compile Include="CellPoint.cs" />
     <Compile Include="CellValue.cs" />
     <Compile Include="ExcelDataImporter.cs" />
+    <Compile Include="ExcelExporter.cs" />
     <Compile Include="ExcelImporter.cs" />
+    <Compile Include="ExportingCell.cs" />
     <Compile Include="IDataImporter.cs" />
+    <Compile Include="IExportingCell.cs" />
     <Compile Include="TypeRepository.cs" />
     <Compile Include="ITypeConverter.cs" />
     <Compile Include="ITypeRepository.cs" />

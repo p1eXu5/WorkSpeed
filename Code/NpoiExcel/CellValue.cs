@@ -13,6 +13,9 @@ namespace NpoiExcel
 {
     public struct CellValue
     {
+        public const int DAY_COUNT_NEGATIVE_VARIANCE = -693_595;
+        public const int DAY_COUNT_POSITIVE_VARIANCE = 2_899_999;
+
         private readonly ICell _cell;
 
         private readonly string _stringValue;
@@ -123,7 +126,7 @@ namespace NpoiExcel
 
                 var days = GetIntValue();
 
-                if ( days != 0 && days > -693595 && days <= 2899999 ) {
+                if ( days != 0 && days > DAY_COUNT_NEGATIVE_VARIANCE && days <= DAY_COUNT_POSITIVE_VARIANCE ) {
 
                     _dateTimeValue = new DateTime( 1900, 1, 1 ).AddDays( days - 2 );
                 }
