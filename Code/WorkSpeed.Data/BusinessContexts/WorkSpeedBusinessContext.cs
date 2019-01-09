@@ -48,7 +48,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
         private void Dispose (bool disposing)
         {
-            if (!disposing && _disposed) {
+            if (!disposing || _disposed) {
                 return;
             }
 
