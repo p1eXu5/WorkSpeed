@@ -29,6 +29,7 @@ namespace NpoiExcel
         #endregion
 
 
+
         #region Constructor
 
         /// <summary>
@@ -61,6 +62,7 @@ namespace NpoiExcel
         #endregion
 
 
+
         #region Properties
 
         /// <summary>
@@ -70,6 +72,7 @@ namespace NpoiExcel
         public IEnumerable<( string header, int column )> SheetHeaderMap => _sheetHeaderMap;
         
         #endregion
+
 
 
         #region Methods
@@ -94,16 +97,16 @@ namespace NpoiExcel
         {
             var minColumn = sheet.GetRow (sheet.FirstRowNum).FirstCellNum;
             short maxColumn;
-            int lastRow = sheet.LastRowNum;
+            int lastRowCounter = sheet.LastRowNum;
+            int lastRow = -1;
 
             do {
-                maxColumn = sheet.GetRow( lastRow-- )?.LastCellNum ?? -1;
+                maxColumn = sheet.GetRow( lastRowCounter-- )?.LastCellNum ?? -1;
+                if ( lastRow < 0 && maxColumn >= 0 ) lastRow = lastRowCounter + 1;
 
-            } while ( maxColumn < 0 && lastRow > 0 );
+            } while ( (maxColumn < 0 && lastRowCounter > 0) || maxColumn < minColumn );
 
             if ( maxColumn < minColumn ) throw new Exception( " maxColumn < minColumn " );
-
-            ++lastRow;
 
             for (int i = sheet.FirstRowNum; i <= lastRow; i++) {
 

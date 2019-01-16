@@ -29,7 +29,7 @@ namespace NpoiExcel
         {
             if ( color != null && color.Length != 3 ) throw new ArgumentException( @"Dimension of color not equals three.", nameof ( color ) );
 
-            Color = new XSSFColor( color ?? new HSSFColor.Automatic().RGB );
+            Color = new XSSFColor( color ?? new HSSFColor.White().RGB );
         }
 
         private ExportingCell ( int row, int column, Color color )
