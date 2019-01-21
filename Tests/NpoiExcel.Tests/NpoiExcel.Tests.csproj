@@ -97,16 +97,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Code\Helpers\Helpers.csproj">
-      <Project>{12faa7bd-a5d4-48e3-80c4-6d7a72be99b0}</Project>
-      <Name>Helpers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Code\NpoiExcel\NpoiExcel.csproj">
-      <Project>{47680BF8-C76A-44B9-BDE3-694F1A73CCB1}</Project>
-      <Name>NpoiExcel</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
