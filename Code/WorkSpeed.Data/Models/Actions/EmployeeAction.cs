@@ -5,7 +5,7 @@ using System.Text;
 
 namespace WorkSpeed.Data.Models
 {
-    public class EmployeeAction
+    public abstract class EmployeeAction
     {
         public int Id { get; set; }
 
@@ -13,7 +13,7 @@ namespace WorkSpeed.Data.Models
         public Employee Employee { get; set; }
 
         public DateTime StartTime { get; set; }
-        public Document1C Document { get; set; }
+        public Document1C Document1C { get; set; }
 
         public Operation Operation { get; set; }
         public TimeSpan Duration { get; set; }

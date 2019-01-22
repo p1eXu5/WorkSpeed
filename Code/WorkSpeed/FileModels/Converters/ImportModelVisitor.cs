@@ -162,7 +162,7 @@ namespace WorkSpeed.FileModels.Converters
             importModel.StartTime = withProductAction.StartTime;
             importModel.Employee = withProductAction.Employee;
             importModel.Duration = withProductAction.Duration;
-            importModel.Document = withProductAction.Document;
+            importModel.Document1C = withProductAction.Document1C;
             importModel.Operation = withProductAction.Operation;
 
             importModel.ProductQuantity = withProductModel.ProductQuantity;
@@ -204,7 +204,7 @@ namespace WorkSpeed.FileModels.Converters
 
             importModel.Duration = TimeSpan.FromSeconds( actionImportModel.OperationDuration );
 
-            importModel.Document = new Document1C {
+            importModel.Document1C = new Document1C {
 
                 Id = actionImportModel.DocumentNumber,
                 Name = actionImportModel.DocumentName,
