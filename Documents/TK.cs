@@ -82,12 +82,22 @@
 	#endregion
 	
 		
-	#region Operation Groups
+	#region Actions
 /*	------------------------
 	
-	Группы операций:
+	Actions:
+
+        0.      EmployeeAction:
+
+                    Common characteristics:
+
+                        -   Employee
+                        -   StartTime
+                        -   Operation
+                        -   Duration
+
 	
-		I.		Операции с товаром и адресами:
+		I.		Ations with Products and Addresses:
 					
 					1)  Верт. дефрагментация
 					2)  Гор. деврагментация
@@ -105,17 +115,17 @@
 					
 					Общие характеристики:
 					
-						-	Товар
-						-	Количество товара
-						-	Количество сканов (строчек)
+						-	ActionDetails ( [ Product: Count ] )
+
 					
 					Операции с товаром и адресами делятся:
 				
 						a.	Операции с одним адресом
 						
-							1) Инвентаризация
-							2) Сканирование товара
-							3) Сканирование транзитов
+							1) Инвентаризация ( AccountingQuantity )
+
+							2) Сканирование товара ( ScanQuantity )
+							3) Сканирование транзитов ( ScanQuantity )
 							
 							Общие характеристики:
 							
@@ -163,16 +173,18 @@
 	
 	Operations are ordered by start DateTime
 	
-	O(n-1s)  Operation(n-1)  O(n-1e)         O(ns)  Operation(n)  O(ne)        
-	...|________________________|..............|____________________|.......
-	
-		1) Operation(n-1) is null:
+	St[n-1]  Operation[n-1]  Et[n-1]         St[n]  Operation[n]  Et[n]        
+	....|________________________|..............|____________________|.......
+	              d[n-1]                                 d[n]
+
+		1) Operation[n-1] is null:
 		
-			Duration of Operation(n) = own duration
+			d[n] = d[n]
 	
-		2) Operation(n-1) have different classifier:
+
+		2) Operation[n-1] have different classifier:
 	
-			Duration of Operation(n) = 
+			d[n] = 
 	
 	
 	
