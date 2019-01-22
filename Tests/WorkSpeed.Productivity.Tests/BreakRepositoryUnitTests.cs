@@ -40,7 +40,7 @@ namespace WorkSpeed.Productivity.Tests
         {
             var repo = new BreakRepository();
 
-            var shortBreak = new ShortBreak()
+            var shortBreak = new ShortBreakSchedule()
             {
                 Duration = repo.ShortBreakDownLimit - TimeSpan.FromSeconds( 1 ),
                 Periodicity = repo.ShortBreakIntervalUpLimit,
@@ -54,7 +54,7 @@ namespace WorkSpeed.Productivity.Tests
         {
             var repo = new BreakRepository();
 
-            var shortBreak = new ShortBreak()
+            var shortBreak = new ShortBreakSchedule()
             {
                 Duration = repo.ShortBreakUpLimit + TimeSpan.FromSeconds( 1 ),
                 Periodicity = repo.ShortBreakIntervalUpLimit,
@@ -227,9 +227,9 @@ namespace WorkSpeed.Productivity.Tests
             return shift;
         }
 
-        private ShortBreak GetShortBreakForNotSmokers ()
+        private ShortBreakSchedule GetShortBreakForNotSmokers ()
         {
-            var shortBreak = new ShortBreak
+            var shortBreak = new ShortBreakSchedule
             {
                 Id = 1,
                 Periodicity = TimeSpan.FromHours( 2 ),
@@ -240,9 +240,9 @@ namespace WorkSpeed.Productivity.Tests
             return shortBreak;
         }
 
-        private ShortBreak GetShortBreakForSmokers ()
+        private ShortBreakSchedule GetShortBreakForSmokers ()
         {
-            var shortBreak = new ShortBreak {
+            var shortBreak = new ShortBreakSchedule {
 
                 Id = 2,
                 Periodicity = TimeSpan.FromHours( 1 ),

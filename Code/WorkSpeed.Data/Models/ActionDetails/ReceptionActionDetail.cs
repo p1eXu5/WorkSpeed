@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WorkSpeed.Data.Models
+namespace WorkSpeed.Data.Models.ActionDetails
 {
-    public class ScanningAction : WithProductAction
+    public class ReceptionActionDetail : SingleAddressDetail
     {
         public ushort ScanQuantity { get; set; }
-        public Address ReceptionDynamicCellAdress { get; set; }
+        public bool IsClientScanning { get; set; }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace WorkSpeed.Data.Models
 {
@@ -20,15 +17,21 @@ namespace WorkSpeed.Data.Models
         public float ItemLength { get; set; }
         public float ItemWidth  { get; set; }
         public float ItemHeight { get; set; }
+    
+        public float ItemWeight { get; set; }
 
-        public float CartonLength { get; set; }
-        public float CartonWidth  { get; set; }
-        public float CartonHeight { get; set; }
+        // Computed
+        public float ItemVolume { get; set; }
 
-        public int CartonQuantity { get; set; }
+        public float? CartonLength { get; set; }
+        public float? CartonWidth  { get; set; }
+        public float? CartonHeight { get; set; }
 
-        public float Weight { get; set; }
-        public float Volume { get; set; }
+        public int? CartonQuantity { get; set; }
+
+        // Computed
+        public float? CartonWeight { get; set; }
+        public float? CartonVolume { get; set; }
 
         public float GatheringComplexity { get; set; }
         public float PackagingComplexity { get; set; }
@@ -37,6 +40,5 @@ namespace WorkSpeed.Data.Models
         public float PlacingComplexity   { get; set; }
 
         public Product Parent { get; set; }
-
     }
 }

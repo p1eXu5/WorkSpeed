@@ -11,14 +11,14 @@ namespace WorkSpeed.Productivity
     public class BreakRepository : IBreakRepository
     {
         private readonly Dictionary<Shift, DayPeriod> _variableBreaks;
-        private readonly Dictionary<ShortBreak, (Predicate<Employee> predicate, List<DayPeriod> periods)> _fixedBreaks;
+        private readonly Dictionary<ShortBreakSchedule, (Predicate<Employee> predicate, List<DayPeriod> periods)> _fixedBreaks;
 
 
 
         public BreakRepository ()
         {
             _variableBreaks = new Dictionary<Shift, DayPeriod>( 2 );
-            _fixedBreaks = new Dictionary<ShortBreak, (Predicate<Employee> predicate, List<DayPeriod> periods)>( 2 );
+            _fixedBreaks = new Dictionary<ShortBreakSchedule, (Predicate<Employee> predicate, List<DayPeriod> periods)>( 2 );
         }
 
 
@@ -39,7 +39,7 @@ namespace WorkSpeed.Productivity
 
 
         public IEnumerable<Shift> ShiftCollection => _variableBreaks.Keys;
-        public IEnumerable<ShortBreak> ShortBreakCollection => _fixedBreaks.Keys;
+        public IEnumerable<ShortBreakSchedule> ShortBreakCollection => _fixedBreaks.Keys;
 
         #endregion
 
@@ -49,7 +49,7 @@ namespace WorkSpeed.Productivity
         /// </summary>
         /// <param name="shortBreak"></param>
         /// <returns></returns>
-        public List<DayPeriod> GetDayPeriods ( ShortBreak shortBreak )
+        public List<DayPeriod> GetDayPeriods ( ShortBreakSchedule shortBreak )
         {
             if ( shortBreak == null ) throw new ArgumentNullException( nameof( shortBreak ), "ShortBreak cannot be null" );
 
@@ -117,7 +117,7 @@ namespace WorkSpeed.Productivity
         /// </summary>
         /// <param name="shortBreak"></param>
         /// <param name="predicate"></param>
-        public void AddFixedBreak ( ShortBreak shortBreak, Predicate<Employee> predicate )
+        public void AddFixedBreak ( ShortBreakSchedule shortBreak, Predicate<Employee> predicate )
         {
             if ( predicate == null ) throw new ArgumentNullException( nameof( predicate ), "Predicate cannot be null" );
             var dayPerioList = GetDayPeriods( shortBreak );
@@ -178,7 +178,7 @@ namespace WorkSpeed.Productivity
         /// <param name="employee"></param>
         /// <param name="period"></param>
         /// <returns></returns>
-        public (ShortBreak shortBreak, TimeSpan breakLength) CheckShortBreak ( Period period, Employee employee )
+        public (ShortBreakSchedule shortBreak, TimeSpan breakLength) CheckShortBreak ( Period period, Employee employee )
         {
             if ( employee == null ) throw new ArgumentNullException();
 

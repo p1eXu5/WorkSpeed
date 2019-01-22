@@ -29,7 +29,7 @@ namespace WorkSpeed.Interfaces
         IEnumerable< Position > GetPositions ();
         IEnumerable< Rank > GetRanks ();
         IEnumerable< Shift > GetShifts ();
-        IEnumerable< ShortBreak > GetBreakList ();
+        IEnumerable< ShortBreakSchedule > GetBreakList ();
         IEnumerable< GatheringAction > GetGatheringActions ();
         IEnumerable< Category > GetCategories ();
 

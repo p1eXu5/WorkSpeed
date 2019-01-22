@@ -101,7 +101,7 @@ namespace WorkSpeed.Productivity
                     var leftShortBreakRes = BreakRepository.CheckShortBreak( leftPause, lastAction.Employee );
                     var rightShortBreakRes = BreakRepository.CheckShortBreak( rightPause, lastAction.Employee );
 
-                    (ShortBreak shortBreak, TimeSpan breakLength) resShortBreakRes = (null, TimeSpan.Zero);
+                    (ShortBreakSchedule shortBreak, TimeSpan breakLength) resShortBreakRes = (null, TimeSpan.Zero);
 
                     if ( leftShortBreakRes.shortBreak != null && rightShortBreakRes.shortBreak != null ) {
 

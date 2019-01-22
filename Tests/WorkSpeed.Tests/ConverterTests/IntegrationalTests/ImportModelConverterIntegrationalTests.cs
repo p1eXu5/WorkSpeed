@@ -35,7 +35,7 @@ namespace WorkSpeed.Tests.ConverterTests.IntegrationalTests
             Assert.That( product.GetType().IsAssignableFrom( typeof( Product ) ) );
             Assert.That( 7123 == product.Id );
             Assert.That( product.Name.Equals( "Product A") );
-            Assert.That( product.Weight.Equals( ( float )1.123 ) );
+            Assert.That( product.ItemWeight.Equals( ( float )1.123 ) );
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace WorkSpeed.Tests.ConverterTests.IntegrationalTests
             Assert.That( "AR12345".Equals( employee.Id ) );
             Assert.That( "Вася Пупкин".Equals( employee.Name ) );
             Assert.That( true == employee.IsActive );
-            Assert.That( "пр".Equals( employee.Position.Abbreviations ) );
+            Assert.That( "пр".Equals( employee.Position.Abbreviation ) );
             Assert.That( "кл".Equals( employee.Appointment.Abbreviations ) );
             Assert.That( 5 == employee.Rank.Number );
            

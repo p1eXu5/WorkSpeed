@@ -10,13 +10,15 @@ namespace WorkSpeed.Data.Models
         public byte Section { get; set; }
         public byte Row { get; set; }
         public byte Shelf { get; set; }
-        public byte CellNum { get; set; }
+        public byte Box { get; set; }
 
-        public CellTypes CellType { get; set; }
+        public BoxTypes BoxType { get; set; }
 
         public float Lenght { get; set; }
         public float Width { get; set; }
         public float Height { get; set; }
+
+        public double Volume { get; set; }
 
         public float MaxWeight { get; set; }
 

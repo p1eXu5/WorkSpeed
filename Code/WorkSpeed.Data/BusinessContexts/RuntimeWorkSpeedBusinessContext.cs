@@ -22,7 +22,7 @@ namespace WorkSpeed.Data.BusinessContexts
         private readonly List< Rank > _ranks = new List< Rank >();
         private readonly List< Category > _categories = new List< Category >();
         private readonly List< Shift > _shifts = new List< Shift >();
-        private readonly List< ShortBreak > _breaks = new List< ShortBreak >();
+        private readonly List< ShortBreakSchedule > _breaks = new List< ShortBreakSchedule >();
 
         #endregion
 
@@ -57,7 +57,7 @@ namespace WorkSpeed.Data.BusinessContexts
                 new Operation {
                     Id = 1,
                     Name = "Выгрузка машины",
-                    OperationGroupId = 1,
+                    GroupId = 1,
                     Group = _operationGroups.First( o => o.Id == 1 ),
                     Complexity = (float) 1.0
                 },
@@ -65,7 +65,7 @@ namespace WorkSpeed.Data.BusinessContexts
                 new Operation {
                     Id = 2,
                     Name = "Погрузка машины",
-                    OperationGroupId = 1,
+                    GroupId = 1,
                     Group = _operationGroups.First( o => o.Id == 1 ),
                     Complexity = (float) 1.0
                 },
@@ -73,7 +73,7 @@ namespace WorkSpeed.Data.BusinessContexts
                 new Operation {
                     Id = 3,
                     Name = "Подбор товара",
-                    OperationGroupId = 2,
+                    GroupId = 2,
                     Group = _operationGroups.First( o => o.Id == 2 ),
                     Complexity = (float) 1.0
                 },
@@ -81,7 +81,7 @@ namespace WorkSpeed.Data.BusinessContexts
                 new Operation {
                     Id = 4,
                     Name = "Подбор клиентского товара",
-                    OperationGroupId = 4,
+                    GroupId = 4,
                     Group = _operationGroups.First( o => o.Id == 4 ),
                     Complexity = (float) 1.0
                 },
@@ -89,7 +89,7 @@ namespace WorkSpeed.Data.BusinessContexts
                 new Operation {
                     Id = 5,
                     Name = "Подбор товаров покупателей",
-                    OperationGroupId = 4,
+                    GroupId = 4,
                     Group = _operationGroups.First( o => o.Id == 4 ),
                     Complexity = (float) 1.0
                 },
@@ -97,7 +97,7 @@ namespace WorkSpeed.Data.BusinessContexts
                 new Operation {
                     Id = 6,
                     Name = "Упаковка товара в места",
-                    OperationGroupId = 3,
+                    GroupId = 3,
                     Group = _operationGroups.First( o => o.Id == 3 ),
                     Complexity = (float) 1.0
                 },
@@ -105,7 +105,7 @@ namespace WorkSpeed.Data.BusinessContexts
                 new Operation {
                     Id = 7,
                     Name = "Приём товара",
-                    OperationGroupId = 6,
+                    GroupId = 6,
                     Group = _operationGroups.First( o => o.Id == 6 ),
                     Complexity = (float) 1.0
                 },
@@ -113,7 +113,7 @@ namespace WorkSpeed.Data.BusinessContexts
                 new Operation {
                     Id = 8,
                     Name = "Размещение товара",
-                    OperationGroupId = 9,
+                    GroupId = 9,
                     Group = _operationGroups.First( o => o.Id == 9 ),
                     Complexity = (float) 1.0
                 },
@@ -121,7 +121,7 @@ namespace WorkSpeed.Data.BusinessContexts
                 new Operation {
                     Id = 9,
                     Name = "Перемещение товара",
-                    OperationGroupId = 10,
+                    GroupId = 10,
                     Group = _operationGroups.First( o => o.Id == 10 ),
                     Complexity = (float) 1.0
                 },
@@ -129,7 +129,7 @@ namespace WorkSpeed.Data.BusinessContexts
                 new Operation {
                     Id = 10,
                     Name = "Инвентаризация",
-                    OperationGroupId = 11,
+                    GroupId = 11,
                     Group = _operationGroups.First( o => o.Id == 11 ),
                     Complexity = (float) 1.0
                 },
@@ -240,7 +240,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 1,
                     Name = "Крупняк",
-                    Abbreviations = "кр.;кр;",
+                    Abbreviation = "кр.;кр;",
                     Complexity = 1.0f,
                 },
 
@@ -248,7 +248,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 2,
                     Name = "Приёмка",
-                    Abbreviations = "приемка;пр.;пр;",
+                    Abbreviation = "приемка;пр.;пр;",
                     Complexity = 1.0f,
                 },
 
@@ -256,7 +256,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 3,
                     Name = "Отгрузка",
-                    Abbreviations = "отгр.;отгр;от.;от;",
+                    Abbreviation = "отгр.;отгр;от.;от;",
                     Complexity = 1.0f,
                 },
 
@@ -264,7 +264,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 4,
                     Name = "Дорогая",
-                    Abbreviations = "дор.;дор;",
+                    Abbreviation = "дор.;дор;",
                     Complexity = 1.0f,
                 },
 
@@ -272,7 +272,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 5,
                     Name = "Мезонин, 1-й этаж",
-                    Abbreviations = "мезонин1;мез1;мез.1;",
+                    Abbreviation = "мезонин1;мез1;мез.1;",
                     Complexity = 1.0f,
                 },
 
@@ -280,7 +280,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 6,
                     Name = "Мезонин, 2-й этаж",
-                    Abbreviations = "мезонин2;мез2;мез.2;",
+                    Abbreviation = "мезонин2;мез2;мез.2;",
                     Complexity = 1.0f,
                 },
 
@@ -288,7 +288,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 7,
                     Name = "Мезонин, 3-й этаж",
-                    Abbreviations = "мезонин3;мез3;мез.3;",
+                    Abbreviation = "мезонин3;мез3;мез.3;",
                     Complexity = 1.0f,
                 },
 
@@ -296,7 +296,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 8,
                     Name = "Мезонин, 4-й этаж",
-                    Abbreviations = "мезонин4;мез4;мез.4;",
+                    Abbreviation = "мезонин4;мез4;мез.4;",
                     Complexity = 1.0f,
                 },
 
@@ -304,7 +304,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 9,
                     Name = "Расстановка",
-                    Abbreviations = "расстановка;рас;рас.;",
+                    Abbreviation = "расстановка;рас;рас.;",
                     Complexity = 1.0f,
                 },
 
@@ -312,7 +312,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 10,
                     Name = "Старший смены, мезонин",
-                    Abbreviations = "ссммез;",
+                    Abbreviation = "ссммез;",
                     Complexity = 1.0f,
                 },
 
@@ -320,7 +320,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 11,
                     Name = "Старший смены, крупняк",
-                    Abbreviations = "ссмкр;",
+                    Abbreviation = "ссмкр;",
                     Complexity = 1.0f,
                 },
             } );
@@ -480,7 +480,7 @@ namespace WorkSpeed.Data.BusinessContexts
             } );
 
             _breaks.AddRange( new [] {
-                new ShortBreak {
+                new ShortBreakSchedule {
                     Id = 1,
                     Name = "Перекуры для некурящих",
                     Duration = TimeSpan.FromMinutes( 10 ),
@@ -488,7 +488,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     IsForSmokers = false,
                     DayOffsetTime = new TimeSpan( 8, 5, 0 )
                 },
-                new ShortBreak {
+                new ShortBreakSchedule {
                     Id = 2,
                     Name = "Перекуры для курящих",
                     Duration = TimeSpan.FromMinutes( 5 ),
@@ -577,8 +577,8 @@ namespace WorkSpeed.Data.BusinessContexts
             if (appointment == null) return;
             employee.Appointment = appointment;
 
-            if ( employee.Position == null || String.IsNullOrWhiteSpace(employee.Position.Abbreviations) ) return;
-            var position = _positions.FirstOrDefault( p => p.Abbreviations.Contains( employee.Position.Abbreviations ) );
+            if ( employee.Position == null || String.IsNullOrWhiteSpace(employee.Position.Abbreviation) ) return;
+            var position = _positions.FirstOrDefault( p => p.Abbreviation.Contains( employee.Position.Abbreviation ) );
             if ( position == null ) return;
             employee.Position = position;
 
@@ -615,7 +615,7 @@ namespace WorkSpeed.Data.BusinessContexts
             return _shifts;
         }
 
-        public IEnumerable< ShortBreak > GetBreakList ()
+        public IEnumerable< ShortBreakSchedule > GetBreakList ()
         {
             return _breaks;
         }

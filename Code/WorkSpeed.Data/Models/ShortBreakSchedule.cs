@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace WorkSpeed.Data.Models
 {
-    public class ShortBreak
+    public class ShortBreakSchedule
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public TimeSpan Duration { get; set; }
         public TimeSpan Periodicity { get; set; }
-        public bool IsForSmokers { get; set; }
+        public TimeSpan FirstBreakTime { get; set; }
 
-        public TimeSpan DayOffsetTime { get; set; }
+        public bool IsForSmokers { get; set; }
     }
 }

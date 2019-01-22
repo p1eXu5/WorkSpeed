@@ -14,11 +14,11 @@ namespace WorkSpeed.Productivity
         TimeSpan ShortBreakUpLimit { get; }
 
         IEnumerable<Shift> ShiftCollection { get; }
-        IEnumerable<ShortBreak> ShortBreakCollection { get; }
+        IEnumerable<ShortBreakSchedule> ShortBreakCollection { get; }
 
-        void AddFixedBreak ( ShortBreak shortBreak, Predicate< Employee > predicate );
+        void AddFixedBreak ( ShortBreakSchedule shortBreak, Predicate< Employee > predicate );
         void AddVariableBreak ( Shift shift );
-        (ShortBreak shortBreak, TimeSpan breakLength) CheckShortBreak ( Period period, Employee employee );
+        (ShortBreakSchedule shortBreak, TimeSpan breakLength) CheckShortBreak ( Period period, Employee employee );
         Shift[] CheckLunchBreak ( Period period );
     }
 }

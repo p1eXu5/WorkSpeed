@@ -34,7 +34,7 @@ namespace WorkSpeed.FileModels.Converters
                 ItemLength = ( float )productImportModel.ItemLength,
                 ItemWidth = ( float )productImportModel.CartonWidth,
                 ItemHeight = ( float )productImportModel.ItemHeight,
-                Weight = ( float )productImportModel.Weight
+                ItemWeight = ( float )productImportModel.Weight
             };
         }
 
@@ -63,7 +63,7 @@ namespace WorkSpeed.FileModels.Converters
                 },
 
                 Position = new Position {
-                    Abbreviations = employeeFullImportModel.Position
+                    Abbreviation = employeeFullImportModel.Position
                 },
             };
         }
@@ -244,7 +244,7 @@ namespace WorkSpeed.FileModels.Converters
                     Row = Byte.Parse( address.Substring( 1, 2 ) ),
                     Section = Byte.Parse( address.Substring( 4, 2 ) ),
                     Shelf = Byte.Parse( address.Substring( 7, 2 ) ),
-                    CellNum = Byte.Parse( address.Substring( 10, 2 ) ),
+                    Box = Byte.Parse( address.Substring( 10, 2 ) ),
                 };
             }
             catch {

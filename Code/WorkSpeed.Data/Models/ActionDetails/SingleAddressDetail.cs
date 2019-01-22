@@ -15,13 +15,16 @@
  *
  */
 
-using WorkSpeed.Data.Models.ActionDetails;
+using System.ComponentModel.DataAnnotations;
 
-namespace WorkSpeed.Data.Models.Actions
+namespace WorkSpeed.Data.Models.ActionDetails
 {
-    public class ShipmentAction : EmployeeActionBase
+    /// <summary>
+    /// Base class for Inventory and Reception details
+    /// </summary>
+    public class SingleAddressDetail : ActionDetailBase
     {
-        public ShipmentActionDetail ShipmentActionDetail { get; set; }
-    }
+        [ Required ]
+        public Address Address { get; set; }
     }
 }

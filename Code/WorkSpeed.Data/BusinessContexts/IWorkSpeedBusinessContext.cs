@@ -33,6 +33,6 @@ namespace WorkSpeed.Data.BusinessContexts
 
         IEnumerable< Shift > GetShifts ();
 
-        IEnumerable< ShortBreak > GetBreakList ();
+        IEnumerable< ShortBreakSchedule > GetBreakList ();
     }
 }

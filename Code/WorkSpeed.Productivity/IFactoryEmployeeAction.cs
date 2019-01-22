@@ -13,7 +13,7 @@ namespace WorkSpeed.Productivity
 
         void AddVariableBreak ( Shift shift );
 
-        void AddFixedBreaks ( ShortBreak shortBreak );
+        void AddFixedBreaks ( ShortBreakSchedule shortBreak );
 
         IEnumerable< Category > GetCategories ();
         TimeSpan GetThreshold ();

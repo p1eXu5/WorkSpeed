@@ -10,9 +10,9 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
 {
     public class ShortBreakViewModel : ViewModel
     {
-        private readonly ShortBreak _break;
+        private readonly ShortBreakSchedule _break;
 
-        public ShortBreakViewModel ( ShortBreak shortBreak )
+        public ShortBreakViewModel ( ShortBreakSchedule shortBreak )
         {
             _break = shortBreak;
         }

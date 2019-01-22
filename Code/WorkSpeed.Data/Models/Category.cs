@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WorkSpeed.Data.Models
 {
+    /// <summary>
+    /// [ MinVolume, MaxVolume ) l.
+    /// </summary>
     public class Category
     {
         public Category ()
