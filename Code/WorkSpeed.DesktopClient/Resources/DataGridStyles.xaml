@@ -65,10 +65,10 @@
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="BorderThickness" Value="0,0,1,1" />
-        <Setter Property="BorderBrush" Value="{StaticResource br_MainWindow.Background}"></Setter>
+        <Setter Property="BorderBrush" Value="{StaticResource br_Window.Background}"></Setter>
         <Setter Property="Background" Value="{StaticResource br_MainWindow.BackgroundAlternative}" />
         <Setter Property="FontWeight" Value="DemiBold" />
-        <Setter Property="SeparatorBrush" Value="{StaticResource br_MainWindow.Background}" />
+        <Setter Property="SeparatorBrush" Value="{StaticResource br_Window.Background}" />
         <Setter Property="Height" Value="24"></Setter>
     </Style>
 
@@ -76,8 +76,8 @@
     <Style TargetType="DataGrid" x:Key="st_EmployeeDataGrid">
         <Setter Property="AlternatingRowBackground" Value="{StaticResource br_DataGrid.EvenRow}" />
         <Setter Property="RowBackground" Value="{StaticResource br_DataGrid.OddRow}" />
-        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource br_MainWindow.Background}" />
-        <Setter Property="VerticalGridLinesBrush" Value="{StaticResource br_MainWindow.Background}" />
+        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource br_Window.Background}" />
+        <Setter Property="VerticalGridLinesBrush" Value="{StaticResource br_Window.Background}" />
         <Setter Property="AutoGenerateColumns" Value="False" />
         <Setter Property="Width" Value="Auto"  />
         <Setter Property="Height" Value="Auto" />
@@ -95,7 +95,7 @@
     <!-- DataGridTemplateColumn Control Styles -->
     <Style TargetType="CheckBox" x:Key="st_TableCheckBox" BasedOn="{StaticResource {x:Type CheckBox}}" >
         <Setter Property="Foreground" Value="{StaticResource br_MainWindow.BackgroundAlternative}" />
-        <Setter Property="BorderBrush" Value="{StaticResource br_MainWindow.Background}" />
+        <Setter Property="BorderBrush" Value="{StaticResource br_Window.Background}" />
         <Setter Property="Width" Value="14" />
         <Setter Property="Height" Value="14" />
         <Setter Property="BorderThickness" Value="14,14,2,7" />

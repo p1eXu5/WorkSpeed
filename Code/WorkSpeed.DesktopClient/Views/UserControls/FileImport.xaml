@@ -49,7 +49,7 @@
             <StackPanel Orientation="Vertical"
                                 VerticalAlignment="Center"
                             >
-                <ProgressBar Height="20" Background="{StaticResource br_MainWindow.Background}" 
+                <ProgressBar Height="20" Background="{StaticResource br_Window.Background}" 
                                      Value="{Binding ProgressCounter}"
                                      Minimum="0"
                                      Maximum="1"

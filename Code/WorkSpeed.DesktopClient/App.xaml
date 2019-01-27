@@ -6,10 +6,12 @@
     <Application.Resources>
          <ResourceDictionary>
              <ResourceDictionary.MergedDictionaries>
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Fonts.xaml" />
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Colors.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Window/ButtonStyles.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Window/Common.xaml" />
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Glyphs.xaml" />
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Images.xaml" />
-                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Fonts.xaml" />
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/ButtonStyles.xaml" />
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/CheckBoxStyle.xaml" />
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/ComboBoxStyles.xaml" />

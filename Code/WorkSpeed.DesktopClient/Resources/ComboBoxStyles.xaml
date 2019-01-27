@@ -292,7 +292,7 @@
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
         <Setter Property="MaxDropDownHeight" Value="100" />
-        <Setter Property="Background" Value="{StaticResource br_MainWindow.Background}" />
+        <Setter Property="Background" Value="{StaticResource br_Window.Background}" />
         <Setter Property="Foreground" Value="{StaticResource brg_ComboBox.Foreground}"/>
         <Setter Property="BorderBrush" Value="{StaticResource br_ComboBox.Border}" />
         <Setter Property="Template">
@@ -365,7 +365,7 @@
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Background" Value="{StaticResource br_MainWindow.Background}" />
+        <Setter Property="Background" Value="{StaticResource br_Window.Background}" />
         <Setter Property="Foreground" Value="{StaticResource brg_NumericComboBox.Foreground}" />
         <Setter Property="BorderBrush" Value="{StaticResource br_ComboBox.Border}" />
         <Setter Property="Template">

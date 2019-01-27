@@ -150,7 +150,7 @@
 
                         <ContentPresenter Content="{TemplateBinding Content}" />
                         
-                        <Rectangle x:Name="m_Rectangle" Fill="{StaticResource br_MainWindow.Background}" Opacity="0.0" />
+                        <Rectangle x:Name="m_Rectangle" Fill="{StaticResource br_Window.Background}" Opacity="0.0" />
 
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">

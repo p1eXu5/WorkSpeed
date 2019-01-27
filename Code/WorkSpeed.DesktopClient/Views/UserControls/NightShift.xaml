@@ -10,7 +10,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     TextElement.FontSize="14"
-                    TextElement.FontFamily="{StaticResource ft_NotoSerif}"
+                    TextElement.FontFamily="{StaticResource font_NotoSerif}"
                     Grid.IsSharedSizeScope="True"
                     TextElement.Foreground="{StaticResource br_MainWindow.BackgroundAlternative}"
                     CanVerticallyScroll="True"

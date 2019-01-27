@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\_builds\</OutputPath>
+    <OutputPath>..\_builds\_debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -29,7 +29,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\_builds\</OutputPath>
+    <OutputPath>..\_builds\_release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -147,6 +147,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\Window\ButtonStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Window\Common.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Design\DesignWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -222,6 +230,16 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Resource Include="Resources\Fonts\Rubik\Rubik-Black.ttf" />
+    <Resource Include="Resources\Fonts\Rubik\Rubik-BlackItalic.ttf" />
+    <Resource Include="Resources\Fonts\Rubik\Rubik-Bold.ttf" />
+    <Resource Include="Resources\Fonts\Rubik\Rubik-BoldItalic.ttf" />
+    <Resource Include="Resources\Fonts\Rubik\Rubik-Italic.ttf" />
+    <Resource Include="Resources\Fonts\Rubik\Rubik-Light.ttf" />
+    <Resource Include="Resources\Fonts\Rubik\Rubik-LightItalic.ttf" />
+    <Resource Include="Resources\Fonts\Rubik\Rubik-Medium.ttf" />
+    <Resource Include="Resources\Fonts\Rubik\Rubik-MediumItalic.ttf" />
+    <Resource Include="Resources\Fonts\Rubik\Rubik-Regular.ttf" />
     <Resource Include="Resources\Fonts\SuiGenerisRg.ttf" />
     <Resource Include="Resources\Fonts\Noto_Serif\NotoSerif-Bold.ttf" />
     <Resource Include="Resources\Fonts\Noto_Serif\NotoSerif-BoldItalic.ttf" />
@@ -245,6 +263,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Fonts\Noto_Serif\LICENSE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Fonts\Rubik\OFL.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -19,7 +19,7 @@
             <StackPanel>
 
             <ListBox ItemsSource="{Binding Shifts}" 
-                     Background="{StaticResource br_MainWindow.Background}"
+                     Background="{StaticResource br_Window.Background}"
                      BorderBrush="{x:Null}"
                      ScrollViewer.CanContentScroll="False"
                      >
@@ -42,7 +42,7 @@
             </ListBox>
 
             <ListBox ItemsSource="{Binding BreakList}" 
-                     Background="{StaticResource br_MainWindow.Background}"
+                     Background="{StaticResource br_Window.Background}"
                      BorderBrush="{x:Null}"
                      ScrollViewer.CanContentScroll="False"
                      >

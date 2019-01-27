@@ -8,109 +8,87 @@
         xmlns:views="clr-namespace:WorkSpeed.DesktopClient.Views"
         xmlns:behavior="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="MainWindow" Height="450" Width="1024"
         WindowStyle="None"
         ResizeMode="NoResize"
         BorderThickness="1"
         BorderBrush="{StaticResource br_Window.Border}"
+        Background="{StaticResource br_Window.Background}"
         WindowStartupLocation="CenterScreen"
-        AllowsTransparency="False"
+        AllowsTransparency="False" 
+        MouseDown="M_Window_MouseDown"
+        FontFamily="{StaticResource font_Rubik}"
+        FontWeight="Regular"
         >
     <Window.Resources>
 
+        <Style TargetType="TabItem">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Width" Value="178" />
+            <Setter Property="Height" Value="90" />
+            <Setter Property="Border.BorderThickness" Value="1,0,1,1"></Setter>
+            <Setter Property="Border.CornerRadius" Value="0,0,3,3" />
+            <Setter Property="Background" Value="{StaticResource br_Window.Button.Background}" />
+            <Setter Property="Foreground" Value="{StaticResource br_Window.Button.Foreground}" />
+            <Setter Property="Control.BorderBrush" Value="Black" />
+            <Setter Property="RenderTransform" Value="1,0,0,1,0,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Canvas RenderTransform="{TemplateBinding RenderTransform}">
+                            <ContentPresenter RecognizesAccessKey="True"
+                                              Content="{TemplateBinding HeaderedContentControl.Header}" 
+                                              ContentTemplate="{TemplateBinding HeaderedContentControl.HeaderTemplate}" 
+                                              ContentStringFormat="{TemplateBinding HeaderedContentControl.HeaderStringFormat}" 
+                                              ContentSource="Header" 
+                                              Name="Content" 
+                                              SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" Canvas.Left="42"
+                                              
+                                              />
+                            <Image>
+                                <Image.Source>
+                                    <DrawingImage>
+                                        <DrawingImage.Drawing>
+                                            <DrawingGroup>
+                                                
+                                                <GeometryDrawing>
+                                                    <GeometryDrawing.Pen>
+                                                        <Pen Brush="{StaticResource br_Window.Border}" Thickness="1"></Pen>
+                                                    </GeometryDrawing.Pen>
+                                                    <GeometryDrawing.Geometry>
+                                                        <GeometryGroup>
+                                                            <RectangleGeometry RadiusX="3" RadiusY="3" Rect="0,0,178,90"></RectangleGeometry>
+                                                        </GeometryGroup>
+                                                    </GeometryDrawing.Geometry>
+                                                </GeometryDrawing>
 
-    <Storyboard x:Key="an_Window.Button.MouseOver">
-        <ColorAnimationUsingKeyFrames Duration="0:0:0.2" 
-                                      Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" 
-                                      >
-            <EasingColorKeyFrame Value="{StaticResource col_Window.Button.MouseOver.Background}">
-                <EasingColorKeyFrame.EasingFunction>
-                    <PowerEase EasingMode="EaseOut" />
-                </EasingColorKeyFrame.EasingFunction>
-            </EasingColorKeyFrame>
-        </ColorAnimationUsingKeyFrames>
-        <ColorAnimationUsingKeyFrames Duration="0:0:0.2" 
-                                      Storyboard.TargetProperty="(Control.Foreground).(SolidColorBrush.Color)" 
-                                      >
-            <EasingColorKeyFrame Value="{StaticResource col_Window.Button.MouseOver.Foreground}">
-                <EasingColorKeyFrame.EasingFunction>
-                    <PowerEase EasingMode="EaseOut" />
-                </EasingColorKeyFrame.EasingFunction>
-            </EasingColorKeyFrame>
-        </ColorAnimationUsingKeyFrames>
-    </Storyboard>
+                                                <GeometryDrawing>
+                                                    <GeometryDrawing.Pen>
+                                                        <Pen Brush="{StaticResource br_Window.Border.InnerShadow}" Thickness="1"></Pen>
+                                                    </GeometryDrawing.Pen>
+                                                    <GeometryDrawing.Geometry>
+                                                        <GeometryGroup>
+                                                            <RectangleGeometry RadiusX="3" RadiusY="3" Rect="1,1,176,88"></RectangleGeometry>
+                                                        </GeometryGroup>
+                                                    </GeometryDrawing.Geometry>
+                                                </GeometryDrawing>
 
-    <Storyboard x:Key="an_Window.Button.Pressed">
-        <ColorAnimationUsingKeyFrames Duration="0:0:0.1" 
-                                      Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" 
-                                      >
-            <EasingColorKeyFrame Value="{StaticResource col_Window.Button.Pressed.Background}">
-                <EasingColorKeyFrame.EasingFunction>
-                    <PowerEase EasingMode="EaseOut" />
-                </EasingColorKeyFrame.EasingFunction>
-            </EasingColorKeyFrame>
-        </ColorAnimationUsingKeyFrames>
-        <ColorAnimationUsingKeyFrames Duration="0:0:0.2" 
-                                      Storyboard.TargetProperty="(Control.Foreground).(SolidColorBrush.Color)" 
-                                      >
-            <EasingColorKeyFrame Value="{StaticResource col_Window.Button.MouseOver.Foreground}">
-                <EasingColorKeyFrame.EasingFunction>
-                    <PowerEase EasingMode="EaseOut" />
-                </EasingColorKeyFrame.EasingFunction>
-            </EasingColorKeyFrame>
-        </ColorAnimationUsingKeyFrames>
-    </Storyboard>
+                                            </DrawingGroup>
+                                        </DrawingImage.Drawing>
+                                    </DrawingImage>
+                                </Image.Source>
+                            </Image>
 
-    <Style x:Key="st_Window.SystemButton" TargetType="Button">
-        <Setter Property="OverridesDefaultStyle" Value="True" />
-        <Setter Property="Width" Value="32" />
-        <Setter Property="BorderBrush" Value="{StaticResource br_Window.Border}" />
-        <Setter Property="BorderThickness" Value="1,0,1,1" />
-        <Setter Property="Padding" Value="1" />
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="VerticalContentAlignment" Value="Bottom" />
-        <Setter Property="Background" Value="{StaticResource br_Window.Button.Background}"/>
-        <Setter Property="Foreground" Value="{StaticResource br_Window.Button.Foreground}"/>
-        <Setter Property="RenderTransform" Value="1,0,0,1,0,0" />
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="Border.CornerRadius" Value="0,0,0,3" />
-        <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Focusable" Value="False" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{Binding Path=(Border.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
-                            Padding="{TemplateBinding Padding}"
-                            Background="{TemplateBinding Background}"
-                            >
-                            <ContentPresenter Margin="{TemplateBinding Padding}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                        />
+                        </Canvas>
 
-                        <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="Common" >
-                                    <VisualState x:Name="Normal" />
-                                    <VisualState x:Name="MouseOver" Storyboard="{StaticResource an_Window.Button.MouseOver}" />
-                                    <VisualState x:Name="Pressed" Storyboard="{StaticResource an_Window.Button.Pressed}" />
-                                </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-    <Style x:Key="st_Window.SystemButton.Path" TargetType="Path">
-        <Setter Property="Stroke" Value="{x:Null}" />
-        <Setter Property="Fill" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}" />
-    </Style>
+    </Window.Resources>
 
-</Window.Resources>
     <behavior:Interaction.Triggers>
         <behavior:EventTrigger EventName="Loaded" SourceObject="{Binding ElementName=m_Window}">
             <behavior:InvokeCommandAction Command="{Binding LoadedCommand}" />
@@ -124,12 +102,12 @@
                     Height="24"
                     Margin="0,0,32,0"
                     >
-            <Button Style="{StaticResource st_Window.SystemButton}"
+            <Button Style="{StaticResource st_Window.Button}"
                     RenderTransform="1,0,0,1,2,0"
                     >
                 <Button.Content>
                     <Path Data="{StaticResource g_Minimized}" 
-                          Style="{StaticResource st_Window.SystemButton.Path}"
+                          Style="{StaticResource st_Window.Common.Path}"
                           Margin="0,0,0,2"
                           />
                 </Button.Content>
@@ -144,13 +122,13 @@
                     RenderTransform="1,0,0,1,1,0"
                     >
                 <Button.Style>
-                    <Style TargetType="Button" BasedOn="{StaticResource st_Window.SystemButton}">
+                    <Style TargetType="Button" BasedOn="{StaticResource st_Window.Button}">
                         <Setter Property="Border.CornerRadius" Value="0" />
                     </Style>
                 </Button.Style>
                 <Button.Content>
                     <Path Data="{StaticResource g_Maximized}" 
-                          Style="{StaticResource st_Window.SystemButton.Path}"
+                          Style="{StaticResource st_Window.Common.Path}"
                           />
                 </Button.Content>
                 <behavior:Interaction.Triggers>
@@ -162,13 +140,13 @@
             </Button>
             <Button>
                 <Button.Style>
-                    <Style TargetType="Button" BasedOn="{StaticResource st_Window.SystemButton}">
+                    <Style TargetType="Button" BasedOn="{StaticResource st_Window.Button}">
                         <Setter Property="Border.CornerRadius" Value="0,0,3,0" />
                     </Style>
                 </Button.Style>
                 <Button.Content>
                     <Path Data="{StaticResource g_Close}" 
-                          Style="{StaticResource st_Window.SystemButton.Path}"
+                          Style="{StaticResource st_Window.Common.Path}"
                           Margin="0,0,0,2"
                           />
                 </Button.Content>
@@ -180,5 +158,72 @@
             </Button>
         </StackPanel>
 
+        <TabControl Margin="0" Padding="0" TabStripPlacement="Top"
+                    Background="{StaticResource br_Window.Background}"
+                    BorderThickness="0"
+                    >
+            <TabItem Width="180"
+                     RenderTransform="1,0,0,1,3,0"
+                     >
+                <TabItem.Header>
+                    <StackPanel Orientation="Vertical">
+                        <Path Style="{StaticResource st_Window.Common.Path}" 
+                              Height="40"
+                              Data="{StaticResource g_Import}"
+                              HorizontalAlignment="Center"
+                              />
+                        <Border Margin="0,5,0,0">
+                            <TextBlock  FontSize="18" Text="Импорт"  />
+                        </Border>
+                    </StackPanel>
+                </TabItem.Header>
+            </TabItem>
+            <TabItem Width="180"
+                     RenderTransform="1,0,0,1,2,0"
+                     >
+                <TabItem.Header>
+                    <StackPanel Orientation="Vertical">
+                        <Path Style="{StaticResource st_Window.Common.Path}" 
+                              Height="40"
+                              Data="{StaticResource g_Productivity}"
+                              HorizontalAlignment="Center"
+                              />
+                        <Border Margin="0,5,0,0">
+                            <TextBlock  FontSize="18" Text="Выработка"  />
+                        </Border>
+                    </StackPanel>
+                </TabItem.Header>
+            </TabItem>
+            <TabItem Width="180"
+                     RenderTransform="1,0,0,1,1,0"
+                     >
+                <TabItem.Header>
+                    <StackPanel Orientation="Vertical">
+                        <Path Style="{StaticResource st_Window.Common.Path}" 
+                              Height="40"
+                              Data="{StaticResource g_Employees}"
+                              HorizontalAlignment="Center"
+                              />
+                        <Border Margin="0,5,0,0">
+                            <TextBlock  FontSize="18" Text="Сотрудники"  />
+                        </Border>
+                    </StackPanel>
+                </TabItem.Header>
+            </TabItem>
+            <TabItem Width="180">
+                <TabItem.Header>
+                    <StackPanel Orientation="Vertical">
+                        <Path Style="{StaticResource st_Window.Common.Path}" 
+                              Height="40"
+                              Data="{StaticResource g_Settings}"
+                              HorizontalAlignment="Center"
+                              />
+                        <Border Margin="0,5,0,0">
+                            <TextBlock  FontSize="18" Text="Настройки"  />
+                        </Border>
+                    </StackPanel>
+                </TabItem.Header>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

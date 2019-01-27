@@ -39,22 +39,8 @@ namespace WorkSpeed.DesktopClient.Views
 
         private IntPtr WindowHook ( IntPtr hwnd, int msg, IntPtr wParam, IntPtr lPatam, ref bool handled )
         {
-            if (msg == ApiCodes.WM_SYSCOMMAND)
-            {
-                //if ( wParam.ToInt32() == ApiCodes.SC_MAXIMIZE ) {
+            if (msg == ApiCodes.WM_SYSCOMMAND) {
 
-                //    WindowStyle = WindowStyle.SingleBorderWindow;
-                //    WindowState = WindowState.Maximized;
-                //    handled = true;
-                //}
-
-                //if ( wParam.ToInt32() == ApiCodes.SC_MINIMIZE ) {
-
-                //    WindowStyle = WindowStyle.SingleBorderWindow;
-                //    WindowState = WindowState.Minimized;
-                //    handled = true;
-
-                //}
                 if (wParam.ToInt32() == ApiCodes.SC_RESTORE) {
 
                     WindowState = WindowState.Normal;
@@ -94,6 +80,13 @@ namespace WorkSpeed.DesktopClient.Views
             public const uint SC_MAXIMIZE = 0xF030;
             public const uint SC_MINIMIZE = 0xF020;
             public const uint SC_RESTORE = 0xF120;
+        }
+
+        private void M_Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if ( e.ChangedButton == MouseButton.Left ) {
+                this.DragMove();
+            }
         }
     }
 }

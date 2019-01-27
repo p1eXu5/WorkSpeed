@@ -10,14 +10,13 @@
     <Color x:Key="col_MainWindow.ForegroundAlternative">#1780ac</Color>
     <Color x:Key="col_MainWindow.ForegroundLight">#c6cdda</Color>
 
-    <SolidColorBrush x:Key="br_MainWindow.Background" Color="{StaticResource col_MainWindow.Background}" />
     <SolidColorBrush x:Key="br_MainWindow.BackgroundAlternative" Color="{StaticResource col_MainWindow.BackgroundAlternative}" />
     <SolidColorBrush x:Key="br_MainWindow.Foreground" Color="{StaticResource col_MainWindow.Foreground}" />
     <SolidColorBrush x:Key="br_MainWindow.ForegroundAlternative" Color="{StaticResource col_MainWindow.ForegroundAlternative}" />
 
     <SolidColorBrush x:Key="brd_MainWindow.ForegroundAlternative" Color="{DynamicResource col_MainWindow.ForegroundAlternative}" />
 
-    <Color x:Key="Color1">#3b3b3b</Color>
+    <Color x:Key="col_Window.Background">#ebebeb</Color>
     <Color x:Key="col_Window.Border">#6e6e6e</Color>
     <Color x:Key="col_Window.Button.Background">#cfcfcf</Color>
     <Color x:Key="col_Window.Button.Foreground">#404040</Color>
@@ -25,8 +24,13 @@
     <Color x:Key="col_Window.Button.MouseOver.Foreground">#e0e0e0</Color>
     <Color x:Key="col_Window.Button.Pressed.Background">#4a8fff</Color>
 
+    <SolidColorBrush x:Key="br_Window.Background" Color="{StaticResource col_Window.Background}" />
     <SolidColorBrush x:Key="br_Window.Border" Color="{StaticResource col_Window.Border }" />
     <SolidColorBrush x:Key="br_Window.Button.Background" Color="{DynamicResource col_Window.Button.Background }" />
     <SolidColorBrush x:Key="br_Window.Button.Foreground" Color="{DynamicResource col_Window.Button.Foreground }" />
+
+    <LinearGradientBrush x:Key="br_Window.Border.InnerShadow">
+
+    </LinearGradientBrush>
 
 </ResourceDictionary>
