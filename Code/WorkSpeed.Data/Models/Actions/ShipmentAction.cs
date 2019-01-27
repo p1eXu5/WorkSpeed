@@ -23,5 +23,4 @@ namespace WorkSpeed.Data.Models.Actions
     {
         public ShipmentActionDetail ShipmentActionDetail { get; set; }
     }
-    }
 }

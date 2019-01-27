@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Productivity
 {
@@ -34,7 +35,7 @@ namespace WorkSpeed.Productivity
         /// <param name="lastAction"></param>
         /// <param name="action"></param>
         /// <returns>TimeSpan.Zero if another shift.</returns>
-        public TimeSpan GetPauseInterval ( EmployeeAction lastAction, EmployeeAction action )
+        public TimeSpan GetPauseInterval ( EmployeeActionBase lastAction, EmployeeActionBase action )
         {
             if ( lastAction == null || lastAction.StartTime == action.StartTime ) return TimeSpan.Zero;
 

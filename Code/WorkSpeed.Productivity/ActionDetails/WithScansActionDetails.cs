@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Productivity.ActionDetails
 {
@@ -15,13 +16,13 @@ namespace WorkSpeed.Productivity.ActionDetails
             Scans = new int[ _filter.CategoryList.Count() ];
         }
 
-        public override void AddDetails ( EmployeeAction action, TimeSpan pause )
+        public override void AddDetails ( EmployeeActionBase action, TimeSpan pause )
         {
             base.AddDetails( action, pause );
 
             if ( !( action is ReceptionAction reception ) ) return;
 
-            Scans[ _filter.GetCategoryIndex( reception.Product ) ] += reception.ScanQuantity;
+            //Scans[ _filter.GetCategoryIndex( reception.Product ) ] += reception.ScanQuantity;
         }
 
         public int[] Scans { get; private set; }

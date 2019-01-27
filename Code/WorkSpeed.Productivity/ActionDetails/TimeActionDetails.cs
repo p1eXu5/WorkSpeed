@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Productivity.ActionDetails
 {
@@ -14,7 +15,7 @@ namespace WorkSpeed.Productivity.ActionDetails
         /// </summary>
         /// <param name="action"><see cref="EmployeeAction"/></param>
         /// <param name="pause">Pause between actions</param>
-        public virtual void AddDetails ( EmployeeAction action, TimeSpan pause )
+        public virtual void AddDetails ( EmployeeActionBase action, TimeSpan pause )
         {
             if ( action == null ) throw new ArgumentNullException( nameof( action ), "EmployeeActiuon cannot be null." );
 

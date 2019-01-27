@@ -1,57 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WorkSpeed.FileModels;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
+//using WorkSpeed.FileModels;
 
-namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
-{
-    public class ActionsImportStageViewModel : ImportStageViewModel
-    {
-        public ActionsImportStageViewModel ( IFastProductivityViewModel fastProductivityViewModel, int stageNum )
-            : base( fastProductivityViewModel, stageNum )
-        {
-            IsInProgress = false;
-        }
+//namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
+//{
+//    public class ActionsImportStageViewModel : ImportStageViewModel
+//    {
+//        public ActionsImportStageViewModel ( IFastProductivityViewModel fastProductivityViewModel, int stageNum )
+//            : base( fastProductivityViewModel, stageNum )
+//        {
+//            IsInProgress = false;
+//        }
 
-        public override string Header { get; } = "Действия сотрудников. Импорт.";
+//        public override string Header { get; } = "Действия сотрудников. Импорт.";
 
-        protected override async void Open ( object obj )
-        {
-            var fileName = base.OpenExcelFile();
+//        protected override async void Open ( object obj )
+//        {
+//            var fileName = base.OpenExcelFile();
 
-            if ( String.IsNullOrWhiteSpace( fileName ) ) return;
+//            if ( String.IsNullOrWhiteSpace( fileName ) ) return;
 
-            FileName = fileName;
+//            FileName = fileName;
 
-            IsInProgress = true;
-            ProgressCounter = 0;
-            Message = "Загрузка...";
+//            IsInProgress = true;
+//            ProgressCounter = 0;
+//            Message = "Загрузка...";
 
-            var actionsLastCount = Warehouse.GetGatheringActions().Count();
+//            var actionsLastCount = Warehouse.GetGatheringActions().Count();
 
-            var cancellationToken = GetCancellationToken();
+//            var cancellationToken = GetCancellationToken();
 
-            bool areActionsAdded = await Warehouse.ImportAsync< GatheringImportModel >( fileName, cancellationToken, Progress );
+//            bool areActionsAdded = await Warehouse.ImportAsync< GatheringImportModel >( fileName, cancellationToken, Progress );
 
-            if ( areActionsAdded )
-            {
+//            if ( areActionsAdded )
+//            {
 
-                Message = $"Добавлено { Warehouse.GetGatheringActions().Count() - actionsLastCount } действий сотрудников";
-                UpdateCanForward();
-            }
-            else
-            {
+//                Message = $"Добавлено { Warehouse.GetGatheringActions().Count() - actionsLastCount } действий сотрудников";
+//                UpdateCanForward();
+//            }
+//            else
+//            {
 
-                IsInProgress = false;
-                Message = "Файл не содержит действий сотрудников.";
-            }
-        }
+//                IsInProgress = false;
+//                Message = "Файл не содержит действий сотрудников.";
+//            }
+//        }
 
-        protected override bool CanForward ( object obj )
-        {
-            return Warehouse.GetGatheringActions().Any();
-        }
-    }
-}
+//        protected override bool CanForward ( object obj )
+//        {
+//            return Warehouse.GetGatheringActions().Any();
+//        }
+//    }
+//}

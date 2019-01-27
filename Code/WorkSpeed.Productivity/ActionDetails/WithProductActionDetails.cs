@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WorkSpeed.Data;
 using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Productivity.ActionDetails
 {
@@ -25,21 +26,21 @@ namespace WorkSpeed.Productivity.ActionDetails
             Quantity = new int[ categoryCount ];
         }
 
-        public override void AddDetails ( EmployeeAction action, TimeSpan pause )
+        public override void AddDetails ( EmployeeActionBase action, TimeSpan pause )
         {
             base.AddDetails( action, pause );
 
-            if ( !(action is WithProductAction withProductAction) ) return;
+            //if ( !(action is WithProductAction withProductAction) ) return;
 
-            var product = withProductAction.Product;
-            var category = _filter.GetCategoryIndex( product );
+            //var product = withProductAction.Product;
+            //var category = _filter.GetCategoryIndex( product );
 
-            if ( category < 0) return;
+            //if ( category < 0) return;
 
-            Weight[ category ] += product.Weight * withProductAction.ProductQuantity;
-            Volume[ category ] += product.GetVolume() * withProductAction.ProductQuantity;
-            Quantity[ category ] += withProductAction.ProductQuantity;
-            Lines[ category ]++;
+            //Weight[ category ] += product.Weight * withProductAction.ProductQuantity;
+            //Volume[ category ] += product.GetVolume() * withProductAction.ProductQuantity;
+            //Quantity[ category ] += withProductAction.ProductQuantity;
+            //Lines[ category ]++;
         }
 
         public double[] Weight { get; private set; }

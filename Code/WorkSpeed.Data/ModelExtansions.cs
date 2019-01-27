@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Data
 {
@@ -14,7 +11,7 @@ namespace WorkSpeed.Data
         /// </summary>
         /// <param name="employeeAction"></param>
         /// <returns></returns>
-        public static bool IsGatheringOperation ( this EmployeeAction employeeAction )
+        public static bool IsGatheringOperation ( this EmployeeActionBase employeeAction )
         {
             var operationGroup = employeeAction?.Operation?.Group?.Name ?? throw new ArgumentNullException();
 
@@ -41,7 +38,7 @@ namespace WorkSpeed.Data
         /// </summary>
         /// <param name="employeeAction"></param>
         /// <returns></returns>
-        public static bool IsShipmentOperation ( this EmployeeAction employeeAction )
+        public static bool IsShipmentOperation ( this EmployeeActionBase employeeAction )
         {
             var operationGroup = employeeAction?.Operation?.Group?.Name ?? throw new ArgumentNullException();
 
@@ -60,7 +57,7 @@ namespace WorkSpeed.Data
         /// </summary>
         /// <param name="employeeAction"></param>
         /// <returns></returns>
-        public static OperationGroups GetOperationGroup ( this EmployeeAction employeeAction )
+        public static OperationGroups GetOperationGroup ( this EmployeeActionBase employeeAction )
         {
             return employeeAction?.Operation?.Group?.Name ?? throw new ArgumentNullException();
         }
@@ -82,7 +79,7 @@ namespace WorkSpeed.Data
         /// </summary>
         /// <param name="employeeAction"></param>
         /// <returns></returns>
-        public static DateTime EndTime ( this EmployeeAction employeeAction )
+        public static DateTime EndTime ( this EmployeeActionBase employeeAction )
         {
             if ( employeeAction == null ) throw new ArgumentNullException( nameof( employeeAction ), "EmployeeAction cannot be null." );
 

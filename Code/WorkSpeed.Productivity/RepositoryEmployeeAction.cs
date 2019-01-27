@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using WorkSpeed.Data;
 using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 using WorkSpeed.Productivity.ActionDetails;
 
 namespace WorkSpeed.Productivity
@@ -18,7 +19,7 @@ namespace WorkSpeed.Productivity
         private readonly TimeSpan _pauseThreshold;
         private readonly Queue< TimeSpan > _pauses;
 
-        private EmployeeAction _lastAction;
+        private EmployeeActionBase _lastAction;
         private TimeActionDetails[] _actions;
 
 
@@ -39,7 +40,7 @@ namespace WorkSpeed.Productivity
         /// 
         /// </summary>
         /// <param name="action"></param>
-        public void AddAction ( EmployeeAction action )
+        public void AddAction ( EmployeeActionBase action )
         {
             if ( _lastAction != null ) {
 
@@ -61,7 +62,7 @@ namespace WorkSpeed.Productivity
             if ( pause > _pauseThreshold ) {
 
                 // OffTime
-                _actions[ _actions.Length - 1 ].AddDetails( new EmployeeAction(), pause - _pauseThreshold );
+                //_actions[ _actions.Length - 1 ].AddDetails( new EmployeeActionBase(), pause - _pauseThreshold );
                 pause = _pauseThreshold;
             }
 
@@ -282,7 +283,7 @@ namespace WorkSpeed.Productivity
         /// </summary>
         /// <param name="action"></param>
         [ MethodImpl( MethodImplOptions.AggressiveInlining ) ]
-        private void UpdateLastAction ( EmployeeAction action )
+        private void UpdateLastAction ( EmployeeActionBase action )
         {
             _lastAction = action;
         }

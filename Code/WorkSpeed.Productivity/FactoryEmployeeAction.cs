@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Productivity
 {
@@ -39,7 +40,7 @@ namespace WorkSpeed.Productivity
         /// 
         /// </summary>
         /// <param name="action"></param>
-        public void AddAction ( EmployeeAction action )
+        public void AddAction ( EmployeeActionBase action )
         {
             if ( !_actionRepositories.ContainsKey( action.Employee.Id ) ) {
                 _actionRepositories[ action.Employee.Id ] = new RepositoryEmployeeAction( PauseBetweenActions, CategoryFilter, _pauseThreshold );

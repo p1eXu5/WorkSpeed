@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Data.BusinessContexts
 {
@@ -16,9 +17,9 @@ namespace WorkSpeed.Data.BusinessContexts
         IEnumerable< Product > GetProducts();
         void AddProduct ( Product product );
 
-        IEnumerable< GatheringAction > GetGatheringActions ();
-        IEnumerable<GatheringAction> GetGatheringActions ( Employee employee );
-        void AddGatheringAction ( GatheringAction gatheringAction );
+        IEnumerable< DoubleAddressAction > GetGatheringActions ();
+        IEnumerable< DoubleAddressAction > GetGatheringActions ( Employee employee );
+        void AddGatheringAction ( DoubleAddressAction gatheringAction );
 
         IEnumerable< Employee > GetEmployees ();
         void AddEmployee ( Employee employee );

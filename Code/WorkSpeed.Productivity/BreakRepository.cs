@@ -51,65 +51,67 @@ namespace WorkSpeed.Productivity
         /// <returns></returns>
         public List<DayPeriod> GetDayPeriods ( ShortBreakSchedule shortBreak )
         {
-            if ( shortBreak == null ) throw new ArgumentNullException( nameof( shortBreak ), "ShortBreak cannot be null" );
+            //if ( shortBreak == null ) throw new ArgumentNullException( nameof( shortBreak ), "ShortBreak cannot be null" );
 
-            // Check duration
-            if ( shortBreak.Duration < ShortBreakDownLimit || shortBreak.Duration > ShortBreakUpLimit )
-                throw new ArgumentException();
+            //// Check duration
+            //if ( shortBreak.Duration < ShortBreakDownLimit || shortBreak.Duration > ShortBreakUpLimit )
+            //    throw new ArgumentException();
 
-            // Check interval
-            var interval = shortBreak.Periodicity - shortBreak.Duration;
+            //// Check interval
+            //var interval = shortBreak.Periodicity - shortBreak.Duration;
 
-            if ( interval < ShortBreakIntervalDownLimit || interval > ShortBreakIntervalUpLimit )
-                throw new ArgumentException();
+            //if ( interval < ShortBreakIntervalDownLimit || interval > ShortBreakIntervalUpLimit )
+            //    throw new ArgumentException();
 
-            var offset = shortBreak.DayOffsetTime;
+            //var offset = shortBreak.DayOffsetTime;
 
-            if ( offset < TimeSpan.Zero || offset >= TimeSpan.FromDays( 1 ) )
-                throw new ArgumentException();
+            //if ( offset < TimeSpan.Zero || offset >= TimeSpan.FromDays( 1 ) )
+            //    throw new ArgumentException();
 
-            var dayPeriodList = new List<DayPeriod>();
+            //var dayPeriodList = new List<DayPeriod>();
 
-            TimeSpan start;
-            TimeSpan end = offset;
-            DayPeriod dayPeriod;
+            //TimeSpan start;
+            //TimeSpan end = offset;
+            //DayPeriod dayPeriod;
 
-            do
-            {
-                start = end + interval;
-                end += interval + shortBreak.Duration;
+            //do
+            //{
+            //    start = end + interval;
+            //    end += interval + shortBreak.Duration;
 
-                if ( end < TimeSpan.FromDays( 1 ) )
-                {
-                    dayPeriod = new DayPeriod( start, end );
-                    dayPeriodList.Add( dayPeriod );
-                }
+            //    if ( end < TimeSpan.FromDays( 1 ) )
+            //    {
+            //        dayPeriod = new DayPeriod( start, end );
+            //        dayPeriodList.Add( dayPeriod );
+            //    }
 
-            } while ( end < TimeSpan.FromDays( 1 ) );
+            //} while ( end < TimeSpan.FromDays( 1 ) );
 
 
-            if ( end > TimeSpan.FromDays( 1 ) )
-            {
+            //if ( end > TimeSpan.FromDays( 1 ) )
+            //{
 
-                end = end - TimeSpan.FromDays( 1 );
-                dayPeriod = new DayPeriod( start, end );
-                dayPeriodList.Add( dayPeriod );
-            }
+            //    end = end - TimeSpan.FromDays( 1 );
+            //    dayPeriod = new DayPeriod( start, end );
+            //    dayPeriodList.Add( dayPeriod );
+            //}
 
-            var lastEnd = end;
-            end = offset;
-            start = end - shortBreak.Duration;
+            //var lastEnd = end;
+            //end = offset;
+            //start = end - shortBreak.Duration;
 
-            while ( start > lastEnd )
-            {
+            //while ( start > lastEnd )
+            //{
 
-                dayPeriod = new DayPeriod( start, end );
-                dayPeriodList.Add( dayPeriod );
-                end = start - interval;
-                start = end - shortBreak.Duration;
-            }
+            //    dayPeriod = new DayPeriod( start, end );
+            //    dayPeriodList.Add( dayPeriod );
+            //    end = start - interval;
+            //    start = end - shortBreak.Duration;
+            //}
 
-            return dayPeriodList;
+            //return dayPeriodList;
+
+            return null;
         }
 
         /// <summary>

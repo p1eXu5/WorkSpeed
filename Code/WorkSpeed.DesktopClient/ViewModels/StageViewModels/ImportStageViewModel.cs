@@ -1,121 +1,121 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Microsoft.Win32;
-using WorkSpeed.Interfaces;
-using WorkSpeed.MvvmBaseLibrary;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading;
+//using System.Threading.Tasks;
+//using System.Windows.Input;
+//using Microsoft.Win32;
+//using WorkSpeed.Interfaces;
+//using WorkSpeed.MvvmBaseLibrary;
 
-namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
-{
-    public abstract class ImportStageViewModel : StageViewModel
-    {
-        #region Fields
+//namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
+//{
+//    public abstract class ImportStageViewModel : StageViewModel
+//    {
+//        #region Fields
 
-        private bool _isInProgress;
-        private string _fileName;
-        private double _progressCounter;
+//        private bool _isInProgress;
+//        private string _fileName;
+//        private double _progressCounter;
         
 
-        protected CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
-        protected Progress< double > Progress;
+//        protected CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
+//        protected Progress< double > Progress;
 
-        #endregion
-
-
-        #region Ctor
-
-        protected ImportStageViewModel ( IFastProductivityViewModel fastProductivityViewModel, int stageNum ) 
-            : base( fastProductivityViewModel, stageNum )
-        {
-            OpenCommand = new MvvmCommand( Open );
-            _message = "Выберите файл, нажав на кнопку выше.";
-
-            Progress = new Progress<double>( ( d ) => ProgressCounter += d );
-        }
-
-        #endregion
+//        #endregion
 
 
-        #region Properties
+//        #region Ctor
+
+//        protected ImportStageViewModel ( IFastProductivityViewModel fastProductivityViewModel, int stageNum ) 
+//            : base( fastProductivityViewModel, stageNum )
+//        {
+//            OpenCommand = new MvvmCommand( Open );
+//            _message = "Выберите файл, нажав на кнопку выше.";
+
+//            Progress = new Progress<double>( ( d ) => ProgressCounter += d );
+//        }
+
+//        #endregion
+
+
+//        #region Properties
 
         
 
-        public string FileName
-        {
-            get => _fileName;
-            set {
-                _fileName = value;
-                OnPropertyChanged();
-            }
-        }
+//        public string FileName
+//        {
+//            get => _fileName;
+//            set {
+//                _fileName = value;
+//                OnPropertyChanged();
+//            }
+//        }
 
-        public bool IsInProgress
-        {
-            get => _isInProgress;
-            set {
-                _isInProgress = value;
-                OnPropertyChanged();
-            }
-        }
+//        public bool IsInProgress
+//        {
+//            get => _isInProgress;
+//            set {
+//                _isInProgress = value;
+//                OnPropertyChanged();
+//            }
+//        }
 
-        public double ProgressCounter
-        {
-            get => _progressCounter;
-            set {
-                _progressCounter = value;
-                OnPropertyChanged();
-            }
-        }
+//        public double ProgressCounter
+//        {
+//            get => _progressCounter;
+//            set {
+//                _progressCounter = value;
+//                OnPropertyChanged();
+//            }
+//        }
 
-        #endregion
-
-
-        #region Commands
-
-        public ICommand OpenCommand { get; }
-
-        #endregion
+//        #endregion
 
 
-        #region Methods
+//        #region Commands
 
-        protected abstract void Open ( object obj );            
+//        public ICommand OpenCommand { get; }
 
-        protected string OpenExcelFile ()
-        {
-            var ofd = new OpenFileDialog
-            {
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer),
-                Filter = "Excel Files|*.xls;*.xlsx",
-                RestoreDirectory = true,
-            };
+//        #endregion
 
-            if ( ofd.ShowDialog() == true ) {
 
-                return ofd.FileName;
-            }
+//        #region Methods
 
-            return null;
-        }
+//        protected abstract void Open ( object obj );            
 
-        protected CancellationToken GetCancellationToken ()
-        {
-            CancellationTokenSource.Cancel();
-            CancellationTokenSource = new CancellationTokenSource();
+//        protected string OpenExcelFile ()
+//        {
+//            var ofd = new OpenFileDialog
+//            {
+//                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer),
+//                Filter = "Excel Files|*.xls;*.xlsx",
+//                RestoreDirectory = true,
+//            };
 
-            return CancellationTokenSource.Token;
-        }
+//            if ( ofd.ShowDialog() == true ) {
 
-        protected override void Backward ( object obj )
-        {
-            CancellationTokenSource.Cancel();
-            base.Backward( null );
-        }
+//                return ofd.FileName;
+//            }
 
-        #endregion
-    }
-}
+//            return null;
+//        }
+
+//        protected CancellationToken GetCancellationToken ()
+//        {
+//            CancellationTokenSource.Cancel();
+//            CancellationTokenSource = new CancellationTokenSource();
+
+//            return CancellationTokenSource.Token;
+//        }
+
+//        protected override void Backward ( object obj )
+//        {
+//            CancellationTokenSource.Cancel();
+//            base.Backward( null );
+//        }
+
+//        #endregion
+//    }
+//}

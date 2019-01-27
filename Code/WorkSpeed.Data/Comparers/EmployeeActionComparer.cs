@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Data.Comparers
 {
     public class EmployeeActionComparer<T> : IComparer<T>
-        where T : EmployeeAction
+        where T : EmployeeActionBase
     {
         public int Compare (T x, T y)
         {

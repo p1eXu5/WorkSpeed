@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WorkSpeed.Data.DataContexts;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Data.BusinessContexts
 {
@@ -41,8 +42,6 @@ namespace WorkSpeed.Data.BusinessContexts
         {
             throw new NotImplementedException();
         }
-
-        public ReadOnlyObservableCollection< GatheringAction > GatheringActions { get; }
 
         #region IDisposable
 

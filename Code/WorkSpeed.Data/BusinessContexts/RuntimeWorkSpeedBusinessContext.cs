@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Data.BusinessContexts
 {
@@ -14,7 +15,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
         private readonly List< Product > _products = new List< Product >( 40_000 );
         private readonly List< Employee > _employees = new List< Employee >();
-        private readonly List< GatheringAction > _gatheringActions = new List< GatheringAction >();
+        private readonly List< DoubleAddressAction > _gatheringActions = new List< DoubleAddressAction >();
         private readonly List< OperationGroup > _operationGroups = new List< OperationGroup >();
         private readonly List< Operation > _operations = new List< Operation >();
         private readonly List< Appointment > _appointments = new List< Appointment >();
@@ -486,7 +487,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Duration = TimeSpan.FromMinutes( 10 ),
                     Periodicity = TimeSpan.FromHours( 2 ),
                     IsForSmokers = false,
-                    DayOffsetTime = new TimeSpan( 8, 5, 0 )
+
                 },
                 new ShortBreakSchedule {
                     Id = 2,
@@ -494,7 +495,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Duration = TimeSpan.FromMinutes( 5 ),
                     Periodicity = TimeSpan.FromHours( 1 ),
                     IsForSmokers = true,
-                    DayOffsetTime = new TimeSpan( 8, 0, 0 )
+
                 },
             } );
         }
@@ -520,22 +521,21 @@ namespace WorkSpeed.Data.BusinessContexts
             }
         }
 
-        public IEnumerable< GatheringAction > GetGatheringActions () => _gatheringActions.OrderBy( a => a.StartTime );
+        public IEnumerable<DoubleAddressAction> GetGatheringActions () => _gatheringActions.OrderBy( a => a.StartTime );
 
-        public IEnumerable< GatheringAction > GetGatheringActions ( Employee employee )
+        public IEnumerable<DoubleAddressAction> GetGatheringActions ( Employee employee )
         {
             if ( employee == null ) throw new ArgumentNullException();
 
             return _gatheringActions.Where( a => a.Employee.Id == employee.Id ).OrderBy( a => a.StartTime );
         }
 
-        public void AddGatheringAction ( GatheringAction gatheringAction )
+        public void AddGatheringAction (DoubleAddressAction gatheringAction )
         {
             if ( gatheringAction == null
                  || gatheringAction.Operation == null
                  || String.IsNullOrEmpty( gatheringAction.Operation.Name )
                  || _gatheringActions.Contains( gatheringAction )
-                 || gatheringAction.Product == null
                  || gatheringAction.Employee == null) {
 
                 return;
@@ -547,21 +547,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
             var operation = _operations.FirstOrDefault( o => o.Name.Equals( gatheringAction.Operation.Name ) );
             if (operation == null) return;
-            gatheringAction.Operation = operation;
-
-            var product = _products.FirstOrDefault( p => p.Id == gatheringAction.Product.Id ) ?? gatheringAction.Product;
-
-            if ( product.Parent == null ) {
-
-                product.Parent = _products.FirstOrDefault( p => p.Id == gatheringAction.Product.Parent.Id ) ?? gatheringAction.Product.Parent;
-
-                if ( product.Parent.Parent == null ) {
-
-                    product.Parent.Parent = _products.FirstOrDefault( p => p.Id == gatheringAction.Product.Parent.Parent.Id ) ?? gatheringAction.Product.Parent;
-                }
-            }
-
-            gatheringAction.Product = product;
+            gatheringAction.Operation = operation;;
 
             _gatheringActions.Add( gatheringAction );
         }

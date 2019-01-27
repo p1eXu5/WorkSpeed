@@ -1,138 +1,138 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using Helpers;
-using NpoiExcel;
-using WorkSpeed.Data.BusinessContexts;
-using WorkSpeed.DesktopClient.ViewModels.StageViewModels;
-using WorkSpeed.Interfaces;
-using WorkSpeed.MvvmBaseLibrary;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading;
+//using System.Threading.Tasks;
+//using System.Windows;
+//using Helpers;
+//using NpoiExcel;
+//using WorkSpeed.Data.BusinessContexts;
+//using WorkSpeed.DesktopClient.ViewModels.StageViewModels;
+//using WorkSpeed.Interfaces;
+//using WorkSpeed.MvvmBaseLibrary;
 
-namespace WorkSpeed.DesktopClient.ViewModels
-{
-    public class FastProductivityViewModel : ViewModel, IFastProductivityViewModel
-    {
-        #region Fields
+//namespace WorkSpeed.DesktopClient.ViewModels
+//{
+//    public class FastProductivityViewModel : ViewModel, IFastProductivityViewModel
+//    {
+//        #region Fields
 
-        private readonly TwoDirectionQueue<Func<IStageViewModel>> _stageQueue;
-        private IStageViewModel _stageViewModel;
-        private IStageViewModel _stageViewModel2;
-        private readonly IWarehouse _warehouse;
+//        private readonly TwoDirectionQueue<Func<IStageViewModel>> _stageQueue;
+//        private IStageViewModel _stageViewModel;
+//        private IStageViewModel _stageViewModel2;
+//        private readonly IWarehouse _warehouse;
 
-        private int _stageIndex;
+//        private int _stageIndex;
 
-        #endregion
-
-
-        #region Ctor
-
-        public FastProductivityViewModel ( IWarehouse warehouse )
-        {
-            _warehouse = warehouse ?? throw new ArgumentNullException( nameof( warehouse ), @"IWarehouse cannot be null" );
-
-            _stageQueue = new TwoDirectionQueue< Func< IStageViewModel >>();
-
-            _stageQueue.Enqueue( () => new ShiftSetupStageViewModel( this, 0 ) );
-            _stageQueue.Enqueue( () => new CategoriesThresholdStageViewModel( this, 1 ) );
-            _stageQueue.Enqueue( () => new ProductsImportStageViewModel( this, 2 ) );
-            _stageQueue.Enqueue( () => new EmployeesImportStageViewModel( this, 3 ) );
-            _stageQueue.Enqueue( () => new CheckEmployeesStageViewModel( this, 4 ) );
-            _stageQueue.Enqueue( () => new ActionsImportStageViewModel( this, 5 ) );
-            _stageQueue.Enqueue( () => new ProductivityStageViewModel( this, 6 ) );
-
-            SetStageViewModel( GetNextStageViewModel( _stageQueue ) );
-        }
-
-        #endregion
+//        #endregion
 
 
-        #region Properties
+//        #region Ctor
 
-        public IWarehouse Warehouse => _warehouse;
+//        public FastProductivityViewModel ( IWarehouse warehouse )
+//        {
+//            _warehouse = warehouse ?? throw new ArgumentNullException( nameof( warehouse ), @"IWarehouse cannot be null" );
 
-        public IStageViewModel StageViewModel
-        {
-            get => _stageViewModel;
-            set {
-                _stageViewModel = value;
-                if ( _stageViewModel != null ) StageIndex = _stageViewModel.StageNum;
-                OnPropertyChanged();
-            }
-        }
+//            _stageQueue = new TwoDirectionQueue< Func< IStageViewModel >>();
 
-        public IStageViewModel StageViewModel2
-        {
-            get => _stageViewModel2;
-            set {
-                _stageViewModel2 = value;
-                if ( _stageViewModel2 != null ) StageIndex = _stageViewModel2.StageNum;
-                OnPropertyChanged();
-            }
-        }
+//            _stageQueue.Enqueue( () => new ShiftSetupStageViewModel( this, 0 ) );
+//            _stageQueue.Enqueue( () => new CategoriesThresholdStageViewModel( this, 1 ) );
+//            _stageQueue.Enqueue( () => new ProductsImportStageViewModel( this, 2 ) );
+//            _stageQueue.Enqueue( () => new EmployeesImportStageViewModel( this, 3 ) );
+//            _stageQueue.Enqueue( () => new CheckEmployeesStageViewModel( this, 4 ) );
+//            _stageQueue.Enqueue( () => new ActionsImportStageViewModel( this, 5 ) );
+//            _stageQueue.Enqueue( () => new ProductivityStageViewModel( this, 6 ) );
 
-        public int StageIndex
-        {
-            get => _stageIndex;
-            set {
-                _stageIndex = value;
-                OnPropertyChanged();
-            }
-        }
+//            SetStageViewModel( GetNextStageViewModel( _stageQueue ) );
+//        }
 
-        #endregion
+//        #endregion
 
 
-        #region Methods
+//        #region Properties
 
-        public bool CheckStage ( IStageViewModel stageViewModel )
-        {
-            throw new NotImplementedException();
-        }
+//        public IWarehouse Warehouse => _warehouse;
 
-        private void SetStageViewModel ( IStageViewModel newStageViewModel )
-        {
-            if ( newStageViewModel.StageNum % 2 == 0 ) {
+//        public IStageViewModel StageViewModel
+//        {
+//            get => _stageViewModel;
+//            set {
+//                _stageViewModel = value;
+//                if ( _stageViewModel != null ) StageIndex = _stageViewModel.StageNum;
+//                OnPropertyChanged();
+//            }
+//        }
 
-                StageViewModel = newStageViewModel;
-            }
-            else {
-                StageViewModel2 = newStageViewModel;
-            }
-        }
+//        public IStageViewModel StageViewModel2
+//        {
+//            get => _stageViewModel2;
+//            set {
+//                _stageViewModel2 = value;
+//                if ( _stageViewModel2 != null ) StageIndex = _stageViewModel2.StageNum;
+//                OnPropertyChanged();
+//            }
+//        }
 
-        private IStageViewModel GetNextStageViewModel ( TwoDirectionQueue< Func<IStageViewModel>> queue )
-        {
-            var stageViewModel = queue.Dequeue()();
+//        public int StageIndex
+//        {
+//            get => _stageIndex;
+//            set {
+//                _stageIndex = value;
+//                OnPropertyChanged();
+//            }
+//        }
 
-            stageViewModel.MoveRequested += OnMoveRequestedEventHandler;
-            return stageViewModel;
+//        #endregion
 
-        }
 
-        private void OnMoveRequestedEventHandler ( object sender, MoveRequestedEventArgs args )
-        {
-            var stageViewModel = (sender as IStageViewModel) ?? throw new ArgumentException();
-            stageViewModel.MoveRequested -= OnMoveRequestedEventHandler;
+//        #region Methods
 
-            if ( sender.GetType() == typeof( ProductsImportStageViewModel ) ) {
+//        public bool CheckStage ( IStageViewModel stageViewModel )
+//        {
+//            throw new NotImplementedException();
+//        }
 
-                if ( args.Direction < 0 ) {
-                    Exit( null );
-                }
-            }
+//        private void SetStageViewModel ( IStageViewModel newStageViewModel )
+//        {
+//            if ( newStageViewModel.StageNum % 2 == 0 ) {
 
-            SetStageViewModel( GetNextStageViewModel( _stageQueue ) );
-        }
+//                StageViewModel = newStageViewModel;
+//            }
+//            else {
+//                StageViewModel2 = newStageViewModel;
+//            }
+//        }
 
-        private void Exit ( object obj )
-        {
-            Application.Current.Shutdown();
-        }
+//        private IStageViewModel GetNextStageViewModel ( TwoDirectionQueue< Func<IStageViewModel>> queue )
+//        {
+//            var stageViewModel = queue.Dequeue()();
 
-        #endregion
-    }
-}
+//            stageViewModel.MoveRequested += OnMoveRequestedEventHandler;
+//            return stageViewModel;
+
+//        }
+
+//        private void OnMoveRequestedEventHandler ( object sender, MoveRequestedEventArgs args )
+//        {
+//            var stageViewModel = (sender as IStageViewModel) ?? throw new ArgumentException();
+//            stageViewModel.MoveRequested -= OnMoveRequestedEventHandler;
+
+//            if ( sender.GetType() == typeof( ProductsImportStageViewModel ) ) {
+
+//                if ( args.Direction < 0 ) {
+//                    Exit( null );
+//                }
+//            }
+
+//            SetStageViewModel( GetNextStageViewModel( _stageQueue ) );
+//        }
+
+//        private void Exit ( object obj )
+//        {
+//            Application.Current.Shutdown();
+//        }
+
+//        #endregion
+//    }
+//}

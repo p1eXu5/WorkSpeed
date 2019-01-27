@@ -1,67 +1,67 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using WorkSpeed.DesktopClient.ViewModels.EntityViewModels;
-using WorkSpeed.ProductivityCalculator;
-using WorkSpeed.MvvmBaseLibrary;
-using WorkSpeed.Productivity;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Collections.ObjectModel;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
+//using System.Windows.Input;
+//using WorkSpeed.DesktopClient.ViewModels.EntityViewModels;
+//using WorkSpeed.ProductivityCalculator;
+//using WorkSpeed.MvvmBaseLibrary;
+//using WorkSpeed.Productivity;
 
-namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
-{
-    public class ProductivityStageViewModel : StageViewModel
-    {
-        private readonly ObservableCollection< ProductivityViewModel > _productivities;
-        private IProgress< ProductivityEmployee > _progress;
-        private double _progressCounter;
-        private double _progressStep;
+//namespace WorkSpeed.DesktopClient.ViewModels.StageViewModels
+//{
+//    public class ProductivityStageViewModel : StageViewModel
+//    {
+//        private readonly ObservableCollection< ProductivityViewModel > _productivities;
+//        private IProgress< ProductivityEmployee > _progress;
+//        private double _progressCounter;
+//        private double _progressStep;
 
 
-        public ProductivityStageViewModel ( IFastProductivityViewModel fastProductivityViewModel, int stageNum )
-            : base( fastProductivityViewModel, stageNum )
-        {
-            _productivities = new ObservableCollection< ProductivityViewModel >();
-            Productivities = new ReadOnlyObservableCollection< ProductivityViewModel >( _productivities );
+//        public ProductivityStageViewModel ( IFastProductivityViewModel fastProductivityViewModel, int stageNum )
+//            : base( fastProductivityViewModel, stageNum )
+//        {
+//            _productivities = new ObservableCollection< ProductivityViewModel >();
+//            Productivities = new ReadOnlyObservableCollection< ProductivityViewModel >( _productivities );
 
-            _progress = new Progress< ProductivityEmployee >( OnProgress );
-        }
+//            _progress = new Progress< ProductivityEmployee >( OnProgress );
+//        }
 
-        public override string Header { get; } = "Выработка.";
+//        public override string Header { get; } = "Выработка.";
 
-        public ReadOnlyObservableCollection< ProductivityViewModel > Productivities { get; }
+//        public ReadOnlyObservableCollection< ProductivityViewModel > Productivities { get; }
 
-        public double ProgressCounter
-        {
-            get => _progressCounter;
-            set {
-                _progressCounter = value;
-                OnPropertyChanged();
-            }
-        }
+//        public double ProgressCounter
+//        {
+//            get => _progressCounter;
+//            set {
+//                _progressCounter = value;
+//                OnPropertyChanged();
+//            }
+//        }
 
-        public ICommand GenerateCommand => new MvvmCommand( Generate );
+//        public ICommand GenerateCommand => new MvvmCommand( Generate );
 
-        private async void Generate ( object obj )
-        {
-            _progressCounter = 0.0;
+//        private async void Generate ( object obj )
+//        {
+//            _progressCounter = 0.0;
 
-            var employeeCount = Warehouse.GetGatheringActions().Select( a => a.Employee ).Distinct().Count();
+//            var employeeCount = Warehouse.GetGatheringActions().Select( a => a.Employee ).Distinct().Count();
 
-            if (employeeCount == 0) return;
+//            if (employeeCount == 0) return;
 
-            _progressStep = 1.0 / employeeCount;
+//            _progressStep = 1.0 / employeeCount;
 
-            await Warehouse.GetProductivitiesAsync( _progress );
-        }
+//            await Warehouse.GetProductivitiesAsync( _progress );
+//        }
 
-        private void OnProgress ( ProductivityEmployee productivity )
-        {
-            ProgressCounter = _progressCounter + _progressStep;
+//        private void OnProgress ( ProductivityEmployee productivity )
+//        {
+//            ProgressCounter = _progressCounter + _progressStep;
 
-            _productivities.Add( new ProductivityViewModel( productivity ) );
-        }
-    }
-}
+//            _productivities.Add( new ProductivityViewModel( productivity ) );
+//        }
+//    }
+//}
