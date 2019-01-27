@@ -6,42 +6,52 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkSpeed.DesktopClient"
         xmlns:views="clr-namespace:WorkSpeed.DesktopClient.Views"
-        xmlns:behaviour="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:behavior="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <behaviour:Interaction.Triggers>
-        <behaviour:EventTrigger EventName="Loaded" SourceObject="{Binding ElementName=m_Window}">
-            <behaviour:InvokeCommandAction Command="{Binding LoadedCommand}" />
-        </behaviour:EventTrigger>
-    </behaviour:Interaction.Triggers>
-    <DockPanel>
+        Title="MainWindow" Height="450" Width="800"
+        WindowStyle="None"
+        >
 
-        <Menu DockPanel.Dock="Top">
-            <MenuItem>
-                <MenuItem.Header>
-                    <Border>
-                        <TextBlock Text="File" />
-                    </Border>
-                </MenuItem.Header>
-            </MenuItem>
-        </Menu>
+    <behavior:Interaction.Triggers>
+        <behavior:EventTrigger EventName="Loaded" SourceObject="{Binding ElementName=m_Window}">
+            <behavior:InvokeCommandAction Command="{Binding LoadedCommand}" />
+        </behavior:EventTrigger>
+    </behavior:Interaction.Triggers>
 
-        <StatusBar DockPanel.Dock="Bottom" Height="24">
-            <Border>
-                <TextBlock Text="{Binding StatusBarText}" />
-            </Border>
-        </StatusBar>
+    <Grid>
+        <StackPanel HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal"
+                    >
+            <Button Style="{x:Null}">
+                <Button.Content>
+                    <Path Data="{StaticResource g_Minimized}" Stroke="Black" Fill="Black" 
+                          VerticalAlignment="Bottom"
+                          />
+                </Button.Content>
+                <behavior:Interaction.Triggers>
+                    <behavior:EventTrigger EventName="Click">
+                        <behavior:CallMethodAction TargetObject="{Binding ElementName=m_Window}" 
+                                                   MethodName="Minimize" />
+                    </behavior:EventTrigger>
+                </behavior:Interaction.Triggers>
+            </Button>
+            <Button>
+                <behavior:Interaction.Triggers>
+                    <behavior:EventTrigger EventName="Click">
+                        <behavior:CallMethodAction TargetObject="{Binding ElementName=m_Window}" 
+                                                   MethodName="MaximizeTrigger" />
+                    </behavior:EventTrigger>
+                </behavior:Interaction.Triggers>
+            </Button>
+            <Button>
+                <behavior:Interaction.Triggers>
+                    <behavior:EventTrigger EventName="Click">
+                        <behavior:CallMethodAction TargetObject="{Binding ElementName=m_Window}" MethodName="Close" />
+                    </behavior:EventTrigger>
+                </behavior:Interaction.Triggers>
+            </Button>
+        </StackPanel>
 
-        <TabControl>
-            <TabItem>
-                <TabItem.Header>
-                    <Border>
-                        <TextBlock Text="Import Data" />
-                    </Border>
-                </TabItem.Header>
-
-            </TabItem>
-        </TabControl>
-
-    </DockPanel>
+    </Grid>
 </Window>

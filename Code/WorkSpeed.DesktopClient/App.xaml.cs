@@ -1,19 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using NpoiExcel;
-using WorkSpeed.Data.BusinessContexts;
-using WorkSpeed.DesktopClient.ViewModels;
+﻿using System.Windows;
 using WorkSpeed.DesktopClient.Views;
-using WorkSpeed.FileModels;
-using WorkSpeed.Productivity;
 
 namespace WorkSpeed.DesktopClient
 {
@@ -24,19 +10,7 @@ namespace WorkSpeed.DesktopClient
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            var context = new RuntimeWorkSpeedBusinessContext();
-            var categoryFilter = new CategoryFilter( context.GetCategories() );
-            var pauseBetween = new PauseBetweenActions( new BreakRepository() );
-
-            var factoryEmployeeAction = new FactoryEmployeeAction( pauseBetween, categoryFilter, TimeSpan.FromMinutes( 2 ) );
-
-            var importer = new ExcelDataImporter();
-
-            var warehouse = new Warehouse( context, importer, factoryEmployeeAction );
-
-            var vm = new FastProductivityViewModel( warehouse );
-            Window mainWindow = new FastProductivityMainWindow();
-            mainWindow.DataContext = vm;
+            Window mainWindow = new MainWindow();
 
             mainWindow.Show();
         }
