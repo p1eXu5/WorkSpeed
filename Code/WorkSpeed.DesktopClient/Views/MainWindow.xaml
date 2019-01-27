@@ -10,8 +10,107 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         WindowStyle="None"
+        ResizeMode="NoResize"
+        BorderThickness="1"
+        BorderBrush="{StaticResource br_Window.Border}"
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="False"
         >
+    <Window.Resources>
 
+
+    <Storyboard x:Key="an_Window.Button.MouseOver">
+        <ColorAnimationUsingKeyFrames Duration="0:0:0.2" 
+                                      Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" 
+                                      >
+            <EasingColorKeyFrame Value="{StaticResource col_Window.Button.MouseOver.Background}">
+                <EasingColorKeyFrame.EasingFunction>
+                    <PowerEase EasingMode="EaseOut" />
+                </EasingColorKeyFrame.EasingFunction>
+            </EasingColorKeyFrame>
+        </ColorAnimationUsingKeyFrames>
+        <ColorAnimationUsingKeyFrames Duration="0:0:0.2" 
+                                      Storyboard.TargetProperty="(Control.Foreground).(SolidColorBrush.Color)" 
+                                      >
+            <EasingColorKeyFrame Value="{StaticResource col_Window.Button.MouseOver.Foreground}">
+                <EasingColorKeyFrame.EasingFunction>
+                    <PowerEase EasingMode="EaseOut" />
+                </EasingColorKeyFrame.EasingFunction>
+            </EasingColorKeyFrame>
+        </ColorAnimationUsingKeyFrames>
+    </Storyboard>
+
+    <Storyboard x:Key="an_Window.Button.Pressed">
+        <ColorAnimationUsingKeyFrames Duration="0:0:0.1" 
+                                      Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" 
+                                      >
+            <EasingColorKeyFrame Value="{StaticResource col_Window.Button.Pressed.Background}">
+                <EasingColorKeyFrame.EasingFunction>
+                    <PowerEase EasingMode="EaseOut" />
+                </EasingColorKeyFrame.EasingFunction>
+            </EasingColorKeyFrame>
+        </ColorAnimationUsingKeyFrames>
+        <ColorAnimationUsingKeyFrames Duration="0:0:0.2" 
+                                      Storyboard.TargetProperty="(Control.Foreground).(SolidColorBrush.Color)" 
+                                      >
+            <EasingColorKeyFrame Value="{StaticResource col_Window.Button.MouseOver.Foreground}">
+                <EasingColorKeyFrame.EasingFunction>
+                    <PowerEase EasingMode="EaseOut" />
+                </EasingColorKeyFrame.EasingFunction>
+            </EasingColorKeyFrame>
+        </ColorAnimationUsingKeyFrames>
+    </Storyboard>
+
+    <Style x:Key="st_Window.SystemButton" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Width" Value="32" />
+        <Setter Property="BorderBrush" Value="{StaticResource br_Window.Border}" />
+        <Setter Property="BorderThickness" Value="1,0,1,1" />
+        <Setter Property="Padding" Value="1" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Bottom" />
+        <Setter Property="Background" Value="{StaticResource br_Window.Button.Background}"/>
+        <Setter Property="Foreground" Value="{StaticResource br_Window.Button.Foreground}"/>
+        <Setter Property="RenderTransform" Value="1,0,0,1,0,0" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Border.CornerRadius" Value="0,0,0,3" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{Binding Path=(Border.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            >
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                        />
+
+                        <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="Common" >
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver" Storyboard="{StaticResource an_Window.Button.MouseOver}" />
+                                    <VisualState x:Name="Pressed" Storyboard="{StaticResource an_Window.Button.Pressed}" />
+                                </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="st_Window.SystemButton.Path" TargetType="Path">
+        <Setter Property="Stroke" Value="{x:Null}" />
+        <Setter Property="Fill" Value="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Button}}" />
+    </Style>
+
+</Window.Resources>
     <behavior:Interaction.Triggers>
         <behavior:EventTrigger EventName="Loaded" SourceObject="{Binding ElementName=m_Window}">
             <behavior:InvokeCommandAction Command="{Binding LoadedCommand}" />
@@ -22,11 +121,16 @@
         <StackPanel HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     Orientation="Horizontal"
+                    Height="24"
+                    Margin="0,0,32,0"
                     >
-            <Button Style="{x:Null}">
+            <Button Style="{StaticResource st_Window.SystemButton}"
+                    RenderTransform="1,0,0,1,2,0"
+                    >
                 <Button.Content>
-                    <Path Data="{StaticResource g_Minimized}" Stroke="Black" Fill="Black" 
-                          VerticalAlignment="Bottom"
+                    <Path Data="{StaticResource g_Minimized}" 
+                          Style="{StaticResource st_Window.SystemButton.Path}"
+                          Margin="0,0,0,2"
                           />
                 </Button.Content>
                 <behavior:Interaction.Triggers>
@@ -36,7 +140,19 @@
                     </behavior:EventTrigger>
                 </behavior:Interaction.Triggers>
             </Button>
-            <Button>
+            <Button VerticalContentAlignment="Center"
+                    RenderTransform="1,0,0,1,1,0"
+                    >
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource st_Window.SystemButton}">
+                        <Setter Property="Border.CornerRadius" Value="0" />
+                    </Style>
+                </Button.Style>
+                <Button.Content>
+                    <Path Data="{StaticResource g_Maximized}" 
+                          Style="{StaticResource st_Window.SystemButton.Path}"
+                          />
+                </Button.Content>
                 <behavior:Interaction.Triggers>
                     <behavior:EventTrigger EventName="Click">
                         <behavior:CallMethodAction TargetObject="{Binding ElementName=m_Window}" 
@@ -45,6 +161,17 @@
                 </behavior:Interaction.Triggers>
             </Button>
             <Button>
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource st_Window.SystemButton}">
+                        <Setter Property="Border.CornerRadius" Value="0,0,3,0" />
+                    </Style>
+                </Button.Style>
+                <Button.Content>
+                    <Path Data="{StaticResource g_Close}" 
+                          Style="{StaticResource st_Window.SystemButton.Path}"
+                          Margin="0,0,0,2"
+                          />
+                </Button.Content>
                 <behavior:Interaction.Triggers>
                     <behavior:EventTrigger EventName="Click">
                         <behavior:CallMethodAction TargetObject="{Binding ElementName=m_Window}" MethodName="Close" />

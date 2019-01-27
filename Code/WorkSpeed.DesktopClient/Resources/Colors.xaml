@@ -17,4 +17,16 @@
 
     <SolidColorBrush x:Key="brd_MainWindow.ForegroundAlternative" Color="{DynamicResource col_MainWindow.ForegroundAlternative}" />
 
+    <Color x:Key="Color1">#3b3b3b</Color>
+    <Color x:Key="col_Window.Border">#6e6e6e</Color>
+    <Color x:Key="col_Window.Button.Background">#cfcfcf</Color>
+    <Color x:Key="col_Window.Button.Foreground">#404040</Color>
+    <Color x:Key="col_Window.Button.MouseOver.Background">#6e6e6e</Color>
+    <Color x:Key="col_Window.Button.MouseOver.Foreground">#e0e0e0</Color>
+    <Color x:Key="col_Window.Button.Pressed.Background">#4a8fff</Color>
+
+    <SolidColorBrush x:Key="br_Window.Border" Color="{StaticResource col_Window.Border }" />
+    <SolidColorBrush x:Key="br_Window.Button.Background" Color="{DynamicResource col_Window.Button.Background }" />
+    <SolidColorBrush x:Key="br_Window.Button.Foreground" Color="{DynamicResource col_Window.Button.Foreground }" />
+
 </ResourceDictionary>

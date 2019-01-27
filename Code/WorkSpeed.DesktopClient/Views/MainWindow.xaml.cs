@@ -22,7 +22,7 @@ namespace WorkSpeed.DesktopClient.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        private IntPtr hwnd;
+        private IntPtr hWnd;
 
         public MainWindow()
         {
@@ -33,18 +33,33 @@ namespace WorkSpeed.DesktopClient.Views
 
         private void OnLoaded ( object sender, RoutedEventArgs e )
         {
-            hwnd = new WindowInteropHelper(this).Handle;
-            HwndSource.FromHwnd(hwnd).AddHook(WindowHook);
+            hWnd = new WindowInteropHelper(this).Handle;
+            HwndSource.FromHwnd(hWnd)?.AddHook(WindowHook);
         }
 
         private IntPtr WindowHook ( IntPtr hwnd, int msg, IntPtr wParam, IntPtr lPatam, ref bool handled )
         {
             if (msg == ApiCodes.WM_SYSCOMMAND)
             {
-                if (wParam.ToInt32() == ApiCodes.SC_RESTORE)
-                {
+                //if ( wParam.ToInt32() == ApiCodes.SC_MAXIMIZE ) {
+
+                //    WindowStyle = WindowStyle.SingleBorderWindow;
+                //    WindowState = WindowState.Maximized;
+                //    handled = true;
+                //}
+
+                //if ( wParam.ToInt32() == ApiCodes.SC_MINIMIZE ) {
+
+                //    WindowStyle = WindowStyle.SingleBorderWindow;
+                //    WindowState = WindowState.Minimized;
+                //    handled = true;
+
+                //}
+                if (wParam.ToInt32() == ApiCodes.SC_RESTORE) {
+
                     WindowState = WindowState.Normal;
                     WindowStyle = WindowStyle.None;
+
                     handled = true;
                 }
             }
@@ -79,7 +94,6 @@ namespace WorkSpeed.DesktopClient.Views
             public const uint SC_MAXIMIZE = 0xF030;
             public const uint SC_MINIMIZE = 0xF020;
             public const uint SC_RESTORE = 0xF120;
-
         }
     }
 }
