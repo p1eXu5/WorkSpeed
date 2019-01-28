@@ -8,7 +8,7 @@
         xmlns:views="clr-namespace:WorkSpeed.DesktopClient.Views"
         xmlns:behavior="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" MinWidth="1024" Width="1200"
+        Title="MainWindow" MinHeight="500" Height="500" MinWidth="1200" Width="1200"
         WindowStyle="None"
         ResizeMode="CanResize"
         BorderThickness="1"
