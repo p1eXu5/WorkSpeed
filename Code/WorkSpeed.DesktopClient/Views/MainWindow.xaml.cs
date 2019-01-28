@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Shell;
 
 namespace WorkSpeed.DesktopClient.Views
 {
@@ -35,7 +38,10 @@ namespace WorkSpeed.DesktopClient.Views
         {
             hWnd = new WindowInteropHelper(this).Handle;
             HwndSource.FromHwnd(hWnd)?.AddHook(WindowHook);
+
         }
+
+
 
         private IntPtr WindowHook ( IntPtr hwnd, int msg, IntPtr wParam, IntPtr lPatam, ref bool handled )
         {
@@ -44,7 +50,6 @@ namespace WorkSpeed.DesktopClient.Views
                 if (wParam.ToInt32() == ApiCodes.SC_RESTORE) {
 
                     WindowState = WindowState.Normal;
-                    WindowStyle = WindowStyle.None;
 
                     handled = true;
                 }
@@ -54,7 +59,6 @@ namespace WorkSpeed.DesktopClient.Views
 
         public void Minimize ()
         {
-            WindowStyle = WindowStyle.SingleBorderWindow;
             WindowState = WindowState.Minimized;
         }
 
@@ -82,7 +86,7 @@ namespace WorkSpeed.DesktopClient.Views
             public const uint SC_RESTORE = 0xF120;
         }
 
-        private void M_Window_MouseDown(object sender, MouseButtonEventArgs e)
+        internal void M_Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if ( e.ChangedButton == MouseButton.Left ) {
                 this.DragMove();

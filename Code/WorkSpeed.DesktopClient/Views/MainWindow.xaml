@@ -8,57 +8,150 @@
         xmlns:views="clr-namespace:WorkSpeed.DesktopClient.Views"
         xmlns:behavior="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="1024"
+        Title="MainWindow" Height="450" MinWidth="1024" Width="1200"
         WindowStyle="None"
-        ResizeMode="NoResize"
+        ResizeMode="CanResize"
         BorderThickness="1"
         BorderBrush="{StaticResource br_Window.Border}"
         Background="{StaticResource br_Window.Background}"
         WindowStartupLocation="CenterScreen"
-        AllowsTransparency="False" 
-        MouseDown="M_Window_MouseDown"
+        AllowsTransparency="false" 
         FontFamily="{StaticResource font_Rubik}"
         FontWeight="Regular"
         >
+
+    <Window.Style>
+        <Style TargetType="views:MainWindow">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="views:MainWindow">
+                    <Grid>
+                        <Border x:Name="MainBorder"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="2"
+                                Background="{TemplateBinding Background}">
+
+                            <DockPanel LastChildFill="True">
+
+                                <Rectangle x:Name="PART_LEFT_BORDER"
+                                           Width="2"
+                                           Cursor="SizeWE">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="Transparent" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+
+                                <Rectangle x:Name="PART_RIGHT_BORDER"
+                                           Cursor="SizeWE"
+                                           Width="2"
+                                           DockPanel.Dock="Right">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="Transparent" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+
+                                <Rectangle x:Name="PART_TOP_BORDER"
+                                           Cursor="SizeNS"
+                                           DockPanel.Dock="Top"
+                                           Height="2">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="Transparent" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+
+                                <Rectangle x:Name="PART_BOTTOM_BORDER"
+                                           Cursor="SizeNS"
+                                           Height="2"
+                                           DockPanel.Dock="Bottom">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="Transparent" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+
+                                <Border x:Name="PART_TITLEBAR"
+                                    Margin="2,0,2,2"
+                                    Height="40"
+                                    DockPanel.Dock="Top"
+                                    CornerRadius="2"
+                                    Background="Transparent">
+
+                                </Border>
+
+                                    <!-- Actual Window Content -->
+                                <AdornerDecorator DockPanel.Dock="Bottom">
+                                    <ContentPresenter />
+                                </AdornerDecorator>
+                            </DockPanel>
+                        </Border>
+                    </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Style>
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0"
+                      CornerRadius="0"
+                      GlassFrameThickness="0"
+                      ResizeBorderThickness="0"
+                      />
+    </WindowChrome.WindowChrome>
+
     <Window.Resources>
 
-        <Style TargetType="TabItem">
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="VerticalAlignment" Value="Center" />
+        <Style x:Key="st_TabControl.ButtonBase" TargetType="ContentControl">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Width" Value="178" />
             <Setter Property="Height" Value="90" />
             <Setter Property="Border.BorderThickness" Value="1,0,1,1"></Setter>
             <Setter Property="Border.CornerRadius" Value="0,0,3,3" />
             <Setter Property="Background" Value="{StaticResource br_Window.Button.Background}" />
             <Setter Property="Foreground" Value="{StaticResource br_Window.Button.Foreground}" />
-            <Setter Property="Control.BorderBrush" Value="Black" />
+            <Setter Property="Control.BorderBrush" Value="{StaticResource br_Window.Border}" />
             <Setter Property="RenderTransform" Value="1,0,0,1,0,0" />
+        </Style>
+
+        <Style TargetType="TabItem" BasedOn="{StaticResource st_TabControl.ButtonBase}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TabItem">
-                        <Canvas RenderTransform="{TemplateBinding RenderTransform}">
+                        <Grid>
+
                             <ContentPresenter RecognizesAccessKey="True"
                                               Content="{TemplateBinding HeaderedContentControl.Header}" 
                                               ContentTemplate="{TemplateBinding HeaderedContentControl.HeaderTemplate}" 
                                               ContentStringFormat="{TemplateBinding HeaderedContentControl.HeaderStringFormat}" 
                                               ContentSource="Header" 
                                               Name="Content" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" Canvas.Left="42"
-                                              
+                                              Panel.ZIndex="1"
                                               />
-                            <Image>
+
+                            <Image VerticalAlignment="Center" 
+                                   SnapsToDevicePixels="True"
+                                   HorizontalAlignment="Center"
+                                   Margin="0"
+                                   >
                                 <Image.Source>
-                                    <DrawingImage>
+                                    <DrawingImage >
                                         <DrawingImage.Drawing>
                                             <DrawingGroup>
-                                                
-                                                <GeometryDrawing>
+
+                                                <GeometryDrawing Brush="{Binding Path=(Panel.Background), RelativeSource={RelativeSource TemplatedParent}}">
                                                     <GeometryDrawing.Pen>
-                                                        <Pen Brush="{StaticResource br_Window.Border}" Thickness="1"></Pen>
+                                                        <Pen Brush="{Binding Path=(Control.BorderBrush), RelativeSource={RelativeSource TemplatedParent}}" 
+                                                             Thickness="1" 
+                                                             />
                                                     </GeometryDrawing.Pen>
                                                     <GeometryDrawing.Geometry>
                                                         <GeometryGroup>
-                                                            <RectangleGeometry RadiusX="3" RadiusY="3" Rect="0,0,178,90"></RectangleGeometry>
+                                                            <RectangleGeometry RadiusX="3" RadiusY="3" Rect="0,0,179,90"></RectangleGeometry>
                                                         </GeometryGroup>
                                                     </GeometryDrawing.Geometry>
                                                 </GeometryDrawing>
@@ -69,7 +162,7 @@
                                                     </GeometryDrawing.Pen>
                                                     <GeometryDrawing.Geometry>
                                                         <GeometryGroup>
-                                                            <RectangleGeometry RadiusX="3" RadiusY="3" Rect="1,1,176,88"></RectangleGeometry>
+                                                            <RectangleGeometry RadiusX="2" RadiusY="2" Rect="1,1,177,88"></RectangleGeometry>
                                                         </GeometryGroup>
                                                     </GeometryDrawing.Geometry>
                                                 </GeometryDrawing>
@@ -80,12 +173,134 @@
                                 </Image.Source>
                             </Image>
 
-                        </Canvas>
+                        </Grid>
 
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style TargetType="TabControl">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Border.BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabControl">
+                        <Grid ClipToBounds="True" 
+                              SnapsToDevicePixels="True" 
+                              KeyboardNavigation.TabNavigation="Local"
+                              >
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition  />
+                                <ColumnDefinition Width="178" />
+                                <ColumnDefinition SharedSizeGroup="A" />
+                                <ColumnDefinition  />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" Name="RowDefinition0" SharedSizeGroup="B" />
+                                <RowDefinition Height="*" Name="RowDefinition1" />
+                            </Grid.RowDefinitions>
+
+                            <TabPanel Grid.Column="2" Grid.Row="0"
+                                      IsItemsHost="True" 
+                                      Name="HeaderPanel" 
+                                      Panel.ZIndex="1" 
+                                      KeyboardNavigation.TabIndex="1"
+                                      Margin="0"
+                                      >
+                                
+                            </TabPanel>
+
+                            <Border Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1" 
+                                    BorderThickness="{TemplateBinding Border.BorderThickness}" 
+                                    BorderBrush="{TemplateBinding Border.BorderBrush}" 
+                                    Background="{TemplateBinding Panel.Background}" 
+                                    Name="ContentPanel" 
+                                    KeyboardNavigation.TabIndex="2" 
+                                    KeyboardNavigation.TabNavigation="Local" 
+                                    KeyboardNavigation.DirectionalNavigation="Contained" 
+                                    >
+
+                                <ContentPresenter Content="{TemplateBinding TabControl.SelectedContent}" 
+                                                  ContentTemplate="{TemplateBinding TabControl.SelectedContentTemplate}" 
+                                                  ContentStringFormat="{TemplateBinding TabControl.SelectedContentStringFormat}" 
+                                                  ContentSource="SelectedContent" 
+                                                  Name="PART_SelectedContentHost" 
+                                                  Margin="{TemplateBinding Control.Padding}" 
+                                                  SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+        <Style x:Key="st_TabControl.Button" TargetType="Button" BasedOn="{StaticResource st_TabControl.ButtonBase}">
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+
+                            <ContentPresenter Content="{TemplateBinding Content}" 
+                                              ContentTemplate="{TemplateBinding Template}" 
+                                              ContentStringFormat="{TemplateBinding ContentStringFormat}"  
+                                              Name="Content" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                              Panel.ZIndex="1"
+                                              />
+
+                            <Image VerticalAlignment="Center" 
+                                   SnapsToDevicePixels="True"
+                                   HorizontalAlignment="Center"
+                                   Margin="0"
+                                   >
+                                <Image.Source>
+                                    <DrawingImage >
+                                        <DrawingImage.Drawing>
+                                            <DrawingGroup>
+
+                                                <GeometryDrawing Brush="{Binding Path=(Panel.Background), RelativeSource={RelativeSource TemplatedParent}}">
+                                                    <GeometryDrawing.Pen>
+                                                        <Pen Brush="{Binding Path=(Control.BorderBrush), RelativeSource={RelativeSource TemplatedParent}}" 
+                                                             Thickness="1" 
+                                                             />
+                                                    </GeometryDrawing.Pen>
+                                                    <GeometryDrawing.Geometry>
+                                                        <GeometryGroup>
+                                                            <RectangleGeometry RadiusX="3" RadiusY="3" Rect="0,0,179,90"></RectangleGeometry>
+                                                        </GeometryGroup>
+                                                    </GeometryDrawing.Geometry>
+                                                </GeometryDrawing>
+
+                                                <GeometryDrawing>
+                                                    <GeometryDrawing.Pen>
+                                                        <Pen Brush="{StaticResource br_Window.Border.InnerShadow}" Thickness="1"></Pen>
+                                                    </GeometryDrawing.Pen>
+                                                    <GeometryDrawing.Geometry>
+                                                        <GeometryGroup>
+                                                            <RectangleGeometry RadiusX="2" RadiusY="2" Rect="1,1,177,88"></RectangleGeometry>
+                                                        </GeometryGroup>
+                                                    </GeometryDrawing.Geometry>
+                                                </GeometryDrawing>
+
+                                            </DrawingGroup>
+                                        </DrawingImage.Drawing>
+                                    </DrawingImage>
+                                </Image.Source>
+                            </Image>
+                        </Grid>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
 
     </Window.Resources>
 
@@ -95,122 +310,173 @@
         </behavior:EventTrigger>
     </behavior:Interaction.Triggers>
 
-    <Grid>
-        <StackPanel HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Orientation="Horizontal"
-                    Height="24"
-                    Margin="0,0,32,0"
-                    >
-            <Button Style="{StaticResource st_Window.Button}"
-                    RenderTransform="1,0,0,1,2,0"
-                    >
-                <Button.Content>
-                    <Path Data="{StaticResource g_Minimized}" 
-                          Style="{StaticResource st_Window.Common.Path}"
-                          Margin="0,0,0,2"
-                          />
-                </Button.Content>
-                <behavior:Interaction.Triggers>
-                    <behavior:EventTrigger EventName="Click">
-                        <behavior:CallMethodAction TargetObject="{Binding ElementName=m_Window}" 
-                                                   MethodName="Minimize" />
-                    </behavior:EventTrigger>
-                </behavior:Interaction.Triggers>
-            </Button>
-            <Button VerticalContentAlignment="Center"
-                    RenderTransform="1,0,0,1,1,0"
-                    >
-                <Button.Style>
-                    <Style TargetType="Button" BasedOn="{StaticResource st_Window.Button}">
-                        <Setter Property="Border.CornerRadius" Value="0" />
-                    </Style>
-                </Button.Style>
-                <Button.Content>
-                    <Path Data="{StaticResource g_Maximized}" 
-                          Style="{StaticResource st_Window.Common.Path}"
-                          />
-                </Button.Content>
-                <behavior:Interaction.Triggers>
-                    <behavior:EventTrigger EventName="Click">
-                        <behavior:CallMethodAction TargetObject="{Binding ElementName=m_Window}" 
-                                                   MethodName="MaximizeTrigger" />
-                    </behavior:EventTrigger>
-                </behavior:Interaction.Triggers>
-            </Button>
-            <Button>
-                <Button.Style>
-                    <Style TargetType="Button" BasedOn="{StaticResource st_Window.Button}">
-                        <Setter Property="Border.CornerRadius" Value="0,0,3,0" />
-                    </Style>
-                </Button.Style>
-                <Button.Content>
-                    <Path Data="{StaticResource g_Close}" 
-                          Style="{StaticResource st_Window.Common.Path}"
-                          Margin="0,0,0,2"
-                          />
-                </Button.Content>
-                <behavior:Interaction.Triggers>
-                    <behavior:EventTrigger EventName="Click">
-                        <behavior:CallMethodAction TargetObject="{Binding ElementName=m_Window}" MethodName="Close" />
-                    </behavior:EventTrigger>
-                </behavior:Interaction.Triggers>
-            </Button>
-        </StackPanel>
+    <Grid RenderTransform="1,0,0,1,0,-20">
 
-        <TabControl Margin="0" Padding="0" TabStripPlacement="Top"
-                    Background="{StaticResource br_Window.Background}"
-                    BorderThickness="0"
-                    >
-            <TabItem Width="180"
-                     RenderTransform="1,0,0,1,3,0"
-                     >
-                <TabItem.Header>
-                    <StackPanel Orientation="Vertical">
-                        <Path Style="{StaticResource st_Window.Common.Path}" 
-                              Height="40"
-                              Data="{StaticResource g_Import}"
-                              HorizontalAlignment="Center"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="5*" MinWidth="1000"/>
+        </Grid.ColumnDefinitions>
+
+        <DockPanel MinWidth="200"
+                   VerticalAlignment="Stretch"
+                   >
+
+            <Border Height="20" VerticalAlignment="Top">
+                <TextBlock Text="Фильтры" 
+                           VerticalAlignment="Center"
+                           Margin="10,0"
+                           />
+            </Border>
+
+        </DockPanel>
+
+        <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="2" />
+
+        <Grid Grid.Column="2">
+
+            <StackPanel HorizontalAlignment="Right"
+                        IsHitTestVisible="True"
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal"
+                        Height="24"
+                        Margin="0,0,20,0"
+                        Panel.ZIndex="1"
+                        >
+                <Button Style="{StaticResource st_Window.Button}"
+                        RenderTransform="1,0,0,1,2,0"
+                        >
+                    <Button.Content>
+                        <Path Data="{StaticResource g_Minimized}" 
+                              Style="{StaticResource st_Window.Common.Path}"
+                              Margin="0,0,0,2"
                               />
-                        <Border Margin="0,5,0,0">
-                            <TextBlock  FontSize="18" Text="Импорт"  />
-                        </Border>
-                    </StackPanel>
-                </TabItem.Header>
-            </TabItem>
-            <TabItem Width="180"
+                    </Button.Content>
+                    <behavior:Interaction.Triggers>
+                        <behavior:EventTrigger EventName="Click">
+                            <behavior:CallMethodAction TargetObject="{Binding ElementName=m_Window}" 
+                                                       MethodName="Minimize" />
+                        </behavior:EventTrigger>
+                    </behavior:Interaction.Triggers>
+                </Button>
+                <Button VerticalContentAlignment="Center"
+                        RenderTransform="1,0,0,1,1,0"
+                        >
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource st_Window.Button}">
+                            <Setter Property="Border.CornerRadius" Value="0" />
+                        </Style>
+                    </Button.Style>
+                    <Button.Content>
+                        <Path Data="{StaticResource g_Maximized}" 
+                              Style="{StaticResource st_Window.Common.Path}"
+                              />
+                    </Button.Content>
+                    <behavior:Interaction.Triggers>
+                        <behavior:EventTrigger EventName="Click">
+                            <behavior:CallMethodAction TargetObject="{Binding ElementName=m_Window}" 
+                                                       MethodName="MaximizeTrigger" />
+                        </behavior:EventTrigger>
+                    </behavior:Interaction.Triggers>
+                </Button>
+                <Button>
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource st_Window.Button}">
+                            <Setter Property="Border.CornerRadius" Value="0,0,3,0" />
+                        </Style>
+                    </Button.Style>
+                    <Button.Content>
+                        <Path Data="{StaticResource g_Close}" 
+                              Style="{StaticResource st_Window.Common.Path}"
+                              Margin="0,0,0,2"
+                              />
+                    </Button.Content>
+                    <behavior:Interaction.Triggers>
+                        <behavior:EventTrigger EventName="Click">
+                            <behavior:CallMethodAction TargetObject="{Binding ElementName=m_Window}" MethodName="Close" />
+                        </behavior:EventTrigger>
+                    </behavior:Interaction.Triggers>
+                </Button>
+            </StackPanel>
+
+            <Grid IsSharedSizeScope="True" HorizontalAlignment="Stretch" >
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="178" />
+                    <ColumnDefinition Width="*" SharedSizeGroup="A" />
+                    <ColumnDefinition MinWidth="140"  />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition SharedSizeGroup="B" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Rectangle x:Name="m_Rectangle" Grid.ColumnSpan="4" Stroke="{x:Null}" Fill="Transparent"
+                           MouseDown="M_Window_MouseDown">
+                </Rectangle>
+
+                <Button Grid.Column="1" Grid.Row="0"
+                        Style="{StaticResource st_TabControl.Button}"
+                        RenderTransform="1,0,0,1,3,0"
+                        Command="{Binding ImportCommand}"
+                        >
+                    <Button.Content>
+                        <StackPanel Orientation="Vertical">
+                                <Path Style="{StaticResource st_Window.Common.Path}" 
+                                      Height="40"
+                                      Data="{StaticResource g_Import}"
+                                      HorizontalAlignment="Center"
+                                      />
+                                <Border Margin="0,5,0,0">
+                                    <TextBlock  FontSize="18" Text="Импорт"  />
+                                </Border>
+                            </StackPanel>
+                    </Button.Content>
+                </Button>
+
+                <TabControl Grid.Column="0" Grid.ColumnSpan="4" 
+                        Padding="0"
+                        TabStripPlacement="Top"
+                        Background="{StaticResource br_Window.Background}"
+                        BorderThickness="0"
+                        HorizontalAlignment="Stretch"
+                        IsHitTestVisible="True"
+                        >
+
+                <TabItem
                      RenderTransform="1,0,0,1,2,0"
                      >
-                <TabItem.Header>
-                    <StackPanel Orientation="Vertical">
-                        <Path Style="{StaticResource st_Window.Common.Path}" 
-                              Height="40"
-                              Data="{StaticResource g_Productivity}"
-                              HorizontalAlignment="Center"
-                              />
-                        <Border Margin="0,5,0,0">
-                            <TextBlock  FontSize="18" Text="Выработка"  />
-                        </Border>
-                    </StackPanel>
-                </TabItem.Header>
-            </TabItem>
-            <TabItem Width="180"
-                     RenderTransform="1,0,0,1,1,0"
-                     >
-                <TabItem.Header>
-                    <StackPanel Orientation="Vertical">
-                        <Path Style="{StaticResource st_Window.Common.Path}" 
-                              Height="40"
-                              Data="{StaticResource g_Employees}"
-                              HorizontalAlignment="Center"
-                              />
-                        <Border Margin="0,5,0,0">
-                            <TextBlock  FontSize="18" Text="Сотрудники"  />
-                        </Border>
-                    </StackPanel>
-                </TabItem.Header>
-            </TabItem>
-            <TabItem Width="180">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Vertical">
+                            <Path Style="{StaticResource st_Window.Common.Path}" 
+                                  Height="40"
+                                  Data="{StaticResource g_Productivity}"
+                                  HorizontalAlignment="Center"
+                                  />
+                            <Border Margin="0,5,0,0">
+                                <TextBlock  FontSize="18" Text="Выработка"  />
+                            </Border>
+                        </StackPanel>
+                    </TabItem.Header>
+                </TabItem>
+                <TabItem RenderTransform="1,0,0,1,1,0"
+                         >
+                    <TabItem.Header>
+                        <StackPanel Orientation="Vertical">
+                            <Path Style="{StaticResource st_Window.Common.Path}" 
+                                  Height="40"
+                                  Data="{StaticResource g_Employees}"
+                                  HorizontalAlignment="Center"
+                                  />
+                            <Border Margin="0,5,0,0">
+                                <TextBlock  FontSize="18" Text="Сотрудники"  />
+                            </Border>
+                        </StackPanel>
+                    </TabItem.Header>
+                </TabItem>
+                <TabItem >
                 <TabItem.Header>
                     <StackPanel Orientation="Vertical">
                         <Path Style="{StaticResource st_Window.Common.Path}" 
@@ -225,5 +491,11 @@
                 </TabItem.Header>
             </TabItem>
         </TabControl>
+
+
+        </Grid>
+
+        </Grid>
+
     </Grid>
 </Window>

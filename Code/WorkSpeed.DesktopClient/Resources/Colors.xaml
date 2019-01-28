@@ -18,6 +18,11 @@
 
     <Color x:Key="col_Window.Background">#ebebeb</Color>
     <Color x:Key="col_Window.Border">#6e6e6e</Color>
+
+    <Color x:Key="col_Window.ShadowLight.Top">#ffffff</Color>
+    <Color x:Key="col_Window.ShadowLight.Bottom">#d9d9d9</Color>
+
+
     <Color x:Key="col_Window.Button.Background">#cfcfcf</Color>
     <Color x:Key="col_Window.Button.Foreground">#404040</Color>
     <Color x:Key="col_Window.Button.MouseOver.Background">#6e6e6e</Color>
@@ -29,8 +34,9 @@
     <SolidColorBrush x:Key="br_Window.Button.Background" Color="{DynamicResource col_Window.Button.Background }" />
     <SolidColorBrush x:Key="br_Window.Button.Foreground" Color="{DynamicResource col_Window.Button.Foreground }" />
 
-    <LinearGradientBrush x:Key="br_Window.Border.InnerShadow">
-
+    <LinearGradientBrush x:Key="br_Window.Border.InnerShadow" StartPoint=".618,1" EndPoint="0.372,0">
+        <GradientStop Color="{DynamicResource col_Window.ShadowLight.Top}" Offset="0.49" />
+        <GradientStop Color="{DynamicResource col_Window.ShadowLight.Bottom}" Offset="0.51" />
     </LinearGradientBrush>
 
 </ResourceDictionary>
