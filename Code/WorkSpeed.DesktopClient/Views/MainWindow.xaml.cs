@@ -38,7 +38,6 @@ namespace WorkSpeed.DesktopClient.Views
         {
             hWnd = new WindowInteropHelper(this).Handle;
             HwndSource.FromHwnd(hWnd)?.AddHook(WindowHook);
-
         }
 
 
@@ -50,6 +49,7 @@ namespace WorkSpeed.DesktopClient.Views
                 if (wParam.ToInt32() == ApiCodes.SC_RESTORE) {
 
                     WindowState = WindowState.Normal;
+                    WindowStyle = WindowStyle.None;
 
                     handled = true;
                 }
@@ -59,6 +59,7 @@ namespace WorkSpeed.DesktopClient.Views
 
         public void Minimize ()
         {
+            WindowStyle = WindowStyle.SingleBorderWindow;
             WindowState = WindowState.Minimized;
         }
 

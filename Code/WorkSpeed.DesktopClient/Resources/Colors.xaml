@@ -23,16 +23,18 @@
     <Color x:Key="col_Window.ShadowLight.Bottom">#d9d9d9</Color>
 
 
-    <Color x:Key="col_Window.Button.Background">#cfcfcf</Color>
-    <Color x:Key="col_Window.Button.Foreground">#404040</Color>
-    <Color x:Key="col_Window.Button.MouseOver.Background">#6e6e6e</Color>
-    <Color x:Key="col_Window.Button.MouseOver.Foreground">#e0e0e0</Color>
+    <Color x:Key="col_Window.Control.Background">#cfcfcf</Color>
+    <Color x:Key="col_Window.Control.Foreground">#404040</Color>
+    <Color x:Key="col_Window.Control.ForegroundAlternative">#e0e0e0</Color>
+    <Color x:Key="col_Window.Control.BackgroundAlternative">#4d4d4d</Color>
     <Color x:Key="col_Window.Button.Pressed.Background">#4a8fff</Color>
 
     <SolidColorBrush x:Key="br_Window.Background" Color="{StaticResource col_Window.Background}" />
     <SolidColorBrush x:Key="br_Window.Border" Color="{StaticResource col_Window.Border }" />
-    <SolidColorBrush x:Key="br_Window.Button.Background" Color="{DynamicResource col_Window.Button.Background }" />
-    <SolidColorBrush x:Key="br_Window.Button.Foreground" Color="{DynamicResource col_Window.Button.Foreground }" />
+    <SolidColorBrush x:Key="br_Window.Control.Background" Color="{DynamicResource col_Window.Control.Background }" />
+    <SolidColorBrush x:Key="br_Window.Control.BackgroundAlternative" Color="{DynamicResource col_Window.Control.BackgroundAlternative }" />
+    <SolidColorBrush x:Key="br_Window.Control.Foreground" Color="{DynamicResource col_Window.Control.Foreground }" />
+    <SolidColorBrush x:Key="br_Window.Control.ForegroundAlternative" Color="{DynamicResource col_Window.Control.ForegroundAlternative }" />
 
     <LinearGradientBrush x:Key="br_Window.Border.InnerShadow" StartPoint=".618,1" EndPoint="0.372,0">
         <GradientStop Color="{DynamicResource col_Window.ShadowLight.Top}" Offset="0.49" />

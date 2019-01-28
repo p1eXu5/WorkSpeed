@@ -15,7 +15,7 @@
         BorderBrush="{StaticResource br_Window.Border}"
         Background="{StaticResource br_Window.Background}"
         WindowStartupLocation="CenterScreen"
-        AllowsTransparency="false" 
+        AllowsTransparency="False" 
         FontFamily="{StaticResource font_Rubik}"
         FontWeight="Regular"
         >
@@ -25,15 +25,16 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="views:MainWindow">
-                        <Border x:Name="MainBorder"
+                        
+                            <Border x:Name="MainBorder"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="1"
-                                CornerRadius="2"
+                                CornerRadius="0"
                                 Background="{TemplateBinding Background}">
 
                             <DockPanel LastChildFill="True">
 
-                                <Rectangle x:Name="PART_LEFT_BORDER"
+                                <!--<Rectangle x:Name="PART_LEFT_BORDER"
                                            Width="2"
                                            Cursor="SizeWE">
                                     <Rectangle.Fill>
@@ -66,16 +67,16 @@
                                     <Rectangle.Fill>
                                         <SolidColorBrush Color="Transparent" />
                                     </Rectangle.Fill>
-                                </Rectangle>
+                                </Rectangle>-->
 
-                                <Border x:Name="PART_TITLEBAR"
+                                <!--<Border x:Name="PART_TITLEBAR"
                                     Margin="2,0,2,2"
                                     Height="0"
                                     DockPanel.Dock="Top"
                                     CornerRadius="2"
                                     Background="Transparent">
 
-                                </Border>
+                                </Border>-->
 
                                 <!-- Actual Window Content -->
                                 <AdornerDecorator DockPanel.Dock="Bottom">
@@ -83,6 +84,7 @@
                                 </AdornerDecorator>
                             </DockPanel>
                         </Border>
+                        
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -93,7 +95,7 @@
         <WindowChrome CaptionHeight="0"
                       CornerRadius="0"
                       GlassFrameThickness="0"
-                      ResizeBorderThickness="0"
+                      ResizeBorderThickness="4"
                       />
     </WindowChrome.WindowChrome>
 
@@ -107,8 +109,8 @@
             <Setter Property="Height" Value="90" />
             <Setter Property="Border.BorderThickness" Value="1,0,1,1"></Setter>
             <Setter Property="Border.CornerRadius" Value="0,0,3,3" />
-            <Setter Property="Background" Value="{StaticResource br_Window.Button.Background}" />
-            <Setter Property="Foreground" Value="{StaticResource br_Window.Button.Foreground}" />
+            <Setter Property="Background" Value="{StaticResource br_Window.Control.Background}" />
+            <Setter Property="Foreground" Value="{StaticResource br_Window.Control.Foreground}" />
             <Setter Property="Control.BorderBrush" Value="{StaticResource br_Window.Border}" />
             <Setter Property="RenderTransform" Value="1,0,0,1,0,0" />
         </Style>
@@ -308,203 +310,257 @@
         </behavior:EventTrigger>
     </behavior:Interaction.Triggers>
 
-    <Grid RenderTransform="1,0,0,1,0,10">
+    <DockPanel LastChildFill="True">
 
-        <Grid.Style>
-            <Style TargetType="Grid">
-                <Setter Property="Background" Value="Aqua"></Setter>
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding ElementName=m_Window, Path=WindowState}" Value="{x:Static WindowState.Maximized}">
-                        <Setter Property="RenderTransform" Value="1,0,0,1,0,0" ></Setter>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </Grid.Style>
+        <Rectangle DockPanel.Dock="Top">
+            <Rectangle.Style>
+                <Style TargetType="Rectangle">
+                    <Setter Property="Height" Value="0" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=m_Window, Path=WindowState}" Value="{x:Static WindowState.Maximized}">
+                            <Setter Property="Height" Value="6" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Rectangle.Style>
+        </Rectangle>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="5*" MinWidth="1000"/>
-        </Grid.ColumnDefinitions>
+        <Rectangle DockPanel.Dock="Bottom">
+            <Rectangle.Style>
+                <Style TargetType="Rectangle">
+                    <Setter Property="Height" Value="0" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=m_Window, Path=WindowState}" Value="{x:Static WindowState.Maximized}">
+                            <Setter Property="Height" Value="6" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Rectangle.Style>
+        </Rectangle>
 
-        <DockPanel MinWidth="200"
-                   VerticalAlignment="Stretch"
-                   >
+        <Rectangle DockPanel.Dock="Left">
+            <Rectangle.Style>
+                <Style TargetType="Rectangle">
+                    <Setter Property="Width" Value="0" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=m_Window, Path=WindowState}" Value="{x:Static WindowState.Maximized}">
+                            <Setter Property="Width" Value="6" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Rectangle.Style>
+        </Rectangle>
 
-            <Border Height="20" VerticalAlignment="Top">
-                <TextBlock Text="Фильтры" 
-                           VerticalAlignment="Center"
-                           Margin="10,0"
-                           />
-            </Border>
+        <Rectangle DockPanel.Dock="Right">
+            <Rectangle.Style>
+                <Style TargetType="Rectangle">
+                    <Setter Property="Width" Value="0" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=m_Window, Path=WindowState}" Value="{x:Static WindowState.Maximized}">
+                            <Setter Property="Width" Value="6" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Rectangle.Style>
+        </Rectangle>
 
-        </DockPanel>
+        <Grid >
 
-        <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="2" />
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="5*" MinWidth="1000"/>
+            </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="2">
 
-            <StackPanel HorizontalAlignment="Right"
-                        IsHitTestVisible="True"
-                        VerticalAlignment="Top"
-                        Orientation="Horizontal"
-                        Height="24"
-                        Margin="0,0,20,0"
-                        Panel.ZIndex="1"
+            <DockPanel VerticalAlignment="Stretch"
+                        LastChildFill="True"
+                        Background="{StaticResource br_Window.Control.Background}"
+                        SnapsToDevicePixels="True"
                         >
-                <Button Style="{StaticResource st_Window.Button}"
-                        RenderTransform="1,0,0,1,2,0"
+
+                <Border Height="20" DockPanel.Dock="Top"
+                        Background="{StaticResource br_Window.Control.BackgroundAlternative}"
+                        
                         >
-                    <Button.Content>
-                        <Path Data="{StaticResource g_Minimized}" 
-                              Style="{StaticResource st_Window.Common.Path}"
-                              Margin="0,0,0,2"
-                              />
-                    </Button.Content>
-                    <behavior:Interaction.Triggers>
-                        <behavior:EventTrigger EventName="Click">
-                            <behavior:CallMethodAction TargetObject="{Binding ElementName=m_Window}" 
-                                                       MethodName="Minimize" />
-                        </behavior:EventTrigger>
-                    </behavior:Interaction.Triggers>
-                </Button>
-                <Button VerticalContentAlignment="Center"
-                        RenderTransform="1,0,0,1,1,0"
-                        >
-                    <Button.Style>
-                        <Style TargetType="Button" BasedOn="{StaticResource st_Window.Button}">
-                            <Setter Property="Border.CornerRadius" Value="0" />
-                        </Style>
-                    </Button.Style>
-                    <Button.Content>
-                        <Path Data="{StaticResource g_Maximized}" 
-                              Style="{StaticResource st_Window.Common.Path}"
-                              />
-                    </Button.Content>
-                    <behavior:Interaction.Triggers>
-                        <behavior:EventTrigger EventName="Click">
-                            <behavior:CallMethodAction TargetObject="{Binding ElementName=m_Window}" 
-                                                       MethodName="MaximizeTrigger" />
-                        </behavior:EventTrigger>
-                    </behavior:Interaction.Triggers>
-                </Button>
-                <Button>
-                    <Button.Style>
-                        <Style TargetType="Button" BasedOn="{StaticResource st_Window.Button}">
-                            <Setter Property="Border.CornerRadius" Value="0,0,3,0" />
-                        </Style>
-                    </Button.Style>
-                    <Button.Content>
-                        <Path Data="{StaticResource g_Close}" 
-                              Style="{StaticResource st_Window.Common.Path}"
-                              Margin="0,0,0,2"
-                              />
-                    </Button.Content>
-                    <behavior:Interaction.Triggers>
-                        <behavior:EventTrigger EventName="Click">
-                            <behavior:CallMethodAction TargetObject="{Binding ElementName=m_Window}" MethodName="Close" />
-                        </behavior:EventTrigger>
-                    </behavior:Interaction.Triggers>
-                </Button>
-            </StackPanel>
+                    <TextBlock Text="Фильтры" 
+                                VerticalAlignment="Center"
+                                Margin="10,0"
+                                Foreground="{StaticResource br_Window.Control.ForegroundAlternative}"
+                                />
+                </Border>
 
-            <Grid IsSharedSizeScope="True" HorizontalAlignment="Stretch" >
+                <Border BorderThickness="0,0,1,0" BorderBrush="{StaticResource br_Window.Border}"></Border>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="178" />
-                    <ColumnDefinition Width="*" SharedSizeGroup="A" />
-                    <ColumnDefinition MinWidth="140"  />
-                </Grid.ColumnDefinitions>
+            </DockPanel>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition SharedSizeGroup="B" />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
 
-                <Rectangle x:Name="m_Rectangle" Grid.ColumnSpan="4" Stroke="{x:Null}" Fill="Transparent"
-                           MouseDown="M_Window_MouseDown">
-                </Rectangle>
+            <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="2" />
 
-                <Button Grid.Column="1" Grid.Row="0"
-                        Style="{StaticResource st_TabControl.Button}"
-                        RenderTransform="1,0,0,1,3,0"
-                        Command="{Binding ImportCommand}"
-                        >
-                    <Button.Content>
-                        <StackPanel Orientation="Vertical">
+            <Grid Grid.Column="2">
+
+                <StackPanel HorizontalAlignment="Right"
+                            IsHitTestVisible="True"
+                            VerticalAlignment="Top"
+                            Orientation="Horizontal"
+                            Height="24"
+                            Margin="0,0,20,0"
+                            Panel.ZIndex="1"
+                            >
+                    <Button Style="{StaticResource st_Window.Button}"
+                            RenderTransform="1,0,0,1,2,0"
+                            >
+                        <Button.Content>
+                            <Path Data="{StaticResource g_Minimized}" 
+                                  Style="{StaticResource st_Window.Common.Path}"
+                                  Margin="0,0,0,2"
+                                  />
+                        </Button.Content>
+                        <behavior:Interaction.Triggers>
+                            <behavior:EventTrigger EventName="Click">
+                                <behavior:CallMethodAction TargetObject="{Binding ElementName=m_Window}" 
+                                                           MethodName="Minimize" />
+                            </behavior:EventTrigger>
+                        </behavior:Interaction.Triggers>
+                    </Button>
+                    <Button VerticalContentAlignment="Center"
+                            RenderTransform="1,0,0,1,1,0"
+                            >
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource st_Window.Button}">
+                                <Setter Property="Border.CornerRadius" Value="0" />
+                            </Style>
+                        </Button.Style>
+                        <Button.Content>
+                            <Path Data="{StaticResource g_Maximized}" 
+                                  Style="{StaticResource st_Window.Common.Path}"
+                                  />
+                        </Button.Content>
+                        <behavior:Interaction.Triggers>
+                            <behavior:EventTrigger EventName="Click">
+                                <behavior:CallMethodAction TargetObject="{Binding ElementName=m_Window}" 
+                                                           MethodName="MaximizeTrigger" />
+                            </behavior:EventTrigger>
+                        </behavior:Interaction.Triggers>
+                    </Button>
+                    <Button>
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource st_Window.Button}">
+                                <Setter Property="Border.CornerRadius" Value="0,0,3,0" />
+                            </Style>
+                        </Button.Style>
+                        <Button.Content>
+                            <Path Data="{StaticResource g_Close}" 
+                                  Style="{StaticResource st_Window.Common.Path}"
+                                  Margin="0,0,0,2"
+                                  />
+                        </Button.Content>
+                        <behavior:Interaction.Triggers>
+                            <behavior:EventTrigger EventName="Click">
+                                <behavior:CallMethodAction TargetObject="{Binding ElementName=m_Window}" MethodName="Close" />
+                            </behavior:EventTrigger>
+                        </behavior:Interaction.Triggers>
+                    </Button>
+                </StackPanel>
+
+                <Grid IsSharedSizeScope="True" HorizontalAlignment="Stretch" >
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="178" />
+                        <ColumnDefinition Width="*" SharedSizeGroup="A" />
+                        <ColumnDefinition MinWidth="140"  />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition SharedSizeGroup="B" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Rectangle x:Name="m_Rectangle" Grid.ColumnSpan="4" Stroke="{x:Null}" Fill="Transparent"
+                               MouseDown="M_Window_MouseDown">
+                    </Rectangle>
+
+                    <Button Grid.Column="1" Grid.Row="0"
+                            Style="{StaticResource st_TabControl.Button}"
+                            RenderTransform="1,0,0,1,3,0"
+                            Command="{Binding ImportCommand}"
+                            >
+                        <Button.Content>
+                            <StackPanel Orientation="Vertical">
+                                    <Path Style="{StaticResource st_Window.Common.Path}" 
+                                          Height="40"
+                                          Data="{StaticResource g_Import}"
+                                          HorizontalAlignment="Center"
+                                          />
+                                    <Border Margin="0,5,0,0">
+                                        <TextBlock  FontSize="18" Text="Импорт"  />
+                                    </Border>
+                                </StackPanel>
+                        </Button.Content>
+                    </Button>
+
+                    <TabControl Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="2"
+                            Padding="0"
+                            TabStripPlacement="Top"
+                            Background="{StaticResource br_Window.Background}"
+                            BorderThickness="0"
+                            HorizontalAlignment="Stretch"
+                            IsHitTestVisible="True"
+                            >
+
+                    <TabItem
+                         RenderTransform="1,0,0,1,2,0"
+                         >
+                        <TabItem.Header>
+                            <StackPanel Orientation="Vertical">
                                 <Path Style="{StaticResource st_Window.Common.Path}" 
                                       Height="40"
-                                      Data="{StaticResource g_Import}"
+                                      Data="{StaticResource g_Productivity}"
                                       HorizontalAlignment="Center"
                                       />
                                 <Border Margin="0,5,0,0">
-                                    <TextBlock  FontSize="18" Text="Импорт"  />
+                                    <TextBlock  FontSize="18" Text="Выработка"  />
                                 </Border>
                             </StackPanel>
-                    </Button.Content>
-                </Button>
-
-                <TabControl Grid.Column="0" Grid.ColumnSpan="4" 
-                        Padding="0"
-                        TabStripPlacement="Top"
-                        Background="{StaticResource br_Window.Background}"
-                        BorderThickness="0"
-                        HorizontalAlignment="Stretch"
-                        IsHitTestVisible="True"
-                        >
-
-                <TabItem
-                     RenderTransform="1,0,0,1,2,0"
-                     >
+                        </TabItem.Header>
+                    </TabItem>
+                    <TabItem RenderTransform="1,0,0,1,1,0"
+                             >
+                        <TabItem.Header>
+                            <StackPanel Orientation="Vertical">
+                                <Path Style="{StaticResource st_Window.Common.Path}" 
+                                      Height="40"
+                                      Data="{StaticResource g_Employees}"
+                                      HorizontalAlignment="Center"
+                                      />
+                                <Border Margin="0,5,0,0">
+                                    <TextBlock  FontSize="18" Text="Сотрудники"  />
+                                </Border>
+                            </StackPanel>
+                        </TabItem.Header>
+                    </TabItem>
+                    <TabItem >
                     <TabItem.Header>
                         <StackPanel Orientation="Vertical">
                             <Path Style="{StaticResource st_Window.Common.Path}" 
                                   Height="40"
-                                  Data="{StaticResource g_Productivity}"
+                                  Data="{StaticResource g_Settings}"
                                   HorizontalAlignment="Center"
                                   />
                             <Border Margin="0,5,0,0">
-                                <TextBlock  FontSize="18" Text="Выработка"  />
+                                <TextBlock  FontSize="18" Text="Настройки"  />
                             </Border>
                         </StackPanel>
                     </TabItem.Header>
                 </TabItem>
-                <TabItem RenderTransform="1,0,0,1,1,0"
-                         >
-                    <TabItem.Header>
-                        <StackPanel Orientation="Vertical">
-                            <Path Style="{StaticResource st_Window.Common.Path}" 
-                                  Height="40"
-                                  Data="{StaticResource g_Employees}"
-                                  HorizontalAlignment="Center"
-                                  />
-                            <Border Margin="0,5,0,0">
-                                <TextBlock  FontSize="18" Text="Сотрудники"  />
-                            </Border>
-                        </StackPanel>
-                    </TabItem.Header>
-                </TabItem>
-                <TabItem >
-                <TabItem.Header>
-                    <StackPanel Orientation="Vertical">
-                        <Path Style="{StaticResource st_Window.Common.Path}" 
-                              Height="40"
-                              Data="{StaticResource g_Settings}"
-                              HorizontalAlignment="Center"
-                              />
-                        <Border Margin="0,5,0,0">
-                            <TextBlock  FontSize="18" Text="Настройки"  />
-                        </Border>
-                    </StackPanel>
-                </TabItem.Header>
-            </TabItem>
-        </TabControl>
+            </TabControl>
 
+
+            </Grid>
+
+            </Grid>
 
         </Grid>
-
-        </Grid>
-
-    </Grid>
+    </DockPanel>
 </Window>

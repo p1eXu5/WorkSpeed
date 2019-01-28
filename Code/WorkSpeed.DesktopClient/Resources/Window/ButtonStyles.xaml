@@ -6,7 +6,7 @@
             <ColorAnimationUsingKeyFrames Duration="0:0:0.2" 
                                           Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" 
                                           >
-                <EasingColorKeyFrame Value="{StaticResource col_Window.Button.MouseOver.Background}">
+                <EasingColorKeyFrame Value="{StaticResource col_Window.Control.BackgroundAlternative}">
                     <EasingColorKeyFrame.EasingFunction>
                         <PowerEase EasingMode="EaseOut" />
                     </EasingColorKeyFrame.EasingFunction>
@@ -15,7 +15,7 @@
             <ColorAnimationUsingKeyFrames Duration="0:0:0.2" 
                                           Storyboard.TargetProperty="(Control.Foreground).(SolidColorBrush.Color)" 
                                           >
-                <EasingColorKeyFrame Value="{StaticResource col_Window.Button.MouseOver.Foreground}">
+                <EasingColorKeyFrame Value="{StaticResource col_Window.Control.ForegroundAlternative}">
                     <EasingColorKeyFrame.EasingFunction>
                         <PowerEase EasingMode="EaseOut" />
                     </EasingColorKeyFrame.EasingFunction>
@@ -36,7 +36,7 @@
             <ColorAnimationUsingKeyFrames Duration="0:0:0.2" 
                                           Storyboard.TargetProperty="(Control.Foreground).(SolidColorBrush.Color)" 
                                           >
-                <EasingColorKeyFrame Value="{StaticResource col_Window.Button.MouseOver.Foreground}">
+                <EasingColorKeyFrame Value="{StaticResource col_Window.Control.ForegroundAlternative}">
                     <EasingColorKeyFrame.EasingFunction>
                         <PowerEase EasingMode="EaseOut" />
                     </EasingColorKeyFrame.EasingFunction>
@@ -52,8 +52,8 @@
             <Setter Property="Padding" Value="1" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Bottom" />
-            <Setter Property="Background" Value="{StaticResource br_Window.Button.Background}"/>
-            <Setter Property="Foreground" Value="{StaticResource br_Window.Button.Foreground}"/>
+            <Setter Property="Background" Value="{StaticResource br_Window.Control.Background}"/>
+            <Setter Property="Foreground" Value="{StaticResource br_Window.Control.Foreground}"/>
             <Setter Property="RenderTransform" Value="1,0,0,1,0,0" />
             <Setter Property="SnapsToDevicePixels" Value="True" />
             <Setter Property="Border.CornerRadius" Value="0,0,0,3" />
