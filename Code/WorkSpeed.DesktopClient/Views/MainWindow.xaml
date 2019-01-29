@@ -237,7 +237,7 @@
                 <!-- import button -->
                 <Button Grid.Column="1" Grid.Row="0"
                         Style="{StaticResource st_TabControl.Button}"
-                        RenderTransform="1,0,0,1,3,0"
+                        RenderTransform="1,0,0,1,1.5,0"
                         Command="{Binding ImportCommand}"
                         >
                     <Button.Content>

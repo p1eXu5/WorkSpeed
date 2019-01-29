@@ -2,18 +2,55 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     >
 
+    <Storyboard x:Key="an_TabItem.MouseOver">
+
+    </Storyboard>
+
+    <Storyboard x:Key="an_TabItem.Choosed">
+
+        <ColorAnimationUsingKeyFrames Duration="0:0:.2" Storyboard.TargetName="outerBorder"
+                                      Storyboard.TargetProperty="Color"
+                                      >
+            <LinearColorKeyFrame Value="{StaticResource col_Window.BorderAlternative}" KeyTime="0:0:0"/>
+        </ColorAnimationUsingKeyFrames>
+
+        <ColorAnimationUsingKeyFrames Duration="0:0:.2" Storyboard.TargetName="container"
+                                      Storyboard.TargetProperty="(GeometryDrawing.Brush).(SolidColorBrush.Color)"
+                                      >
+            <LinearColorKeyFrame Value="{StaticResource col_Window.Border}" KeyTime="0:0:0"/>
+        </ColorAnimationUsingKeyFrames>
+
+        <ColorAnimationUsingKeyFrames Duration="0:0:.2" 
+                                      Storyboard.TargetProperty="(Control.Foreground).(SolidColorBrush.Color)"
+                                      >
+            <LinearColorKeyFrame Value="{StaticResource col_Window.Control.ForegroundAlternative}" KeyTime="0:0:0"/>
+        </ColorAnimationUsingKeyFrames>
+
+        <ColorAnimationUsingKeyFrames Duration="0:0:.2" Storyboard.TargetName="innerGlow"
+                                      Storyboard.TargetProperty="(Pen.Brush).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"
+                                      >
+            <LinearColorKeyFrame Value="{StaticResource col_Window.GlowDark.Top}" KeyTime="0:0:0"/>
+        </ColorAnimationUsingKeyFrames>
+
+        <ColorAnimationUsingKeyFrames Duration="0:0:.2" Storyboard.TargetName="innerGlow"
+                                      Storyboard.TargetProperty="(Pen.Brush).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)"
+                                      >
+            <LinearColorKeyFrame Value="{StaticResource col_Window.GlowDark.Bottom}" KeyTime="0:0:0"/>
+        </ColorAnimationUsingKeyFrames>
+
+    </Storyboard>
+
+
     <Style x:Key="st_TabItem.Base" TargetType="ContentControl">
-            <Setter Property="OverridesDefaultStyle" Value="True" />
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="Width" Value="178" />
-            <Setter Property="Height" Value="90" />
-            <Setter Property="Border.BorderThickness" Value="1,0,1,1"></Setter>
-            <Setter Property="Border.CornerRadius" Value="0,0,3,3" />
-            <Setter Property="Background" Value="{StaticResource br_Window.Control.Background}" />
-            <Setter Property="Foreground" Value="{StaticResource br_Window.Control.Foreground}" />
-            <Setter Property="Control.BorderBrush" Value="{StaticResource br_Window.Border}" />
-            <Setter Property="RenderTransform" Value="1,0,0,1,0,0" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="{StaticResource br_Window.Control.Background}" />
+        <Setter Property="Foreground" Value="{StaticResource br_Window.Control.Foreground}" />
+        <Setter Property="Control.BorderBrush" Value="{StaticResource br_Window.Border}" />
+        <Setter Property="Width" Value="178" />
+        <Setter Property="RenderTransform" Value="1,0,0,1,0,0" />
+        <Setter Property="Panel.ZIndex" Value="0" />
     </Style>
 
     <Style TargetType="TabItem" BasedOn="{StaticResource st_TabItem.Base}">
@@ -23,57 +60,75 @@
                     <Grid>
 
                         <ContentPresenter RecognizesAccessKey="True"
-                                            Content="{TemplateBinding HeaderedContentControl.Header}" 
-                                            ContentTemplate="{TemplateBinding HeaderedContentControl.HeaderTemplate}" 
-                                            ContentStringFormat="{TemplateBinding HeaderedContentControl.HeaderStringFormat}" 
-                                            ContentSource="Header" 
-                                            Name="Content" 
-                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                            SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" Canvas.Left="42"
-                                            Panel.ZIndex="1"
-                                            />
+                                          Content="{TemplateBinding HeaderedContentControl.Header}" 
+                                          ContentTemplate="{TemplateBinding HeaderedContentControl.HeaderTemplate}" 
+                                          ContentStringFormat="{TemplateBinding HeaderedContentControl.HeaderStringFormat}" 
+                                          ContentSource="Header" 
+                                          Name="Content" 
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" Canvas.Left="42"
+                                          Panel.ZIndex="1"
+                                          />
 
                         <Image VerticalAlignment="Center" 
-                                SnapsToDevicePixels="True"
-                                HorizontalAlignment="Center"
-                                Margin="0"
-                                >
+                               SnapsToDevicePixels="True"
+                               HorizontalAlignment="Center"
+                               Margin="0"
+                               >
                             <Image.Source>
                                 <DrawingImage >
                                     <DrawingImage.Drawing>
                                         <DrawingGroup>
 
-                                            <GeometryDrawing Brush="{Binding Path=(Panel.Background), RelativeSource={RelativeSource TemplatedParent}}">
+                                            <GeometryDrawing x:Name="container" Brush="{Binding Path=(Panel.Background), RelativeSource={RelativeSource TemplatedParent}}">
                                                 <GeometryDrawing.Pen>
                                                     <Pen Brush="{Binding Path=(Control.BorderBrush), RelativeSource={RelativeSource TemplatedParent}}" 
-                                                            Thickness="1" 
-                                                            />
+                                                         Thickness="1" 
+                                                         >
+                                                    </Pen>
                                                 </GeometryDrawing.Pen>
                                                 <GeometryDrawing.Geometry>
-                                                    <GeometryGroup>
-                                                        <RectangleGeometry RadiusX="3" RadiusY="3" Rect="0,0,179,90"></RectangleGeometry>
-                                                    </GeometryGroup>
+                                                    <PathGeometry Figures="M 0,0  V 88  a 3,3, 0,0, 0 3,3  H 172  a 3,3,0,0,0,3,-3  V 0" />
                                                 </GeometryDrawing.Geometry>
                                             </GeometryDrawing>
 
                                             <GeometryDrawing>
                                                 <GeometryDrawing.Pen>
-                                                    <Pen Brush="{StaticResource br_Window.Border.InnerShadow}" Thickness="1"></Pen>
+                                                    <Pen x:Name="innerGlow" Brush="{StaticResource br_Window.Border.InnerGlow}" Thickness="1"></Pen>
                                                 </GeometryDrawing.Pen>
                                                 <GeometryDrawing.Geometry>
-                                                    <GeometryGroup>
-                                                        <RectangleGeometry RadiusX="2" RadiusY="2" Rect="1,1,177,88"></RectangleGeometry>
-                                                    </GeometryGroup>
+                                                    <PathGeometry Figures="M 1, 0  V 88  a 2,2, 0,0, 0,2,2  h 169  a2,2,0,0,0,2-2  V 0" />
                                                 </GeometryDrawing.Geometry>
                                             </GeometryDrawing>
+
+                                            <GeometryDrawing >
+                                                <GeometryDrawing.Pen>
+                                                    <Pen Thickness="1" 
+                                                         >
+                                                        <Pen.Brush>
+                                                            <SolidColorBrush x:Name="outerBorder" Color="Transparent" />
+                                                        </Pen.Brush>
+                                                    </Pen>
+                                                </GeometryDrawing.Pen>
+                                                <GeometryDrawing.Geometry>
+                                                    <PathGeometry Figures="M 0,0  V 88  a 3,3, 0,0, 0 3,3  H 172  a 3,3,0,0,0,3,-3  V 0" />
+                                                </GeometryDrawing.Geometry>
+                                            </GeometryDrawing>
+
 
                                         </DrawingGroup>
                                     </DrawingImage.Drawing>
                                 </DrawingImage>
                             </Image.Source>
                         </Image>
-
+                        
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="SelectionStates">
+                                <VisualState x:Name="Unselected" />
+                                <VisualState x:Name="Selected" Storyboard="{StaticResource an_TabItem.Choosed}" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
                     </Grid>
 
                 </ControlTemplate>
@@ -88,8 +143,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="TabControl">
                     <Grid ClipToBounds="True" 
-                            SnapsToDevicePixels="True" 
-                            KeyboardNavigation.TabNavigation="Local"
+                          SnapsToDevicePixels="True" 
+                          KeyboardNavigation.TabNavigation="Local"
                             >
 
                         <Grid.ColumnDefinitions>
@@ -105,12 +160,12 @@
                         </Grid.RowDefinitions>
 
                         <TabPanel Grid.Column="2" Grid.Row="0"
-                                    IsItemsHost="True" 
-                                    Name="HeaderPanel" 
-                                    Panel.ZIndex="1" 
-                                    KeyboardNavigation.TabIndex="1"
-                                    Margin="0"
-                                    >
+                                  IsItemsHost="True" 
+                                  Name="HeaderPanel" 
+                                  Panel.ZIndex="1" 
+                                  KeyboardNavigation.TabIndex="1"
+                                  Margin="0"
+                                  >
                                 
                         </TabPanel>
 
@@ -143,11 +198,11 @@
            TargetType="Button" 
            BasedOn="{StaticResource st_TabItem.Base}">
         <Setter Property="VerticalAlignment" Value="Top" />
-        <Setter Property="Panel.ZIndex" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Grid RenderTransform="{TemplateBinding RenderTransform}">
+                    <Grid RenderTransform="{TemplateBinding RenderTransform}"
+                          >
 
                         <ContentPresenter Content="{TemplateBinding Content}" 
                                             ContentTemplate="{TemplateBinding Template}" 
@@ -160,42 +215,6 @@
                                             />
 
                         <Image VerticalAlignment="Center" 
-                                SnapsToDevicePixels="True"
-                                HorizontalAlignment="Center"
-                                Margin="0"
-                                >
-                            <Image.Source>
-                                <DrawingImage >
-                                    <DrawingImage.Drawing>
-                                        <DrawingGroup>
-
-                                            <GeometryDrawing Brush="{Binding Path=(Panel.Background), RelativeSource={RelativeSource TemplatedParent}}">
-                                                <GeometryDrawing.Pen>
-                                                    <Pen Brush="{Binding Path=(Control.BorderBrush), RelativeSource={RelativeSource TemplatedParent}}" 
-                                                            Thickness="1" 
-                                                            />
-                                                </GeometryDrawing.Pen>
-                                                <GeometryDrawing.Geometry>
-                                                    <PathGeometry Figures="M 0,0  V 88  a 3,3, 0,0, 0 3,3  H 172  a 3,3,0,0,0,3,-3  V 0" />
-                                                </GeometryDrawing.Geometry>
-                                            </GeometryDrawing>
-
-                                            <GeometryDrawing>
-                                                <GeometryDrawing.Pen>
-                                                    <Pen Brush="{StaticResource br_Window.Border.InnerShadow}" Thickness="1"></Pen>
-                                                </GeometryDrawing.Pen>
-                                                <GeometryDrawing.Geometry>
-                                                    <PathGeometry Figures="M 1, 0  V 88  a 2,2, 0,0, 0,2,2  h 169  a2,2,0,0,0,2-2  V 0" />
-                                                </GeometryDrawing.Geometry>
-                                            </GeometryDrawing>
-
-                                        </DrawingGroup>
-                                    </DrawingImage.Drawing>
-                                </DrawingImage>
-                            </Image.Source>
-                        </Image>
-
-                        <Image VerticalAlignment="Center" 
                                SnapsToDevicePixels="True"
                                HorizontalAlignment="Center"
                                Margin="0"
@@ -205,12 +224,33 @@
                                     <DrawingImage.Drawing>
                                         <DrawingGroup>
 
+                                            <GeometryDrawing x:Name="container" Brush="{Binding Path=(Panel.Background), RelativeSource={RelativeSource TemplatedParent}}">
+                                                <GeometryDrawing.Pen>
+                                                    <Pen Brush="{Binding Path=(Control.BorderBrush), RelativeSource={RelativeSource TemplatedParent}}" 
+                                                         Thickness="1" 
+                                                         >
+                                                    </Pen>
+                                                </GeometryDrawing.Pen>
+                                                <GeometryDrawing.Geometry>
+                                                    <PathGeometry Figures="M 0,0  V 88  a 3,3, 0,0, 0 3,3  H 172  a 3,3,0,0,0,3,-3  V 0" />
+                                                </GeometryDrawing.Geometry>
+                                            </GeometryDrawing>
+
+                                            <GeometryDrawing>
+                                                <GeometryDrawing.Pen>
+                                                    <Pen x:Name="innerGlow" Brush="{StaticResource br_Window.Border.InnerGlow}" Thickness="1"></Pen>
+                                                </GeometryDrawing.Pen>
+                                                <GeometryDrawing.Geometry>
+                                                    <PathGeometry Figures="M 1, 0  V 88  a 2,2, 0,0, 0,2,2  h 169  a2,2,0,0,0,2-2  V 0" />
+                                                </GeometryDrawing.Geometry>
+                                            </GeometryDrawing>
+
                                             <GeometryDrawing >
                                                 <GeometryDrawing.Pen>
                                                     <Pen Thickness="1" 
                                                          >
                                                         <Pen.Brush>
-                                                            <SolidColorBrush Color="Transparent" />
+                                                            <SolidColorBrush x:Name="outerBorder" Color="Transparent" />
                                                         </Pen.Brush>
                                                     </Pen>
                                                 </GeometryDrawing.Pen>
@@ -219,12 +259,12 @@
                                                 </GeometryDrawing.Geometry>
                                             </GeometryDrawing>
 
+
                                         </DrawingGroup>
                                     </DrawingImage.Drawing>
                                 </DrawingImage>
                             </Image.Source>
                         </Image>
-
 
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="Common" >
@@ -238,6 +278,12 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                     </Grid>
+                    
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ButtonBase.IsPressed" Value="True">
+                            <Setter Property="Panel.ZIndex" Value="1" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
 
                 </ControlTemplate>
             </Setter.Value>

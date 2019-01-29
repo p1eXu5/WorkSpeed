@@ -16,11 +16,15 @@
 
     <SolidColorBrush x:Key="brd_MainWindow.ForegroundAlternative" Color="{DynamicResource col_MainWindow.ForegroundAlternative}" />
 
+
+
+
     <Color x:Key="col_Window.Background">#ebebeb</Color>
     <Color x:Key="col_Window.Border">#6e6e6e</Color>
+    <Color x:Key="col_Window.BorderAlternative">#3b3b3b</Color>
 
-    <Color x:Key="col_Window.ShadowLight.Top">#ffffff</Color>
-    <Color x:Key="col_Window.ShadowLight.Bottom">#d9d9d9</Color>
+    <Color x:Key="col_Window.GlowLight.Top">#d9d9d9</Color>
+    <Color x:Key="col_Window.GlowLight.Bottom">#ffffff</Color>
 
 
     <Color x:Key="col_Window.Control.Background">#cfcfcf</Color>
@@ -30,15 +34,18 @@
     <Color x:Key="col_Window.Button.Pressed.Background">#4a8fff</Color>
 
     <SolidColorBrush x:Key="br_Window.Background" Color="{StaticResource col_Window.Background}" />
-    <SolidColorBrush x:Key="br_Window.Border" Color="{StaticResource col_Window.Border }" />
+    <SolidColorBrush x:Key="br_Window.Border" Color="{DynamicResource col_Window.Border }" />
     <SolidColorBrush x:Key="br_Window.Control.Background" Color="{DynamicResource col_Window.Control.Background }" />
     <SolidColorBrush x:Key="br_Window.Control.BackgroundAlternative" Color="{DynamicResource col_Window.Control.BackgroundAlternative }" />
     <SolidColorBrush x:Key="br_Window.Control.Foreground" Color="{DynamicResource col_Window.Control.Foreground }" />
     <SolidColorBrush x:Key="br_Window.Control.ForegroundAlternative" Color="{DynamicResource col_Window.Control.ForegroundAlternative }" />
 
-    <LinearGradientBrush x:Key="br_Window.Border.InnerShadow" StartPoint=".618,1" EndPoint="0.372,0">
-        <GradientStop Color="{DynamicResource col_Window.ShadowLight.Top}" Offset="0.49" />
-        <GradientStop Color="{DynamicResource col_Window.ShadowLight.Bottom}" Offset="0.51" />
+    <LinearGradientBrush x:Key="br_Window.Border.InnerGlow" StartPoint=".372,0" EndPoint=".638,1" x:Shared="False">
+        <GradientStop Color="{DynamicResource col_Window.GlowLight.Top}" Offset="0.49" />
+        <GradientStop Color="{DynamicResource col_Window.GlowLight.Bottom}" Offset="0.51" />
     </LinearGradientBrush>
+
+    <Color x:Key="col_Window.GlowDark.Top">#5c5c5c</Color>
+    <Color x:Key="col_Window.GlowDark.Bottom">#808080</Color>
 
 </ResourceDictionary>
