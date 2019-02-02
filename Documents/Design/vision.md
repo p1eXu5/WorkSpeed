@@ -3,21 +3,9 @@ Vision
 
 ### Update dates
 
-<table>
-  <tr>
-    <th>Version</td>
-    <th>Date</th>
-    <th>Description</th>
-    <th>Author</th>
-  </tr>
-  <tr>
-    <td>First draft variant</td>
-    <td>January 31, 2018 </td>
-    <td>First draft variant. It will be refined in dev state lately.</td>
-    <td>Vladimir Likhatsky</td>
-  </tr>
-  <tr></tr>
-</table>
+Version             | Date             | Description                                                  | Author
+--------------------|------------------|--------------------------------------------------------------|-----------------------
+First draft variant | January 31, 2018 | First draft variant. It will be refined in dev state lately. | Vladimir Likhatsky
 
 ### Intro
 
