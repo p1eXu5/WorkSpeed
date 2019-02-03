@@ -5,9 +5,7 @@ namespace WorkSpeed.Data.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public float Complexity { get; set; }
-
-        public int GroupId { get; set; }
-        public OperationGroup Group { get; set; }
+        public OperationGroups OperationGroup { get; set; }
+        public float? Complexity { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WorkSpeed.Data.Models
 {
@@ -14,14 +15,14 @@ namespace WorkSpeed.Data.Models
         /// <summary>
         /// Item lenght in cm.
         /// </summary>
-        public float ItemLength { get; set; }
-        public float ItemWidth  { get; set; }
-        public float ItemHeight { get; set; }
+        public float? ItemLength { get; set; }
+        public float? ItemWidth  { get; set; }
+        public float? ItemHeight { get; set; }
     
-        public float ItemWeight { get; set; }
+        public float? ItemWeight { get; set; }
 
         // Computed
-        public float ItemVolume { get; set; }
+        public float? ItemVolume { get; set; }
 
         public float? CartonLength { get; set; }
         public float? CartonWidth  { get; set; }
@@ -33,12 +34,15 @@ namespace WorkSpeed.Data.Models
         public float? CartonWeight { get; set; }
         public float? CartonVolume { get; set; }
 
-        public float GatheringComplexity { get; set; }
-        public float PackagingComplexity { get; set; }
-        public float ScanningComplexity  { get; set; }
-        public float InventoryComplexity { get; set; }
-        public float PlacingComplexity   { get; set; }
+        public float? GatheringComplexity { get; set; }
+        public float? PackagingComplexity { get; set; }
+        public float? ScanningComplexity  { get; set; }
+        public float? InventoryComplexity { get; set; }
+        public float? PlacingComplexity   { get; set; }
 
+        public int? ParentId { get; set; }
         public Product Parent { get; set; }
+
+        public List< Product > Children { get; set; }
     }
 }

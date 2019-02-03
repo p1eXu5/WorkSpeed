@@ -7,7 +7,7 @@ namespace WorkSpeed.Data.Models
 {
     public class Employee
     {
-        [ MaxLength (7), MinLength (7), Required ]
+        [ MaxLength (7), MinLength (7)]
         public string Id { get; set; }
 
         public string Name { get; set; }

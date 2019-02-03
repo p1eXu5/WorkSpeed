@@ -45,7 +45,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agbm.NpoiExcel.Tests", "Agb
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{12EEFD5A-880A-4FBE-AFFE-F2102BF2617A}"
 	ProjectSection(SolutionItems) = preProject
-		Documents\Tk.cs = Documents\Tk.cs
+		Documents\Design\Precedent P1. Автоматизированный ввод данных для расчёта выработки.md = Documents\Design\Precedent P1. Автоматизированный ввод данных для расчёта выработки.md
+		Documents\Design\Precedent P2. Формирование интерактивного отчёта о выработке за определённый период.md = Documents\Design\Precedent P2. Формирование интерактивного отчёта о выработке за определённый период.md
+		Documents\Design\Precedent P3. Точная настройка алгоритма расчёта выработки.md = Documents\Design\Precedent P3. Точная настройка алгоритма расчёта выработки.md
+		Documents\Design\Precedent P4. Управление рабочими сменами.md = Documents\Design\Precedent P4. Управление рабочими сменами.md
+		Documents\Design\Precedent P5. Управление графиками перерывов.md = Documents\Design\Precedent P5. Управление графиками перерывов.md
+		Documents\Design\Precedent P6. Экспорт результатов в табличном виде.md = Documents\Design\Precedent P6. Экспорт результатов в табличном виде.md
+		Documents\Spec.md = Documents\Spec.md
+		Documents\Design\Vision.md = Documents\Design\Vision.md
+		Vocabulary.cs = Vocabulary.cs
 	EndProjectSection
 EndProject
 Global

@@ -59,7 +59,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Id = 1,
                     Name = "Выгрузка машины",
                     GroupId = 1,
-                    Group = _operationGroups.First( o => o.Id == 1 ),
+                    OperationGroup = _operationGroups.First( o => o.Id == 1 ),
                     Complexity = (float) 1.0
                 },
 
@@ -67,7 +67,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Id = 2,
                     Name = "Погрузка машины",
                     GroupId = 1,
-                    Group = _operationGroups.First( o => o.Id == 1 ),
+                    OperationGroup = _operationGroups.First( o => o.Id == 1 ),
                     Complexity = (float) 1.0
                 },
 
@@ -75,7 +75,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Id = 3,
                     Name = "Подбор товара",
                     GroupId = 2,
-                    Group = _operationGroups.First( o => o.Id == 2 ),
+                    OperationGroup = _operationGroups.First( o => o.Id == 2 ),
                     Complexity = (float) 1.0
                 },
 
@@ -83,7 +83,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Id = 4,
                     Name = "Подбор клиентского товара",
                     GroupId = 4,
-                    Group = _operationGroups.First( o => o.Id == 4 ),
+                    OperationGroup = _operationGroups.First( o => o.Id == 4 ),
                     Complexity = (float) 1.0
                 },
 
@@ -91,7 +91,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Id = 5,
                     Name = "Подбор товаров покупателей",
                     GroupId = 4,
-                    Group = _operationGroups.First( o => o.Id == 4 ),
+                    OperationGroup = _operationGroups.First( o => o.Id == 4 ),
                     Complexity = (float) 1.0
                 },
 
@@ -99,7 +99,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Id = 6,
                     Name = "Упаковка товара в места",
                     GroupId = 3,
-                    Group = _operationGroups.First( o => o.Id == 3 ),
+                    OperationGroup = _operationGroups.First( o => o.Id == 3 ),
                     Complexity = (float) 1.0
                 },
 
@@ -107,7 +107,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Id = 7,
                     Name = "Приём товара",
                     GroupId = 6,
-                    Group = _operationGroups.First( o => o.Id == 6 ),
+                    OperationGroup = _operationGroups.First( o => o.Id == 6 ),
                     Complexity = (float) 1.0
                 },
 
@@ -115,7 +115,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Id = 8,
                     Name = "Размещение товара",
                     GroupId = 9,
-                    Group = _operationGroups.First( o => o.Id == 9 ),
+                    OperationGroup = _operationGroups.First( o => o.Id == 9 ),
                     Complexity = (float) 1.0
                 },
 
@@ -123,7 +123,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Id = 9,
                     Name = "Перемещение товара",
                     GroupId = 10,
-                    Group = _operationGroups.First( o => o.Id == 10 ),
+                    OperationGroup = _operationGroups.First( o => o.Id == 10 ),
                     Complexity = (float) 1.0
                 },
 
@@ -131,7 +131,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     Id = 10,
                     Name = "Инвентаризация",
                     GroupId = 11,
-                    Group = _operationGroups.First( o => o.Id == 11 ),
+                    OperationGroup = _operationGroups.First( o => o.Id == 11 ),
                     Complexity = (float) 1.0
                 },
             } );

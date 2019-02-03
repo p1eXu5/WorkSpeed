@@ -129,6 +129,12 @@
     <Compile Include="Comparers\EmployeeActionComparer.cs" />
     <Compile Include="Comparers\EmployeeComparer.cs" />
     <Compile Include="Comparers\OperationComparer.cs" />
+    <Compile Include="DataContexts\Configurations\AddressConfiguration.cs" />
+    <Compile Include="DataContexts\Configurations\EmployeeConfiguration.cs" />
+    <Compile Include="DataContexts\Configurations\OperationConfiguration.cs" />
+    <Compile Include="DataContexts\Configurations\PositionConfiguration.cs" />
+    <Compile Include="DataContexts\Configurations\ProductConfiguration.cs" />
+    <Compile Include="DataContexts\Configurations\ShipmentActionDetails.cs" />
     <Compile Include="Interfaces\IEntity.cs" />
     <Compile Include="BusinessContexts\IWorkSpeedBusinessContext.cs" />
     <Compile Include="DataContexts\WorkSpeedDataContext.cs" />
@@ -151,7 +157,6 @@
     <Compile Include="Models\Actions\DoubleAddressAction.cs" />
     <Compile Include="Models\Actions\InventoryAction.cs" />
     <Compile Include="Models\Operation.cs" />
-    <Compile Include="Models\OperationGroup.cs" />
     <Compile Include="Models\OperationGroups.cs" />
     <Compile Include="Models\PersonnelFileRecord.cs" />
     <Compile Include="Models\Position.cs" />
@@ -166,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\12 - Декабрь 2018 - расчёты %28тариф 1%29.xlsx" />
     <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\Выработка 28.11.2018 8.00 - 29.11.2018 8.00.xls" />

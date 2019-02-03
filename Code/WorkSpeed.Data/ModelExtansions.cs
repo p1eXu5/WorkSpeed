@@ -13,19 +13,14 @@ namespace WorkSpeed.Data
         /// <returns></returns>
         public static bool IsGatheringOperation ( this EmployeeActionBase employeeAction )
         {
-            var operationGroup = employeeAction?.Operation?.Group?.Name ?? throw new ArgumentNullException();
+            var operationGroup = employeeAction?.Operation?.OperationGroup ?? throw new ArgumentNullException();
 
             switch ( operationGroup )
             {
-
                 case OperationGroups.Gathering:
-                case OperationGroups.ClientGathering:
-                case OperationGroups.ShopperGathering:
                 case OperationGroups.Packing:
-                case OperationGroups.ClientPacking:
                 case OperationGroups.Defragmentation:
                 case OperationGroups.Placing:
-                case OperationGroups.Replacing:
 
                     return true;
             }
@@ -40,7 +35,7 @@ namespace WorkSpeed.Data
         /// <returns></returns>
         public static bool IsShipmentOperation ( this EmployeeActionBase employeeAction )
         {
-            var operationGroup = employeeAction?.Operation?.Group?.Name ?? throw new ArgumentNullException();
+            var operationGroup = employeeAction?.Operation?.OperationGroup ?? throw new ArgumentNullException();
 
             switch ( operationGroup )
             {
@@ -59,7 +54,7 @@ namespace WorkSpeed.Data
         /// <returns></returns>
         public static OperationGroups GetOperationGroup ( this EmployeeActionBase employeeAction )
         {
-            return employeeAction?.Operation?.Group?.Name ?? throw new ArgumentNullException();
+            return employeeAction?.Operation?.OperationGroup ?? throw new ArgumentNullException();
         }
 
         /// <summary>
@@ -71,7 +66,7 @@ namespace WorkSpeed.Data
         {
             if ( product == null ) throw new ArgumentNullException();
 
-            return product.ItemHeight * product.ItemWidth * product.ItemLength / 1000;
+            return (double)(product.ItemHeight ?? 0 * product.ItemWidth ?? 0 * product.ItemLength ?? 0 / 1000.0);
         }
 
         /// <summary>
