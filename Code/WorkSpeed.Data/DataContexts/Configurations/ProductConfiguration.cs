@@ -42,7 +42,10 @@ namespace WorkSpeed.Data.DataContexts.Configurations
             builder.Property( p => p.PackagingComplexity ).HasColumnType( "real" );
             builder.Property( p => p.PlacingComplexity ).HasColumnType( "real" );
 
-            builder.HasOne( p => p.Parent ).WithMany( p => p.Children ).HasForeignKey( p => p.ParentId ).HasConstraintName( "ForeignKey_ProductChild_ProductParent" );
+            builder.HasOne( p => p.Parent )
+                   .WithMany( p => p.Children )
+                   .HasForeignKey( p => p.ParentId )
+                   .HasConstraintName( "ForeignKey_ProductChild_ProductParent" );
         }
     }
 }

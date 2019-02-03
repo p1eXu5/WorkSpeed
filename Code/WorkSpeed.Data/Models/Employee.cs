@@ -15,18 +15,11 @@ namespace WorkSpeed.Data.Models
         public bool IsSmoker { get; set; }
         public DateTime? ProbationEnd { get; set; }
 
-        [ Required ]
+        public int? PositionId { get; set; }
         public Position Position { get; set; }
-
-        [ Required ]
         public Rank Rank { get; set; }
-
-        [ Required ]
         public Appointment Appointment { get; set; }
-
-        [ Required ]
         public Shift Shift { get; set; }
-
         public ShortBreakSchedule ShortBreakSchedule { get; set; }
 
         public List< ReceptionAction > ReceptionActions { get; set; }
@@ -34,8 +27,6 @@ namespace WorkSpeed.Data.Models
         public List< InventoryAction > InventoryActions { get; set; }
         public List< ShipmentAction > ShipmentActions { get; set; }
         public List< OtherAction > OtherActions { get; set; }
-
-        public List< PersonnelFileRecord > PersonnelFileRecordCollection { get; set; }
 
         public override string ToString ()
         {

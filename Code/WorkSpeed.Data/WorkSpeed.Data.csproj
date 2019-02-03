@@ -130,11 +130,12 @@
     <Compile Include="Comparers\EmployeeComparer.cs" />
     <Compile Include="Comparers\OperationComparer.cs" />
     <Compile Include="DataContexts\Configurations\AddressConfiguration.cs" />
+    <Compile Include="DataContexts\Configurations\Document1CConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\EmployeeConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\OperationConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\PositionConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\ProductConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\ShipmentActionDetails.cs" />
+    <Compile Include="DataContexts\Configurations\ShipmentActionConfiguration.cs" />
     <Compile Include="Interfaces\IEntity.cs" />
     <Compile Include="BusinessContexts\IWorkSpeedBusinessContext.cs" />
     <Compile Include="DataContexts\WorkSpeedDataContext.cs" />
@@ -158,7 +159,6 @@
     <Compile Include="Models\Actions\InventoryAction.cs" />
     <Compile Include="Models\Operation.cs" />
     <Compile Include="Models\OperationGroups.cs" />
-    <Compile Include="Models\PersonnelFileRecord.cs" />
     <Compile Include="Models\Position.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Rank.cs" />
