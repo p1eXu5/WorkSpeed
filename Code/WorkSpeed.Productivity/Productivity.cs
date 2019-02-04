@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Enums;
 
 namespace WorkSpeed.Productivity
 {
-    public struct ProductivityEmployee
+    public struct Productivity
     {
         public Employee Employee { get; set; }
 

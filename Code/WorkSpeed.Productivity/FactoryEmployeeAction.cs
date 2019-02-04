@@ -65,13 +65,13 @@ namespace WorkSpeed.Productivity
         /// </summary>
         /// <param name="employee"></param>
         /// <returns></returns>
-        public ProductivityEmployee GetProductivity ( Employee employee )
+        public Productivity GetProductivity ( Employee employee )
         {
-            if ( !HasOperations( employee ) ) return new ProductivityEmployee();
+            if ( !HasOperations( employee ) ) return new Productivity();
 
             var actionRepository = _actionRepositories[ employee.Id ];
 
-            var productivity = new ProductivityEmployee {
+            var productivity = new Productivity {
 
                 Employee = employee,
                 TotalTime = actionRepository.GetTotalTime(),

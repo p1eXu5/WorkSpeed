@@ -15,7 +15,7 @@
 //    public class ProductivityStageViewModel : StageViewModel
 //    {
 //        private readonly ObservableCollection< ProductivityViewModel > _productivities;
-//        private IProgress< ProductivityEmployee > _progress;
+//        private IProgress< Productivity > _progress;
 //        private double _progressCounter;
 //        private double _progressStep;
 
@@ -26,7 +26,7 @@
 //            _productivities = new ObservableCollection< ProductivityViewModel >();
 //            Productivities = new ReadOnlyObservableCollection< ProductivityViewModel >( _productivities );
 
-//            _progress = new Progress< ProductivityEmployee >( OnProgress );
+//            _progress = new Progress< Productivity >( OnProgress );
 //        }
 
 //        public override string Header { get; } = "Выработка.";
@@ -57,7 +57,7 @@
 //            await Warehouse.GetProductivitiesAsync( _progress );
 //        }
 
-//        private void OnProgress ( ProductivityEmployee productivity )
+//        private void OnProgress ( Productivity productivity )
 //        {
 //            ProgressCounter = _progressCounter + _progressStep;
 

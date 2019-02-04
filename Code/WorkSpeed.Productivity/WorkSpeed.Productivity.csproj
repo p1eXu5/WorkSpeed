@@ -51,12 +51,14 @@
     <Compile Include="IBreakRepository.cs" />
     <Compile Include="ICategoryFilter.cs" />
     <Compile Include="IFactoryEmployeeAction.cs" />
+    <Compile Include="IProductivityCalculator.cs" />
+    <Compile Include="ProductivityCalculator.cs" />
     <Compile Include="RepositoryEmployeeAction.cs" />
     <Compile Include="FactoryEmployeeAction.cs" />
     <Compile Include="IPauseBetweenActions.cs" />
     <Compile Include="PauseBetweenActions.cs" />
     <Compile Include="Period.cs" />
-    <Compile Include="ProductivityEmployee.cs" />
+    <Compile Include="Productivity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ActionDetails\WithScansActionDetails.cs" />
   </ItemGroup>

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Enums;
 
 namespace WorkSpeed.Data.DataContexts.Configurations
 {
@@ -18,10 +15,10 @@ namespace WorkSpeed.Data.DataContexts.Configurations
 
             builder.HasKey( a => new { a.Letter, a.Row, a.Section, a.Shelf, CellNum = a.Box } );
 
-            builder.Property( p => p.Letter ).HasColumnType( "varchar(1)" ).IsRequired( true );
-            builder.Property( p => p.Section ).HasColumnType( "tinyint" ).IsRequired( true );
-            builder.Property( p => p.Shelf ).HasColumnType( "tinyint" ).IsRequired( true );
-            builder.Property( p => p.Box ).HasColumnType( "tinyint" ).IsRequired( true );
+            builder.Property( p => p.Letter ).HasColumnType( "varchar(1)" ).IsRequired();
+            builder.Property( p => p.Section ).HasColumnType( "tinyint" ).IsRequired();
+            builder.Property( p => p.Shelf ).HasColumnType( "tinyint" ).IsRequired();
+            builder.Property( p => p.Box ).HasColumnType( "tinyint" ).IsRequired();
 
             var converter = new EnumToStringConverter< BoxTypes >();
             builder.Property( p => p.BoxType ).HasConversion( converter ).HasColumnType( "varchar(50)" ).IsRequired( true );

@@ -1,11 +1,13 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using WorkSpeed.Data.Models.Enums;
 
 namespace WorkSpeed.Data.Models
 {
     public class Address
     {
-        public char[] Letter { get; set; } = new char[1];
+        [ MaxLength( 1 ), MinLength( 1 )]
+        public string Letter { get; set; }
         public byte Section { get; set; }
         public byte Row { get; set; }
         public byte Shelf { get; set; }

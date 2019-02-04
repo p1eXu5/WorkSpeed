@@ -10,7 +10,7 @@ namespace WorkSpeed.Productivity
         void AddAction ( EmployeeActionBase action );
         void ClearActions ();
 
-        ProductivityEmployee GetProductivity ( Employee employee );
+        Productivity GetProductivity ( Employee employee );
 
         void AddVariableBreak ( Shift shift );
 

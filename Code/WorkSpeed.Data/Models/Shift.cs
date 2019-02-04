@@ -9,6 +9,6 @@ namespace WorkSpeed.Data.Models
         public TimeSpan StartTime { get; set; }
         public TimeSpan ShiftDuration { get; set; }
         public TimeSpan LunchDuration { get; set; }
-        public TimeSpan RestTime { get; set; }
+        public TimeSpan? RestTime { get; set; }
     }
 }

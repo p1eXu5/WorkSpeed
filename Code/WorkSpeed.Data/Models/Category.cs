@@ -3,7 +3,6 @@
 namespace WorkSpeed.Data.Models
 {
     /// <summary>
-    /// No db model
     /// [ MinVolume, MaxVolume ) l.
     /// </summary>
     public class Category
@@ -23,9 +22,9 @@ namespace WorkSpeed.Data.Models
             MaxVolume = maxVolume;
         }
 
-        public int Id { get; set; }
-        public DateTime Date { get; set; }
+        public int? Id { get; set; }
         public string Name { get; set; }
+        public string Abbreviation { get; set; }
 
         /// <summary>
         /// Minimum volume in liters.

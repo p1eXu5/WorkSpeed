@@ -11,37 +11,25 @@ using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Data.BusinessContexts
 {
-    public class WorkSpeedBusinessContext : IDisposable
+    public class WarehouseService : IDisposable, IWarehouseService
     {
-        private readonly WorkSpeedDataContext _dbContext;
+        private readonly WorkSpeedDbContext _context;
         private bool _disposed;
 
 
-        public WorkSpeedBusinessContext()
+        public WarehouseService()
         {
-            _dbContext = new WorkSpeedDataContext();
+            _context = new WorkSpeedDbContext();
         }
 
 
-        public bool HasProducts ()
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<bool> HasProductsAsync ()
-        {
-            return _dbContext.Products.AnyAsync();
-        }
 
-        public IEnumerable< Product > GetProducts ()
+        public Task ImportAsync ( string fileName )
         {
             throw new NotImplementedException();
         }
 
-        public void AddProduct ( Product product )
-        {
-            throw new NotImplementedException();
-        }
 
         #region IDisposable
 

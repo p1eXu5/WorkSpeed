@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
+using WorkSpeed.Data.Models.Enums;
 
 namespace WorkSpeed.Data.BusinessContexts
 {
@@ -16,7 +17,6 @@ namespace WorkSpeed.Data.BusinessContexts
         private readonly List< Product > _products = new List< Product >( 40_000 );
         private readonly List< Employee > _employees = new List< Employee >();
         private readonly List< DoubleAddressAction > _gatheringActions = new List< DoubleAddressAction >();
-        private readonly List< OperationGroup > _operationGroups = new List< OperationGroup >();
         private readonly List< Operation > _operations = new List< Operation >();
         private readonly List< Appointment > _appointments = new List< Appointment >();
         private readonly List< Position > _positions = new List< Position >();
@@ -42,7 +42,6 @@ namespace WorkSpeed.Data.BusinessContexts
 
         private void OnModelCreating ()
         {
-            SeedOperationGroups();
             SeedOperations();
             SeedAppointments();
             SeedPositions();
@@ -58,101 +57,75 @@ namespace WorkSpeed.Data.BusinessContexts
                 new Operation {
                     Id = 1,
                     Name = "Выгрузка машины",
-                    GroupId = 1,
-                    OperationGroup = _operationGroups.First( o => o.Id == 1 ),
+                    OperationGroup = OperationGroups.Shipment,
                     Complexity = (float) 1.0
                 },
 
                 new Operation {
                     Id = 2,
                     Name = "Погрузка машины",
-                    GroupId = 1,
-                    OperationGroup = _operationGroups.First( o => o.Id == 1 ),
+                    OperationGroup = OperationGroups.Shipment,
                     Complexity = (float) 1.0
                 },
 
                 new Operation {
                     Id = 3,
                     Name = "Подбор товара",
-                    GroupId = 2,
-                    OperationGroup = _operationGroups.First( o => o.Id == 2 ),
+                    OperationGroup = OperationGroups.Gathering,
                     Complexity = (float) 1.0
                 },
 
                 new Operation {
                     Id = 4,
                     Name = "Подбор клиентского товара",
-                    GroupId = 4,
-                    OperationGroup = _operationGroups.First( o => o.Id == 4 ),
+                    OperationGroup = OperationGroups.Gathering,
                     Complexity = (float) 1.0
                 },
 
                 new Operation {
                     Id = 5,
                     Name = "Подбор товаров покупателей",
-                    GroupId = 4,
-                    OperationGroup = _operationGroups.First( o => o.Id == 4 ),
+                    OperationGroup = OperationGroups.Gathering,
                     Complexity = (float) 1.0
                 },
 
                 new Operation {
                     Id = 6,
                     Name = "Упаковка товара в места",
-                    GroupId = 3,
-                    OperationGroup = _operationGroups.First( o => o.Id == 3 ),
+                    OperationGroup = OperationGroups.Packing,
                     Complexity = (float) 1.0
                 },
 
                 new Operation {
                     Id = 7,
                     Name = "Приём товара",
-                    GroupId = 6,
-                    OperationGroup = _operationGroups.First( o => o.Id == 6 ),
+                    OperationGroup = OperationGroups.Reception,
                     Complexity = (float) 1.0
                 },
 
                 new Operation {
                     Id = 8,
                     Name = "Размещение товара",
-                    GroupId = 9,
-                    OperationGroup = _operationGroups.First( o => o.Id == 9 ),
+                    OperationGroup = OperationGroups.Placing,
                     Complexity = (float) 1.0
                 },
 
                 new Operation {
                     Id = 9,
                     Name = "Перемещение товара",
-                    GroupId = 10,
-                    OperationGroup = _operationGroups.First( o => o.Id == 10 ),
+                    OperationGroup = OperationGroups.Placing,
                     Complexity = (float) 1.0
                 },
 
                 new Operation {
                     Id = 10,
                     Name = "Инвентаризация",
-                    GroupId = 11,
-                    OperationGroup = _operationGroups.First( o => o.Id == 11 ),
+                    OperationGroup = OperationGroups.Inventory,
                     Complexity = (float) 1.0
                 },
             } );
         }
 
-        private void SeedOperationGroups ()
-        {
-            _operationGroups.AddRange( new[] {
-                new OperationGroup { Id = 1, Name = OperationGroups.Shipment, Complexity = (float) 1.0 },
-                new OperationGroup { Id = 2, Name = OperationGroups.Gathering, Complexity = (float) 1.0 },
-                new OperationGroup { Id = 3, Name = OperationGroups.Packing, Complexity = (float) 1.0 },
-                new OperationGroup { Id = 4, Name = OperationGroups.ClientGathering, Complexity = (float) 1.0 },
-                new OperationGroup { Id = 5, Name = OperationGroups.ClientPacking, Complexity = (float) 1.0 },
-                new OperationGroup { Id = 6, Name = OperationGroups.Scanning, Complexity = (float) 1.0 },
-                new OperationGroup { Id = 7, Name = OperationGroups.ClientScanning, Complexity = (float) 1.0 },
-                new OperationGroup { Id = 8, Name = OperationGroups.Defragmentation, Complexity = (float) 1.0 },
-                new OperationGroup { Id = 9, Name = OperationGroups.Placing, Complexity = (float) 1.0 },
-                new OperationGroup { Id = 10, Name = OperationGroups.Replacing, Complexity = (float) 1.0 },
-                new OperationGroup { Id = 11, Name = OperationGroups.Inventory, Complexity = (float) 1.0 },
-            } );
-        }
 
         private void SeedAppointments ()
         {
@@ -164,7 +137,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     InnerName = "Грузчик",
                     OfficialName = "Грузчик",
                     SalaryPerOneHour = 47.85m,
-                    Abbreviations = "гр;гр.;груз;грузч.;"
+                    Abbreviation = "гр;гр.;груз;грузч.;"
                 },
 
                 new Appointment {
@@ -173,7 +146,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     InnerName = "Кладовщик на РРЦ",
                     OfficialName = "Кладовщик склада",
                     SalaryPerOneHour = 52.64m,
-                    Abbreviations = "кладовщик;кл;кл.;клад;клад.;"
+                    Abbreviation = "кладовщик;кл;кл.;клад;клад.;"
                 },
 
                 new Appointment {
@@ -182,7 +155,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     InnerName = "Кладовщик приемщик",
                     OfficialName = "Кладовщик-приемщик",
                     SalaryPerOneHour = 57.42m,
-                    Abbreviations = "приёмщик;приемщик;пр;пр.;"
+                    Abbreviation = "приёмщик;приемщик;пр;пр.;"
                 },
 
                 new Appointment {
@@ -191,7 +164,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     InnerName = "Водитель погрузчика",
                     OfficialName = "Водитель погрузчика",
                     SalaryPerOneHour = 52.64m,
-                    Abbreviations = "водитель;вод;вод.;карщик;"
+                    Abbreviation = "водитель;вод;вод.;карщик;"
                 },
 
                 new Appointment {
@@ -200,7 +173,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     InnerName = "Старший кладовщик на РРЦ",
                     OfficialName = "Старший кладовщик склада",
                     SalaryPerOneHour = 62.21m,
-                    Abbreviations = "старший;ст;ст.;старшийкладовщик;ст.клад."
+                    Abbreviation = "старший;ст;ст.;старшийкладовщик;ст.клад."
                 },
 
                 new Appointment {
@@ -209,7 +182,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     InnerName = "Заместитель управляющего склада по отгрузке",
                     OfficialName = "Менеджер по отправке груза",
                     SalaryPerOneHour = 95.70m,
-                    Abbreviations = "зампоприёмке;зам.пр."
+                    Abbreviation = "зампоприёмке;зам.пр."
                 },
 
                 new Appointment {
@@ -218,7 +191,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     InnerName = "Заместитель управляющего склада по приемке",
                     OfficialName = "Менеджер по приему груза",
                     SalaryPerOneHour = 92.22m,
-                    Abbreviations = "зампоотгрузке;зам.отгр.;"
+                    Abbreviation = "зампоотгрузке;зам.отгр.;"
                 },
 
                 new Appointment {
@@ -227,7 +200,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     InnerName = "Управляющий РРЦ",
                     OfficialName = "Управляющий складом",
                     SalaryPerOneHour = 119.63m,
-                    Abbreviations = "управляющий;упр.;упр;упр.складом"
+                    Abbreviation = "управляющий;упр.;упр;упр.складом"
                 },
 
             } );
@@ -416,42 +389,36 @@ namespace WorkSpeed.Data.BusinessContexts
             _categories.AddRange( new [] {
                 new Category {
                     Id = 1,
-                    Date = DateTime.Now,
                     Name = "Товары до 2,5 литров",
                     MinVolume = 0.0,
                     MaxVolume = 2.5
                 },
                 new Category {
-                    Id = 1,
-                    Date = DateTime.Now,
+                    Id = 2,
                     Name = "Товары до 5 литров",
                     MinVolume = 2.5,
                     MaxVolume = 5.0,
                 },
                 new Category {
-                    Id = 1,
-                    Date = DateTime.Now,
+                    Id = 3,
                     Name = "Товары до 25 литров",
                     MinVolume = 5.0,
                     MaxVolume = 25.0,
                 },
                 new Category {
-                    Id = 1,
-                    Date = DateTime.Now,
+                    Id = 4,
                     Name = "Товары до 100 литров",
                     MinVolume = 25.0,
                     MaxVolume = 100.0,
                 },
                 new Category {
-                    Id = 1,
-                    Date = DateTime.Now,
+                    Id = 5,
                     Name = "Товары до 250 литров",
                     MinVolume = 100.0,
                     MaxVolume = 250.0,
                 },
                 new Category {
-                    Id = 1,
-                    Date = DateTime.Now,
+                    Id = 6,
                     Name = "Товары от 250 литров",
                     MinVolume = 250.0,
                     MaxVolume = double.PositiveInfinity,
@@ -558,8 +525,8 @@ namespace WorkSpeed.Data.BusinessContexts
         {
             if ( employee == null || employee.Id.Length != 7 || _employees.Contains( employee ) ) return;
 
-            if ( employee.Appointment == null || String.IsNullOrWhiteSpace( employee.Appointment.Abbreviations ) ) return;
-            var appointment = _appointments.FirstOrDefault( a => a.Abbreviations.Contains( employee.Appointment.Abbreviations ) );
+            if ( employee.Appointment == null || String.IsNullOrWhiteSpace( employee.Appointment.Abbreviation ) ) return;
+            var appointment = _appointments.FirstOrDefault( a => a.Abbreviation.Contains( employee.Appointment.Abbreviation ) );
             if (appointment == null) return;
             employee.Appointment = appointment;
 

@@ -12,9 +12,9 @@
 //{
 //    public class ProductivityViewModel : ViewModel
 //    {
-//        private readonly ProductivityEmployee _productivity;
+//        private readonly Productivity _productivity;
 
-//        public ProductivityViewModel ( ProductivityEmployee productivity )
+//        public ProductivityViewModel ( Productivity productivity )
 //        {
 //            _productivity = productivity;
 

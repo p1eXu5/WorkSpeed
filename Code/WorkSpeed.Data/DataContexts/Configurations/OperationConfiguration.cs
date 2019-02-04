@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Enums;
 
 namespace WorkSpeed.Data.DataContexts.Configurations
 {

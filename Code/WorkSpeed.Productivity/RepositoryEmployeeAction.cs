@@ -8,6 +8,7 @@ using WorkSpeed.Data;
 using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
+using WorkSpeed.Data.Models.Enums;
 using WorkSpeed.Productivity.ActionDetails;
 
 namespace WorkSpeed.Productivity
@@ -264,18 +265,18 @@ namespace WorkSpeed.Productivity
             // OffTime
             _actions[ operationCount  - 1 ] = new TimeActionDetails();
 
-            _actions[ ( int )OperationGroups.ClientGathering ] = new WithProductActionDetails( categoryFilter );
-            _actions[ ( int )OperationGroups.ClientPacking ] = new WithProductActionDetails( categoryFilter );
-            _actions[ ( int )OperationGroups.ClientScanning ] = new WithScansActionDetails( categoryFilter );
+            //_actions[ ( int )OperationGroups.ClientGathering ] = new WithProductActionDetails( categoryFilter );
+            //_actions[ ( int )OperationGroups.ClientPacking ] = new WithProductActionDetails( categoryFilter );
+            //_actions[ ( int )OperationGroups.ClientScanning ] = new WithScansActionDetails( categoryFilter );
             _actions[ ( int )OperationGroups.Defragmentation ] = new WithProductActionDetails( categoryFilter );
             _actions[ ( int )OperationGroups.Gathering ] = new WithProductActionDetails( categoryFilter );
             _actions[ ( int )OperationGroups.Inventory ] = new WithProductActionDetails( categoryFilter );
             _actions[ ( int )OperationGroups.Packing ] = new WithProductActionDetails( categoryFilter );
             _actions[ ( int )OperationGroups.Placing ] = new WithProductActionDetails( categoryFilter );
-            _actions[ ( int )OperationGroups.Replacing ] = new WithProductActionDetails( categoryFilter );
-            _actions[ ( int )OperationGroups.Scanning ] = new WithScansActionDetails( categoryFilter );
+            //_actions[ ( int )OperationGroups.Replacing ] = new WithProductActionDetails( categoryFilter );
+           // _actions[ ( int )OperationGroups.Scanning ] = new WithScansActionDetails( categoryFilter );
             _actions[ ( int )OperationGroups.Shipment ] = new ShipmentActionDetails();
-            _actions[ ( int )OperationGroups.ShopperGathering ] = new WithScansActionDetails( categoryFilter );
+            //_actions[ ( int )OperationGroups.ShopperGathering ] = new WithScansActionDetails( categoryFilter );
         }
 
         /// <summary>

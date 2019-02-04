@@ -11,7 +11,7 @@ namespace WorkSpeed.Data.Models.Enums
         Placing,
         Defragmentation,
         Inventory,
-        Scanning,
+        Reception,
         Shipment,
         Unknown,
     }

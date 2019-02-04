@@ -5,7 +5,7 @@ namespace WorkSpeed.Data.Models.ActionDetails
 {
     public class ReceptionActionDetail : SingleAddressDetail
     {
-        public ushort ScanQuantity { get; set; }
+        public short ScanQuantity { get; set; }
         public bool IsClientScanning { get; set; }
 
         public int ReceptionActionId { get; set; }
