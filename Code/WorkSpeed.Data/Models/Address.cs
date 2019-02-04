@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using WorkSpeed.Data.Models.Enums;
 
 namespace WorkSpeed.Data.Models
 {

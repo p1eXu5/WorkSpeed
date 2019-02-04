@@ -1,4 +1,6 @@
 ﻿
+using WorkSpeed.Data.Models.Enums;
+
 namespace WorkSpeed.Data.Models
 {
     public class Operation

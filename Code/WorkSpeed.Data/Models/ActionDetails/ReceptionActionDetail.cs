@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Data.Models.ActionDetails
 {
@@ -10,5 +7,8 @@ namespace WorkSpeed.Data.Models.ActionDetails
     {
         public ushort ScanQuantity { get; set; }
         public bool IsClientScanning { get; set; }
+
+        public int ReceptionActionId { get; set; }
+        public ReceptionAction ReceptionAction { get; set; }
     }
 }

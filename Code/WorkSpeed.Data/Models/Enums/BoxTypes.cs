@@ -1,6 +1,6 @@
 ﻿
 
-namespace WorkSpeed.Data.Models
+namespace WorkSpeed.Data.Models.Enums
 {
     public enum BoxTypes : byte
     {

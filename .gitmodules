@@ -1,3 +1,6 @@
 [submodule "Agbm.Tools"]
 	path = Agbm.Tools
 	url = https://github.com/p1exu5/Agbm.Tools.git
+[submodule "Agbm.Wpf"]
+	path = Agbm.Wpf
+	url = https://github.com/p1eXu5/Agbm.Wpf

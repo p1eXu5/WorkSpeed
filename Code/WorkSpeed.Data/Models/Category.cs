@@ -3,6 +3,7 @@
 namespace WorkSpeed.Data.Models
 {
     /// <summary>
+    /// No db model
     /// [ MinVolume, MaxVolume ) l.
     /// </summary>
     public class Category

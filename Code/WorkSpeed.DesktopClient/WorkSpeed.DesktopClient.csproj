@@ -254,12 +254,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WorkSpeed.MvvmBaseLibrary\WorkSpeed.MvvmBaseLibrary.csproj">
-      <Project>{aa23ec1f-26a2-4962-8b57-8c4626c4cd9f}</Project>
-      <Name>WorkSpeed.MvvmBaseLibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\openfile.png" />
   </ItemGroup>
   <ItemGroup>
@@ -270,6 +264,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Fonts\Rubik\OFL.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Agbm.Wpf\Code\Agbm.Wpf.MvvmBaseLibrary\Agbm.Wpf.MvvmBaseLibrary.csproj">
+      <Project>{c92ff512-b9c0-4aaf-9a9b-d0dee139af44}</Project>
+      <Name>Agbm.Wpf.MvvmBaseLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
