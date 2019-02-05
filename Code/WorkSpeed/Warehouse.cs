@@ -156,7 +156,7 @@ namespace WorkSpeed
         private bool Import ( string fileName,  Type type = null )
         {
             //var sheetTable = _dataImporter.GetSheetTable (fileName, 0);
-            //var mappedType = _typeRepository.GetTypeWithMap ( sheetTable );
+            //var mappedType = _typeRepository.GetTypeAndPropertyMap ( sheetTable );
 
             //if ( type != null && mappedType.type != null && !mappedType.type.IsAssignableFrom( type ) ) {
             //    return false;
