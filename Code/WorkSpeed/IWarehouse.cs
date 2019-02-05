@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 using WorkSpeed.FileModels;
 using WorkSpeed.Productivity;
 using WorkSpeed.ProductivityCalculator;
@@ -30,12 +31,11 @@ namespace WorkSpeed.Interfaces
         IEnumerable< Rank > GetRanks ();
         IEnumerable< Shift > GetShifts ();
         IEnumerable< ShortBreakSchedule > GetBreakList ();
-        IEnumerable< GatheringAction > GetGatheringActions ();
+        IEnumerable< DoubleAddressAction > GetGatheringActions ();
         IEnumerable< Category > GetCategories ();
 
         TimeSpan GetThreshold ();
 
 
-        Task GetProductivitiesAsync ( IProgress< ProductivityEmployee > progress );
     }
 }
