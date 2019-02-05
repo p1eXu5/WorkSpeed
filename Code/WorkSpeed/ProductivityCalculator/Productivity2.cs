@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Constraints;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
+using WorkSpeed.Data.Models.Enums;
 using WorkSpeed.Interfaces;
 using WorkSpeed.ProductivityIndicatorsModels;
 
@@ -23,15 +25,15 @@ namespace WorkSpeed.ProductivityCalculator
             _indicatorsNames = new Dictionary< OperationGroups, string >
             {
                 [ OperationGroups.Gathering ] = "Набор неклиентского товара",
-                [ OperationGroups.ClientGathering ] = "Набор клиентского товара",
-                [ OperationGroups.ShopperGathering ] = "Набор товара покупателей",
+                //[ OperationGroups.ClientGathering ] = "Набор клиентского товара",
+                //[ OperationGroups.ShopperGathering ] = "Набор товара покупателей",
 
-                [ OperationGroups.Placing ] = "Расстановка",
-                [ OperationGroups.Defragmentation ] = "Подтоварка",
-                [ OperationGroups.Inventory ] = "Инвентаризация",
+                //[ OperationGroups.Placing ] = "Расстановка",
+                //[ OperationGroups.Defragmentation ] = "Подтоварка",
+                //[ OperationGroups.Inventory ] = "Инвентаризация",
 
-                [ OperationGroups.Scanning ] = "Сканирование неклиентского товара",
-                [ OperationGroups.ClientScanning ] = "Сканирование клиентского товара",
+                //[ OperationGroups.Scanning ] = "Сканирование неклиентского товара",
+                //[ OperationGroups.ClientScanning ] = "Сканирование клиентского товара",
 
                 [ OperationGroups.Shipment ] = "Загружено/Погружено",
             };
@@ -75,10 +77,10 @@ namespace WorkSpeed.ProductivityCalculator
             _inventory = new LineIndicators( _indicatorsNames[ OperationGroups.Inventory ], _categoryConstraints );
 
             _scanned = new CompositeQuantityIndicators( "Сканирование" );
-            FillScanningIndicators( _scanned );
+            //FillScanningIndicators( _scanned );
 
             _shipment = new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.Shipment ] );
-            FillShipmentIndicators( _shipment );
+            //FillShipmentIndicators( _shipment );
         }
 
         private void FillGetheringIndicators ( CompositeQuantityIndicators gathered )
@@ -93,44 +95,44 @@ namespace WorkSpeed.ProductivityCalculator
                 .AddIndicators( new VolumeIndicators( "Объём" ) );
 
 
-            // client gathering
-            gathered.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.ClientGathering ] ) );
+            //    // client gathering
+            //    gathered.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.ClientGathering ] ) );
 
-            ( ( CompositeQuantityIndicators )gathered[ _indicatorsNames[ OperationGroups.ClientGathering ] ] )
-                .AddIndicators( new LineIndicators( "Строчки" ) );
+            //    ( ( CompositeQuantityIndicators )gathered[ _indicatorsNames[ OperationGroups.ClientGathering ] ] )
+            //        .AddIndicators( new LineIndicators( "Строчки" ) );
 
-            ( ( CompositeQuantityIndicators )gathered[ _indicatorsNames[ OperationGroups.ClientGathering ] ] )
-                .AddIndicators( new VolumeIndicators( "Объём" ) );
-
-
-            // shopper gathering
-            gathered.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.ShopperGathering ] ) );
-
-            ( ( CompositeQuantityIndicators )gathered[ _indicatorsNames[ OperationGroups.ShopperGathering ] ] )
-                .AddIndicators( new LineIndicators( "Строчки" ) );
-
-            ( ( CompositeQuantityIndicators )gathered[ _indicatorsNames[ OperationGroups.ShopperGathering ] ] )
-                .AddIndicators( new VolumeIndicators( "Объём" ) );
-        }
-
-        private void FillScanningIndicators ( CompositeQuantityIndicators scanned )
-        {
-            scanned.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.Scanning ] ) );
-
-            ( ( CompositeQuantityIndicators )scanned[ _indicatorsNames[ OperationGroups.Scanning ] ] )
-                .AddIndicators( new LineIndicators( "Строчки" ) );
-
-            ( ( CompositeQuantityIndicators )scanned[ _indicatorsNames[ OperationGroups.Scanning ] ] )
-                .AddIndicators( new VolumeIndicators( "Объём" ) );
+            //    ( ( CompositeQuantityIndicators )gathered[ _indicatorsNames[ OperationGroups.ClientGathering ] ] )
+            //        .AddIndicators( new VolumeIndicators( "Объём" ) );
 
 
-            scanned.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.ClientScanning ] ) );
+            //    // shopper gathering
+            //    gathered.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.ShopperGathering ] ) );
 
-            ( ( CompositeQuantityIndicators )scanned[ _indicatorsNames[ OperationGroups.ClientScanning ] ] )
-                .AddIndicators( new LineIndicators( "Строчки" ) );
+            //    ( ( CompositeQuantityIndicators )gathered[ _indicatorsNames[ OperationGroups.ShopperGathering ] ] )
+            //        .AddIndicators( new LineIndicators( "Строчки" ) );
 
-            ( ( CompositeQuantityIndicators )scanned[ _indicatorsNames[ OperationGroups.ClientScanning ] ] )
-                .AddIndicators( new VolumeIndicators( "Объём" ) );
+            //    ( ( CompositeQuantityIndicators )gathered[ _indicatorsNames[ OperationGroups.ShopperGathering ] ] )
+            //        .AddIndicators( new VolumeIndicators( "Объём" ) );
+            //}
+
+            //private void FillScanningIndicators ( CompositeQuantityIndicators scanned )
+            //{
+            //    scanned.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.Scanning ] ) );
+
+            //    ( ( CompositeQuantityIndicators )scanned[ _indicatorsNames[ OperationGroups.Scanning ] ] )
+            //        .AddIndicators( new LineIndicators( "Строчки" ) );
+
+            //    ( ( CompositeQuantityIndicators )scanned[ _indicatorsNames[ OperationGroups.Scanning ] ] )
+            //        .AddIndicators( new VolumeIndicators( "Объём" ) );
+
+
+            //    scanned.AddIndicators( new CompositeQuantityIndicators( _indicatorsNames[ OperationGroups.ClientScanning ] ) );
+
+            //    ( ( CompositeQuantityIndicators )scanned[ _indicatorsNames[ OperationGroups.ClientScanning ] ] )
+            //        .AddIndicators( new LineIndicators( "Строчки" ) );
+
+            //    ( ( CompositeQuantityIndicators )scanned[ _indicatorsNames[ OperationGroups.ClientScanning ] ] )
+            //        .AddIndicators( new VolumeIndicators( "Объём" ) );
         }
 
         private void FillShipmentIndicators ( CompositeQuantityIndicators shipment )
@@ -164,9 +166,9 @@ namespace WorkSpeed.ProductivityCalculator
 
         #region Methods
 
-        public void AddTime ( EmployeeAction employeeAction,  AddTimeOptions option = AddTimeOptions.Duration )
+        public void AddTime ( EmployeeActionBase employeeAction,  AddTimeOptions option = AddTimeOptions.Duration )
         {
-            switch ( employeeAction.Operation.Group.Name ) {
+            switch ( employeeAction.Operation.OperationGroup ) {
 
                 case OperationGroups.Gathering :
                 case OperationGroups.Packing :
@@ -175,30 +177,30 @@ namespace WorkSpeed.ProductivityCalculator
                         GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).GatheringTime );
                     break;
 
-                case OperationGroups.ClientGathering :
-                case OperationGroups.ClientPacking :
+                //case OperationGroups.ClientGathering :
+                //case OperationGroups.ClientPacking :
 
-                    (( TimeIndicators )Times).ClientGatheringTime += 
-                        GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).ClientGatheringTime );
-                    break;
+                //    (( TimeIndicators )Times).ClientGatheringTime += 
+                //        GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).ClientGatheringTime );
+                //    break;
 
-                case OperationGroups.ShopperGathering:
+                //case OperationGroups.ShopperGathering:
 
-                    (( TimeIndicators )Times).ShopperGatheringTime += 
-                        GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).ShopperGatheringTime );
-                    break;
+                //    (( TimeIndicators )Times).ShopperGatheringTime += 
+                //        GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).ShopperGatheringTime );
+                //    break;
 
-                case OperationGroups.Scanning :
+                //case OperationGroups.Scanning :
 
-                    (( TimeIndicators )Times).ScanningTime += 
-                        GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).ScanningTime );
-                    break;
+                //    (( TimeIndicators )Times).ScanningTime += 
+                //        GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).ScanningTime );
+                //    break;
 
-                case OperationGroups.ClientScanning :
+                //case OperationGroups.ClientScanning :
 
-                    (( TimeIndicators )Times).ClientScanningTime += 
-                        GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).ClientScanningTime );
-                    break;
+                //    (( TimeIndicators )Times).ClientScanningTime += 
+                //        GetProductivityTimer( employeeAction,  option,  (( TimeIndicators )Times).ClientScanningTime );
+                //    break;
 
                 case OperationGroups.Defragmentation :
 
@@ -232,11 +234,7 @@ namespace WorkSpeed.ProductivityCalculator
             }
         }
 
-        public void AddActionDetails ( EmployeeAction employeeAction )
-        {
-        }
-
-        private ProductivityTime GetProductivityTimer ( EmployeeAction employeeAction,  AddTimeOptions option,  ProductivityTime timer )
+        private ProductivityTime GetProductivityTimer ( EmployeeActionBase employeeAction,  AddTimeOptions option,  ProductivityTime timer )
         {
             switch ( option ) {
 
@@ -259,10 +257,6 @@ namespace WorkSpeed.ProductivityCalculator
             return timer;
         }
 
-        private void AddGatheringDetails ( GatheringAction gatheringAction )
-        {
-            
-        }
 
         #endregion
     }
