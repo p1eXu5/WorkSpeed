@@ -178,94 +178,94 @@ namespace WorkSpeed
 
         private bool Import ( string fileName,  Type type = null )
         {
-            var sheetTable = _dataImporter.ImportData (fileName, 0);
-            var mappedType = _typeRepository.GetTypeWithMap ( sheetTable );
+            //var sheetTable = _dataImporter.ImportData (fileName, 0);
+            //var mappedType = _typeRepository.GetTypeWithMap ( sheetTable );
 
-            if ( type != null && mappedType.type != null && !mappedType.type.IsAssignableFrom( type ) ) {
-                return false;
-            }
+            //if ( type != null && mappedType.type != null && !mappedType.type.IsAssignableFrom( type ) ) {
+            //    return false;
+            //}
 
 
-            if ( typeof( ProductImportModel ) == mappedType.type  ) {
+            //if ( typeof( ProductImportModel ) == mappedType.type  ) {
 
-                ImportProducts(
-                    _dataImporter.GetEnumerable( 
-                        sheetTable,  
-                        mappedType.propertyMap,  
-                        new ImportModelConverter< ProductImportModel, Product >( new ImportModelVisitor() ) 
-                    ).ToArray()
-                );
-            }
-            else if ( typeof( EmployeeImportModel ) == mappedType.type ) {
+            //    ImportProducts(
+            //        _dataImporter.GetEnumerable( 
+            //            sheetTable,  
+            //            mappedType.propertyMap,  
+            //            new ImportModelConverter< ProductImportModel, Product >( new ImportModelVisitor() ) 
+            //        ).ToArray()
+            //    );
+            //}
+            //else if ( typeof( EmployeeImportModel ) == mappedType.type ) {
 
-                ImportEmployees(
-                    _dataImporter.GetEnumerable( 
-                        sheetTable,  
-                        mappedType.propertyMap,  
-                        new ImportModelConverter< EmployeeImportModel, Employee >( new ImportModelVisitor() ) 
-                    ).ToArray()
-                );
-            }
-            else if ( typeof( EmployeeFullImportModel ) == mappedType.type ) {
+            //    ImportEmployees(
+            //        _dataImporter.GetEnumerable( 
+            //            sheetTable,  
+            //            mappedType.propertyMap,  
+            //            new ImportModelConverter< EmployeeImportModel, Employee >( new ImportModelVisitor() ) 
+            //        ).ToArray()
+            //    );
+            //}
+            //else if ( typeof( EmployeeFullImportModel ) == mappedType.type ) {
 
-                ImportEmployees(
-                    _dataImporter.GetEnumerable(
-                        sheetTable,
-                        mappedType.propertyMap,
-                        new ImportModelConverter< EmployeeFullImportModel, Employee >( new ImportModelVisitor() )
-                    ).ToArray()
-                );
-            }
-            else if ( typeof( ShipmentImportModel ) == mappedType.type ) {
+            //    ImportEmployees(
+            //        _dataImporter.GetEnumerable(
+            //            sheetTable,
+            //            mappedType.propertyMap,
+            //            new ImportModelConverter< EmployeeFullImportModel, Employee >( new ImportModelVisitor() )
+            //        ).ToArray()
+            //    );
+            //}
+            //else if ( typeof( ShipmentImportModel ) == mappedType.type ) {
 
-                ImportShipmentActions(
-                    _dataImporter.GetEnumerable( 
-                        sheetTable,  
-                        mappedType.propertyMap,  
-                        new ImportModelConverter< ShipmentImportModel, ShipmentAction >( new ImportModelVisitor() ) 
-                    ).ToArray()
-                );
-            }
-            else if ( typeof( GatheringImportModel ) == mappedType.type ) {
+            //    ImportShipmentActions(
+            //        _dataImporter.GetEnumerable( 
+            //            sheetTable,  
+            //            mappedType.propertyMap,  
+            //            new ImportModelConverter< ShipmentImportModel, ShipmentAction >( new ImportModelVisitor() ) 
+            //        ).ToArray()
+            //    );
+            //}
+            //else if ( typeof( GatheringImportModel ) == mappedType.type ) {
 
-                ImportGatheringActions(
-                    _dataImporter.GetEnumerable( 
-                        sheetTable,  
-                        mappedType.propertyMap,  
-                        new ImportModelConverter< GatheringImportModel, GatheringAction >( new ImportModelVisitor() ) 
-                    ).ToArray()
-                );
-            }
-            else if ( typeof( ReceptionImportModel ) == mappedType.type ) {
+            //    ImportGatheringActions(
+            //        _dataImporter.GetEnumerable( 
+            //            sheetTable,  
+            //            mappedType.propertyMap,  
+            //            new ImportModelConverter< GatheringImportModel, GatheringAction >( new ImportModelVisitor() ) 
+            //        ).ToArray()
+            //    );
+            //}
+            //else if ( typeof( ReceptionImportModel ) == mappedType.type ) {
 
-                ImportWithProductAction(
-                    _dataImporter.GetEnumerable( 
-                        sheetTable,  
-                        mappedType.propertyMap,  
-                        new ImportModelConverter< ReceptionImportModel, ReceptionAction >( new ImportModelVisitor() ) 
-                    ).ToArray()
-                );
-            }
-            else if ( typeof( InventoryImportModel ) == mappedType.type ) {
+            //    ImportSingleAction(
+            //        _dataImporter.GetEnumerable( 
+            //            sheetTable,  
+            //            mappedType.propertyMap,  
+            //            new ImportModelConverter< ReceptionImportModel, ReceptionAction >( new ImportModelVisitor() ) 
+            //        ).ToArray()
+            //    );
+            //}
+            //else if ( typeof( InventoryImportModel ) == mappedType.type ) {
 
-                ImportWithProductAction(
-                    _dataImporter.GetEnumerable( 
-                        sheetTable,  
-                        mappedType.propertyMap,  
-                        new ImportModelConverter< InventoryImportModel, InventoryAction >( new ImportModelVisitor() ) 
-                    ).ToArray()
-                );
-            }
-            else if ( typeof( ProductivityImportModel ) == mappedType.type ) {
+            //    ImportSingleAction(
+            //        _dataImporter.GetEnumerable( 
+            //            sheetTable,  
+            //            mappedType.propertyMap,  
+            //            new ImportModelConverter< InventoryImportModel, InventoryAction >( new ImportModelVisitor() ) 
+            //        ).ToArray()
+            //    );
+            //}
+            //else if ( typeof( ProductivityImportModel ) == mappedType.type ) {
 
-                ImportProductivity(
-                    _dataImporter.GetEnumerable( 
-                        sheetTable,  
-                        mappedType.propertyMap,  
-                        new ImportModelConverter< ProductivityImportModel, EmployeeAction >( new ImportModelVisitor() ) 
-                    ).ToArray()
-                );
-            }
+            //    ImportProductivity(
+            //        _dataImporter.GetEnumerable( 
+            //            sheetTable,  
+            //            mappedType.propertyMap,  
+            //            new ImportModelConverter< ProductivityImportModel, EmployeeAction >( new ImportModelVisitor() ) 
+            //        ).ToArray()
+            //    );
+            //}
 
             return true;
         }
@@ -285,20 +285,25 @@ namespace WorkSpeed
         }
 
         // ReSharper disable PossibleMultipleEnumeration
-        private void ImportProductivity ( IEnumerable< EmployeeAction > employeeActions )
+        private void ImportProductivity ( IEnumerable< EmployeeActionBase > employeeActions )
         {
-            ImportGatheringActions( employeeActions.Where( a => a is GatheringAction ).Cast< GatheringAction >() );
-            ImportWithProductAction( employeeActions.Where( a => a is ReceptionAction ).Cast< ReceptionAction >() );
-            ImportWithProductAction( employeeActions.Where( a => a is InventoryAction ).Cast< InventoryAction >() );
+            ImportGatheringActions( employeeActions.Where( a => a is DoubleAddressAction ).Cast< DoubleAddressAction >() );
+            ImportSingleAction( employeeActions.Where( a => a is ReceptionAction ).Cast< ReceptionAction >() );
+            ImportSingleAction( employeeActions.Where( a => a is InventoryAction ).Cast< InventoryAction >() );
             ImportShipmentActions( employeeActions.Where( a => a is ShipmentAction ).Cast< ShipmentAction >() );
         }
 
-        private void ImportWithProductAction ( IEnumerable< WithProductAction > withProductActions )
+        private void ImportSingleAction ( IEnumerable< ReceptionAction > withProductActions )
         {
 
         }
 
-        private void ImportGatheringActions ( IEnumerable< GatheringAction > gatheringActions )
+        private void ImportSingleAction ( IEnumerable< InventoryAction > withProductActions )
+        {
+
+        }
+
+        private void ImportGatheringActions ( IEnumerable< DoubleAddressAction > gatheringActions )
         {
             foreach ( var gatheringAction in gatheringActions ) {
                 _context.AddGatheringAction( gatheringAction );
