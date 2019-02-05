@@ -20,7 +20,15 @@ namespace WorkSpeed.Data.BusinessContexts
 
         public Task ImportFromXlsxAsync ( string fileName, IProgress< (string, int) > progress )
         {
-            throw new NotImplementedException();
+            var task = new Task( () => ImportFromXlsx( fileName, progress ) );
+            task.Start();
+
+            return task;
+        }
+
+        public void ImportFromXlsx ( string fileName, IProgress< (string, int) > progress )
+        {
+            var table = ExcelImporter.GetSheetTable( fileName );
         }
     }
 }
