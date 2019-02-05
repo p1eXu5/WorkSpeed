@@ -138,8 +138,8 @@
     <Compile Include="BusinessContexts\Contracts\IImportService.cs" />
     <Compile Include="BusinessContexts\Contracts\IService.cs" />
     <Compile Include="BusinessContexts\ImportService.cs" />
-    <Compile Include="BusinessContexts\IWarehouseService.cs" />
-    <Compile Include="BusinessContexts\IWorkSpeedBusinessContext.cs" />
+    <Compile Include="BusinessContexts\Contracts\IWarehouseService.cs" />
+    <Compile Include="BusinessContexts\Contracts\IWorkSpeedBusinessContext.cs" />
     <Compile Include="BusinessContexts\ProductivityService.cs" />
     <Compile Include="BusinessContexts\RuntimeWorkSpeedBusinessContext.cs" />
     <Compile Include="BusinessContexts\Service.cs" />
