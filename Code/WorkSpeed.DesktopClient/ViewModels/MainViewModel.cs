@@ -18,7 +18,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
         private readonly IImportService _importService;
 
         protected CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
-        protected IProgress< (string, int) > _progress;
+        protected IProgress< (int, string) > _progress;
 
 
         public MainViewModel ( IImportService importService )

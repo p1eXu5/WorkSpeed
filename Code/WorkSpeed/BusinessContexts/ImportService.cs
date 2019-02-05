@@ -18,7 +18,7 @@ namespace WorkSpeed.Data.BusinessContexts
             _typeRepository = typeRepository;
         }
 
-        public Task ImportFromXlsxAsync ( string fileName, IProgress< (string, int) > progress )
+        public Task ImportFromXlsxAsync ( string fileName, IProgress< (int, string) > progress )
         {
             var task = new Task( () => ImportFromXlsx( fileName, progress ) );
             task.Start();
@@ -26,9 +26,18 @@ namespace WorkSpeed.Data.BusinessContexts
             return task;
         }
 
-        public void ImportFromXlsx ( string fileName, IProgress< (string, int) > progress )
+        public void ImportFromXlsx ( string fileName, IProgress< (int, string) > progress )
         {
             var table = ExcelImporter.GetSheetTable( fileName );
+            var propertyMap = _typeRepository.GetTypeAndPropertyMap( table );
+
+            if ( null == propertyMap.type ) {
+
+                progress.Report( (-1, @"Не удалось прочитать файл. Файл либо открыт в другой программе, " 
+                                      + @"либо содержит таблицу, тип которой определить не удалось.") );
+
+                return;
+            }
         }
     }
 }

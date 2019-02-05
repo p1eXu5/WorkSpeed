@@ -8,6 +8,6 @@ namespace WorkSpeed.Data.BusinessContexts.Contracts
 {
     public interface IImportService
     {
-        Task ImportFromXlsxAsync ( string fileName, IProgress<(string, int)> progress );
+        Task ImportFromXlsxAsync ( string fileName, IProgress< (int, string) > progress );
     }
 }
