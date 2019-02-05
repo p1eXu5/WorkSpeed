@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 using Agbm.NpoiExcel;
 using Agbm.NpoiExcel.Attributes;
 using WorkSpeed.Data.Models;
-using NpoiExcel;
-using NpoiExcel.Attributes;
 using WorkSpeed;
 using WorkSpeed.Data;
 using WorkSpeed.Data.BusinessContexts;
@@ -292,6 +290,11 @@ namespace WorkSpeed
         private void ImportShipmentActions ( IEnumerable< ShipmentAction > shipmentActions )
         {
 
+        }
+
+        IEnumerable<DoubleAddressAction> IWarehouse.GetGatheringActions()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
