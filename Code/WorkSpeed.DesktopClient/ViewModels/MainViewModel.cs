@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Agbm.Wpf.MvvmBaseLibrary;
 using Microsoft.Win32;
 using WorkSpeed.Data.BusinessContexts;
+using WorkSpeed.Data.BusinessContexts.Contracts;
 using WorkSpeed.Productivity;
 
 namespace WorkSpeed.DesktopClient.ViewModels
@@ -15,11 +17,15 @@ namespace WorkSpeed.DesktopClient.ViewModels
     {
         private readonly IWarehouseService _warehouse;
         private readonly IProductivityCalculator _productivityCalculator;
+        private readonly IImportService _importService;
 
-        public MainViewModel ( IWarehouseService warehouse, IProductivityCalculator productivityCalculator )
+        protected CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
+        protected IProgress< (string, int) > Progress;
+
+
+        public MainViewModel ( IImportService importService )
         {
-            _warehouse = warehouse;
-            _productivityCalculator = productivityCalculator;
+            _importService = importService;
         }
 
         public ICommand ImportAsyncCommand => new MvvmCommand( ImportAsync );

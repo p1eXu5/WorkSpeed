@@ -13,13 +13,13 @@ namespace WorkSpeed.Data.BusinessContexts
 {
     public class WarehouseService : IDisposable, IWarehouseService
     {
-        private readonly WorkSpeedDbContext _context;
+        private readonly WorkSpeedDbContext _dbContext;
         private bool _disposed;
 
 
         public WarehouseService()
         {
-            _context = new WorkSpeedDbContext();
+            _dbContext = new WorkSpeedDbContext();
         }
 
 

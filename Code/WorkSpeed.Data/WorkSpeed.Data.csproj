@@ -125,9 +125,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessContexts\Contracts\IImportService.cs" />
+    <Compile Include="BusinessContexts\Contracts\IService.cs" />
+    <Compile Include="BusinessContexts\ImportService.cs" />
     <Compile Include="BusinessContexts\IWarehouseService.cs" />
     <Compile Include="BusinessContexts\ProductivityService.cs" />
     <Compile Include="BusinessContexts\RuntimeWorkSpeedBusinessContext.cs" />
+    <Compile Include="BusinessContexts\Service.cs" />
     <Compile Include="Comparers\EmployeeActionComparer.cs" />
     <Compile Include="Comparers\EmployeeComparer.cs" />
     <Compile Include="Comparers\OperationComparer.cs" />
