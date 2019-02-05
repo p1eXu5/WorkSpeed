@@ -8,11 +8,11 @@ namespace WorkSpeed.Data.BusinessContexts
     {
         private bool _disposed;
 
-        public WorkSpeedDbContext DdContext { get; }
+        public WorkSpeedDbContext WorkSpeedDbContext { get; }
 
         public Service ( WorkSpeedDbContext dbContext )
         {
-            DdContext = dbContext;
+            WorkSpeedDbContext = dbContext;
         }
 
         public void Dispose ()
@@ -24,7 +24,7 @@ namespace WorkSpeed.Data.BusinessContexts
         {
             if ( !disposing || _disposed ) return;
 
-            DdContext.Dispose();
+            WorkSpeedDbContext.Dispose();
             _disposed = true;
         }
     }

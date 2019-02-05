@@ -20,6 +20,7 @@ namespace WorkSpeed.Data.BusinessContexts
         public WarehouseService()
         {
             _dbContext = new WorkSpeedDbContext();
+            
         }
 
 

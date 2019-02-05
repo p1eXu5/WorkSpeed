@@ -9,6 +9,6 @@ namespace WorkSpeed.Data.BusinessContexts.Contracts
 {
     public interface IService : IDisposable
     {
-        WorkSpeedDbContext DdContext { get; }
+        WorkSpeedDbContext WorkSpeedDbContext { get; }
     }
 }

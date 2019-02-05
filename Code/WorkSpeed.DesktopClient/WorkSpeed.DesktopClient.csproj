@@ -266,6 +266,10 @@
     <Resource Include="Resources\Fonts\Rubik\OFL.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Agbm.Tools\Code\Agbm.NpoiExcel\Agbm.NpoiExcel.csproj">
+      <Project>{47680bf8-c76a-44b9-bde3-694f1a73ccb1}</Project>
+      <Name>Agbm.NpoiExcel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Agbm.Wpf\Code\Agbm.Wpf.MvvmBaseLibrary\Agbm.Wpf.MvvmBaseLibrary.csproj">
       <Project>{c92ff512-b9c0-4aaf-9a9b-d0dee139af44}</Project>
       <Name>Agbm.Wpf.MvvmBaseLibrary</Name>
@@ -277,6 +281,10 @@
     <ProjectReference Include="..\WorkSpeed.Productivity\WorkSpeed.Productivity.csproj">
       <Project>{61c2a155-2641-4617-826e-82911531837a}</Project>
       <Name>WorkSpeed.Productivity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WorkSpeed\WorkSpeed.csproj">
+      <Project>{035d995a-6f8a-47c1-aebd-41b2cc5d6d7d}</Project>
+      <Name>WorkSpeed</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

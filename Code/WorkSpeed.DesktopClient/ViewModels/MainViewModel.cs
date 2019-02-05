@@ -23,7 +23,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
         public MainViewModel ( IImportService importService )
         {
-            _importService = importService;
+            _importService = importService ?? throw new ArgumentNullException(nameof(importService), @"type cannot be null."); ;
         }
 
         public ICommand ImportAsyncCommand => new MvvmCommand( ImportAsync );

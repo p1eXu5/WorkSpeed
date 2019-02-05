@@ -1,8 +1,12 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using Agbm.NpoiExcel;
+using Agbm.NpoiExcel.Attributes;
 using WorkSpeed.Data.BusinessContexts;
+using WorkSpeed.Data.DataContexts;
 using WorkSpeed.DesktopClient.ViewModels;
 using WorkSpeed.DesktopClient.Views;
-using WorkSpeed.Productivity;
+using WorkSpeed.FileModels;
 
 namespace WorkSpeed.DesktopClient
 {
@@ -15,13 +19,19 @@ namespace WorkSpeed.DesktopClient
         {
             Window mainWindow = new MainWindow();
 
-            var context = new WarehouseService();
-            var calculator = new ProductivityCalculator();
+            ImportService importService = null; 
+            try {
+                importService = WorkSpeedBusinessContextCreator.Create();
+                var mvm = new MainViewModel( importService );
+                mainWindow.DataContext = mvm;
 
-            var mvm = new MainViewModel();
-            mainWindow.DataContext = mvm;
-
-            mainWindow.Show();
+                mainWindow.Show();
+            }
+            finally {
+                importService?.Dispose();
+            }
         }
+
+        
     }
 }
