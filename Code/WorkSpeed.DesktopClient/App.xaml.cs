@@ -23,8 +23,8 @@ namespace WorkSpeed.DesktopClient
             try {
                 importService = WorkSpeedBusinessContextCreator.Create();
                 var mvm = new MainViewModel( importService );
-                mainWindow.DataContext = mvm;
 
+                mainWindow.DataContext = mvm;
                 mainWindow.Show();
             }
             finally {

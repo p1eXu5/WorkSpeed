@@ -20,7 +20,7 @@ namespace WorkSpeed.Data.BusinessContexts
             var context = new WorkSpeedDbContext();
             context.Database.Migrate();
 
-            var importService = new ImportService( context );
+            var importService = new ImportService( context, typeRepo );
 
             return importService;
         }
