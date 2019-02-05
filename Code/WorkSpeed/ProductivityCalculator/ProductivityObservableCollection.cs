@@ -7,20 +7,21 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Comparers;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 using WorkSpeed.FileModels;
 
 namespace WorkSpeed.ProductivityCalculator
 {
     public class ProductivityObservableCollection : ObservableCollection< Productivity2 >
     {
-        private SortedSet<EmployeeAction> _actions;
+        private SortedSet< EmployeeActionBase > _actions;
 
         public ProductivityObservableCollection()
         {
-            _actions = new SortedSet<EmployeeAction> (new EmployeeActionComparer<EmployeeAction>());
+            _actions = new SortedSet< EmployeeActionBase > (new EmployeeActionComparer< EmployeeActionBase >());
         }
 
-        public IProductivityCalculator<EmployeeAction> ProductivityCalculator { get; set; }
+        public IProductivityCalculator< EmployeeActionBase > ProductivityCalculator { get; set; }
 
         /// <summary>
         /// Adds employeeAction into internal collection. After adding
