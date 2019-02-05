@@ -39,7 +39,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
             if ( true == ofd.ShowDialog() ) {
 
-                await _warehouse.ImportAsync( ofd.FileName );
+                await _importService.ImportFromXlsxAsync( ofd.FileName );
             }
         }
     }
