@@ -125,14 +125,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessContexts\Contracts\IImportService.cs" />
-    <Compile Include="BusinessContexts\Contracts\IService.cs" />
-    <Compile Include="BusinessContexts\ImportService.cs" />
-    <Compile Include="BusinessContexts\IWarehouseService.cs" />
-    <Compile Include="BusinessContexts\ProductivityService.cs" />
-    <Compile Include="BusinessContexts\RuntimeWorkSpeedBusinessContext.cs" />
-    <Compile Include="BusinessContexts\Service.cs" />
-    <Compile Include="BusinessContexts\WorkSpeedBusinessContextCreator.cs" />
     <Compile Include="Comparers\EmployeeActionComparer.cs" />
     <Compile Include="Comparers\EmployeeComparer.cs" />
     <Compile Include="Comparers\OperationComparer.cs" />
@@ -158,7 +150,6 @@
     <Compile Include="DataContexts\Configurations\ShiftConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\ShortBreakScheduleConfiguration.cs" />
     <Compile Include="Interfaces\IEntity.cs" />
-    <Compile Include="BusinessContexts\IWorkSpeedBusinessContext.cs" />
     <Compile Include="DataContexts\WorkSpeedDbContext.cs" />
     <Compile Include="Migrations\20190204165210_InitialCreate.cs" />
     <Compile Include="Migrations\20190204165210_InitialCreate.designer.cs">
@@ -194,7 +185,6 @@
     <Compile Include="Models\Actions\ShipmentAction.cs" />
     <Compile Include="Models\ShortBreakSchedule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BusinessContexts\WarehouseService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />

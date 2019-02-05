@@ -7,6 +7,7 @@ using Agbm.NpoiExcel;
 using Agbm.NpoiExcel.Attributes;
 using Microsoft.EntityFrameworkCore;
 using WorkSpeed.Data.DataContexts;
+using WorkSpeed.Factories;
 
 namespace WorkSpeed.Data.BusinessContexts
 {

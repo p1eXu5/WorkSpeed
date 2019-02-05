@@ -58,6 +58,16 @@
     <Compile Include="ActionData.cs" />
     <Compile Include="BreakConstraintsForNotSmokers.cs" />
     <Compile Include="BreakConstraintsForSmokers.cs" />
+    <Compile Include="BusinessContexts\Contracts\IImportService.cs" />
+    <Compile Include="BusinessContexts\Contracts\IService.cs" />
+    <Compile Include="BusinessContexts\ImportService.cs" />
+    <Compile Include="BusinessContexts\IWarehouseService.cs" />
+    <Compile Include="BusinessContexts\IWorkSpeedBusinessContext.cs" />
+    <Compile Include="BusinessContexts\ProductivityService.cs" />
+    <Compile Include="BusinessContexts\RuntimeWorkSpeedBusinessContext.cs" />
+    <Compile Include="BusinessContexts\Service.cs" />
+    <Compile Include="BusinessContexts\WarehouseService.cs" />
+    <Compile Include="BusinessContexts\WorkSpeedBusinessContextCreator.cs" />
     <Compile Include="CategoryConstraints.cs" />
     <Compile Include="Constraints\BreakConstraints.cs" />
     <Compile Include="Constraints\DefaultCategoryConstraints.cs" />
