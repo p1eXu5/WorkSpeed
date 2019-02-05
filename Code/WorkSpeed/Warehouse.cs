@@ -105,27 +105,6 @@ namespace WorkSpeed
             return await Task<bool>.Factory.StartNew (() => Import (fileName), TaskCreationOptions.LongRunning);
         }
 
-        public async Task GetProductivitiesAsync ( IProgress< ProductivityEmployee > progress )
-        {
-            await Task.Run( () => GetProductivities( progress ) );
-        }
-
-        private void GetProductivities ( IProgress< ProductivityEmployee > progress )
-        {
-            foreach ( var action in _context.GetGatheringActions().ToArray() ) {
-                FactoryEmployeeAction.AddAction( action );
-            }
-
-            foreach ( var employee in _context.GetEmployees().ToArray() ) {
-
-                if ( FactoryEmployeeAction.HasOperations( employee ) ) {
-
-                    progress.Report( FactoryEmployeeAction.GetProductivity( employee ) );
-                }
-            }
-
-        }
-
         public (DateTime, DateTime) GetActionsPeriod ()
         {
             throw new NotImplementedException();
