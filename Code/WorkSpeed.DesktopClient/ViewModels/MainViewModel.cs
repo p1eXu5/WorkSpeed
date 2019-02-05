@@ -15,8 +15,6 @@ namespace WorkSpeed.DesktopClient.ViewModels
 {
     public class MainViewModel : ViewModel
     {
-        private readonly IWarehouseService _warehouse;
-        private readonly IProductivityCalculator _productivityCalculator;
         private readonly IImportService _importService;
 
         protected CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
