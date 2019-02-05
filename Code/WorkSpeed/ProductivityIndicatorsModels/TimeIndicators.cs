@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Constraints;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 using WorkSpeed.Interfaces;
 using WorkSpeed.ProductivityCalculator;
 
@@ -91,7 +92,7 @@ namespace WorkSpeed.ProductivityIndicatorsModels
             set => _nonProductivTime = _timeConstraint.GetProductivityTime( value, _nonProductivTime );
         }
 
-        protected override void Add ( EmployeeAction employeeAction )
+        protected override void Add ( EmployeeActionBase employeeAction )
         {
             throw new NotImplementedException();
         }

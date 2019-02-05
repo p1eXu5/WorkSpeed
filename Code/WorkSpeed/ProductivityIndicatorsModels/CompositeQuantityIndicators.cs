@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Constraints;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 using WorkSpeed.Interfaces;
 
 namespace WorkSpeed.ProductivityIndicatorsModels
@@ -54,7 +55,7 @@ namespace WorkSpeed.ProductivityIndicatorsModels
             }
         }
 
-        protected override void Add ( EmployeeAction employeeAction )
+        protected override void Add ( EmployeeActionBase employeeAction )
         {
             foreach ( var indicators in _indicatorsDictionary.Values ) {
 

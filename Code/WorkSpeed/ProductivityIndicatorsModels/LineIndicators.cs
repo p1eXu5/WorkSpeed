@@ -18,15 +18,6 @@ namespace WorkSpeed.ProductivityIndicatorsModels
 
         protected override void Add ( EmployeeActionBase employeeAction )
         {
-            switch ( employeeAction ) {
-
-                case GatheringAction gatheringAction:
-
-                    var valueIndex = CategoryConstraints.GetCategoryNum( gatheringAction.Product );
-                    ++ValueList[ valueIndex ];
-                    break;
-                    
-            }
 
         }
     }

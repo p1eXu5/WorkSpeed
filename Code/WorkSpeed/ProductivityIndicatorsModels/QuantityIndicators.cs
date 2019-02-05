@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Constraints;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 using WorkSpeed.Interfaces;
 
 namespace WorkSpeed.ProductivityIndicatorsModels
@@ -29,14 +30,14 @@ namespace WorkSpeed.ProductivityIndicatorsModels
             internal set => OnChangeCategoryConstraints( value );
         }
 
-        public void AddQuantity ( EmployeeAction employeeAction )
+        public void AddQuantity ( EmployeeActionBase employeeAction )
         {
             Add( employeeAction );
         }
 
         protected abstract void OnChangeCategoryConstraints ( ICategoryConstraints categoryConstraints );
 
-        public static QuantityIndicators operator + ( QuantityIndicators indicators, EmployeeAction employeeAction )
+        public static QuantityIndicators operator + ( QuantityIndicators indicators, EmployeeActionBase employeeAction )
         {
             indicators.AddQuantity( employeeAction );
             return indicators;

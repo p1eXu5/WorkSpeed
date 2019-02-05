@@ -63,7 +63,7 @@ namespace WorkSpeed
         public IEnumerable< Rank > GetRanks() => _context.GetRanks();
         public IEnumerable < Shift > GetShifts () => _context.GetShifts();
         public IEnumerable< ShortBreakSchedule > GetBreakList () => _context.GetBreakList();
-        public IEnumerable< GatheringAction > GetGatheringActions () => _context.GetGatheringActions();
+        public IEnumerable< DoubleAddressAction > GetGatheringActions () => _context.GetGatheringActions();
         public IEnumerable< Category > GetCategories () => FactoryEmployeeAction.GetCategories ();
 
         public TimeSpan GetThreshold () => FactoryEmployeeAction.GetThreshold();
