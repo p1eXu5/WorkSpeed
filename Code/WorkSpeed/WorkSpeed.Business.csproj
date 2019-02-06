@@ -8,8 +8,8 @@
     <ProjectGuid>{035D995A-6F8A-47C1-AEBD-41B2CC5D6D7D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WorkSpeed</RootNamespace>
-    <AssemblyName>WorkSpeed</AssemblyName>
+    <RootNamespace>WorkSpeed.Business</RootNamespace>
+    <AssemblyName>WorkSpeed.Business</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
