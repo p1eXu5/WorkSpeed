@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Agbm.NpoiExcel;
 using WorkSpeed.Business.Contexts.Contracts;
@@ -17,14 +19,20 @@ namespace WorkSpeed.Business.Contexts
     {
         private readonly ITypeRepository _typeRepository;
 
+
+        #region Ctor
+
         public ImportService ( WorkSpeedDbContext dbContext, ITypeRepository typeRepository ) : base( dbContext )
         {
             _typeRepository = typeRepository;
         }
 
-        public Task ImportFromXlsxAsync ( string fileName, IProgress< (int, string) > progress )
+        #endregion
+
+
+        public Task ImportFromXlsxAsync ( string fileName, IProgress< (int, string) > progress, CancellationToken cancellationToken )
         {
-            var task = new Task( () => ImportFromXlsx( fileName, progress ) );
+            var task = new Task( () => ImportFromXlsx( fileName, progress ), cancellationToken );
             task.Start();
 
             return task;
@@ -49,13 +57,17 @@ namespace WorkSpeed.Business.Contexts
             }
         }
 
-        private void StoreData ( IEnumerable< Product > data )
+        [ SuppressMessage( "ReSharper", "PossibleMultipleEnumeration" ) ]
+        private async void StoreData ( IEnumerable< Product > data )
         {
+            var products = new List< Product >( data.Count() );
+
             foreach ( var product in data ) {
-                _dbContext.AddProduct( product );
+                products.Add( product );
             }
 
-            _dbContext.SaveChangesAsync();
+            await _dbContext.AddRangeAsync( products );
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

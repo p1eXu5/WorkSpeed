@@ -4,10 +4,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WorkSpeed.DesktopClient"
+        xmlns:local="clr-namespace:WorkSpeed.DesktopClient.ViewModels"
         xmlns:views="clr-namespace:WorkSpeed.DesktopClient.Views"
         xmlns:behavior="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
+
+        d:DataContext="{d:DesignInstance local:MainViewModel}"
+
         Title="MainWindow" MinHeight="500" Height="500" MinWidth="1200" Width="1200"
         WindowStyle="None"
         ResizeMode="CanResize"
@@ -28,7 +31,7 @@
                         
                         <Border x:Name="MainBorder"
                                 BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="1"
+                                BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="0"
                                 Background="{TemplateBinding Background}">
 
@@ -334,11 +337,22 @@
                             >
                     <StackPanel Orientation="Horizontal" >
                         <TextBlock FontSize="26" FontWeight="Bold" Text="Загрузка данных: "/>
-                        <TextBlock Text="{Binding Percent}" />
+                        <TextBlock Text="{Binding ImportPercentage}" />
                     </StackPanel>
 
-                    <TextBlock Margin="0,10,0,0" Text="{Binding LoadingDataStatus}" />
+                    <TextBlock Margin="0,10,0,0" Text="{Binding ImportMessage}" />
                 </StackPanel>
+
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsImporting}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
             </Grid>
         </Grid>
     </DockPanel>

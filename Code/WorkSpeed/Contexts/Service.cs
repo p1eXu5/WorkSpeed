@@ -18,7 +18,7 @@ namespace WorkSpeed.Business.Contexts
 
         public void Dispose ()
         {
-            throw new NotImplementedException();
+            Dispose( true );
         }
 
         private void Dispose ( bool disposing )

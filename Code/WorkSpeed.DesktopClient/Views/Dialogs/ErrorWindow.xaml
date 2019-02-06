@@ -1,0 +1,59 @@
+﻿<Window x:Class="WorkSpeed.DesktopClient.Views.Dialogs.ErrorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+
+        xmlns:local="clr-namespace:WorkSpeed.DesktopClient.ViewModels.Dialogs"
+        xmlns:behavior="http://schemas.microsoft.com/xaml/behaviors"
+
+        mc:Ignorable="d"
+        Title="ErrorWindow" Height="220" Width="400"
+
+        d:DataContext="{d:DesignInstance local:ErrorViewModel}"
+
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        WindowState="Normal"
+        ResizeMode="NoResize"
+        BorderThickness="1"
+        BorderBrush="{StaticResource br_Window.Border}"
+        Background="{StaticResource br_Window.Background}"
+        >
+    <DockPanel LastChildFill="True" >
+        <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="10,0">
+            <Button Height="24">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource st_Window.Button}">
+                        <Setter Property="Border.CornerRadius" Value="0,0,3,3" />
+                    </Style>
+                </Button.Style>
+                <Button.Content>
+                    <Path Data="{StaticResource g_Close}" 
+                          Style="{StaticResource st_Window.Common.Path}"
+                          Margin="0,0,0,2"
+                          />
+                </Button.Content>
+                <behavior:Interaction.Triggers>
+                    <behavior:EventTrigger EventName="Click">
+                        <behavior:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" MethodName="Close" />
+                    </behavior:EventTrigger>
+                </behavior:Interaction.Triggers>
+            </Button>
+        </StackPanel>
+
+        <Button DockPanel.Dock="Bottom" 
+                Background="{StaticResource br_Window.Control.Background}"
+                Content="Принял"
+                HorizontalAlignment="Center"
+                Margin="0,10,0,40"
+                />
+
+        <Border Margin="40,40,40,20">
+            <TextBlock Text="{}}{Binding Message}"
+                       HorizontalAlignment="Center"
+                       />
+        </Border>
+
+    </DockPanel>
+</Window>
