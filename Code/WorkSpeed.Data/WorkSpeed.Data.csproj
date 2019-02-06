@@ -149,6 +149,7 @@
     <Compile Include="DataContexts\Configurations\RankConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\ShiftConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\ShortBreakScheduleConfiguration.cs" />
+    <Compile Include="DataContexts\ImportServiceExtensions\WorkSpeedDbContextExtensions.cs" />
     <Compile Include="Models\IKeyedEntity.cs" />
     <Compile Include="DataContexts\WorkSpeedDbContext.cs" />
     <Compile Include="ModelExtansions.cs" />

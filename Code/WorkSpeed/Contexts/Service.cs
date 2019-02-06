@@ -7,12 +7,13 @@ namespace WorkSpeed.Business.Contexts
     public class Service : IService
     {
         private bool _disposed;
+        protected readonly WorkSpeedDbContext _dbContext;
 
-        public WorkSpeedDbContext WorkSpeedDbContext { get; }
+        public WorkSpeedDbContext DbContext => _dbContext;
 
         public Service ( WorkSpeedDbContext dbContext )
         {
-            WorkSpeedDbContext = dbContext;
+            _dbContext = dbContext;
         }
 
         public void Dispose ()
@@ -24,7 +25,7 @@ namespace WorkSpeed.Business.Contexts
         {
             if ( !disposing || _disposed ) return;
 
-            WorkSpeedDbContext.Dispose();
+            _dbContext.Dispose();
             _disposed = true;
         }
     }

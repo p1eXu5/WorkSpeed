@@ -54,6 +54,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agbm.Wpf.MvvmBaseLibrary", "Agbm.Wpf\Code\Agbm.Wpf.MvvmBaseLibrary\Agbm.Wpf.MvvmBaseLibrary.csproj", "{C92FF512-B9C0-4AAF-9A9B-D0DEE139AF44}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.Threads", "Experiments\Experiments.Threads\Experiments.Threads.csproj", "{B8302D41-74EF-4A81-961D-5059F02E3CC6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -120,6 +122,10 @@ Global
 		{C92FF512-B9C0-4AAF-9A9B-D0DEE139AF44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C92FF512-B9C0-4AAF-9A9B-D0DEE139AF44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C92FF512-B9C0-4AAF-9A9B-D0DEE139AF44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8302D41-74EF-4A81-961D-5059F02E3CC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8302D41-74EF-4A81-961D-5059F02E3CC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8302D41-74EF-4A81-961D-5059F02E3CC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8302D41-74EF-4A81-961D-5059F02E3CC6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,6 +146,7 @@ Global
 		{8C7C647B-6A28-477E-8B1F-9FB555F55376} = {1ECA741B-6388-4A77-8B30-D1E113F4F26F}
 		{0943E858-2173-4084-AFC8-C0524D8CB825} = {1ECA741B-6388-4A77-8B30-D1E113F4F26F}
 		{C92FF512-B9C0-4AAF-9A9B-D0DEE139AF44} = {54D2341D-01ED-4B7D-9493-20E4AAD65301}
+		{B8302D41-74EF-4A81-961D-5059F02E3CC6} = {02ADBBD2-843C-457E-B553-A71CFDBFEF80}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {74CCEA37-7ECF-4A64-9DA7-75E503ED2A97}

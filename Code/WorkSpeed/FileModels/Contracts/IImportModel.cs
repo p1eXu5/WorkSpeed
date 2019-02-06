@@ -6,6 +6,6 @@ namespace WorkSpeed.Business.FileModels.Contracts
 {
     public interface IImportModel
     {
-        IEntity Convert ( IImportModelVisitor visitor );
+        IEntity Accept ( IImportModelVisitor visitor );
     }
 }

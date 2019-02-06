@@ -7,7 +7,6 @@ using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.Data.DataContexts;
 using WorkSpeed.DesktopClient.ViewModels;
 using WorkSpeed.DesktopClient.Views;
-using WorkSpeed.FileModels;
 
 namespace WorkSpeed.DesktopClient
 {
