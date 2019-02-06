@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Agbm.NpoiExcel;
-using Agbm.NpoiExcel.Attributes;
 using Microsoft.EntityFrameworkCore;
 using WorkSpeed.Data.DataContexts;
 using WorkSpeed.Factories;
 
-namespace WorkSpeed.Data.BusinessContexts
+namespace WorkSpeed.Business.BusinessContexts
 {
     public static class WorkSpeedBusinessContextCreator
     {

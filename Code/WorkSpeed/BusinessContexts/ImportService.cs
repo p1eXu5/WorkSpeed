@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Agbm.NpoiExcel;
-using WorkSpeed.Data.BusinessContexts.Contracts;
+using WorkSpeed.Business.BusinessContexts.Contracts;
+using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.Data.DataContexts;
 
-namespace WorkSpeed.Data.BusinessContexts
+namespace WorkSpeed.Business.BusinessContexts
 {
     public class ImportService : Service, IImportService
     {
