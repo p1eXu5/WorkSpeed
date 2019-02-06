@@ -15,11 +15,11 @@ namespace WorkSpeed.Data.DataContexts.Configurations.ActionDetails
 
             builder.HasOne( d => d.SenderCellAdress )
                    .WithMany()
-                   .IsRequired();
+                   .IsRequired().OnDelete( DeleteBehavior.ClientSetNull );
 
             builder.HasOne( d => d.ReceiverCellAdress )
                    .WithMany()
-                   .IsRequired();
+                   .IsRequired().OnDelete( DeleteBehavior.ClientSetNull );
 
             builder.HasOne( d => d.DoubleAddressAction )
                    .WithMany( a => a.DoubleAddressDetails )

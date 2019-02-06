@@ -243,7 +243,7 @@
                         <Button Grid.Column="1" Grid.Row="0"
                             Style="{StaticResource st_TabControl.Button}"
                             RenderTransform="1,0,0,1,1.5,0"
-                            Command="{Binding ImportCommand}"
+                            Command="{Binding ImportAsyncCommand}"
                             >
                             <Button.Content>
                                 <StackPanel Orientation="Vertical">

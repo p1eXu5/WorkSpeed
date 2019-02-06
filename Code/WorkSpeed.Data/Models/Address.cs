@@ -15,7 +15,7 @@ namespace WorkSpeed.Data.Models
 
         public BoxTypes BoxType { get; set; }
 
-        public Single? Lenght { get; set; }
+        public Single? Length { get; set; }
         public Single? Width { get; set; }
         public Single? Height { get; set; }
 

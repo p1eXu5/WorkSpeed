@@ -23,7 +23,7 @@ namespace WorkSpeed.Data.DataContexts.Configurations
             var converter = new EnumToStringConverter< BoxTypes >();
             builder.Property( p => p.BoxType ).HasConversion( converter ).HasColumnType( "varchar(50)" ).IsRequired( true );
 
-            builder.Property( p => p.Lenght ).HasColumnType( "real" );
+            builder.Property( p => p.Length ).HasColumnType( "real" );
             builder.Property( p => p.Width ).HasColumnType( "real" );
             builder.Property( p => p.Height ).HasColumnType( "real" );
 
