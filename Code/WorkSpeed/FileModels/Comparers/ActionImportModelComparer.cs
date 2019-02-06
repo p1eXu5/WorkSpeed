@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WorkSpeed.FileModels
+namespace WorkSpeed.Business.FileModels
 {
     public class ActionImportModelComparer<T> : IComparer<T>
         where T : ActionImportModel

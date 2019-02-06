@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WorkSpeed.Interfaces;
-using WorkSpeed.ProductivityIndicatorsModels;
+using WorkSpeed.Business.Constraints;
+using WorkSpeed.Business.Interfaces;
+using WorkSpeed.Business.ProductivityIndicatorsModels;
 
-namespace WorkSpeed
+namespace WorkSpeed.Business
 {
     public class BreakConstraintsForNotSmokers : IBreakConstraints
     {

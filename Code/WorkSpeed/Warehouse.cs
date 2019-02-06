@@ -10,16 +10,15 @@ using Agbm.NpoiExcel;
 using Agbm.NpoiExcel.Attributes;
 using WorkSpeed.Data.Models;
 using WorkSpeed;
+using WorkSpeed.Business.FileModels;
+using WorkSpeed.Business.Interfaces;
+using WorkSpeed.Business.ProductivityCalculator;
 using WorkSpeed.Data;
 using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.Data.Models.Actions;
-using WorkSpeed.FileModels;
-using WorkSpeed.FileModels.Converters;
-using WorkSpeed.Interfaces;
-using WorkSpeed.ProductivityCalculator;
 using WorkSpeed.Productivity;
 
-namespace WorkSpeed
+namespace WorkSpeed.Business
 {
     public class Warehouse : IWarehouse
     {
@@ -139,18 +138,7 @@ namespace WorkSpeed
 
         private void AddTypesToRepository ( ITypeRepository repo )
         {
-            repo.RegisterType< ProductImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-
-            repo.RegisterType< EmployeeImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-            repo.RegisterType< EmployeeFullImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-
-            repo.RegisterType< ShipmentImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-
-            repo.RegisterType< GatheringImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-            repo.RegisterType< InventoryImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-            repo.RegisterType< ReceptionImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
-
-            repo.RegisterType< ProductivityImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            throw new NotImplementedException();
         }
 
         private bool Import ( string fileName,  Type type = null )

@@ -5,12 +5,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkSpeed.Business.FileModels;
 using WorkSpeed.Data.Comparers;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
-using WorkSpeed.FileModels;
 
-namespace WorkSpeed.ProductivityCalculator
+namespace WorkSpeed.Business.ProductivityCalculator
 {
     public class ProductivityObservableCollection : ObservableCollection< Productivity2 >
     {
@@ -28,7 +28,7 @@ namespace WorkSpeed.ProductivityCalculator
         /// Calculate method must be called.
         /// </summary>
         /// <param name="employeeAction">Imported employeeAction.</param>
-        public void Add(ActionImportModel employeeAction)
+        public void Add( ActionImportModel employeeAction )
         {
 
         }

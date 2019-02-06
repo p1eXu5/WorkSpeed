@@ -137,7 +137,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     InnerName = "Грузчик",
                     OfficialName = "Грузчик",
                     SalaryPerOneHour = 47.85m,
-                    Abbreviation = "гр;гр.;груз;грузч.;"
+                    Abbreviations = "гр;гр.;груз;грузч.;"
                 },
 
                 new Appointment {
@@ -146,7 +146,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     InnerName = "Кладовщик на РРЦ",
                     OfficialName = "Кладовщик склада",
                     SalaryPerOneHour = 52.64m,
-                    Abbreviation = "кладовщик;кл;кл.;клад;клад.;"
+                    Abbreviations = "кладовщик;кл;кл.;клад;клад.;"
                 },
 
                 new Appointment {
@@ -155,7 +155,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     InnerName = "Кладовщик приемщик",
                     OfficialName = "Кладовщик-приемщик",
                     SalaryPerOneHour = 57.42m,
-                    Abbreviation = "приёмщик;приемщик;пр;пр.;"
+                    Abbreviations = "приёмщик;приемщик;пр;пр.;"
                 },
 
                 new Appointment {
@@ -164,7 +164,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     InnerName = "Водитель погрузчика",
                     OfficialName = "Водитель погрузчика",
                     SalaryPerOneHour = 52.64m,
-                    Abbreviation = "водитель;вод;вод.;карщик;"
+                    Abbreviations = "водитель;вод;вод.;карщик;"
                 },
 
                 new Appointment {
@@ -173,7 +173,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     InnerName = "Старший кладовщик на РРЦ",
                     OfficialName = "Старший кладовщик склада",
                     SalaryPerOneHour = 62.21m,
-                    Abbreviation = "старший;ст;ст.;старшийкладовщик;ст.клад."
+                    Abbreviations = "старший;ст;ст.;старшийкладовщик;ст.клад."
                 },
 
                 new Appointment {
@@ -182,7 +182,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     InnerName = "Заместитель управляющего склада по отгрузке",
                     OfficialName = "Менеджер по отправке груза",
                     SalaryPerOneHour = 95.70m,
-                    Abbreviation = "зампоприёмке;зам.пр."
+                    Abbreviations = "зампоприёмке;зам.пр."
                 },
 
                 new Appointment {
@@ -191,7 +191,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     InnerName = "Заместитель управляющего склада по приемке",
                     OfficialName = "Менеджер по приему груза",
                     SalaryPerOneHour = 92.22m,
-                    Abbreviation = "зампоотгрузке;зам.отгр.;"
+                    Abbreviations = "зампоотгрузке;зам.отгр.;"
                 },
 
                 new Appointment {
@@ -200,7 +200,7 @@ namespace WorkSpeed.Data.BusinessContexts
                     InnerName = "Управляющий РРЦ",
                     OfficialName = "Управляющий складом",
                     SalaryPerOneHour = 119.63m,
-                    Abbreviation = "управляющий;упр.;упр;упр.складом"
+                    Abbreviations = "управляющий;упр.;упр;упр.складом"
                 },
 
             } );
@@ -525,8 +525,8 @@ namespace WorkSpeed.Data.BusinessContexts
         {
             if ( employee == null || employee.Id.Length != 7 || _employees.Contains( employee ) ) return;
 
-            if ( employee.Appointment == null || String.IsNullOrWhiteSpace( employee.Appointment.Abbreviation ) ) return;
-            var appointment = _appointments.FirstOrDefault( a => a.Abbreviation.Contains( employee.Appointment.Abbreviation ) );
+            if ( employee.Appointment == null || String.IsNullOrWhiteSpace( employee.Appointment.Abbreviations ) ) return;
+            var appointment = _appointments.FirstOrDefault( a => a.Abbreviations.Contains( employee.Appointment.Abbreviations ) );
             if (appointment == null) return;
             employee.Appointment = appointment;
 

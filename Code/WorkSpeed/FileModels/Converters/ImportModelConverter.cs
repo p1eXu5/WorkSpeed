@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Agbm.NpoiExcel;
+using WorkSpeed.Business.FileModels;
+using WorkSpeed.Business.FileModels.Converters;
 using WorkSpeed.Data.Models;
-using WorkSpeed.Interfaces;
 
-namespace WorkSpeed.FileModels.Converters
+namespace WorkSpeed.Business.FileModels.Converters
 {
     public class ImportModelConverter< TImport, TDataBase > : ITypeConverter< TImport, TDataBase >
         where   TImport : ImportModel
@@ -16,7 +17,8 @@ namespace WorkSpeed.FileModels.Converters
 
         static ImportModelConverter ()
         {
-            _typeMap[ typeof(Empl) ] = typeof();
+            _typeMap[ typeof( ProductImportModel ) ] = typeof( Product );
+            _typeMap[ typeof( EmployeeImportModel ) ] = typeof( Employee );
         }
 
         public ImportModelConverter ()

@@ -7,10 +7,10 @@ using WorkSpeed.ActionModels;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
 
-namespace WorkSpeed.ProductivityCalculator
+namespace WorkSpeed.Business.ProductivityCalculator
 {
     public interface IProductivityCalculator<TAction> where TAction : EmployeeActionBase
     {
-        void Calculate (SortedSet<TAction> actions, ICollection<Productivity2> productivities);
+        void Calculate ( SortedSet< TAction > actions,  ICollection< Productivity2 > productivities );
     }
 }

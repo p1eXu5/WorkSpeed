@@ -1,7 +1,7 @@
 ﻿using Agbm.NpoiExcel.Attributes;
 using WorkSpeed.Data.Models;
 
-namespace WorkSpeed.FileModels
+namespace WorkSpeed.Business.FileModels
 {
     public class ReceptionImportModel : WithProductActionImportModel
     {

@@ -5,14 +5,13 @@ using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using WorkSpeed.Constraints;
+using WorkSpeed.Business.Constraints;
+using WorkSpeed.Business.ProductivityIndicatorsModels;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
 using WorkSpeed.Data.Models.Enums;
-using WorkSpeed.Interfaces;
-using WorkSpeed.ProductivityIndicatorsModels;
 
-namespace WorkSpeed.ProductivityCalculator
+namespace WorkSpeed.Business.ProductivityCalculator
 {
     public class Productivity2
     {

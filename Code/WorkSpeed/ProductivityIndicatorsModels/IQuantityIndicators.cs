@@ -1,7 +1,7 @@
 ﻿using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
 
-namespace WorkSpeed.ProductivityIndicatorsModels
+namespace WorkSpeed.Business.ProductivityIndicatorsModels
 {
     public interface IQuantityIndicators
     {

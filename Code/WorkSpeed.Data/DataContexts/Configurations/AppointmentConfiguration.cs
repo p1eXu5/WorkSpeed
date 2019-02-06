@@ -17,7 +17,7 @@ namespace WorkSpeed.Data.DataContexts.Configurations
             builder.Property( a => a.OfficialName ).HasColumnType( "varchar(255)" );
             builder.Property( a => a.InnerName ).HasColumnType( "varchar(255)" ).IsRequired();
             builder.Property( a => a.SalaryPerOneHour ).HasColumnType( "decimal" );
-            builder.Property( a => a.Abbreviation ).HasColumnType( "varchar(16)" ).IsRequired();
+            builder.Property( a => a.Abbreviations ).HasColumnType( "varchar(16)" ).IsRequired();
         }
     }
 }

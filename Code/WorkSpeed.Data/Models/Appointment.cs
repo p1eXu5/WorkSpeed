@@ -7,6 +7,6 @@ namespace WorkSpeed.Data.Models
         public string OfficialName { get; set; }
         public string InnerName { get; set; }
         public decimal? SalaryPerOneHour { get; set; }
-        public string Abbreviation { get; set; }
+        public string Abbreviations { get; set; }
     }
 }

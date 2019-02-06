@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WorkSpeed.Constraints;
+using WorkSpeed.Business.Constraints;
 using WorkSpeed.Data.Models;
-using WorkSpeed.Interfaces;
 
-namespace WorkSpeed.ProductivityIndicatorsModels
+namespace WorkSpeed.Business.ProductivityIndicatorsModels
 {
     public abstract class ValueIndicators : QuantityIndicators
     {

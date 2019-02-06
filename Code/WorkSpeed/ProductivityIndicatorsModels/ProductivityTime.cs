@@ -1,7 +1,7 @@
 ﻿using System;
 using WorkSpeed.Data.Models.Enums;
 
-namespace WorkSpeed.ProductivityIndicatorsModels
+namespace WorkSpeed.Business.ProductivityIndicatorsModels
 {
     public struct ProductivityTime
     {

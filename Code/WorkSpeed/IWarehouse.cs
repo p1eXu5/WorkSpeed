@@ -5,13 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using WorkSpeed.Business.FileModels;
+using WorkSpeed.Business.Interfaces;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
-using WorkSpeed.FileModels;
-using WorkSpeed.Productivity;
-using WorkSpeed.ProductivityCalculator;
 
-namespace WorkSpeed.Interfaces
+namespace WorkSpeed.Business
 {
     public interface IWarehouse
     {

@@ -1,8 +1,7 @@
 ﻿using Agbm.NpoiExcel.Attributes;
-using WorkSpeed.FileModels.Converters;
-using WorkSpeed.Interfaces;
+using WorkSpeed.Business.FileModels.Converters;
 
-namespace WorkSpeed.FileModels
+namespace WorkSpeed.Business.FileModels
 {
     public class GatheringImportModel : WithProductActionImportModel
     {
@@ -13,10 +12,5 @@ namespace WorkSpeed.FileModels
         [Header("Адрес-получатель")]
         [Header( "АдресПолучатель" )]
         public string AddressReceiver { get; set; }
-
-        public override object Convert ( IImportModelVisitor visitor )
-        {
-            return visitor.GetDbModel( this );
-        }
     }
 }

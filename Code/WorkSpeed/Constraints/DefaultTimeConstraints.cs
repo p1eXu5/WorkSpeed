@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WorkSpeed.ProductivityIndicatorsModels;
+using WorkSpeed.Business.ProductivityIndicatorsModels;
 
-namespace WorkSpeed.Constraints
+namespace WorkSpeed.Business.Constraints
 {
     public class DefaultTimeConstraints : ITimeConstraints
     {

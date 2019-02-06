@@ -157,7 +157,7 @@
     <Compile Include="Constraints\IBreakConstraints.cs" />
     <Compile Include="Constraints\ICategoryConstraints.cs" />
     <Compile Include="FileModels\Contracts\IImportModel.cs" />
-    <Compile Include="FileModels\EmployeeFullImportModel.cs" />
+    <Compile Include="FileModels\EmployeeImportModel.cs" />
     <Compile Include="FileModels\Converters\ImportModelConverter.cs" />
     <Compile Include="FileModels\Converters\ImportModelVisitor.cs" />
     <Compile Include="FileModels\ProductImportModel.cs" />

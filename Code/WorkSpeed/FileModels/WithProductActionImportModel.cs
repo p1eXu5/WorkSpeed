@@ -1,6 +1,6 @@
 ﻿using Agbm.NpoiExcel.Attributes;
 
-namespace WorkSpeed.FileModels
+namespace WorkSpeed.Business.FileModels
 {
     public abstract class WithProductActionImportModel : ActionImportModel
     {

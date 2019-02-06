@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
 
-namespace WorkSpeed.ProductivityIndicatorsModels
+namespace WorkSpeed.Business.ProductivityIndicatorsModels
 {
     public abstract class ProductivityIndicators
     {

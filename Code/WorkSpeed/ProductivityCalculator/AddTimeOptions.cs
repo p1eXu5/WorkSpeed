@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WorkSpeed.ProductivityCalculator
+namespace WorkSpeed.Business.ProductivityCalculator
 {
     public enum AddTimeOptions
     {

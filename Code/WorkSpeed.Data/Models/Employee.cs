@@ -5,7 +5,7 @@ using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Data.Models
 {
-    public class Employee
+    public class Employee : IEntity
     {
         [ MaxLength (7), MinLength (7)]
         public string Id { get; set; }
