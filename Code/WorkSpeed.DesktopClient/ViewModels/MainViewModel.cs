@@ -26,9 +26,9 @@ namespace WorkSpeed.DesktopClient.ViewModels
             _importService = importService ?? throw new ArgumentNullException(nameof(importService), @"type cannot be null."); ;
         }
 
-        public ICommand ImportAsyncCommand => new MvvmCommand( ImportAsync );
+        public ICommand ImportAsyncCommand => new MvvmCommand( Import );
 
-        private async void ImportAsync ( object obj )
+        private void Import ( object obj )
         {
             var ofd = new OpenFileDialog
             {
@@ -39,7 +39,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
             if ( true == ofd.ShowDialog() ) {
 
-                await _importService.ImportFromXlsxAsync( ofd.FileName, _progress );
+                _importService.ImportFromXlsxAsync( ofd.FileName, _progress );
             }
         }
     }
