@@ -51,8 +51,8 @@ namespace WorkSpeed.Business.FileModels.Converters
         {
             return new Employee
             {
-                Id = employeeImportModel.EmployeeId,
-                Name = employeeImportModel.EmployeeName,
+                Id = employeeImportModel.Id,
+                Name = employeeImportModel.Name,
                 IsActive = employeeImportModel.IsActive,
             };
         }
@@ -62,8 +62,8 @@ namespace WorkSpeed.Business.FileModels.Converters
             return new Employee
             {
 
-                Id = employeeFullImportModel.EmployeeId,
-                Name = employeeFullImportModel.EmployeeName,
+                Id = employeeFullImportModel.Id,
+                Name = employeeFullImportModel.Name,
                 IsActive = employeeFullImportModel.IsActive,
                 Appointment = new Appointment
                 {
@@ -218,8 +218,8 @@ namespace WorkSpeed.Business.FileModels.Converters
             importModel.Employee = new Employee
             {
 
-                Id = actionImportModel.EmployeeId,
-                Name = actionImportModel.EmployeeName,
+                Id = actionImportModel.Id,
+                Name = actionImportModel.Name,
             };
 
             importModel.Duration = TimeSpan.FromSeconds(actionImportModel.OperationDuration);
@@ -248,8 +248,8 @@ namespace WorkSpeed.Business.FileModels.Converters
             importModel.StartTime = actionImportModel.StartTime;
             importModel.DocumentNumber = actionImportModel.DocumentNumber;
             importModel.DocumentName = actionImportModel.DocumentName;
-            importModel.EmployeeId = actionImportModel.EmployeeId;
-            importModel.EmployeeName = actionImportModel.EmployeeName;
+            importModel.Id = actionImportModel.Id;
+            importModel.Name = actionImportModel.Name;
             importModel.Operation = actionImportModel.Operation;
             importModel.OperationDuration = actionImportModel.OperationDuration;
 
