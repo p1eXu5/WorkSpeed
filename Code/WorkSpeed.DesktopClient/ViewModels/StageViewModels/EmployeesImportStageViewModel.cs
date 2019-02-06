@@ -34,7 +34,7 @@
 
 //            var cancellationToken = GetCancellationToken();
 
-//            bool areEmployeesAdded = await Warehouse.ImportAsync< EmployeeFullImportModel >( fileName, cancellationToken, Progress );
+//            bool areEmployeesAdded = await Warehouse.ImportAsync< EmployeeImportModel >( fileName, cancellationToken, Progress );
 
 //            if ( !areEmployeesAdded ) {
 //                areEmployeesAdded = await Warehouse.ImportAsync<EmployeeImportModel>( fileName, cancellationToken, Progress );

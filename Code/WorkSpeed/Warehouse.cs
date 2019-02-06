@@ -183,13 +183,13 @@ namespace WorkSpeed
             //        ).ToArray()
             //    );
             //}
-            //else if ( typeof( EmployeeFullImportModel ) == mappedType.type ) {
+            //else if ( typeof( EmployeeImportModel ) == mappedType.type ) {
 
             //    ImportEmployees(
             //        _dataImporter.GetDataFromTable(
             //            sheetTable,
             //            mappedType.propertyMap,
-            //            new ImportModelConverter< EmployeeFullImportModel, Employee >( new ImportModelVisitor() )
+            //            new ImportModelConverter< EmployeeImportModel, Employee >( new ImportModelVisitor() )
             //        ).ToArray()
             //    );
             //}
