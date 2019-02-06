@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Agbm.NpoiExcel.Attributes;
 using WorkSpeed.Business.FileModels;
 
-namespace WorkSpeed.FileModels
+namespace WorkSpeed.Business.FileModels
 {
     public abstract class WithEmployeeImportModel : ImportModel
     {
