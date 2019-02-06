@@ -149,7 +149,7 @@
     <Compile Include="DataContexts\Configurations\RankConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\ShiftConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\ShortBreakScheduleConfiguration.cs" />
-    <Compile Include="Interfaces\IEntity.cs" />
+    <Compile Include="Models\IKeyedEntity.cs" />
     <Compile Include="DataContexts\WorkSpeedDbContext.cs" />
     <Compile Include="Migrations\20190204165210_InitialCreate.cs" />
     <Compile Include="Migrations\20190204165210_InitialCreate.designer.cs">
@@ -170,6 +170,7 @@
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Appointment.cs" />
     <Compile Include="Models\CategorySet.cs" />
+    <Compile Include="Models\IEntity.cs" />
     <Compile Include="Models\Enums\BoxTypes.cs" />
     <Compile Include="Models\Document1C.cs" />
     <Compile Include="Models\Employee.cs" />

@@ -1,11 +1,13 @@
 ﻿using Agbm.NpoiExcel.Attributes;
+using WorkSpeed.Business.FileModels;
+using WorkSpeed.Business.FileModels.Converters;
 using WorkSpeed.Data.Models;
 using WorkSpeed.FileModels.Converters;
 using WorkSpeed.Interfaces;
 
-namespace WorkSpeed.FileModels
+namespace WorkSpeed.Business.FileModels
 {
-    public class ProductImportModel : ImportModel
+    public class ProductImportModel : ImportModel, IKeyedEntity< int >
     {
         [Header( "Код товара" )]        public int Id { get; set; }
         [Header( "Номенклатура" )]      public string Name { get; set; }
@@ -26,16 +28,8 @@ namespace WorkSpeed.FileModels
         [Header( "ВысотаКоробки_см" )]
                                         public double CartonHeight { get; set; }
 
-        [Header( "ОбъемЕд_л" )]         public double Volume { get; set; }
-
         [Header( "ДлинаЕд_см" )]         public double ItemLength { get; set; }
         [Header( "ШиринаЕд_см" )]         public double ItemWidth { get; set; }
         [Header( "ВысотаЕд_см" )]         public double ItemHeight { get; set; }
-
-
-        public override object Convert ( IImportModelVisitor visitor )
-        {
-            return visitor.GetDbModel( this );
-        }
     }
 }

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WorkSpeed.Data.Interfaces
+namespace WorkSpeed.Data.Models
 {
-    public interface IEntity<out T>
+    public interface IEntity
     {
-        T Id { get; }
     }
 }

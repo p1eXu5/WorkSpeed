@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WorkSpeed.Data.Interfaces;
+using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Data.Comparers
 {
-    public class EntityComparer<TEntity,TId> : IEqualityComparer<TEntity>
-        where TEntity :  IEntity<TId>
+    public class EntityComparer< TEntity,TId > : IEqualityComparer< TEntity >   where TEntity : IKeyedEntity< TId >
     {
         public bool Equals(TEntity x, TEntity y)
         {

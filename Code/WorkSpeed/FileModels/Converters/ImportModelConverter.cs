@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Agbm.NpoiExcel;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Interfaces;
@@ -9,7 +10,19 @@ namespace WorkSpeed.FileModels.Converters
         where   TImport : ImportModel
         where TDataBase : new()
     {
+        private static readonly Dictionary< Type, Type > _typeMap;
+
         private readonly IImportModelVisitor _visitor;
+
+        static ImportModelConverter ()
+        {
+            _typeMap[ typeof(Empl) ] = typeof();
+        }
+
+        public ImportModelConverter ()
+        {
+            _visitor = new ImportModelVisitor();
+        }
 
         public ImportModelConverter ( IImportModelVisitor visitor )
         {

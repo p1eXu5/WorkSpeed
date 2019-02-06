@@ -7,6 +7,7 @@ using Agbm.NpoiExcel;
 using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.Data.DataContexts;
+using WorkSpeed.FileModels.Converters;
 
 namespace WorkSpeed.Business.Contexts
 {
@@ -40,7 +41,7 @@ namespace WorkSpeed.Business.Contexts
                 return;
             }
 
-            var data = ExcelImporter.ImportData(  )
+            var data = ExcelImporter.GetDataFromTable( table, propertyMap, new ImportModelConverter() );
         }
     }
 }

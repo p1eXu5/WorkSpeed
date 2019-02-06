@@ -8,10 +8,5 @@ namespace WorkSpeed.FileModels
     {
         [Header( "Работает")]
         public bool IsActive { get; set; }
-
-        public override object Convert ( IImportModelVisitor visitor )
-        {
-            return visitor.GetDbModel( this );
-        }
     }
 }

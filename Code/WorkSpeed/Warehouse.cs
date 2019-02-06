@@ -166,7 +166,7 @@ namespace WorkSpeed
             //if ( typeof( ProductImportModel ) == mappedType.type  ) {
 
             //    ImportProducts(
-            //        _dataImporter.GetEnumerable( 
+            //        _dataImporter.GetDataFromTable( 
             //            sheetTable,  
             //            mappedType.propertyMap,  
             //            new ImportModelConverter< ProductImportModel, Product >( new ImportModelVisitor() ) 
@@ -176,7 +176,7 @@ namespace WorkSpeed
             //else if ( typeof( EmployeeImportModel ) == mappedType.type ) {
 
             //    ImportEmployees(
-            //        _dataImporter.GetEnumerable( 
+            //        _dataImporter.GetDataFromTable( 
             //            sheetTable,  
             //            mappedType.propertyMap,  
             //            new ImportModelConverter< EmployeeImportModel, Employee >( new ImportModelVisitor() ) 
@@ -186,7 +186,7 @@ namespace WorkSpeed
             //else if ( typeof( EmployeeFullImportModel ) == mappedType.type ) {
 
             //    ImportEmployees(
-            //        _dataImporter.GetEnumerable(
+            //        _dataImporter.GetDataFromTable(
             //            sheetTable,
             //            mappedType.propertyMap,
             //            new ImportModelConverter< EmployeeFullImportModel, Employee >( new ImportModelVisitor() )
@@ -196,7 +196,7 @@ namespace WorkSpeed
             //else if ( typeof( ShipmentImportModel ) == mappedType.type ) {
 
             //    ImportShipmentActions(
-            //        _dataImporter.GetEnumerable( 
+            //        _dataImporter.GetDataFromTable( 
             //            sheetTable,  
             //            mappedType.propertyMap,  
             //            new ImportModelConverter< ShipmentImportModel, ShipmentAction >( new ImportModelVisitor() ) 
@@ -206,7 +206,7 @@ namespace WorkSpeed
             //else if ( typeof( GatheringImportModel ) == mappedType.type ) {
 
             //    ImportGatheringActions(
-            //        _dataImporter.GetEnumerable( 
+            //        _dataImporter.GetDataFromTable( 
             //            sheetTable,  
             //            mappedType.propertyMap,  
             //            new ImportModelConverter< GatheringImportModel, GatheringAction >( new ImportModelVisitor() ) 
@@ -216,7 +216,7 @@ namespace WorkSpeed
             //else if ( typeof( ReceptionImportModel ) == mappedType.type ) {
 
             //    ImportSingleAction(
-            //        _dataImporter.GetEnumerable( 
+            //        _dataImporter.GetDataFromTable( 
             //            sheetTable,  
             //            mappedType.propertyMap,  
             //            new ImportModelConverter< ReceptionImportModel, ReceptionAction >( new ImportModelVisitor() ) 
@@ -226,7 +226,7 @@ namespace WorkSpeed
             //else if ( typeof( InventoryImportModel ) == mappedType.type ) {
 
             //    ImportSingleAction(
-            //        _dataImporter.GetEnumerable( 
+            //        _dataImporter.GetDataFromTable( 
             //            sheetTable,  
             //            mappedType.propertyMap,  
             //            new ImportModelConverter< InventoryImportModel, InventoryAction >( new ImportModelVisitor() ) 
@@ -236,7 +236,7 @@ namespace WorkSpeed
             //else if ( typeof( ProductivityImportModel ) == mappedType.type ) {
 
             //    ImportProductivity(
-            //        _dataImporter.GetEnumerable( 
+            //        _dataImporter.GetDataFromTable( 
             //            sheetTable,  
             //            mappedType.propertyMap,  
             //            new ImportModelConverter< ProductivityImportModel, EmployeeAction >( new ImportModelVisitor() ) 
