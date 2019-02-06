@@ -10,7 +10,7 @@ namespace WorkSpeed.Data.Tests.FunctionalTests
         [Test]
         public void CanCreateDatabase()
         {
-            using (var context = new WorkSpeedDataContext()) {
+            using (var context = new WorkSpeedDbContext()) {
 
                 context.Database.Migrate();
             }
@@ -19,7 +19,7 @@ namespace WorkSpeed.Data.Tests.FunctionalTests
         [TearDown]
         public void DeleteDataBase()
         {
-            using (var context = new WorkSpeedDataContext()) {
+            using (var context = new WorkSpeedDbContext()) {
 
                 context.Database.EnsureDeleted();
             }
