@@ -9,9 +9,6 @@ namespace WorkSpeed.Data.DataContexts.ImportServiceExtensions
 {
     public static class WorkSpeedDbContextExtensions
     {
-        public static void AddProduct ( this WorkSpeedDbContext dbContext, Product product )
-        {
 
-        }
     }
 }
