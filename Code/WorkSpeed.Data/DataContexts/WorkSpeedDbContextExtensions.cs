@@ -10,12 +10,11 @@ namespace WorkSpeed.Data.DataContexts
 {
     public static class WorkSpeedDbContextExtensions
     {
-        public static Task AddAsync< TEntity > ( this WorkSpeedDbContext dbContext, 
-                                                 IEnumerable< TEntity > entities, 
-                                                 CancellationToken cancellationToken ) 
+        public static Task AddRangeAsync< TEntity > ( this WorkSpeedDbContext dbContext, 
+                                                 IEnumerable< TEntity > entities ) 
             where TEntity : class, IEntity
         {
-            return dbContext.Set< TEntity >().AddRangeAsync( entities, cancellationToken );
+            return dbContext.Set< TEntity >().AddRangeAsync( entities );
         }
     }
 }
