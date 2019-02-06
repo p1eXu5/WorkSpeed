@@ -2,11 +2,10 @@
 using WorkSpeed.FileModels.Converters;
 using WorkSpeed.Interfaces;
 
-namespace WorkSpeed.FileModels
+namespace WorkSpeed.Business.FileModels
 {
     public class EmployeeImportModel : WithEmployeeImportModel
     {
-        [Header( "Работает")]
-        public bool IsActive { get; set; }
+        [Header( "Работает")]   public bool IsActive { get; set; }
     }
 }
