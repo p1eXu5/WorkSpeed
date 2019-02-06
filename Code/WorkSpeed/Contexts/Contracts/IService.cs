@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data.DataContexts;
 
-namespace WorkSpeed.Business.BusinessContexts.Contracts
+namespace WorkSpeed.Business.Contexts.Contracts
 {
     public interface IService : IDisposable
     {

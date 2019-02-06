@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using WorkSpeed.Data.DataContexts;
 using WorkSpeed.Factories;
 
-namespace WorkSpeed.Business.BusinessContexts
+namespace WorkSpeed.Business.Contexts
 {
     public static class WorkSpeedBusinessContextCreator
     {

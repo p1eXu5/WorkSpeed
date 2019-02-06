@@ -1,8 +1,8 @@
 ﻿using System;
-using WorkSpeed.Business.BusinessContexts.Contracts;
+using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Data.DataContexts;
 
-namespace WorkSpeed.Business.BusinessContexts
+namespace WorkSpeed.Business.Contexts
 {
     public class Service : IService
     {

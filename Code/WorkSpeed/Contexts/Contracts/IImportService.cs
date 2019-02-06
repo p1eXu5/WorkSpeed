@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WorkSpeed.Business.BusinessContexts.Contracts
+namespace WorkSpeed.Business.Contexts.Contracts
 {
     public interface IImportService
     {

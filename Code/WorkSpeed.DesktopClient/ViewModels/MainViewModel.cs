@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Agbm.Wpf.MvvmBaseLibrary;
 using Microsoft.Win32;
+using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Data.BusinessContexts;
-using WorkSpeed.Data.BusinessContexts.Contracts;
 using WorkSpeed.Productivity;
 
 namespace WorkSpeed.DesktopClient.ViewModels
