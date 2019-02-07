@@ -1,18 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\Microsoft.EntityFrameworkCore.Design.2.2.1\build\net461\Microsoft.EntityFrameworkCore.Design.props" Condition="Exists('..\..\packages\Microsoft.EntityFrameworkCore.Design.2.2.1\build\net461\Microsoft.EntityFrameworkCore.Design.props')" />
+  <Import Project="..\..\packages\NUnit.3.11.0\build\NUnit.props" Condition="Exists('..\..\packages\NUnit.3.11.0\build\NUnit.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{035D995A-6F8A-47C1-AEBD-41B2CC5D6D7D}</ProjectGuid>
+    <ProjectGuid>{A16FD406-AE2B-44F0-BE87-B4C20AF112CE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WorkSpeed.Business</RootNamespace>
-    <AssemblyName>WorkSpeed.Business</AssemblyName>
+    <RootNamespace>WorkSpeed.Business.Tests</RootNamespace>
+    <AssemblyName>WorkSpeed.Business.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -34,8 +35,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="JetBrains.Annotations, Version=2018.3.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\JetBrains.Annotations.2018.3.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Castle.Core.4.3.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Sqlite, Version=2.2.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Data.Sqlite.Core.2.2.1\lib\netstandard2.0\Microsoft.Data.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.DotNet.PlatformAbstractions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.DotNet.PlatformAbstractions.2.1.0\lib\net45\Microsoft.DotNet.PlatformAbstractions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.EntityFrameworkCore, Version=2.2.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.EntityFrameworkCore.2.2.1\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll</HintPath>
@@ -43,11 +50,11 @@
     <Reference Include="Microsoft.EntityFrameworkCore.Abstractions, Version=2.2.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.EntityFrameworkCore.Abstractions.2.2.1\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.EntityFrameworkCore.Design, Version=2.2.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.EntityFrameworkCore.Design.2.2.1\lib\net461\Microsoft.EntityFrameworkCore.Design.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.EntityFrameworkCore.Relational, Version=2.2.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.EntityFrameworkCore.Relational.2.2.1\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Relational.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore.Sqlite, Version=2.2.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.EntityFrameworkCore.Sqlite.Core.2.2.1\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Sqlite.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Extensions.Caching.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
@@ -70,6 +77,9 @@
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyModel, Version=2.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Extensions.DependencyModel.2.1.0\lib\net451\Microsoft.Extensions.DependencyModel.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.Logging, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Extensions.Logging.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
     </Reference>
@@ -82,8 +92,29 @@
     <Reference Include="Microsoft.Extensions.Primitives, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Extensions.Primitives.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
+    <Reference Include="Moq, Version=4.10.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Moq.4.10.1\lib\net45\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NUnit.3.11.0\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Remotion.Linq.2.2.0\lib\net45\Remotion.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.batteries_green, Version=1.1.11.121, Culture=neutral, PublicKeyToken=a84b7dcfb1391f7f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCLRaw.bundle_green.1.1.11\lib\net45\SQLitePCLRaw.batteries_green.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.batteries_v2, Version=1.1.11.121, Culture=neutral, PublicKeyToken=8226ea5df37bcae9, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCLRaw.bundle_green.1.1.11\lib\net45\SQLitePCLRaw.batteries_v2.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.core, Version=1.1.11.121, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCLRaw.core.1.1.11\lib\net45\SQLitePCLRaw.core.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.provider.e_sqlite3, Version=1.1.11.121, Culture=neutral, PublicKeyToken=9c301db686d0bd12, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCLRaw.provider.e_sqlite3.net45.1.1.11\lib\net45\SQLitePCLRaw.provider.e_sqlite3.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -96,6 +127,7 @@
       <HintPath>..\..\packages\System.ComponentModel.Annotations.4.5.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.3.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Diagnostics.DiagnosticSource.4.5.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
@@ -113,6 +145,14 @@
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Runtime.InteropServices.RuntimeInformation.4.0.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Threading.Tasks.Extensions.4.5.1\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -121,92 +161,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionModels\Dims.cs" />
-    <Compile Include="ActionModels\ImportedEmployeeAction.cs" />
-    <Compile Include="ActionModels\ImportedActionDetailsBase.cs" />
-    <Compile Include="ActionModels\ImportedAddress.cs" />
-    <Compile Include="ActionModels\ImportedCommonActionDetails.cs" />
-    <Compile Include="ActionModels\ImportedGatheringActionDetails.cs" />
-    <Compile Include="ActionModels\ImportedInventoryActionDetails.cs" />
-    <Compile Include="ActionModels\ImportedOperation.cs" />
-    <Compile Include="ActionModels\ImportedProduct.cs" />
-    <Compile Include="ActionModels\ImportedReceptionActionDetails.cs" />
-    <Compile Include="ActionModels\ImportedShipmentActionDetails.cs" />
-    <Compile Include="ActionData.cs" />
-    <Compile Include="BreakConstraintsForNotSmokers.cs" />
-    <Compile Include="BreakConstraintsForSmokers.cs" />
-    <Compile Include="Contexts\Contracts\IImportService.cs" />
-    <Compile Include="Contexts\Contracts\IService.cs" />
-    <Compile Include="Contexts\ImportService.cs" />
-    <Compile Include="Contexts\Contracts\IWarehouseService.cs" />
-    <Compile Include="Contexts\Contracts\IWorkSpeedBusinessContext.cs" />
-    <Compile Include="Contexts\ProductivityService.cs" />
-    <Compile Include="Contexts\RuntimeWorkSpeedBusinessContext.cs" />
-    <Compile Include="Contexts\Service.cs" />
-    <Compile Include="Contexts\WarehouseService.cs" />
-    <Compile Include="Contexts\WorkSpeedBusinessContextCreator.cs" />
-    <Compile Include="CategoryConstraints.cs" />
-    <Compile Include="Constraints\BreakConstraints.cs" />
-    <Compile Include="Constraints\DefaultCategoryConstraints.cs" />
-    <Compile Include="Constraints\DefaultTimeConstraints.cs" />
-    <Compile Include="Constraints\ITimeConstraints.cs" />
-    <Compile Include="Constraints\ITimeConstraintFactory.cs" />
-    <Compile Include="DayPeriod.cs" />
-    <Compile Include="Factories\TypeRepositoryLoader.cs" />
-    <Compile Include="FileModels\Comparers\ActionImportModelComparer.cs" />
-    <Compile Include="Constraints\IBreakConstraints.cs" />
-    <Compile Include="Constraints\ICategoryConstraints.cs" />
-    <Compile Include="FileModels\Contracts\IImportModel.cs" />
-    <Compile Include="FileModels\EmployeeImportModel.cs" />
-    <Compile Include="FileModels\Converters\ImportModelConverter.cs" />
-    <Compile Include="FileModels\Converters\ImportModelVisitor.cs" />
-    <Compile Include="FileModels\ProductImportModel.cs" />
-    <Compile Include="FileModels\WithEmployeeImportModel.cs" />
-    <Compile Include="FileModels\Converters\IImportModelVisitor.cs" />
-    <Compile Include="Period.cs" />
-    <Compile Include="ProductivityCalculator\AddTimeOptions.cs" />
-    <Compile Include="ProductivityCalculator\IProductivityCalculator.cs" />
-    <Compile Include="ProductivityCalculator\Productivity2.cs" />
-    <Compile Include="ActionModels\ProductMgh.cs" />
-    <Compile Include="FileModels\ActionImportModel.cs" />
-    <Compile Include="FileModels\WithProductActionImportModel.cs" />
-    <Compile Include="FileModels\GatheringImportModel.cs" />
-    <Compile Include="FileModels\ImportModel.cs" />
-    <Compile Include="FileModels\InventoryImportModel.cs" />
-    <Compile Include="FileModels\ProductivityImportModel.cs" />
-    <Compile Include="FileModels\ReceptionImportModel.cs" />
-    <Compile Include="FileModels\ShipmentImportModel.cs" />
-    <Compile Include="IWarehouse.cs" />
-    <Compile Include="Interfaces\IWarehouseEntities.cs" />
-    <Compile Include="ProductivityCalculator\ProductivityObservableCollection.cs" />
-    <Compile Include="ProductivityIndicatorsModels\CargoIndicators.cs" />
-    <Compile Include="ProductivityIndicatorsModels\CompositeQuantityIndicators.cs" />
-    <Compile Include="ProductivityIndicatorsModels\GatheringIndicators.cs" />
-    <Compile Include="ProductivityIndicatorsModels\IQuantityIndicators.cs" />
-    <Compile Include="ProductivityIndicatorsModels\LineIndicators.cs" />
-    <Compile Include="ProductivityIndicatorsModels\QuantityIndicators.cs" />
-    <Compile Include="ProductivityIndicatorsModels\ProductivityIndicators.cs" />
-    <Compile Include="ProductivityIndicatorsModels\ProductivityTime.cs" />
-    <Compile Include="ProductivityIndicatorsModels\TimeIndicators.cs" />
-    <Compile Include="ProductivityIndicatorsModels\ValueIndicators.cs" />
-    <Compile Include="ProductivityIndicatorsModels\VolumeIndicators.cs" />
-    <Compile Include="ProductivityIndicatorsModels\WeightIndicators.cs" />
+    <Compile Include="Contexts\UnitTests\ImportServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Warehouse.cs" />
-    <Compile Include="WarehouseEntities.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Agbm.Tools\Code\Agbm.NpoiExcel\Agbm.NpoiExcel.csproj">
       <Project>{47680bf8-c76a-44b9-bde3-694f1a73ccb1}</Project>
       <Name>Agbm.NpoiExcel</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WorkSpeed.Data\WorkSpeed.Data.csproj">
+    <ProjectReference Include="..\..\Code\WorkSpeed.Data\WorkSpeed.Data.csproj">
       <Project>{72e065c5-8769-4008-9529-11194be488e0}</Project>
       <Name>WorkSpeed.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WorkSpeed.Productivity\WorkSpeed.Productivity.csproj">
-      <Project>{61c2a155-2641-4617-826e-82911531837a}</Project>
-      <Name>WorkSpeed.Productivity</Name>
+    <ProjectReference Include="..\..\Code\WorkSpeed\WorkSpeed.Business.csproj">
+      <Project>{035d995a-6f8a-47c1-aebd-41b2cc5d6d7d}</Project>
+      <Name>WorkSpeed.Business</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -214,10 +183,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets" Condition="Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\Microsoft.EntityFrameworkCore.Design.2.2.1\build\net461\Microsoft.EntityFrameworkCore.Design.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.EntityFrameworkCore.Design.2.2.1\build\net461\Microsoft.EntityFrameworkCore.Design.props'))" />
+    <Error Condition="!Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets'))" />
+    <Error Condition="!Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets'))" />
+    <Error Condition="!Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets'))" />
+    <Error Condition="!Exists('..\..\packages\NUnit.3.11.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit.3.11.0\build\NUnit.props'))" />
   </Target>
+  <Import Project="..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets" Condition="Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" />
+  <Import Project="..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets" Condition="Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" />
 </Project>

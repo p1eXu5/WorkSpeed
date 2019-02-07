@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WorkSpeed.Data.Models
 {
-    public class Product
+    public class Product : IEntity
     {
         public int Id { get; set; }
 
@@ -16,22 +16,55 @@ namespace WorkSpeed.Data.Models
         /// Item lenght in cm.
         /// </summary>
         public float? ItemLength { get; set; }
+
+        /// <summary>
+        /// Item width in cm.
+        /// </summary>
         public float? ItemWidth  { get; set; }
+
+        /// <summary>
+        /// Item height in cm.
+        /// </summary>
         public float? ItemHeight { get; set; }
     
+        /// <summary>
+        /// Item weight in cm.
+        /// </summary>
         public float? ItemWeight { get; set; }
 
-        // Computed
+        /// <summary>
+        /// Computed column that is item volume in litters.
+        /// </summary>
         public float? ItemVolume { get; set; }
 
+        /// <summary>
+        /// Item carton lenght in cm.
+        /// </summary>
         public float? CartonLength { get; set; }
+
+        /// <summary>
+        /// Item carton width in cm.
+        /// </summary>
         public float? CartonWidth  { get; set; }
+
+        /// <summary>
+        /// Item carton height in cm.
+        /// </summary>
         public float? CartonHeight { get; set; }
 
+        /// <summary>
+        /// Item quantity that contained in carton.
+        /// </summary>
         public int? CartonQuantity { get; set; }
 
-        // Computed
+        /// <summary>
+        /// Computed column that is item carton weight in kg.
+        /// </summary>
         public float? CartonWeight { get; set; }
+
+        /// <summary>
+        /// Computed column that is item carton volume in litters.
+        /// </summary>
         public float? CartonVolume { get; set; }
 
         public float? GatheringComplexity { get; set; }

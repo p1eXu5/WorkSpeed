@@ -10,5 +10,6 @@ namespace WorkSpeed.Business.Contexts.Contracts
     public interface IImportService
     {
         Task ImportFromXlsxAsync ( string fileName, IProgress< (int, string) > progress, CancellationToken cancellationToken );
+        void ImportFromXlsx ( string fileName, IProgress< (int, string) > progress );
     }
 }
