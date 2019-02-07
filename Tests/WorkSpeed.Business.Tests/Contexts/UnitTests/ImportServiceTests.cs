@@ -185,15 +185,15 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             service.Employees = new[] { new Employee { Id = "AR23456", Name = "Test Employee" } };
 
             // Action:
-            service.ImportFromXlsx( PRODUCTS, null );
+            service.ImportFromXlsx( EMPLOYEES, null );
 
             // Assert:
-            var dbEmployees = service.DbContext.Products.ToArray();
+            var dbEmployees = service.DbContext.Employees.ToArray();
             Assert.That( dbEmployees.Length == 1 );
         }
 
         [ Test ]
-        public void ImportFromXlsx_ProductExistInDb_DoesNotAddEmployee ()
+        public void ImportFromXlsx_EmployeeExistInDb_DoesNotAddEmployee ()
         {
             // Arrange:
             var service = GetImportService();
@@ -204,7 +204,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             service.ImportFromXlsx( PRODUCTS, null );
 
             // Assert:
-            var dbEmployees = service.DbContext.Products.ToArray();
+            var dbEmployees = service.DbContext.Employees.ToArray();
             Assert.That( dbEmployees.Length == 1 );
         }
 

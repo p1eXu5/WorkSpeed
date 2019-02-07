@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Agbm.NpoiExcel;
+using Microsoft.EntityFrameworkCore;
 using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Business.FileModels.Converters;
 using WorkSpeed.Data.BusinessContexts;
@@ -62,10 +64,11 @@ namespace WorkSpeed.Business.Contexts
         {
             var newProducts = new List< Product >( data.Count() );
             var updateProducts = new List< Product >( data.Count() );
+            var dbProductList = await _dbContext.GetProducts().ToListAsync();
 
             foreach ( var product in data.Where( p => !String.IsNullOrWhiteSpace( p.Name ) && p.Id > 0 ) ) {
 
-                var dbProduct = await _dbContext.GetProductAsync( product );
+                var dbProduct = dbProductList.FirstOrDefault( p => p.Id == product.Id );
 
                 if ( dbProduct == null ) {
                     newProducts.Add( product );
@@ -82,6 +85,25 @@ namespace WorkSpeed.Business.Contexts
 
             addTask.Wait();
             await _dbContext.SaveChangesAsync();
+        }
+
+        [ SuppressMessage( "ReSharper", "PossibleMultipleEnumeration" ) ]
+        private async void StoreData ( IEnumerable< Employee > data )
+        {
+            var newEmployees = new List< Employee >( data.Count() );
+
+            foreach ( var employee in data.Where( e => !string.IsNullOrWhiteSpace( e.Name ) && !string.IsNullOrWhiteSpace( e.Id ) ) ) {
+
+                var dbEmployee = await _dbContext.GetEmployeeAsync( employee );
+                
+                if ( null == dbEmployee ) {
+                    newEmployees.Add( employee );
+                }
+            }
+
+            await _dbContext.AddRangeAsync( newEmployees );
+            await _dbContext.SaveChangesAsync();
+
         }
 
         private bool CheckDifferent ( Product donor, Product acceptor )
