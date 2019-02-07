@@ -197,11 +197,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         {
             // Arrange:
             var service = GetImportService();
-            service.Products = new[] { new Product { Id = 01223456, Name = "Test Product" } };
+            service.Employees = new[] { new Employee { Id = "AR23456", Name = "Test Employee" } };
 
             // Action:
-            service.ImportFromXlsx( PRODUCTS, null );
-            service.ImportFromXlsx( PRODUCTS, null );
+            service.ImportFromXlsx( EMPLOYEES, null );
+            service.ImportFromXlsx( EMPLOYEES, null );
 
             // Assert:
             var dbEmployees = service.DbContext.Employees.ToArray();

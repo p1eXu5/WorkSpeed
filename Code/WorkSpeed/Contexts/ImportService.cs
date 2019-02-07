@@ -7,13 +7,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Agbm.NpoiExcel;
-using Microsoft.EntityFrameworkCore;
 using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Business.FileModels.Converters;
 using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.Data.DataContexts;
 using WorkSpeed.Data.DataContexts.ImportServiceExtensions;
 using WorkSpeed.Data.Models;
+using Microsoft.EntityFrameworkCore;
+using WorkSpeed.Business.Models;
+using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Business.Contexts
 {
@@ -91,11 +93,12 @@ namespace WorkSpeed.Business.Contexts
         private async void StoreData ( IEnumerable< Employee > data )
         {
             var newEmployees = new List< Employee >( data.Count() );
+            var employees = await _dbContext.GetEmployees().ToArrayAsync();
 
             foreach ( var employee in data.Where( e => !string.IsNullOrWhiteSpace( e.Name ) && !string.IsNullOrWhiteSpace( e.Id ) ) ) {
 
-                var dbEmployee = await _dbContext.GetEmployeeAsync( employee );
-                
+                var dbEmployee = employees.FirstOrDefault( e => e.Id.Equals( employee.Id ) );
+
                 if ( null == dbEmployee ) {
                     newEmployees.Add( employee );
                 }
@@ -103,6 +106,16 @@ namespace WorkSpeed.Business.Contexts
 
             await _dbContext.AddRangeAsync( newEmployees );
             await _dbContext.SaveChangesAsync();
+
+        }
+
+        private async void StoreData ( IEnumerable< EmployeeActionBase > data )
+        {
+            StoreData( data.Where( d => d is DoubleAddressAction ) );
+        }
+
+        private async void StoreData ( IEnumerable< DoubleAddressAction > data )
+        {
 
         }
 

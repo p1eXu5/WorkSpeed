@@ -16,8 +16,8 @@ namespace WorkSpeed.Data.DataContexts.Configurations
 
             builder.Property( p => p.Name ).HasColumnType( "varchar(255)" ).IsRequired();
             builder.Property( p => p.IsActive ).HasColumnType( "bit" ).IsRequired();
-            builder.Property( p => p.IsSmoker ).HasColumnType( "bit" ).IsRequired();
-            builder.Property( p => p.ProbationEnd ).HasColumnType( "datetime2" ).IsRequired();
+            builder.Property( p => p.IsSmoker ).HasColumnType( "bit" );
+            builder.Property( p => p.ProbationEnd ).HasColumnType( "datetime2" );
 
             builder.HasOne( p => p.Position ).WithMany().HasForeignKey( p => p.PositionId );
             builder.HasOne( p => p.Rank ).WithMany();

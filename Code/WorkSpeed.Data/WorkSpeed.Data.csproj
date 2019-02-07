@@ -169,7 +169,6 @@
     <Compile Include="Models\CategorySet.cs" />
     <Compile Include="Models\IEntity.cs" />
     <Compile Include="Models\Enums\BoxTypes.cs" />
-    <Compile Include="Models\Document1C.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\Actions\DoubleAddressAction.cs" />
     <Compile Include="Models\Actions\InventoryAction.cs" />

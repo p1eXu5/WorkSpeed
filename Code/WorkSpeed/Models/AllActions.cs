@@ -10,9 +10,9 @@ namespace WorkSpeed.Business.Models
 {
     public class AllActions : IEntity
     {
-        public ICollection< DoubleAddressAction > DoubleAddressActions { get; set; }
-        public ICollection< ReceptionAction > ReceptionActions { get; set; }
-        public ICollection< InventoryAction > InventoryActions { get; set; }
-        public ICollection< ShipmentAction > ShipmentActions { get; set; }
+        public DoubleAddressAction DoubleAddressAction { get; set; }
+        public ReceptionAction ReceptionAction { get; set; }
+        public InventoryAction InventoryAction { get; set; }
+        public ShipmentAction ShipmentActions { get; set; }
     }
 }
