@@ -121,17 +121,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionModels\Dims.cs" />
-    <Compile Include="ActionModels\ImportedEmployeeAction.cs" />
-    <Compile Include="ActionModels\ImportedActionDetailsBase.cs" />
-    <Compile Include="ActionModels\ImportedAddress.cs" />
-    <Compile Include="ActionModels\ImportedCommonActionDetails.cs" />
-    <Compile Include="ActionModels\ImportedGatheringActionDetails.cs" />
-    <Compile Include="ActionModels\ImportedInventoryActionDetails.cs" />
-    <Compile Include="ActionModels\ImportedOperation.cs" />
-    <Compile Include="ActionModels\ImportedProduct.cs" />
-    <Compile Include="ActionModels\ImportedReceptionActionDetails.cs" />
-    <Compile Include="ActionModels\ImportedShipmentActionDetails.cs" />
+    <Compile Include="Models\ActionModels\Dims.cs" />
+    <Compile Include="Models\ActionModels\ImportedEmployeeAction.cs" />
+    <Compile Include="Models\ActionModels\ImportedActionDetailsBase.cs" />
+    <Compile Include="Models\ActionModels\ImportedAddress.cs" />
+    <Compile Include="Models\ActionModels\ImportedCommonActionDetails.cs" />
+    <Compile Include="Models\ActionModels\ImportedGatheringActionDetails.cs" />
+    <Compile Include="Models\ActionModels\ImportedInventoryActionDetails.cs" />
+    <Compile Include="Models\ActionModels\ImportedOperation.cs" />
+    <Compile Include="Models\ActionModels\ImportedProduct.cs" />
+    <Compile Include="Models\ActionModels\ImportedReceptionActionDetails.cs" />
+    <Compile Include="Models\ActionModels\ImportedShipmentActionDetails.cs" />
     <Compile Include="ActionData.cs" />
     <Compile Include="BreakConstraintsForNotSmokers.cs" />
     <Compile Include="BreakConstraintsForSmokers.cs" />
@@ -163,11 +163,12 @@
     <Compile Include="FileModels\ProductImportModel.cs" />
     <Compile Include="FileModels\WithEmployeeImportModel.cs" />
     <Compile Include="FileModels\Converters\IImportModelVisitor.cs" />
+    <Compile Include="Models\AllActions.cs" />
     <Compile Include="Period.cs" />
     <Compile Include="ProductivityCalculator\AddTimeOptions.cs" />
     <Compile Include="ProductivityCalculator\IProductivityCalculator.cs" />
     <Compile Include="ProductivityCalculator\Productivity2.cs" />
-    <Compile Include="ActionModels\ProductMgh.cs" />
+    <Compile Include="Models\ActionModels\ProductMgh.cs" />
     <Compile Include="FileModels\ActionImportModel.cs" />
     <Compile Include="FileModels\WithProductActionImportModel.cs" />
     <Compile Include="FileModels\GatheringImportModel.cs" />

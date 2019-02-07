@@ -37,47 +37,95 @@ namespace WorkSpeed.Business.Contexts
 
         public void ImportFromXlsx ( string fileName, IProgress< (int, string) > progress )
         {
-            if ( !TryGetData( fileName, out var data ) ) {
-
-                progress?.Report( (-1, @"Не удалось прочитать файл. Файл либо открыт в другой программе, " 
-                                      + @"либо содержит таблицу, тип которой определить не удалось.") );
-
-                return;
-            }
+            try {
+                var data = GetDataFromFile( fileName );
            
-            if ( data.Any() ) {
-                StoreData( ( dynamic )data );
+                if ( data.Any() ) {
+                    StoreData( ( dynamic )data );
+                }
+            }
+            catch ( Exception ) {
+                progress?.Report( (-1, @"Не удалось прочитать файл. Файл либо открыт в другой программе, " 
+                                          + @"либо содержит таблицу, тип которой определить не удалось.") );
             }
         }
 
-        protected internal virtual bool TryGetData ( string fileName, out IEnumerable< IEntity > data )
+        protected internal virtual IEnumerable< IEntity > GetDataFromFile ( string fileName )
         {
-            try {
-                var table = ExcelImporter.GetSheetTable( fileName );
-                var typeMap = _typeRepository.GetTypeAndPropertyMap( table );
-                data = ExcelImporter.GetDataFromTable( table, typeMap.propertyMap, new ImportModelConverter() );
-                return true;
-            }
-            catch ( Exception ) {
-                ;
-            }
-
-            data = new IEntity[0];
-            return false;
+            var table = ExcelImporter.GetSheetTable( fileName );
+            var typeMap = _typeRepository.GetTypeAndPropertyMap( table );
+            return ExcelImporter.GetDataFromTable( table, typeMap.propertyMap, new ImportModelConverter() );
         }
 
 
         [ SuppressMessage( "ReSharper", "PossibleMultipleEnumeration" ) ]
         private async void StoreData ( IEnumerable< Product > data )
         {
-            var products = new List< Product >( data.Count() );
+            var newProducts = new List< Product >( data.Count() );
+            var updateProducts = new List< Product >( data.Count() );
 
-            foreach ( var product in data ) {
-                products.Add( product );
+            foreach ( var product in data.Where( p => !String.IsNullOrWhiteSpace( p.Name ) && p.Id > 0 ) ) {
+
+                var dbProduct = await _dbContext.GetProductAsync( product );
+
+                if ( dbProduct == null ) {
+                    newProducts.Add( product );
+                    continue;
+                }
+
+                if ( CheckDifferent( product, dbProduct ) ) {
+                    updateProducts.Add( dbProduct );
+                }
             }
 
-            await _dbContext.AddRangeAsync( products );
+            var addTask = _dbContext.AddRangeAsync( newProducts );
+            _dbContext.UpdateRange( updateProducts );
+
+            addTask.Wait();
             await _dbContext.SaveChangesAsync();
+        }
+
+        private bool CheckDifferent ( Product donor, Product acceptor )
+        {
+            bool isDifferent = false;
+
+            acceptor.ItemLength = TryUpdateMeasure( donor.ItemLength, acceptor.ItemLength );
+            acceptor.ItemWidth = TryUpdateMeasure( donor.ItemWidth, acceptor.ItemWidth );
+            acceptor.ItemHeight = TryUpdateMeasure( donor.ItemHeight, acceptor.ItemHeight );
+
+            acceptor.ItemWeight = TryUpdateMeasure( donor.ItemWeight, acceptor.ItemWeight );
+
+            acceptor.CartonLength = TryUpdateMeasure( donor.CartonLength, acceptor.CartonLength );
+            acceptor.CartonWidth = TryUpdateMeasure( donor.CartonWidth, acceptor.CartonWidth );
+            acceptor.CartonHeight = TryUpdateMeasure( donor.CartonHeight, acceptor.CartonHeight );
+
+            acceptor.CartonQuantity = TryUpdateQuantity( donor.CartonQuantity, acceptor.CartonQuantity );
+
+            return isDifferent;
+
+            float? TryUpdateMeasure ( float? donorValue, float? acceptorValue )
+            {
+                if ( !acceptorValue.HasValue && donorValue.HasValue ) {
+                    acceptorValue = donorValue;
+                    if ( !isDifferent ) isDifferent = true;
+                }
+
+                return acceptorValue;
+            }
+
+            int? TryUpdateQuantity ( int? donorValue, int? acceptorValue )
+            {
+                if ( !acceptorValue.HasValue && donorValue.HasValue ) {
+                    acceptorValue = donorValue;
+                    if ( !isDifferent ) isDifferent = true;
+                }
+
+                return acceptorValue;
+            }
+        }
+
+        private static class Check
+        {
         }
     }
 }

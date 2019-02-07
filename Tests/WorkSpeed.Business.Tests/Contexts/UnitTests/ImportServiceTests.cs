@@ -27,6 +27,8 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             _connection?.Close();
         }
 
+
+
         [ Test ]
         public void ImportService_WhenCreating_DoesNotSeedProducts ()
         {
@@ -98,15 +100,118 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             service.ImportFromXlsx( PRODUCTS, null );
 
             // Action:
-            service.Products = new[] { new Product { Id = 01223456, Name = originName, ItemLength = } };
+            service.Products = new[] { new Product { Id = 01223456, Name = originName, ItemLength = 15.0f } };
             service.ImportFromXlsx( PRODUCTS, null );
 
             // Assert:
             var dbProducts = service.DbContext.Products.ToArray();
-            Assert.That( dbProducts[0].Name, Is.EqualTo( originName ) );
+            Assert.That( dbProducts[0].ItemLength, Is.EqualTo( 15.0f ) );
+        }
+
+        [ Test ]
+        public void ImportFromXlsx_ProductExistInDb_AddingProductHasDifferentItemWidth_UpdateDbProductItemWidth ()
+        {
+            // Arrange:
+            var service = GetImportService();
+            var originName = "TestProduct";
+            service.Products = new[] { new Product { Id = 01223456, Name = originName } };
+            service.ImportFromXlsx( PRODUCTS, null );
+
+            // Action:
+            service.Products = new[] { new Product { Id = 01223456, Name = originName, ItemWidth = 15.0f } };
+            service.ImportFromXlsx( PRODUCTS, null );
+
+            // Assert:
+            var dbProducts = service.DbContext.Products.ToArray();
+            Assert.That( dbProducts[0].ItemWidth, Is.EqualTo( 15.0f ) );
+        }
+
+        [ Test ]
+        public void ImportFromXlsx_ProductExistInDb_AddingProductHasDifferentItemHeight_UpdateDbProductItemHeight ()
+        {
+            // Arrange:
+            var service = GetImportService();
+            var originName = "TestProduct";
+            service.Products = new[] { new Product { Id = 01223456, Name = originName } };
+            service.ImportFromXlsx( PRODUCTS, null );
+
+            // Action:
+            service.Products = new[] { new Product { Id = 01223456, Name = originName, ItemHeight = 15.0f } };
+            service.ImportFromXlsx( PRODUCTS, null );
+
+            // Assert:
+            var dbProducts = service.DbContext.Products.ToArray();
+            Assert.That( dbProducts[0].ItemHeight, Is.EqualTo( 15.0f ) );
+        }
+
+        [ Test ]
+        public void ImportFromXlsx_ProductExistInDb_AddingProductHasDifferentItemWeight_UpdateDbProductItemWeight ()
+        {
+            // Arrange:
+            var service = GetImportService();
+            var originName = "TestProduct";
+            service.Products = new[] { new Product { Id = 01223456, Name = originName } };
+            service.ImportFromXlsx( PRODUCTS, null );
+
+            // Action:
+            service.Products = new[] { new Product { Id = 01223456, Name = originName, ItemWeight = 15.0f } };
+            service.ImportFromXlsx( PRODUCTS, null );
+
+            // Assert:
+            var dbProducts = service.DbContext.Products.ToArray();
+            Assert.That( dbProducts[0].ItemWeight, Is.EqualTo( 15.0f ) );
+        }
+
+
+
+        [ Test ]
+        public void ImportService_WhenCreating_DoesNotSeedEmployees ()
+        {
+            // Arrange:
+            // Action:
+            var service = GetImportService();
+
+            // Assert:
+            var dbEmployees = service.DbContext.Employees.ToArray();
+            Assert.That( dbEmployees.Length == 0 );
+        }
+
+        [ Test ]
+        public void ImportFromXlsx_CanAddEmployee ()
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.Employees = new[] { new Product { Id = 01223456, Name = "Test Product " } };
+
+            // Action:
+            service.ImportFromXlsx( PRODUCTS, null );
+
+            // Assert:
+            var dbEmployees = service.DbContext.Products.ToArray();
+            Assert.That( dbEmployees.Length == 1 );
+        }
+
+        [ Test ]
+        public void ImportFromXlsx_ProductExistInDb_DoesNotAddEmployee ()
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.Products = new[] { new Product { Id = 01223456, Name = "Test Product" } };
+
+            // Action:
+            service.ImportFromXlsx( PRODUCTS, null );
+            service.ImportFromXlsx( PRODUCTS, null );
+
+            // Assert:
+            var dbEmployees = service.DbContext.Products.ToArray();
+            Assert.That( dbEmployees.Length == 1 );
         }
 
         #region Factory
+
+        private const string PRODUCTS = "Products";
+        private const string EMPLOYEES = "Employees";
+        private const string PRODUCTIVITY = "Productivity";
 
         private DbConnection _connection;
 
@@ -125,23 +230,28 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             return importServise;
         }
 
-        private const string PRODUCTS = "Products";
-
+        /// <summary>
+        /// Fake ImportService
+        /// </summary>
         private class ImportServiceFake : ImportService
         {
             public ImportServiceFake ( WorkSpeedDbContext dbContext, ITypeRepository typeRepository ) : base( dbContext, typeRepository ) { }
 
             public IEnumerable< Product > Products { get; set; }
+            public IEnumerable< Employee > Employees { get; set; }
+            public IEnumerable< ProductivityActions > Productivity { get; set; }
 
-            protected override bool TryGetData ( string fileName, out IEnumerable< IEntity > data )
+            protected override IEnumerable< IEntity > GetDataFromFile ( string fileName )
             {
                 switch ( fileName ) {
                     case PRODUCTS:
-                        data = Products;
-                        return true;
+                        return Products;
+                    case EMPLOYEES:
+                        return Employees;
+                    case PRODUCTIVITY:
+                        return Productivity;
                     default:
-                        data = new IEntity[0];
-                        return false;
+                        return new IEntity[0];
                 }
             }
         }
