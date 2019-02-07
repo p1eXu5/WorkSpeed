@@ -12,13 +12,13 @@ namespace WorkSpeed.Data.DataContexts.Configurations.Actions
             builder.ToTable( "ReceptionActions", "dbo" );
 
             builder.HasKey( p => p.Id );
-            builder.Property( p => p.Id ).UseSqlServerIdentityColumn();
+            builder.Property( p => p.Id ).ValueGeneratedNever();
+            builder.Property( p => p.DocumentName ).HasColumnType( "varchar(100)" );
 
             builder.Property( p => p.StartTime ).HasColumnType( "datetime2" ).IsRequired();
             builder.Property( p => p.Duration ).HasColumnType( "time" ).IsRequired();
 
             builder.HasOne( p => p.Employee ).WithMany().IsRequired();
-            builder.HasOne( p => p.Document1C ).WithMany().IsRequired();
             builder.HasOne( p => p.Operation ).WithMany().IsRequired();
 
             builder.HasMany( p => p.ReceptionActionDetails )
