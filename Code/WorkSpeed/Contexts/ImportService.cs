@@ -19,7 +19,6 @@ namespace WorkSpeed.Business.Contexts
     {
         private readonly ITypeRepository _typeRepository;
 
-
         #region Ctor
 
         public ImportService ( WorkSpeedDbContext dbContext, ITypeRepository typeRepository ) : base( dbContext )

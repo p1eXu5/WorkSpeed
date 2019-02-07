@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Business.Models
 {
-    public class AllActions
+    public class AllActions : IEntity
     {
         public ICollection< DoubleAddressAction > DoubleAddressActions { get; set; }
         public ICollection< ReceptionAction > ReceptionActions { get; set; }

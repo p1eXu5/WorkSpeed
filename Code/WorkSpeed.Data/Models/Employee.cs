@@ -12,7 +12,7 @@ namespace WorkSpeed.Data.Models
 
         public string Name { get; set; }
         public bool IsActive { get; set; }
-        public bool IsSmoker { get; set; }
+        public bool? IsSmoker { get; set; }
         public DateTime? ProbationEnd { get; set; }
 
         public int? PositionId { get; set; }

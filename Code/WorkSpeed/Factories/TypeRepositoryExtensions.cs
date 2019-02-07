@@ -4,7 +4,7 @@ using WorkSpeed.Business.FileModels;
 
 namespace WorkSpeed.Business.Factories
 {
-    public static class TypeRepositoryLoader
+    public static class TypeRepositoryExtensions
     {
         public static void Fill ( this ITypeRepository repo )
         {

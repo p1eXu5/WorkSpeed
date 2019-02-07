@@ -15,6 +15,7 @@ using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Data.DataContexts;
 using WorkSpeed.Data.Models;
 using NUnit.Framework;
+using WorkSpeed.Business.Models;
 
 namespace WorkSpeed.Business.Tests.Contexts.UnitTests
 {
@@ -181,7 +182,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         {
             // Arrange:
             var service = GetImportService();
-            service.Employees = new[] { new Product { Id = 01223456, Name = "Test Product " } };
+            service.Employees = new[] { new Employee { Id = "AR23456", Name = "Test Employee" } };
 
             // Action:
             service.ImportFromXlsx( PRODUCTS, null );
@@ -239,7 +240,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
 
             public IEnumerable< Product > Products { get; set; }
             public IEnumerable< Employee > Employees { get; set; }
-            public IEnumerable< ProductivityActions > Productivity { get; set; }
+            public IEnumerable< AllActions > Productivity { get; set; }
 
             protected override IEnumerable< IEntity > GetDataFromFile ( string fileName )
             {
