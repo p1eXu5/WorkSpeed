@@ -139,7 +139,6 @@
     <Compile Include="DataContexts\Configurations\AppointmentConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\CategoryConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\CategorySetConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\Document1CConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\EmployeeConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\OperationConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\PositionConfiguration.cs" />
