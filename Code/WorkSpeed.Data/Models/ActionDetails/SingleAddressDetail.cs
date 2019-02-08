@@ -22,7 +22,7 @@ namespace WorkSpeed.Data.Models.ActionDetails
     /// <summary>
     /// Base class for Inventory and Reception details
     /// </summary>
-    public class SingleAddressDetail : ActionDetailBase
+    public class SingleAddressDetail : WithProductActionDetail
     {
         [ Required ]
         public Address Address { get; set; }

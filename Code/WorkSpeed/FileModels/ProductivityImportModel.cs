@@ -2,7 +2,7 @@
 
 namespace WorkSpeed.Business.FileModels
 {
-    public class ProductivityImportModel : WithEmployeeImportModel
+    public class ProductivityImportModel : ActionImportModel
     {
         [ Header( "Код товара" )]       public int? ProductId { get; set; }
 

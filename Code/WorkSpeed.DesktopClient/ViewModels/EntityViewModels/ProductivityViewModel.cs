@@ -21,9 +21,9 @@
 
 //        }
 
-//        public string Name => _productivity.Employee.Name;
+//        public string EmployeeName => _productivity.Employee.EmployeeName;
 //        public string Appointment => _productivity.Employee.Appointment.InnerName;
-//        public string Position => _productivity.Employee.Position.Name;
+//        public string Position => _productivity.Employee.Position.EmployeeName;
 //        public string Rank => _productivity.Employee.Rank.Number.ToString();
 //        public string IsSmoker => _productivity.Employee.IsSmoker ? "Да" : "Нет";
 

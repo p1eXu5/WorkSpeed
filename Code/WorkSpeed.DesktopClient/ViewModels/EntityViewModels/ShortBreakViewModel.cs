@@ -16,13 +16,13 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
         //    _break = shortBreak;
         //}
 
-        //public int Id => _break.Id;
+        //public int EmployeeId => _break.EmployeeId;
 
-        //public string Name
+        //public string EmployeeName
         //{
-        //    get => _break.Name;
+        //    get => _break.EmployeeName;
         //    set {
-        //        _break.Name = value;
+        //        _break.EmployeeName = value;
         //        OnPropertyChanged();
         //    }
         //}

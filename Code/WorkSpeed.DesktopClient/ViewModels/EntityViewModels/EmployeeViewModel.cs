@@ -18,7 +18,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
 
         //public Employee Employee => _employee;
 
-        //public string Id => _employee.Id;
+        //public string EmployeeId => _employee.EmployeeId;
 
         //public Appointment Appointment
         //{
@@ -29,7 +29,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
         //    }
         //}
 
-        //public string Name => _employee.Name;
+        //public string EmployeeName => _employee.EmployeeName;
 
         //public bool IsActive
         //{

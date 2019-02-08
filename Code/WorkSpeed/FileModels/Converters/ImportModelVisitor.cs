@@ -1,6 +1,8 @@
 ﻿using System;
-using WorkSpeed.Business.FileModels;
+using System.Collections.Generic;
+using WorkSpeed.Business.Models;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.ActionDetails;
 using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Business.FileModels.Converters
@@ -43,13 +45,13 @@ namespace WorkSpeed.Business.FileModels.Converters
             };
         }
 
-        public Employee GetDbModel(EmployeeImportModel employeeImportModel)
+        public Employee GetDbModel( EmployeeImportModel employeeImportModel )
         {
             return new Employee
             {
 
-                Id = employeeImportModel.Id,
-                Name = employeeImportModel.Name,
+                Id = employeeImportModel.EmployeeId,
+                Name = employeeImportModel.EmployeeName,
                 IsActive = employeeImportModel.IsActive,
                 Appointment = new Appointment { Abbreviations = employeeImportModel.Appointment },
                 Rank = new Rank
@@ -64,200 +66,89 @@ namespace WorkSpeed.Business.FileModels.Converters
             };
         }
 
-        //public GatheringAction GetDbModel(GatheringImportModel gatheringImportModel)
-        //{
-        //    GatheringAction gatheringAction = GetWithProductAction<GatheringAction>(gatheringImportModel);
+        public AllActions GetDbModel ( ProductivityImportModel productivityImportModel )
+        {
+            var actions = new AllActions();
 
-        //    gatheringAction.SenderCellAdress = GetAddress(gatheringImportModel.AddressSender);
-        //    gatheringAction.ReceiverCellAdress = GetAddress(gatheringImportModel.AddressReceiver);
+            if ( productivityImportModel.ProductId == null ) {
 
-        //    return gatheringAction;
-        //}
+                actions.ShipmentActions = GetShipmentAction( productivityImportModel );
+            }
+            else if ( !string.IsNullOrWhiteSpace( productivityImportModel.SenderAddress )
+                      && string.IsNullOrWhiteSpace( productivityImportModel.ReceiverAddress ) ) {
 
-        //public ReceptionAction GetDbModel(ReceptionImportModel receptionImportModel)
-        //{
-        //    ReceptionAction reseptionAction = GetWithProductAction<ReceptionAction>(receptionImportModel);
+                actions.InventoryAction = GetInventoryAction( productivityImportModel );
+            }
+            else if ( string.IsNullOrWhiteSpace( productivityImportModel.SenderAddress )
+                      && !string.IsNullOrWhiteSpace( productivityImportModel.ReceiverAddress ) ) {
 
-        //    reseptionAction.ScanQuantity = receptionImportModel.ScanQuantity;
+                actions.ReceptionAction = GetReceptionAction( productivityImportModel );
+            }
+            else {
+                actions.DoubleAddressAction = GetDoubleAddressAction( productivityImportModel );
+            }
 
-        //    reseptionAction.ReceiverCellAddress = GetAddress(receptionImportModel.Address);
-        //    reseptionAction.IsClientScanning = receptionImportModel.IsClientScanning;
+            return actions;
+        }
 
-        //    return reseptionAction;
-        //}
+        private ShipmentAction GetShipmentAction ( ProductivityImportModel shipmentImportModel )
+        {
+            var shipment = new ShipmentAction {
 
-        //public InventoryAction GetDbModel(InventoryImportModel inventoryImportModel)
-        //{
-        //    InventoryAction inventoryAction = GetWithProductAction<InventoryAction>(inventoryImportModel);
+                Id = shipmentImportModel.DocumentNumber,
+                DocumentName = shipmentImportModel.DocumentName,
 
-        //    inventoryAction.AccountingQuantity = inventoryImportModel.AccountingQuantity;
-        //    inventoryAction.InventoryCellAddress = GetAddress(inventoryImportModel.Address);
+                StartTime = shipmentImportModel.StartTime,
+                Duration = TimeSpan.FromSeconds( shipmentImportModel.OperationDuration ),
+                Operation = new Operation { Name = shipmentImportModel.Operation },
+                Employee = new Employee { Name = shipmentImportModel.EmployeeName },
 
-        //    return inventoryAction;
-        //}
+                ShipmentActionDetail = new ShipmentActionDetail {
+                    Weight = ( float? )shipmentImportModel.WeightPerEmployee,
+                    Volume = ( float? )shipmentImportModel.VolumePerEmployee,
+                    ClientCargoQuantity = ( float? )shipmentImportModel.ClientCargoQuantityt,
+                    CommonCargoQuantity = ( float? )shipmentImportModel.CommonCargoQuantity
+                }
+            };
 
-        //public ShipmentAction GetDbModel(ShipmentImportModel shipmentImportModel)
-        //{
-        //    ShipmentAction shipmentAction = GetEmployeeAction<ShipmentAction>(shipmentImportModel);
+            return shipment;
+        }
 
-        //    shipmentAction.ItemWeight = (float)shipmentImportModel.WeightPerEmployee;
-        //    shipmentAction.ClientCargoQuantity = (float)shipmentImportModel.ClientCargoQuantity;
-        //    shipmentAction.CommonCargoQuantity = (float)shipmentAction.CommonCargoQuantity;
+        private InventoryAction GetInventoryAction ( ProductivityImportModel inventoryImportModel )
+        {
+            var inventory = new InventoryAction {
 
-        //    return shipmentAction;
-        //}
+                Id = inventoryImportModel.DocumentNumber,
+                DocumentName = inventoryImportModel.DocumentName,
 
-        //public EmployeeAction GetDbModel(ProductivityImportModel productivityImportModel)
-        //{
-        //    var receiverAddress = productivityImportModel.ReceiverAddress;
-        //    var senderAddress = productivityImportModel.SenderAddress;
+                StartTime = inventoryImportModel.StartTime,
+                Duration = TimeSpan.FromSeconds( inventoryImportModel.OperationDuration ),
+                Operation = new Operation { Name = inventoryImportModel.Operation },
+                Employee = new Employee { Name = inventoryImportModel.EmployeeName },
 
-        //    if (String.IsNullOrWhiteSpace(receiverAddress) && String.IsNullOrWhiteSpace(senderAddress))
-        //    {
+                InventoryActionDetails = new List< InventoryActionDetail > {
+                    new InventoryActionDetail {
+                        AccountingQuantity = inventoryImportModel.AccountingQuantity ?? 0,
+                        
+                    }
+                }
+            };
 
-        //        ShipmentImportModel shipmentImportModel = GetImportModel<ShipmentImportModel>(productivityImportModel);
-        //        shipmentImportModel.WeightPerEmployee = productivityImportModel.WeightPerEmployee;
-        //        shipmentImportModel.ClientCargoQuantity = productivityImportModel.CommonCargoQuantity;
-        //        shipmentImportModel.CommonCargoQuantity = productivityImportModel.CommonCargoQuantity;
+            return inventory;
+        }
 
-        //        return GetDbModel(shipmentImportModel);
-        //    }
-        //    else if (String.IsNullOrWhiteSpace(receiverAddress))
-        //    {
+        private ReceptionAction GetReceptionAction ( ProductivityImportModel productivityImportModel )
+        {
+            var reception = new ReceptionAction { };
 
-        //        InventoryImportModel inventoryImportModel = GetImportModel<InventoryImportModel>(productivityImportModel);
-        //        inventoryImportModel.Address = productivityImportModel.SenderAddress;
-        //        inventoryImportModel.AccountingQuantity = productivityImportModel.AccountingQuantity;
+            return reception;
+        }
 
-        //        return GetDbModel(inventoryImportModel);
-        //    }
-        //    else if (String.IsNullOrWhiteSpace(senderAddress))
-        //    {
+        private DoubleAddressAction GetDoubleAddressAction ( ProductivityImportModel productivityImportModel )
+        {
+            var doubleAction = new DoubleAddressAction { };
 
-        //        ReceptionImportModel receptionImportModel = GetImportModel<ReceptionImportModel>(productivityImportModel);
-        //        receptionImportModel.Address = productivityImportModel.ReceiverAddress;
-        //        receptionImportModel.IsClientScanning = productivityImportModel.IsClientScanning;
-        //        receptionImportModel.ScanQuantity = productivityImportModel.ScanQuantity;
-
-        //        return GetDbModel(receptionImportModel);
-        //    }
-        //    else
-        //    {
-
-        //        GatheringImportModel gatheringImportModel = GetImportModel<GatheringImportModel>(productivityImportModel);
-        //        gatheringImportModel.AddressSender = productivityImportModel.SenderAddress;
-        //        gatheringImportModel.AddressReceiver = productivityImportModel.ReceiverAddress;
-
-        //        return GetDbModel(gatheringImportModel);
-        //    }
-        //}
-
-
-        //private TImportModel GetWithProductAction<TImportModel>(WithProductActionImportModel withProductModel)
-        //    where TImportModel : WithProductAction
-        //{
-        //    var withProductAction = GetEmployeeAction<WithProductAction>(withProductModel);
-        //    var importModel = (TImportModel)Activator.CreateInstance(typeof(TImportModel));
-
-        //    importModel.StartTime = withProductAction.StartTime;
-        //    importModel.Employee = withProductAction.Employee;
-        //    importModel.Duration = withProductAction.Duration;
-        //    importModel.Document1C = withProductAction.Document1C;
-        //    importModel.Operation = withProductAction.Operation;
-
-        //    importModel.ProductQuantity = withProductModel.ProductQuantity;
-
-        //    importModel.Product = new Product
-        //    {
-
-        //        Id = withProductModel.ProductId,
-        //        Name = withProductModel.Product,
-
-        //        Parent = new Product
-        //        {
-
-        //            Id = withProductModel.ImmadiateProductId,
-        //            Name = withProductModel.ImmadiateProduct,
-
-        //            Parent = new Product
-        //            {
-
-        //                Id = withProductModel.ImmadiateProductId,
-        //                Name = withProductModel.ImmadiateProduct,
-        //            }
-        //        }
-        //    };
-
-        //    return importModel;
-        //}
-
-        //private TImportModel GetEmployeeAction<TImportModel>(ActionImportModel actionImportModel)
-        //    where TImportModel : EmployeeAction
-        //{
-        //    var importModel = (TImportModel)Activator.CreateInstance(typeof(TImportModel));
-
-        //    importModel.StartTime = actionImportModel.StartTime;
-
-        //    importModel.Employee = new Employee
-        //    {
-
-        //        Id = actionImportModel.Id,
-        //        Name = actionImportModel.Name,
-        //    };
-
-        //    importModel.Duration = TimeSpan.FromSeconds(actionImportModel.OperationDuration);
-
-        //    importModel.Document1C = new Document1C
-        //    {
-
-        //        Id = actionImportModel.DocumentNumber,
-        //        Name = actionImportModel.DocumentName,
-        //        Date = actionImportModel.StartTime
-        //    };
-
-        //    importModel.Operation = new Operation
-        //    {
-        //        Name = actionImportModel.Operation
-        //    };
-
-        //    return importModel;
-        //}
-
-        //private TImportType GetImportModel<TImportType>(ActionImportModel actionImportModel)
-        //    where TImportType : ActionImportModel
-        //{
-        //    var importModel = (TImportType)Activator.CreateInstance(typeof(TImportType));
-
-        //    importModel.StartTime = actionImportModel.StartTime;
-        //    importModel.DocumentNumber = actionImportModel.DocumentNumber;
-        //    importModel.DocumentName = actionImportModel.DocumentName;
-        //    importModel.Id = actionImportModel.Id;
-        //    importModel.Name = actionImportModel.Name;
-        //    importModel.Operation = actionImportModel.Operation;
-        //    importModel.OperationDuration = actionImportModel.OperationDuration;
-
-        //    return importModel;
-        //}
-
-
-        //private Address GetAddress(string address)
-        //{
-        //    try
-        //    {
-        //        return new Address
-        //        {
-
-        //            Letter = address[0],
-        //            Row = Byte.Parse(address.Substring(1, 2)),
-        //            Section = Byte.Parse(address.Substring(4, 2)),
-        //            Shelf = Byte.Parse(address.Substring(7, 2)),
-        //            Box = Byte.Parse(address.Substring(10, 2)),
-        //        };
-        //    }
-        //    catch
-        //    {
-        //        return new Address();
-        //    }
-        //}
+            return doubleAction;
+        }
     }
 }

@@ -12,10 +12,10 @@ namespace WorkSpeed.Business.FileModels
     {
         [ Header( "Код сотрудника" ) ]
         [ Header( "Код" ) ]
-                                        public string Id { get; set; }
+                                        public string EmployeeId { get; set; }
 
         [ Header( "Сотрудник" ) ]
         [ Header( "Кладовщик" ) ]
-                                        public string Name { get; set; }
+                                        public string EmployeeName { get; set; }
     }
 }

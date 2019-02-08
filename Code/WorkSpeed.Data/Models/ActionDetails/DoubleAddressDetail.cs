@@ -4,7 +4,7 @@ using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Data.Models.ActionDetails
 {
-    public class DoubleAddressDetail : ActionDetailBase
+    public class DoubleAddressDetail : WithProductActionDetail
     {
         public Address SenderCellAdress { get; set; }
         public Address ReceiverCellAdress { get; set; }

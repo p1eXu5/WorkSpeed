@@ -54,7 +54,7 @@
 
 //            if ( shortBreak.IsForSmokers ) {
 
-//                foreach ( var other in BreakList.Where( b => b.Id != shortBreak.Id ) ) {
+//                foreach ( var other in BreakList.Where( b => b.EmployeeId != shortBreak.EmployeeId ) ) {
 //                    other.IsForSmokers = false;
 //                }
 //            }

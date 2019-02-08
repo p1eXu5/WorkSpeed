@@ -16,11 +16,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
         //    _category = category ?? throw new ArgumentNullException( nameof( category ), @"Category cannot be null." );
         //}
 
-        //public string Name
+        //public string EmployeeName
         //{
-        //    get => _category.Name;
+        //    get => _category.EmployeeName;
         //    set {
-        //        _category.Name = value;
+        //        _category.EmployeeName = value;
         //        OnPropertyChanged();
         //    }
         //}

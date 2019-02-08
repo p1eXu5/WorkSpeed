@@ -49,7 +49,7 @@
     <!-- ComboBoxes -->
     <DataTemplate x:Key="dt_ComboBox.Appointments">
         <ComboBox ItemsSource="{Binding Content.Appointments, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=4}}"
-                  DisplayMemberPath="InnerName"
+                  DisplayMemberPath="InnerEmployeeName"
                   SelectedItem="{Binding Appointment}" 
                   Style="{StaticResource st_TableComboBox}"
                   />
@@ -57,7 +57,7 @@
 
     <DataTemplate x:Key="dt_ComboBox.Positions">
         <ComboBox ItemsSource="{Binding Content.Positions, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentControl, AncestorLevel=4}}" 
-                  DisplayMemberPath="Name"
+                  DisplayMemberPath="EmployeeName"
                   SelectedItem="{Binding Position}"
                   Style="{StaticResource st_TableComboBox}"
                   />
