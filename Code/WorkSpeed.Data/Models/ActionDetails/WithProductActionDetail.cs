@@ -7,7 +7,7 @@ namespace WorkSpeed.Data.Models.ActionDetails
     {
         public int ProductQuantity { get; set; }
 
-        [Required]
+        public int ProductId { get; set; }
         public Product Product { get; set; }
     }
 }

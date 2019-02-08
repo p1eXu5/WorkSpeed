@@ -14,6 +14,9 @@ namespace WorkSpeed.Data.DataContexts.Configurations.ActionDetails
             builder.HasKey( d => d.Id );
             builder.Property( d => d.Id ).UseSqlServerIdentityColumn();
 
+            builder.Property( p => p.ProductQuantity ).HasColumnType( "int" ).IsRequired();
+            builder.HasOne( p => p.Product ).WithMany().HasForeignKey( p => p.ProductId ).IsRequired();
+
             builder.HasOne( d => d.Address ).WithMany().IsRequired();
 
             builder.Property( d => d.AccountingQuantity ).HasColumnType( "int" ).IsRequired();
