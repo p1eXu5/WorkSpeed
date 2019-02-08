@@ -7,7 +7,7 @@ namespace WorkSpeed.Data.Models.ActionDetails
     {
         public int AccountingQuantity { get; set; }
 
-        public int InventoryActionId { get; set; }
+        public string InventoryActionId { get; set; }
         public InventoryAction InventoryAction { get; set; }
     }
 }

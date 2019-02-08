@@ -39,7 +39,6 @@ namespace WorkSpeed.Data.DataContexts
 
             modelBuilder.ApplyConfiguration( new ProductConfiguration() )
                         .ApplyConfiguration( new AddressConfiguration() )
-                        .ApplyConfiguration( new Document1CConfiguration() )
                         .ApplyConfiguration( new OperationConfiguration() );
 
             modelBuilder.ApplyConfiguration( new InventoryActionConfiguration() )

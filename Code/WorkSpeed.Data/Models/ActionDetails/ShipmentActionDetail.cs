@@ -10,7 +10,7 @@ namespace WorkSpeed.Data.Models.ActionDetails
         public float? ClientCargoQuantity { get; set; }
         public float? CommonCargoQuantity { get; set; }
 
-        public int ShipmentActionId { get; set; }
+        public string ShipmentActionId { get; set; }
         public ShipmentAction ShipmentAction { get; set; }
     }
 }

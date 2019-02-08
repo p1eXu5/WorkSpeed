@@ -9,7 +9,7 @@ namespace WorkSpeed.Data.Models.ActionDetails
         public Address SenderCellAdress { get; set; }
         public Address ReceiverCellAdress { get; set; }
 
-        public int DoubleAddressActionId { get; set; }
+        public string DoubleAddressActionId { get; set; }
         public DoubleAddressAction DoubleAddressAction { get; set; }
     }
 }

@@ -18,7 +18,9 @@ namespace WorkSpeed.DesktopClient.Converters
             try {
                 intValue = System.Convert.ToInt32( value );
             }
-            catch { }
+            catch {
+                ;
+            }
 
             if ( intValue % 2 == 0 ) return 0;
 
