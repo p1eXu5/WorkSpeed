@@ -25,14 +25,14 @@ namespace WorkSpeed.Business.FileModels.Converters
                 Name = productImportModel.Name,
                 IsGroup = false,
 
-                ItemLength = (float)productImportModel.ItemLength,
-                ItemWidth = (float)productImportModel.CartonWidth,
-                ItemHeight = (float)productImportModel.ItemHeight,
-                ItemWeight = (float)productImportModel.Weight,
+                ItemLength = (float?)productImportModel.ItemLength,
+                ItemWidth = (float?)productImportModel.ItemWidth,
+                ItemHeight = (float?)productImportModel.ItemHeight,
+                ItemWeight = (float?)productImportModel.ItemWeight,
 
-                CartonLength = (float)productImportModel.CartonLength,
-                CartonWidth = (float)productImportModel.CartonWidth,
-                CartonHeight = (float)productImportModel.CartonHeight,
+                CartonLength = (float?)productImportModel.CartonLength,
+                CartonWidth = (float?)productImportModel.CartonWidth,
+                CartonHeight = (float?)productImportModel.CartonHeight,
                 CartonQuantity = productImportModel.CartonQuantity,
                 
                 GatheringComplexity = (float)1.0,
@@ -100,7 +100,7 @@ namespace WorkSpeed.Business.FileModels.Converters
         //{
         //    ShipmentAction shipmentAction = GetEmployeeAction<ShipmentAction>(shipmentImportModel);
 
-        //    shipmentAction.Weight = (float)shipmentImportModel.WeightPerEmployee;
+        //    shipmentAction.ItemWeight = (float)shipmentImportModel.WeightPerEmployee;
         //    shipmentAction.ClientCargoQuantity = (float)shipmentImportModel.ClientCargoQuantity;
         //    shipmentAction.CommonCargoQuantity = (float)shipmentAction.CommonCargoQuantity;
 
