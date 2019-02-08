@@ -7,9 +7,10 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Business.Contexts.Comparers
 {
-    public class EmployeeEqualityComparer : IEqualityComparer< Employee >
+    public class EntityEqualityComparer< TEntity,TId > : IEqualityComparer< TEntity >
+        where TEntity : IKeyedEntity< TId >
     {
-        public bool Equals ( Employee x, Employee y )
+        public bool Equals ( TEntity x, TEntity y )
         {
             if ( ReferenceEquals( x, null ) && ReferenceEquals( y, null ) ) return true;
             if ( ReferenceEquals( x, null ) || ReferenceEquals( y, null ) ) return false;
@@ -17,9 +18,13 @@ namespace WorkSpeed.Business.Contexts.Comparers
             return x.Id.Equals( y.Id );
         }
 
-        public int GetHashCode ( Employee obj )
+        public int GetHashCode ( TEntity obj )
         {
-            return obj.Id?.GetHashCode() ?? 0;
+            if ( obj.Id is string ) {
+                return  obj.Id?.GetHashCode() ?? 0;
+            }
+
+            return obj.Id.GetHashCode();
         }
     }
 }

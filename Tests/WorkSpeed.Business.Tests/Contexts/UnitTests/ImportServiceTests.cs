@@ -74,6 +74,24 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         }
 
         [ Test ]
+        public void ImportFromXlsx_ByDefault_CannotAddProductWithTheSameId ()
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.Products = new[] {
+                new Product { Id = 01223456, Name = "Test Product" },
+                new Product { Id = 01223456, Name = "Test Product2" },
+            };
+
+            // Action:
+            service.ImportFromXlsx( PRODUCTS, null );
+
+            // Assert:
+            var dbProducts = service.DbContext.Products.ToArray();
+            Assert.That( dbProducts.Length == 1 );
+        }
+
+        [ Test ]
         public void ImportFromXlsx_ProductExistInDb_AddingProductHasDifferentName_DoesNotChangeDbProductName ()
         {
             // Arrange:
@@ -209,7 +227,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         }
 
         [ Test ]
-        public void ImportFromXlsx_ByDefault_CannotAddEmployeesWithSameId()
+        public void ImportFromXlsx_ByDefault_CannotAddEmployeesWithTheSameId()
         {
             // Arrange:
             var service = GetImportService();
@@ -225,6 +243,8 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             var dbEmployees = service.DbContext.Employees.ToArray();
             Assert.That( dbEmployees.Length == 1 );
         }
+
+
 
         #region Factory
 

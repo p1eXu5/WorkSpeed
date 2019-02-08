@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WorkSpeed.Data.Models
 {
-    public class Product : IEntity
+    public class Product : IEntity, IKeyedEntity< int >
     {
         public int Id { get; set; }
 

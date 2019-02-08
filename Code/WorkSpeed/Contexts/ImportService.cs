@@ -14,6 +14,7 @@ using WorkSpeed.Data.DataContexts;
 using WorkSpeed.Data.DataContexts.ImportServiceExtensions;
 using WorkSpeed.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using WorkSpeed.Business.Contexts.Comparers;
 using WorkSpeed.Business.Models;
 using WorkSpeed.Data.Models.Actions;
 
@@ -64,11 +65,12 @@ namespace WorkSpeed.Business.Contexts
         [ SuppressMessage( "ReSharper", "PossibleMultipleEnumeration" ) ]
         private async void StoreData ( IEnumerable< Product > data )
         {
+            var products = new HashSet< Product >( data, ComparerFactory.ProductComparer );
             var newProducts = new List< Product >( data.Count() );
             var updateProducts = new List< Product >( data.Count() );
             var dbProductList = await _dbContext.GetProducts().ToListAsync();
 
-            foreach ( var product in data.Where( p => !String.IsNullOrWhiteSpace( p.Name ) && p.Id > 0 ) ) {
+            foreach ( var product in products.Where( p => !String.IsNullOrWhiteSpace( p.Name ) && p.Id > 0 ) ) {
 
                 var dbProduct = dbProductList.FirstOrDefault( p => p.Id == product.Id );
 
@@ -92,11 +94,11 @@ namespace WorkSpeed.Business.Contexts
         [ SuppressMessage( "ReSharper", "PossibleMultipleEnumeration" ) ]
         private async void StoreData ( IEnumerable< Employee > data )
         {
-            var employees = new HashSet< Employee >( data, );
+            var employees = new HashSet< Employee >( data, ComparerFactory.EmployeeComparer );
             var newEmployees = new List< Employee >( data.Count() );
             var dbEmployees = await _dbContext.GetEmployees().ToArrayAsync();
 
-            foreach ( var employee in data.Where( e => !string.IsNullOrWhiteSpace( e.Name ) && !string.IsNullOrWhiteSpace( e.Id ) ) ) {
+            foreach ( var employee in employees.Where( e => !string.IsNullOrWhiteSpace( e.Name ) && !string.IsNullOrWhiteSpace( e.Id ) ) ) {
 
                 var dbEmployee = dbEmployees.FirstOrDefault( e => e.Id.Equals( employee.Id ) );
 
