@@ -92,12 +92,13 @@ namespace WorkSpeed.Business.Contexts
         [ SuppressMessage( "ReSharper", "PossibleMultipleEnumeration" ) ]
         private async void StoreData ( IEnumerable< Employee > data )
         {
+            var employees = new HashSet< Employee >( data, );
             var newEmployees = new List< Employee >( data.Count() );
-            var employees = await _dbContext.GetEmployees().ToArrayAsync();
+            var dbEmployees = await _dbContext.GetEmployees().ToArrayAsync();
 
             foreach ( var employee in data.Where( e => !string.IsNullOrWhiteSpace( e.Name ) && !string.IsNullOrWhiteSpace( e.Id ) ) ) {
 
-                var dbEmployee = employees.FirstOrDefault( e => e.Id.Equals( employee.Id ) );
+                var dbEmployee = dbEmployees.FirstOrDefault( e => e.Id.Equals( employee.Id ) );
 
                 if ( null == dbEmployee ) {
                     newEmployees.Add( employee );

@@ -208,6 +208,24 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( dbEmployees.Length == 1 );
         }
 
+        [ Test ]
+        public void ImportFromXlsx_ByDefault_CannotAddEmployeesWithSameId()
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.Employees = new[] {
+                new Employee { Id = "AR23456", Name = "Test Employee" },
+                new Employee { Id = "AR23456", Name = "Test Employee2" },
+            };
+
+            // Action:
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            // Assert:
+            var dbEmployees = service.DbContext.Employees.ToArray();
+            Assert.That( dbEmployees.Length == 1 );
+        }
+
         #region Factory
 
         private const string PRODUCTS = "Products";
