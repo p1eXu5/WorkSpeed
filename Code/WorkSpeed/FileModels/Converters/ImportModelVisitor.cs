@@ -54,7 +54,7 @@ namespace WorkSpeed.Business.FileModels.Converters
                 Appointment = new Appointment { Abbreviations = employeeImportModel.Appointment },
                 Rank = new Rank
                 {
-                    Number = employeeImportModel.Rank
+                    Number = employeeImportModel.Rank ?? 3
                 },
 
                 Position = new Position
