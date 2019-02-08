@@ -128,8 +128,25 @@ namespace WorkSpeed.Business.FileModels.Converters
 
                 InventoryActionDetails = new List< InventoryActionDetail > {
                     new InventoryActionDetail {
+                        ProductId = inventoryImportModel.ProductId ?? 0,
+                        Product = new Product {
+                            
+                            Id = inventoryImportModel.ProductId ?? 0,
+                            Name = inventoryImportModel.Product,
+                            Parent = new Product {
+                                
+                                Id = inventoryImportModel.ImmadiateProductId ?? 0,
+                                Name = inventoryImportModel.ImmadiateProduct,
+                                Parent = new Product {
+                                    
+                                    Id = inventoryImportModel.SecondProductId ?? 0,
+                                    Name = inventoryImportModel.SecondProduct,
+                                }
+                            }
+                        },
+                        ProductQuantity = inventoryImportModel.ProductQuantity ?? 0,
+                        Address = GetAddress( inventoryImportModel.SenderAddress ),
                         AccountingQuantity = inventoryImportModel.AccountingQuantity ?? 0,
-                        
                     }
                 }
             };
@@ -149,6 +166,12 @@ namespace WorkSpeed.Business.FileModels.Converters
             var doubleAction = new DoubleAddressAction { };
 
             return doubleAction;
+        }
+
+        private Address GetAddress ( string addressName )
+        {
+            var address = new Address();
+            return address;
         }
     }
 }
