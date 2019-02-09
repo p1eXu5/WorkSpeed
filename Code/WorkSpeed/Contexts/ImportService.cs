@@ -34,6 +34,7 @@ namespace WorkSpeed.Business.Contexts
         #endregion
 
 
+
         public Task ImportFromXlsxAsync ( string fileName, IProgress< (int, string) > progress, CancellationToken cancellationToken )
         {
             return Task.Run( () => ImportFromXlsx( fileName, progress ), cancellationToken );
@@ -140,29 +141,89 @@ namespace WorkSpeed.Business.Contexts
             await _dbContext.SaveChangesAsync();
         }
 
-        private void StoreOtherActions ( IEnumerable< OtherAction > data )
+        private async void StoreOtherActions ( IEnumerable< OtherAction > data )
         {
             // new Operation and Employee can be
+            var newActions = new List< OtherAction >();
+
+            foreach ( var otherAction in data.Where( a => !string.IsNullOrWhiteSpace(a.Id ) && a.Id.Length == 11 ) ) {
+
+                var dbAction = await _dbContext.GetOtherActionAsync( otherAction );
+
+                if ( null == dbAction ) {
+                    newActions.Add( otherAction );
+                }
+            }
+
+            await _dbContext.AddRangeAsync( newActions );
         }
 
-        private void StoreShipmentActions ( IEnumerable< ShipmentAction > data )
+        private async void StoreShipmentActions ( IEnumerable< ShipmentAction > data )
         {
             // new Operation and Employee can be
+            var newActions = new List< ShipmentAction >();
+
+            foreach ( var shipmentAction in data.Where( a => !string.IsNullOrWhiteSpace(a.Id ) && a.Id.Length == 11 ) ) {
+
+                var dbAction = await _dbContext.GetShipmentActionAsync( shipmentAction );
+
+                if ( null == dbAction ) {
+                    newActions.Add( shipmentAction );
+                }
+            }
+
+            await _dbContext.AddRangeAsync( newActions );
         }
 
-        private void StoreInventoryActions ( IEnumerable< InventoryAction > data )
+        private async void StoreInventoryActions ( IEnumerable< InventoryAction > data )
         {
             // new Operation, Employee, Product and ProductGroup can be
+            var newActions = new List< InventoryAction >();
+
+            foreach ( var inventoryAction in data.Where( a => !string.IsNullOrWhiteSpace(a.Id ) && a.Id.Length == 11 ) ) {
+
+                var dbAction = await _dbContext.GetInventoryActionAsync( inventoryAction );
+
+                if ( null == dbAction ) {
+                    newActions.Add( inventoryAction );
+                }
+            }
+
+            await _dbContext.AddRangeAsync( newActions );
         }
 
-        private void StoreReceptionActions ( IEnumerable< ReceptionAction > data )
+        private async void StoreReceptionActions ( IEnumerable< ReceptionAction > data )
         {
             // new Operation, Employee, Product and ProductGroup can be
+            var newActions = new List< ReceptionAction >();
+
+            foreach ( var receptionAction in data.Where( a => !string.IsNullOrWhiteSpace(a.Id ) && a.Id.Length == 11 ) ) {
+
+                var dbAction = await _dbContext.GetReceptionActionAsync( receptionAction );
+
+                if ( null == dbAction ) {
+                    newActions.Add( receptionAction );
+                }
+            }
+
+            await _dbContext.AddRangeAsync( newActions );
         }
 
-        private void StoreDoubleActions ( IEnumerable< DoubleAddressAction > data )
+        private async void StoreDoubleActions ( IEnumerable< DoubleAddressAction > data )
         {
             // new Operation, Employee, Product and ProductGroup can be
+            var newActions = new List< DoubleAddressAction >();
+
+            foreach ( var doubleAddressAction in data.Where( a => !string.IsNullOrWhiteSpace(a.Id ) && a.Id.Length == 11 ) ) {
+
+                var dbAction = await _dbContext.GetDoubleAddressActionAsync( doubleAddressAction );
+
+                if ( null == dbAction ) {
+                    newActions.Add( doubleAddressAction );
+                }
+            }
+
+            await _dbContext.AddRangeAsync( newActions );
         }
 
         
