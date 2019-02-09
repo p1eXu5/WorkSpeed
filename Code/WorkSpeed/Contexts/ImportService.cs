@@ -54,13 +54,13 @@ namespace WorkSpeed.Business.Contexts
             }
         }
 
+
         protected internal virtual IEnumerable< IEntity > GetDataFromFile ( string fileName )
         {
             var table = ExcelImporter.GetSheetTable( fileName );
             var typeMap = _typeRepository.GetTypeAndPropertyMap( table );
             return ExcelImporter.GetDataFromTable( table, typeMap.propertyMap, new ImportModelConverter() );
         }
-
 
         [ SuppressMessage( "ReSharper", "PossibleMultipleEnumeration" ) ]
         private async void StoreData ( IEnumerable< Product > data )
@@ -94,9 +94,15 @@ namespace WorkSpeed.Business.Contexts
         [ SuppressMessage( "ReSharper", "PossibleMultipleEnumeration" ) ]
         private async void StoreData ( IEnumerable< Employee > data )
         {
+            // new Appointment, Rank and Position can be
+
             var employees = new HashSet< Employee >( data, ComparerFactory.EmployeeComparer );
             var newEmployees = new List< Employee >( data.Count() );
+
             var dbEmployees = await _dbContext.GetEmployees().ToArrayAsync();
+            var dbAppointments = await _dbContext.GetAppointments().ToArrayAsync();
+            var dbRanks = await _dbContext.GetRanks().ToArrayAsync();
+            var dbPositions = await _dbContext.GetPositions().ToArrayAsync();
 
             foreach ( var employee in employees.Where( e => !string.IsNullOrWhiteSpace( e.Name ) && !string.IsNullOrWhiteSpace( e.Id ) ) ) {
 
@@ -112,15 +118,54 @@ namespace WorkSpeed.Business.Contexts
 
         }
 
+        [ SuppressMessage( "ReSharper", "PossibleMultipleEnumeration" ) ]
         private async void StoreData ( IEnumerable< EmployeeActionBase > data )
         {
-            StoreData( data.Where( d => d is DoubleAddressAction ) );
+            var actions = data.ToArray();
+
+            var otherActions = actions.Where( a => a is OtherAction ).Cast< OtherAction >();
+            var shipmentActions = actions.Where( a => a is ShipmentAction ).Cast< ShipmentAction >();
+            var inventoryActions = actions.Where( a => a is InventoryAction ).Cast< InventoryAction >();
+            var receptionActions = actions.Where( a => a is ReceptionAction ).Cast< ReceptionAction >();
+            var doubleAddressActions = actions.Where( a => a is DoubleAddressAction ).Cast< DoubleAddressAction >();
+
+            Task.WaitAll( new[] {
+                Task.Run( () => StoreOtherActions( otherActions ) ),
+                Task.Run( () => StoreShipmentActions( shipmentActions ) ),
+                Task.Run( () => StoreInventoryActions( inventoryActions ) ),
+                Task.Run( () => StoreReceptionActions( receptionActions ) ),
+                Task.Run( () => StoreDoubleActions( doubleAddressActions ) ),
+            } );
+
+            await _dbContext.SaveChangesAsync();
         }
 
-        private async void StoreData ( IEnumerable< DoubleAddressAction > data )
+        private void StoreOtherActions ( IEnumerable< OtherAction > data )
         {
-
+            // new Operation and Employee can be
         }
+
+        private void StoreShipmentActions ( IEnumerable< ShipmentAction > data )
+        {
+            // new Operation and Employee can be
+        }
+
+        private void StoreInventoryActions ( IEnumerable< InventoryAction > data )
+        {
+            // new Operation, Employee, Product and ProductGroup can be
+        }
+
+        private void StoreReceptionActions ( IEnumerable< ReceptionAction > data )
+        {
+            // new Operation, Employee, Product and ProductGroup can be
+        }
+
+        private void StoreDoubleActions ( IEnumerable< DoubleAddressAction > data )
+        {
+            // new Operation, Employee, Product and ProductGroup can be
+        }
+
+        
 
         private bool CheckDifferent ( Product donor, Product acceptor )
         {
