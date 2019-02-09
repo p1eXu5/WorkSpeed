@@ -13,6 +13,7 @@ namespace WorkSpeed.Business.Models
         public DoubleAddressAction DoubleAddressAction { get; set; }
         public ReceptionAction ReceptionAction { get; set; }
         public InventoryAction InventoryAction { get; set; }
-        public ShipmentAction ShipmentActions { get; set; }
+        public ShipmentAction ShipmentAction { get; set; }
+        public OtherAction OtherAction { get; set; }
     }
 }
