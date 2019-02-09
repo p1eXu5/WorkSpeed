@@ -16,11 +16,11 @@ namespace WorkSpeed.Data.DataContexts.Configurations.ActionDetails
             builder.Property( p => p.ProductQuantity ).HasColumnType( "int" ).IsRequired();
             builder.HasOne( p => p.Product ).WithMany().HasForeignKey( p => p.ProductId ).IsRequired();
 
-            builder.HasOne( d => d.SenderCellAdress )
+            builder.HasOne( d => d.SenderAddress )
                    .WithMany()
                    .IsRequired().OnDelete( DeleteBehavior.ClientSetNull );
 
-            builder.HasOne( d => d.ReceiverCellAdress )
+            builder.HasOne( d => d.ReceiverAddress )
                    .WithMany()
                    .IsRequired().OnDelete( DeleteBehavior.ClientSetNull );
 

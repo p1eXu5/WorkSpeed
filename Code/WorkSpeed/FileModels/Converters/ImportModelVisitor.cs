@@ -91,62 +91,48 @@ namespace WorkSpeed.Business.FileModels.Converters
             return actions;
         }
 
-        private ShipmentAction GetShipmentAction ( ProductivityImportModel shipmentImportModel )
+        private static ShipmentAction GetShipmentAction ( ProductivityImportModel productivityImportModel )
         {
             var shipment = new ShipmentAction {
 
-                Id = shipmentImportModel.DocumentNumber,
-                DocumentName = shipmentImportModel.DocumentName,
+                Id = productivityImportModel.DocumentNumber.Trim(),
+                DocumentName = productivityImportModel.DocumentName,
 
-                StartTime = shipmentImportModel.StartTime,
-                Duration = TimeSpan.FromSeconds( shipmentImportModel.OperationDuration ),
-                Operation = new Operation { Name = shipmentImportModel.Operation },
-                Employee = new Employee { Name = shipmentImportModel.EmployeeName },
+                StartTime = productivityImportModel.StartTime,
+                Duration = TimeSpan.FromSeconds( productivityImportModel.OperationDuration ),
+                Operation = new Operation { Name = productivityImportModel.Operation.Trim() },
+                Employee = GetEmployee( productivityImportModel ),
 
                 ShipmentActionDetail = new ShipmentActionDetail {
-                    Weight = ( float? )shipmentImportModel.WeightPerEmployee,
-                    Volume = ( float? )shipmentImportModel.VolumePerEmployee,
-                    ClientCargoQuantity = ( float? )shipmentImportModel.ClientCargoQuantityt,
-                    CommonCargoQuantity = ( float? )shipmentImportModel.CommonCargoQuantity
+                    Weight = ( float? )productivityImportModel.WeightPerEmployee,
+                    Volume = ( float? )productivityImportModel.VolumePerEmployee,
+                    ClientCargoQuantity = ( float? )productivityImportModel.ClientCargoQuantityt,
+                    CommonCargoQuantity = ( float? )productivityImportModel.CommonCargoQuantity
                 }
             };
 
             return shipment;
         }
 
-        private InventoryAction GetInventoryAction ( ProductivityImportModel inventoryImportModel )
+        private static InventoryAction GetInventoryAction ( ProductivityImportModel productivityImportModel )
         {
             var inventory = new InventoryAction {
 
-                Id = inventoryImportModel.DocumentNumber,
-                DocumentName = inventoryImportModel.DocumentName,
+                Id = productivityImportModel.DocumentNumber.Trim(),
+                DocumentName = productivityImportModel.DocumentName,
 
-                StartTime = inventoryImportModel.StartTime,
-                Duration = TimeSpan.FromSeconds( inventoryImportModel.OperationDuration ),
-                Operation = new Operation { Name = inventoryImportModel.Operation },
-                Employee = new Employee { Name = inventoryImportModel.EmployeeName },
+                StartTime = productivityImportModel.StartTime,
+                Duration = TimeSpan.FromSeconds( productivityImportModel.OperationDuration ),
+                Operation = new Operation { Name = productivityImportModel.Operation.Trim() },
+                Employee = GetEmployee( productivityImportModel ),
 
                 InventoryActionDetails = new List< InventoryActionDetail > {
                     new InventoryActionDetail {
-                        ProductId = inventoryImportModel.ProductId ?? 0,
-                        Product = new Product {
-                            
-                            Id = inventoryImportModel.ProductId ?? 0,
-                            Name = inventoryImportModel.Product,
-                            Parent = new Product {
-                                
-                                Id = inventoryImportModel.ImmadiateProductId ?? 0,
-                                Name = inventoryImportModel.ImmadiateProduct,
-                                Parent = new Product {
-                                    
-                                    Id = inventoryImportModel.SecondProductId ?? 0,
-                                    Name = inventoryImportModel.SecondProduct,
-                                }
-                            }
-                        },
-                        ProductQuantity = inventoryImportModel.ProductQuantity ?? 0,
-                        Address = GetAddress( inventoryImportModel.SenderAddress ),
-                        AccountingQuantity = inventoryImportModel.AccountingQuantity ?? 0,
+                        ProductId = productivityImportModel.ProductId ?? 0,
+                        Product = GetProduct( productivityImportModel ),
+                        ProductQuantity = productivityImportModel.ProductQuantity ?? 0,
+                        Address = GetAddress( productivityImportModel.SenderAddress ),
+                        AccountingQuantity = productivityImportModel.AccountingQuantity ?? 0,
                     }
                 }
             };
@@ -154,23 +140,107 @@ namespace WorkSpeed.Business.FileModels.Converters
             return inventory;
         }
 
-        private ReceptionAction GetReceptionAction ( ProductivityImportModel productivityImportModel )
+        private static ReceptionAction GetReceptionAction ( ProductivityImportModel productivityImportModel )
         {
-            var reception = new ReceptionAction { };
+            var reception = new ReceptionAction {
+
+                Id = productivityImportModel.DocumentNumber.Trim(),
+                DocumentName = productivityImportModel.DocumentName,
+
+                StartTime = productivityImportModel.StartTime,
+                Duration = TimeSpan.FromSeconds( productivityImportModel.OperationDuration ),
+                Operation = new Operation { Name = productivityImportModel.Operation.Trim() },
+                Employee = GetEmployee( productivityImportModel ),
+
+                ReceptionActionDetails = new List< ReceptionActionDetail > {
+                    new ReceptionActionDetail {
+                        ProductId = productivityImportModel.ProductId ?? 0,
+                        Product = GetProduct( productivityImportModel ),
+                        Address = GetAddress( productivityImportModel.ReceiverAddress ),
+                        ScanQuantity = (short)(productivityImportModel.ScanQuantity ?? 0),
+                        IsClientScanning = productivityImportModel.IsClientScanning ?? false
+                    }
+                }
+            };
 
             return reception;
         }
 
-        private DoubleAddressAction GetDoubleAddressAction ( ProductivityImportModel productivityImportModel )
+        private static DoubleAddressAction GetDoubleAddressAction ( ProductivityImportModel productivityImportModel )
         {
-            var doubleAction = new DoubleAddressAction { };
+            var doubleAction = new DoubleAddressAction {
+
+                Id = productivityImportModel.DocumentNumber.Trim(),
+                DocumentName = productivityImportModel.DocumentName,
+
+                StartTime = productivityImportModel.StartTime,
+                Duration = TimeSpan.FromSeconds( productivityImportModel.OperationDuration ),
+                Operation = new Operation { Name = productivityImportModel.Operation.Trim() },
+                Employee = GetEmployee( productivityImportModel ),
+
+                DoubleAddressDetails = new List< DoubleAddressDetail > {
+                    new DoubleAddressDetail {
+                        ProductId = productivityImportModel.ProductId ?? 0,
+                        Product = GetProduct( productivityImportModel ),
+                        ProductQuantity = productivityImportModel.ProductQuantity ?? 0,
+                        SenderAddress = GetAddress( productivityImportModel.SenderAddress ),
+                        ReceiverAddress = GetAddress( productivityImportModel.ReceiverAddress )
+                    }
+                }
+            };
 
             return doubleAction;
         }
 
-        private Address GetAddress ( string addressName )
+
+        private static Product GetProduct ( ProductivityImportModel productivityImportModel )
+        {
+            var product = new Product {
+
+                Id = productivityImportModel.ProductId ?? 0,
+                Name = productivityImportModel.Product.Trim(),
+                Parent = new Product {
+
+                    Id = productivityImportModel.ImmadiateProductId ?? 0,
+                    Name = productivityImportModel.ImmadiateProduct.Trim(),
+                    Parent = new Product {
+
+                        Id = productivityImportModel.SecondProductId ?? 0,
+                        Name = productivityImportModel.SecondProduct.Trim(),
+                    }
+                }
+            };
+
+            return product;
+        }
+
+        private static Employee GetEmployee ( ProductivityImportModel productivityImportModel )
+        {
+            return new Employee {
+                Id = productivityImportModel.EmployeeId.Trim(),
+                Name = productivityImportModel.EmployeeName
+            };
+        }
+
+        private static Address GetAddress ( string addressName )
         {
             var address = new Address();
+
+            if ( string.IsNullOrWhiteSpace( addressName ) || addressName.Length != 12 ) {
+                return address;
+            }
+
+            try {
+                address.Letter = addressName.Substring( 0, 1 );
+                address.Row = Convert.ToByte( addressName.Substring( 1, 2 ) );
+                address.Section = Convert.ToByte( addressName.Substring( 4, 2 ) );
+                address.Shelf = Convert.ToByte( addressName.Substring( 7, 2 ) );
+                address.Box = Convert.ToByte( addressName.Substring( 10, 2 ) );
+            }
+            catch ( Exception ) {
+                return new Address();
+            }
+
             return address;
         }
     }
