@@ -11,10 +11,10 @@ namespace WorkSpeed.Business.FileModels
         [ Header( "Родитель1Код" )]
         [ Header( "Код родителя" )]
         [ Header( "Код родителя1" )]
-                                        public int? ImmadiateProductId { get; set; }
+                                        public int? ImmediateProductId { get; set; }
 
         [ Header( "Родитель1" ) ]
-                                        public string ImmadiateProduct { get; set; }
+                                        public string ImmediateProduct { get; set; }
 
         [ Header( "Родитель2Код" ) ]
         [ Header( "Код родителя 2" ) ]

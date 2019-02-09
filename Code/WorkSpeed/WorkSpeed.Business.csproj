@@ -123,6 +123,7 @@
   <ItemGroup>
     <Compile Include="Contexts\Comparers\ComparerFactory.cs" />
     <Compile Include="Contexts\Comparers\EmployeeEqualityComparer.cs" />
+    <Compile Include="FileModels\OtherActionImportModel.cs" />
     <Compile Include="Models\ActionModels\Dims.cs" />
     <Compile Include="Models\ActionModels\ImportedEmployeeAction.cs" />
     <Compile Include="Models\ActionModels\ImportedActionDetailsBase.cs" />

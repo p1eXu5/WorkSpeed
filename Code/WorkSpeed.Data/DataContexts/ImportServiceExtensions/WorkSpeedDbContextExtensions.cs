@@ -21,5 +21,14 @@ namespace WorkSpeed.Data.DataContexts.ImportServiceExtensions
 
         public static IQueryable< Employee > GetEmployees ( this WorkSpeedDbContext dbContext )
             => dbContext.Employees.AsQueryable();
+
+        public static IQueryable< Appointment > GetAppointments ( this WorkSpeedDbContext dbContext )
+            => dbContext.Appointments.AsQueryable();
+
+        public static IQueryable< Rank > GetRanks ( this WorkSpeedDbContext dbContext )
+            => dbContext.Ranks.AsQueryable();
+
+        public static IQueryable< Position > GetPositions ( this WorkSpeedDbContext dbContext )
+            => dbContext.Positions.AsQueryable();
     }
 }
