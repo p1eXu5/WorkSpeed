@@ -72,7 +72,16 @@ namespace WorkSpeed.Business.FileModels.Converters
 
             if ( productivityImportModel.ProductId == null ) {
 
-                actions.ShipmentActions = GetShipmentAction( productivityImportModel );
+                if ( productivityImportModel.ClientCargoQuantityt == null
+                     && productivityImportModel.CommonCargoQuantity == null
+                     && productivityImportModel.WeightPerEmployee == null
+                     && productivityImportModel.VolumePerEmployee == null ) {
+
+                    actions.OtherAction = GetOtherAction( productivityImportModel );
+                }
+                else {
+                    actions.ShipmentAction = GetShipmentAction( productivityImportModel );
+                }
             }
             else if ( !string.IsNullOrWhiteSpace( productivityImportModel.SenderAddress )
                       && string.IsNullOrWhiteSpace( productivityImportModel.ReceiverAddress ) ) {
@@ -89,6 +98,24 @@ namespace WorkSpeed.Business.FileModels.Converters
             }
 
             return actions;
+        }
+
+
+
+        private static OtherAction GetOtherAction ( ProductivityImportModel productivityImportModel )
+        {
+            var other = new OtherAction {
+
+                Id = productivityImportModel.DocumentNumber.Trim(),
+                DocumentName = productivityImportModel.DocumentName,
+
+                StartTime = productivityImportModel.StartTime,
+                Duration = TimeSpan.FromSeconds( productivityImportModel.OperationDuration ),
+                Operation = new Operation { Name = productivityImportModel.Operation.Trim() },
+                Employee = GetEmployee( productivityImportModel ),
+            };
+
+            return other;
         }
 
         private static ShipmentAction GetShipmentAction ( ProductivityImportModel productivityImportModel )
@@ -193,6 +220,7 @@ namespace WorkSpeed.Business.FileModels.Converters
         }
 
 
+
         private static Product GetProduct ( ProductivityImportModel productivityImportModel )
         {
             var product = new Product {
@@ -201,8 +229,8 @@ namespace WorkSpeed.Business.FileModels.Converters
                 Name = productivityImportModel.Product.Trim(),
                 Parent = new Product {
 
-                    Id = productivityImportModel.ImmadiateProductId ?? 0,
-                    Name = productivityImportModel.ImmadiateProduct.Trim(),
+                    Id = productivityImportModel.ImmediateProductId ?? 0,
+                    Name = productivityImportModel.ImmediateProduct.Trim(),
                     Parent = new Product {
 
                         Id = productivityImportModel.SecondProductId ?? 0,
