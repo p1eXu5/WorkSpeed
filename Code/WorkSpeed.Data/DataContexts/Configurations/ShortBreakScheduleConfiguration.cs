@@ -23,6 +23,18 @@ namespace WorkSpeed.Data.DataContexts.Configurations
             builder.Property( b => b.Periodicity ).HasColumnType( "time" );
             builder.Property( b => b.FirstBreakTime ).HasColumnType( "time" );
             builder.Property( b => b.IsForSmokers ).HasColumnType( "bit" );
+
+            builder.HasData( new ShortBreakSchedule[] {
+                new ShortBreakSchedule { Id = 1, Name = "Перекуры для некурящих", Duration = TimeSpan.FromMinutes( 10 ), Periodicity = TimeSpan.FromHours( 2 ), IsForSmokers = false, },
+                new ShortBreakSchedule {
+                    Id = 2,
+                    Name = "Перекуры для курящих",
+                    Duration = TimeSpan.FromMinutes( 5 ),
+                    Periodicity = TimeSpan.FromHours( 1 ),
+                    IsForSmokers = true,
+
+                },
+            } );
         }
     }
 }
