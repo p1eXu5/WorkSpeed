@@ -73,6 +73,7 @@ namespace WorkSpeed.Data.Models
         public float? InventoryComplexity { get; set; }
         public float? PlacingComplexity   { get; set; }
 
+        public int? ParentId { get; set; }
         public Product Parent { get; set; }
 
         public List< Product > Children { get; set; }

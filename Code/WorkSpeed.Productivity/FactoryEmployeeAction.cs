@@ -94,11 +94,6 @@ namespace WorkSpeed.Productivity
 
         public void AddFixedBreaks ( ShortBreakSchedule shortBreak )
         {
-            if ( shortBreak.IsForSmokers ) {
-                PauseBetweenActions.BreakRepository.AddFixedBreak( shortBreak, (e) => e.IsSmoker ?? false );
-                return;
-            }
-
             PauseBetweenActions.BreakRepository.AddFixedBreak( shortBreak, ( e ) => !e.IsSmoker ?? false );
         }
 

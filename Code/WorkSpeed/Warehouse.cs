@@ -120,14 +120,14 @@ namespace WorkSpeed.Business
         {
             var breakList = _context.GetBreakList().ToArray();
 
-            var forNotSmokers = breakList.FirstOrDefault( b => b.IsForSmokers == false );
+            var forNotSmokers = breakList.FirstOrDefault( );
 
             if ( forNotSmokers != null ) {
 
                 FactoryEmployeeAction.AddFixedBreaks( forNotSmokers );
             }
 
-            var forSmokers = breakList.FirstOrDefault( b => b.IsForSmokers );
+            var forSmokers = breakList.FirstOrDefault( );
 
             if ( forNotSmokers != null )
             {

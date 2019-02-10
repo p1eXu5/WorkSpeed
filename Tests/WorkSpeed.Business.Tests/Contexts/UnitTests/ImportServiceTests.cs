@@ -244,6 +244,38 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( dbEmployees.Length == 1 );
         }
 
+        [ Test ]
+        public void ImportFromXlsx_EmployeeHasKnownRank_AddsWithRank ()
+        {
+            var service = GetImportService();
+            service.Employees = new[] {
+                new Employee { Id = "AR23456", Name = "Test Employee", Rank = new Rank { Number = 3 } },
+            };
+
+            // Action:
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            // Assert:
+            var dbEmployees = service.DbContext.Employees.ToArray();
+            Assert.That( dbEmployees[0].Rank, Is.Not.Null );
+        }
+
+
+        [ Test ]
+        public void ImportFromXlsx_EmployeeHasUnknownRank_AddsWithNullRank ()
+        {
+            var service = GetImportService();
+            service.Employees = new[] {
+                new Employee { Id = "AR23456", Name = "Test Employee", Rank = new Rank { Number = 827 } },
+            };
+
+            // Action:
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            // Assert:
+            var dbEmployees = service.DbContext.Employees.ToArray();
+            Assert.That( dbEmployees[0].Rank, Is.Null );
+        }
 
 
         #region Factory
