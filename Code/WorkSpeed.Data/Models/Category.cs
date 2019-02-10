@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace WorkSpeed.Data.Models
 {
@@ -22,18 +23,20 @@ namespace WorkSpeed.Data.Models
             MaxVolume = maxVolume;
         }
 
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Abbreviation { get; set; }
 
         /// <summary>
         /// Minimum volume in liters.
         /// </summary>
-        public double MinVolume { get; set; }
+        public double? MinVolume { get; set; }
 
         /// <summary>
         /// Maximum volume in liters.
         /// </summary>
-        public double MaxVolume { get; set; }
+        public double? MaxVolume { get; set; }
+
+        public List< CategoryCategorySet > CategorySets { get; set; } 
     }
 }

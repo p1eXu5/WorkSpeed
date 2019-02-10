@@ -53,7 +53,8 @@ namespace WorkSpeed.Data.DataContexts
                         .ApplyConfiguration( new ShipmentActionDetailConfiguration() );
 
             modelBuilder.ApplyConfiguration( new CategoryConfiguration() )
-                        .ApplyConfiguration( new CategorySetConfiguration() );
+                        .ApplyConfiguration( new CategorySetConfiguration() )
+                        .ApplyConfiguration( new CategoryCategorySetConfiguration() );
         }
 
         public DbSet< Position > Positions { get; set; }

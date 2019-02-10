@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
@@ -453,16 +451,14 @@ namespace WorkSpeed.Data.BusinessContexts
                     Name = "Перекуры для некурящих",
                     Duration = TimeSpan.FromMinutes( 10 ),
                     Periodicity = TimeSpan.FromHours( 2 ),
-                    IsForSmokers = false,
-
+                    FirstBreakTime = new TimeSpan( 9, 55, 0 ),
                 },
                 new ShortBreakSchedule {
                     Id = 2,
                     Name = "Перекуры для курящих",
                     Duration = TimeSpan.FromMinutes( 5 ),
                     Periodicity = TimeSpan.FromHours( 1 ),
-                    IsForSmokers = true,
-
+                    FirstBreakTime = new TimeSpan( 8, 55, 0),
                 },
             } );
         }

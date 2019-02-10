@@ -128,6 +128,7 @@
     <Compile Include="Comparers\EmployeeActionComparer.cs" />
     <Compile Include="Comparers\EmployeeComparer.cs" />
     <Compile Include="Comparers\OperationComparer.cs" />
+    <Compile Include="DataContexts\CategoryCategorySetConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\ActionDetails\DoubleAddressDetailConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\ActionDetails\InventoryActionDetailConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\ActionDetails\ReceptionActionDetailConfiguration.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="DataContexts\Configurations\ShortBreakScheduleConfiguration.cs" />
     <Compile Include="DataContexts\ImportServiceExtensions\WorkSpeedDbContextExtensions.cs" />
     <Compile Include="DataContexts\WorkSpeedDbContextExtensions.cs" />
+    <Compile Include="Models\CategoryCategorySet.cs" />
     <Compile Include="Models\IKeyedEntity.cs" />
     <Compile Include="DataContexts\WorkSpeedDbContext.cs" />
     <Compile Include="ModelExtansions.cs" />
