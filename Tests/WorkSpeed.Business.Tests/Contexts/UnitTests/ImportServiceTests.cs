@@ -510,8 +510,8 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( actions, Is.Not.Empty );
         }
 
-        [ TestCase( "ZP8-123450" ), TestCase( "ZP8-1234" ), Category( "DoubleAddressActions" ) ]
-        public void ImportFromXlsx_IdLengthNot9_DoesNotAddDoubleAddressAction ( string id )
+        [ TestCase( "ZP8-1234560" ), TestCase( "ZP8-12345" ), Category( "DoubleAddressActions" ) ]
+        public void ImportFromXlsx_IdLengthNot10_DoesNotAddDoubleAddressAction ( string id )
         {
             // Arrange:
             var service = GetImportService();
@@ -528,7 +528,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( actions, Is.Empty );
         }
 
-        [ TestCase( "3P8-12345" ), TestCase( "Z38-12345" ), TestCase( "238-12345" ), Category( "DoubleAddressActions" ) ]
+        [ TestCase( "3P8-123456" ), TestCase( "Z38-123456" ), TestCase( "238-123456" ), Category( "DoubleAddressActions" ) ]
         public void ImportFromXlsx_IdFirstTwoNotLetters_DoesNotAddDoubleAddressAction ( string id )
         {
             // Arrange:
@@ -546,7 +546,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( actions, Is.Empty );
         }
 
-        [ TestCase( "ZPD-12345" ), Category( "DoubleAddressActions" ) ]
+        [ TestCase( "ZPD-123456" ), Category( "DoubleAddressActions" ) ]
         public void ImportFromXlsx_IdThirdNotDigit_DoesNotAddDoubleAddressAction ( string id )
         {
             // Arrange:
@@ -564,8 +564,8 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( actions, Is.Empty );
         }
 
-        [ TestCase( "ZP8+12345" ), TestCase( "ZP8 12345" ) ]
-        [ TestCase( "ZP8Z12345" ), TestCase( "ZP8712345" ), Category( "DoubleAddressActions" ) ]
+        [ TestCase( "ZP8+123456" ), TestCase( "ZP8 123456" ) ]
+        [ TestCase( "ZP8Z123456" ), TestCase( "ZP87123456" ), Category( "DoubleAddressActions" ) ]
         public void ImportFromXlsx_IdFourthNotDash_DoesNotAddDoubleAddressAction ( string id )
         {
             // Arrange:
@@ -681,19 +681,14 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             service.AllActions = new[] {
                 new AllActions { DoubleAddressAction = GetValidDoubleAddressAction() }
             };
-            service.AllActions[0].DoubleAddressAction.DoubleAddressDetails[0].ProductId = 1;
 
             // Action:
             service.ImportFromXlsx( ACTIONS, null );
 
             // Assert:
-            var actions = service.DbContext.DoubleAddressActions.ToArray();
-            Assert.That( actions, Is.Empty );
+            var products = service.DbContext.Products.ToArray();
+            Assert.That( products, Is.Not.Empty );
         }
-
-
-
-
 
         [ Test, Category( "DoubleAddressActions" ) ]
         public void ImportFromXlsx_DoubleAddressActionExistInDb_DoesNotAddDoubleAddressAction ()
@@ -723,6 +718,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
 
         #endregion
 
+
         #region Factory
 
         private const string PRODUCTS = "Products";
@@ -749,7 +745,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         private DoubleAddressAction GetValidDoubleAddressAction ()
         {
             return new DoubleAddressAction { 
-                        Id = "ZP8-000498",
+                        Id = "ZP8-123456",
                         StartTime = DateTime.Parse( "12.12.2017 12:23:43", CultureInfo.CurrentCulture ),
                         Duration = TimeSpan.FromSeconds( 34 ),
                         DocumentName = "",

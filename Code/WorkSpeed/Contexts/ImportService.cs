@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
@@ -229,32 +230,76 @@ namespace WorkSpeed.Business.Contexts
         {
             // new Operation, Employee, Product and ProductGroup can be
             var newActions = new List< DoubleAddressAction >();
+            var operations = _dbContext.Operations.ToArray();
 
-                foreach ( var doubleAddressAction in data.Where( Check.IsDoubleActionCorrect ) ) {
+            foreach ( var doubleAddressAction in data.Where( a => Check.IsDoubleActionCorrect( a, operations ) ) ) {
 
-                    Modify.RemoveAddresses( doubleAddressAction.DoubleAddressDetails[0] );
+                RemoveAddresses( doubleAddressAction.DoubleAddressDetails[0] );
 
-                    var dbAction = await _dbContext.GetDoubleAddressActionAsync( doubleAddressAction );
-
-                    if ( null == dbAction ) {
-                        newActions.Add( doubleAddressAction );
-                    }
+                // check product
+                var product = doubleAddressAction.DoubleAddressDetails[0].Product;
+                var dbProduct = await _dbContext.GetProductAsync( product );
+                if ( null == dbProduct ) {
+                    _dbContext.Add( product );
                 }
 
-                await _dbContext.AddRangeAsync( newActions );
+                var dbAction = await _dbContext.GetDoubleAddressActionAsync( doubleAddressAction );
+
+                if ( null == dbAction ) {
+                    newActions.Add( doubleAddressAction );
+                }
+            }
+
+            await _dbContext.AddRangeAsync( newActions );
         }
 
+        private void RemoveAddresses ( DoubleAddressActionDetail detail )
+        {
+            if ( detail.SenderAddress != null )
+                detail.SenderAddress = null;
+
+                if ( detail.ReceiverAddress != null )
+                detail.ReceiverAddress = null;
+
+        }
+
+        private  void RemoveAddresses ( SingleAddressActionDetail detail )
+        {
+            if ( detail.Address != null )
+                detail.Address = null;
+        }
+
+        private  async void ProductDbCheck ( DoubleAddressActionDetail detail )
+        {
+            
+        }
 
 
         private static class Check
         {
-            public static bool IsDoubleActionCorrect ( DoubleAddressAction a )
-            {
+            private static readonly DateTime DNS_BEGIN_TIME = new DateTime( 1998, 1, 1, 0, 0, 0);
 
-                return !string.IsNullOrWhiteSpace( a.Id ) && a.Id.Length == 10;
+            public static bool IsDoubleActionCorrect ( DoubleAddressAction a, Operation[] operations )
+            {
+                if ( a.Id.Length != 10 ) return false;
+                int.TryParse( a.Id.Substring( 4 ), out var num );
+                var now = DateTime.Now;
+
+                return num > 0
+                       && !string.IsNullOrWhiteSpace( a.Id )
+                       && char.IsLetter( a.Id[0] ) && char.IsLetter( a.Id[1] )
+                       && char.IsDigit( a.Id[2] ) && a.Id[3].Equals( '-' )
+                       && a.StartTime >= DNS_BEGIN_TIME && a.StartTime < now && a.Duration > TimeSpan.Zero
+                       && IsEmployeeCorrect( a.Employee )
+                       && IsOperationCorrect( a, operations )
+                       && a.DoubleAddressDetails?[0].Product != null && Check.IsProductCorrect( a.DoubleAddressDetails[0].Product );
             }
 
-            [ MethodImpl( MethodImplOptions.AggressiveInlining )]
+            static bool IsOperationCorrect ( EmployeeActionBase a, Operation[] operations )
+            {
+                return operations.FirstOrDefault( o => o.Name.Equals( a.Operation.Name ) ) != null;
+            }
+
             public static bool IsProductCorrect ( Product p )
             {
                 return !String.IsNullOrWhiteSpace( p.Name ) && p.Id > 0;
@@ -273,14 +318,12 @@ namespace WorkSpeed.Business.Contexts
                        && char.IsLetter( e.Id[0] ) && char.IsLetter( e.Id[1] );
             }
 
-            [ MethodImpl( MethodImplOptions.AggressiveInlining )]
             public static bool CheckAbbreviation ( string abbreviations, string abbreviation )
             {
                 var abreviations = abbreviations.Split( new[] { ';' } );
                 return abreviations.Contains( abbreviation );
             }
 
-            [ MethodImpl( MethodImplOptions.AggressiveInlining )]
             public static IEntity CheckEntity ( IEntity dbEntity, IEntity entity )
             {
                 if ( dbEntity == null && entity != null ) {
@@ -330,23 +373,6 @@ namespace WorkSpeed.Business.Contexts
             }
         }
 
-        private static class Modify
-        {
-            public static void RemoveAddresses ( DoubleAddressActionDetail detail )
-            {
-                if ( detail.SenderAddress != null )
-                    detail.SenderAddress = null;
-
-                 if ( detail.ReceiverAddress != null )
-                    detail.ReceiverAddress = null;
-
-            }
-
-            public static void RemoveAddresses ( SingleAddressActionDetail detail )
-            {
-                if ( detail.Address != null )
-                    detail.Address = null;
-            }
-        }
+        
     }
 }
