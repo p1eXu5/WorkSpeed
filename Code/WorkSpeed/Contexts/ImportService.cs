@@ -144,19 +144,76 @@ namespace WorkSpeed.Business.Contexts
             var actions = data.ToArray();
 
             var doubleAddressActions = actions.Select( a => a.DoubleAddressAction ).ToArray();
-            //var receptionActions = actions.Select( a => a.ReceptionAction ).ToArray();
+            var receptionActions = actions.Select( a => a.ReceptionAction ).ToArray();
             //var inventoryActions = actions.Select( a => a.InventoryAction ).ToArray();
             //var shipmentActions = actions.Select( a => a.ShipmentAction ).ToArray();
             //var otherActions = actions.Select( a => a.OtherAction ).ToArray();
 
             StoreDoubleActions( doubleAddressActions );
-            //StoreReceptionActions( receptionActions );
+            await _dbContext.SaveChangesAsync();
+            StoreReceptionActions( receptionActions );
+            await _dbContext.SaveChangesAsync();
             //StoreInventoryActions( inventoryActions );
             //StoreShipmentActions( shipmentActions );
             //StoreOtherActions( otherActions );
 
-            await _dbContext.SaveChangesAsync();
         }
+
+        private async void StoreDoubleActions ( DoubleAddressAction[] data )
+        {
+            var newActions = new List< DoubleAddressAction >();
+            var operations = _dbContext.Operations.ToArray();
+
+            foreach ( var doubleAddressAction in data.Where( a => Check.IsDoubleActionCorrect( a, operations, da => ((DoubleAddressAction)da).DoubleAddressDetails[0].Product ) ) ) {
+
+                RemoveAddresses( doubleAddressAction.DoubleAddressDetails[0] );
+
+                // check product
+                var product = doubleAddressAction.DoubleAddressDetails[0].Product;
+                var dbProduct = await _dbContext.GetProductAsync( product );
+                if ( dbProduct != null ) {
+                    doubleAddressAction.DoubleAddressDetails[0].Product = dbProduct;
+                    doubleAddressAction.DoubleAddressDetails[0].ProductId = dbProduct.Id;
+                }
+
+                var dbAction = await _dbContext.GetReceptionActionAsync( receptionAction );
+
+                if ( null == dbAction ) {
+                    _dbContext.Add( receptionAction );
+                }    
+
+                _dbContext.SaveChanges();
+            }
+
+        }
+
+        private async void StoreReceptionActions ( ReceptionAction[] data )
+        {
+            var newActions = new List< ReceptionAction >();
+            var operations = _dbContext.Operations.ToArray();
+
+            foreach ( var receptionAction in data.Where( a => Check.IsDoubleActionCorrect( a, operations, ra => ((ReceptionAction)ra).ReceptionActionDetails[0].Product ) ) ) {
+
+                RemoveAddresses( receptionAction.ReceptionActionDetails[0] );
+
+                // check product
+                var product = receptionAction.ReceptionActionDetails[0].Product;
+                var dbProduct = await _dbContext.GetProductAsync( product );
+                if ( dbProduct != null ) {
+                    receptionAction.ReceptionActionDetails[0].Product = dbProduct;
+                    receptionAction.ReceptionActionDetails[0].ProductId = dbProduct.Id;
+                }
+
+                var dbAction = await _dbContext.GetReceptionActionAsync( receptionAction );
+
+                if ( null == dbAction ) {
+                    _dbContext.Add( receptionAction );
+                }    
+
+                _dbContext.SaveChanges();
+            }
+        }
+
 
         private async void StoreOtherActions ( IEnumerable< OtherAction > data )
         {
@@ -209,49 +266,7 @@ namespace WorkSpeed.Business.Contexts
             await _dbContext.AddRangeAsync( newActions );
         }
 
-        private async void StoreReceptionActions ( IEnumerable< ReceptionAction > data )
-        {
-            // new Operation, Employee, Product and ProductGroup can be
-            var newActions = new List< ReceptionAction >();
 
-            foreach ( var receptionAction in data.Where( a => !string.IsNullOrWhiteSpace(a.Id ) && a.Id.Length == 11 ) ) {
-
-                var dbAction = await _dbContext.GetReceptionActionAsync( receptionAction );
-
-                if ( null == dbAction ) {
-                    newActions.Add( receptionAction );
-                }
-            }
-
-            await _dbContext.AddRangeAsync( newActions );
-        }
-
-        private async void StoreDoubleActions ( DoubleAddressAction[] data )
-        {
-            // new Operation, Employee, Product and ProductGroup can be
-            var newActions = new List< DoubleAddressAction >();
-            var operations = _dbContext.Operations.ToArray();
-
-            foreach ( var doubleAddressAction in data.Where( a => Check.IsDoubleActionCorrect( a, operations ) ) ) {
-
-                RemoveAddresses( doubleAddressAction.DoubleAddressDetails[0] );
-
-                // check product
-                var product = doubleAddressAction.DoubleAddressDetails[0].Product;
-                var dbProduct = await _dbContext.GetProductAsync( product );
-                if ( null == dbProduct ) {
-                    _dbContext.Add( product );
-                }
-
-                var dbAction = await _dbContext.GetDoubleAddressActionAsync( doubleAddressAction );
-
-                if ( null == dbAction ) {
-                    newActions.Add( doubleAddressAction );
-                }
-            }
-
-            await _dbContext.AddRangeAsync( newActions );
-        }
 
         private void RemoveAddresses ( DoubleAddressActionDetail detail )
         {
@@ -269,21 +284,18 @@ namespace WorkSpeed.Business.Contexts
                 detail.Address = null;
         }
 
-        private  async void ProductDbCheck ( DoubleAddressActionDetail detail )
-        {
-            
-        }
-
 
         private static class Check
         {
             private static readonly DateTime DNS_BEGIN_TIME = new DateTime( 1998, 1, 1, 0, 0, 0);
 
-            public static bool IsDoubleActionCorrect ( DoubleAddressAction a, Operation[] operations )
+            public static bool IsDoubleActionCorrect ( EmployeeActionBase a, Operation[] operations, Func< EmployeeActionBase, Product > getter )
             {
                 if ( a.Id.Length != 10 ) return false;
                 int.TryParse( a.Id.Substring( 4 ), out var num );
                 var now = DateTime.Now;
+
+                var product = getter.Invoke( a );
 
                 return num > 0
                        && !string.IsNullOrWhiteSpace( a.Id )
@@ -292,7 +304,7 @@ namespace WorkSpeed.Business.Contexts
                        && a.StartTime >= DNS_BEGIN_TIME && a.StartTime < now && a.Duration > TimeSpan.Zero
                        && IsEmployeeCorrect( a.Employee )
                        && IsOperationCorrect( a, operations )
-                       && a.DoubleAddressDetails?[0].Product != null && Check.IsProductCorrect( a.DoubleAddressDetails[0].Product );
+                       && product != null && Check.IsProductCorrect( product );
             }
 
             static bool IsOperationCorrect ( EmployeeActionBase a, Operation[] operations )

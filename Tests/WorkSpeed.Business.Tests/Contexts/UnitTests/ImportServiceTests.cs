@@ -716,6 +716,28 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( actions, Is.Empty );
         }
 
+        [ Test, Category( "DoubleAddressActions" )]
+        public void ImportFromXlsx_AllActions_AddsActions ()
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.AllActions = new[] {
+                new AllActions {
+                    DoubleAddressAction = GetValidDoubleAddressAction(),
+                    ReceptionAction = GetValidReceptionAction()
+                }
+            };
+
+            // Action:
+            service.ImportFromXlsx( ACTIONS, null );
+
+            // Assert:
+            var dActions = service.DbContext.DoubleAddressActions.ToArray();
+            Assert.That( dActions, Is.Not.Empty );
+            var rActions = service.DbContext.ReceptionActions.ToArray();
+            Assert.That( rActions, Is.Not.Empty );
+        }
+
         #endregion
 
 
@@ -754,6 +776,25 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
                         DoubleAddressDetails = new List< DoubleAddressActionDetail >{ new DoubleAddressActionDetail {
                             Product = new Product { Id = 0006634, Name = "Test Product", },
                             ProductQuantity = 1,
+                        },
+                    }
+            };
+        }
+
+        private ReceptionAction GetValidReceptionAction ()
+        {
+            return new ReceptionAction { 
+                        Id = "ZP8-123456",
+                        StartTime = DateTime.Parse( "12.12.2017 12:23:43", CultureInfo.CurrentCulture ),
+                        Duration = TimeSpan.FromSeconds( 34 ),
+                        DocumentName = "",
+                        Employee = new Employee { Id = "AR12345", Name = "Anton" },
+                        Operation = new Operation { Name = "Подбор товара" },
+
+                        ReceptionActionDetails = new List< ReceptionActionDetail >{ new ReceptionActionDetail {
+                            Product = new Product { Id = 0006634, Name = "Test Product", },
+                            ProductQuantity = 1,
+                            ScanQuantity    = 3
                         },
                     }
             };
