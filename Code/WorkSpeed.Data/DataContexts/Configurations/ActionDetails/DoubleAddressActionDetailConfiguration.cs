@@ -4,9 +4,9 @@ using WorkSpeed.Data.Models.ActionDetails;
 
 namespace WorkSpeed.Data.DataContexts.Configurations.ActionDetails
 {
-    public class DoubleAddressDetailConfiguration : IEntityTypeConfiguration< DoubleAddressDetail >
+    public class DoubleAddressActionDetailConfiguration : IEntityTypeConfiguration< DoubleAddressActionDetail >
     {
-        public void Configure ( EntityTypeBuilder< DoubleAddressDetail > builder )
+        public void Configure ( EntityTypeBuilder< DoubleAddressActionDetail > builder )
         {
             builder.ToTable( "DoubleAddressDetails", "dbo" );
 
@@ -17,12 +17,10 @@ namespace WorkSpeed.Data.DataContexts.Configurations.ActionDetails
             builder.HasOne( p => p.Product ).WithMany().HasForeignKey( p => p.ProductId ).IsRequired();
 
             builder.HasOne( d => d.SenderAddress )
-                   .WithMany()
-                   .IsRequired().OnDelete( DeleteBehavior.ClientSetNull );
+                   .WithMany();
 
             builder.HasOne( d => d.ReceiverAddress )
-                   .WithMany()
-                   .IsRequired().OnDelete( DeleteBehavior.ClientSetNull );
+                   .WithMany();
 
             builder.HasOne( d => d.DoubleAddressAction )
                    .WithMany( a => a.DoubleAddressDetails )

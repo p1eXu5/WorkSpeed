@@ -129,7 +129,7 @@
     <Compile Include="Comparers\EmployeeComparer.cs" />
     <Compile Include="Comparers\OperationComparer.cs" />
     <Compile Include="DataContexts\CategoryCategorySetConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\ActionDetails\DoubleAddressDetailConfiguration.cs" />
+    <Compile Include="DataContexts\Configurations\ActionDetails\DoubleAddressActionDetailConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\ActionDetails\InventoryActionDetailConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\ActionDetails\ReceptionActionDetailConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\Actions\DoubleAddressActionConfiguration.cs" />
@@ -156,12 +156,12 @@
     <Compile Include="DataContexts\WorkSpeedDbContext.cs" />
     <Compile Include="ModelExtansions.cs" />
     <Compile Include="Models\ActionDetails\ActionDetailBase.cs" />
-    <Compile Include="Models\ActionDetails\DoubleAddressDetail.cs" />
+    <Compile Include="Models\ActionDetails\DoubleAddressActionDetail.cs" />
     <Compile Include="Models\ActionDetails\InventoryActionDetail.cs" />
     <Compile Include="Models\ActionDetails\ReceptionActionDetail.cs" />
     <Compile Include="Models\ActionDetails\ShipmentActionDetail.cs" />
     <Compile Include="Models\ActionDetails\WithProductActionDetail.cs" />
-    <Compile Include="Models\ActionDetails\SingleAddressDetail.cs" />
+    <Compile Include="Models\ActionDetails\SingleAddressActionDetail.cs" />
     <Compile Include="Models\Actions\OtherAction.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Actions\EmployeeActionBase.cs" />

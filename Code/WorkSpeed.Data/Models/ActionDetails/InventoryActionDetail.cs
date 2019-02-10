@@ -3,7 +3,7 @@ using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Data.Models.ActionDetails
 {
-    public class InventoryActionDetail : SingleAddressDetail
+    public class InventoryActionDetail : SingleAddressActionDetail
     {
         public int AccountingQuantity { get; set; }
 

@@ -6,7 +6,7 @@ namespace WorkSpeed.Data.Models
     /// <summary>
     /// [ MinVolume, MaxVolume ) l.
     /// </summary>
-    public class Category
+    public class Category : IEntity
     {
         public Category ()
         { }

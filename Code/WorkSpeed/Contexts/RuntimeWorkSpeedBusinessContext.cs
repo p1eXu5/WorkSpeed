@@ -212,7 +212,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 1,
                     Name = "Крупняк",
-                    Abbreviation = "кр.;кр;",
+                    Abbreviations = "кр.;кр;",
                     Complexity = 1.0f,
                 },
 
@@ -220,7 +220,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 2,
                     Name = "Приёмка",
-                    Abbreviation = "приемка;пр.;пр;",
+                    Abbreviations = "приемка;пр.;пр;",
                     Complexity = 1.0f,
                 },
 
@@ -228,7 +228,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 3,
                     Name = "Отгрузка",
-                    Abbreviation = "отгр.;отгр;от.;от;",
+                    Abbreviations = "отгр.;отгр;от.;от;",
                     Complexity = 1.0f,
                 },
 
@@ -236,7 +236,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 4,
                     Name = "Дорогая",
-                    Abbreviation = "дор.;дор;",
+                    Abbreviations = "дор.;дор;",
                     Complexity = 1.0f,
                 },
 
@@ -244,7 +244,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 5,
                     Name = "Мезонин, 1-й этаж",
-                    Abbreviation = "мезонин1;мез1;мез.1;",
+                    Abbreviations = "мезонин1;мез1;мез.1;",
                     Complexity = 1.0f,
                 },
 
@@ -252,7 +252,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 6,
                     Name = "Мезонин, 2-й этаж",
-                    Abbreviation = "мезонин2;мез2;мез.2;",
+                    Abbreviations = "мезонин2;мез2;мез.2;",
                     Complexity = 1.0f,
                 },
 
@@ -260,7 +260,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 7,
                     Name = "Мезонин, 3-й этаж",
-                    Abbreviation = "мезонин3;мез3;мез.3;",
+                    Abbreviations = "мезонин3;мез3;мез.3;",
                     Complexity = 1.0f,
                 },
 
@@ -268,7 +268,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 8,
                     Name = "Мезонин, 4-й этаж",
-                    Abbreviation = "мезонин4;мез4;мез.4;",
+                    Abbreviations = "мезонин4;мез4;мез.4;",
                     Complexity = 1.0f,
                 },
 
@@ -276,7 +276,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 9,
                     Name = "Расстановка",
-                    Abbreviation = "расстановка;рас;рас.;",
+                    Abbreviations = "расстановка;рас;рас.;",
                     Complexity = 1.0f,
                 },
 
@@ -284,7 +284,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 10,
                     Name = "Старший смены, мезонин",
-                    Abbreviation = "ссммез;",
+                    Abbreviations = "ссммез;",
                     Complexity = 1.0f,
                 },
 
@@ -292,7 +292,7 @@ namespace WorkSpeed.Data.BusinessContexts
 
                     Id = 11,
                     Name = "Старший смены, крупняк",
-                    Abbreviation = "ссмкр;",
+                    Abbreviations = "ссмкр;",
                     Complexity = 1.0f,
                 },
             } );
@@ -526,8 +526,8 @@ namespace WorkSpeed.Data.BusinessContexts
             if (appointment == null) return;
             employee.Appointment = appointment;
 
-            if ( employee.Position == null || String.IsNullOrWhiteSpace(employee.Position.Abbreviation) ) return;
-            var position = _positions.FirstOrDefault( p => p.Abbreviation.Contains( employee.Position.Abbreviation ) );
+            if ( employee.Position == null || String.IsNullOrWhiteSpace(employee.Position.Abbreviations) ) return;
+            var position = _positions.FirstOrDefault( p => p.Abbreviations.Contains( employee.Position.Abbreviations ) );
             if ( position == null ) return;
             employee.Position = position;
 

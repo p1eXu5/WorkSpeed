@@ -49,20 +49,13 @@ namespace WorkSpeed.Business.FileModels.Converters
         {
             return new Employee
             {
-
                 Id = employeeImportModel.EmployeeId,
                 Name = employeeImportModel.EmployeeName,
                 IsActive = employeeImportModel.IsActive,
-                Appointment = new Appointment { Abbreviations = employeeImportModel.Appointment },
-                Rank = new Rank
-                {
-                    Number = employeeImportModel.Rank ?? 3
-                },
 
-                Position = new Position
-                {
-                    Abbreviation = employeeImportModel.Position
-                },
+                Appointment = new Appointment { Abbreviations = employeeImportModel.Appointment },
+                Rank = new Rank { Number = employeeImportModel.Rank ?? 3 },
+                Position = new Position { Abbreviations = employeeImportModel.Position },
             };
         }
 
@@ -205,8 +198,8 @@ namespace WorkSpeed.Business.FileModels.Converters
                 Operation = new Operation { Name = productivityImportModel.Operation.Trim() },
                 Employee = GetEmployee( productivityImportModel ),
 
-                DoubleAddressDetails = new List< DoubleAddressDetail > {
-                    new DoubleAddressDetail {
+                DoubleAddressDetails = new List< DoubleAddressActionDetail > {
+                    new DoubleAddressActionDetail {
                         ProductId = productivityImportModel.ProductId ?? 0,
                         Product = GetProduct( productivityImportModel ),
                         ProductQuantity = productivityImportModel.ProductQuantity ?? 0,
@@ -227,16 +220,6 @@ namespace WorkSpeed.Business.FileModels.Converters
 
                 Id = productivityImportModel.ProductId ?? 0,
                 Name = productivityImportModel.Product.Trim(),
-                Parent = new Product {
-
-                    Id = productivityImportModel.ImmediateProductId ?? 0,
-                    Name = productivityImportModel.ImmediateProduct.Trim(),
-                    Parent = new Product {
-
-                        Id = productivityImportModel.SecondProductId ?? 0,
-                        Name = productivityImportModel.SecondProduct.Trim(),
-                    }
-                }
             };
 
             return product;

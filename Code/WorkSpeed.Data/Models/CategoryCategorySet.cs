@@ -1,6 +1,6 @@
 ﻿namespace WorkSpeed.Data.Models
 {
-    public class CategoryCategorySet
+    public class CategoryCategorySet : IEntity
     {
         public int CategorySetId { get; set; }
         public CategorySet CategorySet { get; set; }

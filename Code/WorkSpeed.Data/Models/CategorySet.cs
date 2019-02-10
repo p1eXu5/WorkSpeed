@@ -2,7 +2,7 @@
 
 namespace WorkSpeed.Data.Models
 {
-    public class CategorySet
+    public class CategorySet : IEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }

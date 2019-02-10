@@ -34,6 +34,8 @@ namespace WorkSpeed.Data.DataContexts.Configurations
             builder.Property( p => p.Complexity ).HasColumnType( "real" );
 
             builder.HasOne( p => p.Position ).WithMany();
+
+            // shadows
         }
     }
 }

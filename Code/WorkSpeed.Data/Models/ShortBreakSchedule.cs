@@ -2,7 +2,7 @@
 
 namespace WorkSpeed.Data.Models
 {
-    public class ShortBreakSchedule
+    public class ShortBreakSchedule : IEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -1,7 +1,7 @@
 ﻿
 namespace WorkSpeed.Data.Models
 {
-    public class Appointment
+    public class Appointment : IEntity
     {
         public int Id { get; set; }
         public string OfficialName { get; set; }

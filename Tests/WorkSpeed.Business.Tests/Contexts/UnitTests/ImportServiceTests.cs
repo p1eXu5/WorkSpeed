@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -16,6 +17,8 @@ using WorkSpeed.Data.DataContexts;
 using WorkSpeed.Data.Models;
 using NUnit.Framework;
 using WorkSpeed.Business.Models;
+using WorkSpeed.Data.Models.ActionDetails;
+using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Business.Tests.Contexts.UnitTests
 {
@@ -29,8 +32,9 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         }
 
 
+        #region Product
 
-        [ Test ]
+        [ Test, Category( "Product" ) ]
         public void ImportService_WhenCreating_DoesNotSeedProducts ()
         {
             // Arrange:
@@ -42,7 +46,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( dbProducts.Length == 0 );
         }
 
-        [ Test ]
+        [ Test, Category( "Product" ) ]
         public void ImportFromXlsx_CanAddProduct ()
         {
             // Arrange:
@@ -54,10 +58,10 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
 
             // Assert:
             var dbProducts = service.DbContext.Products.ToArray();
-            Assert.That( dbProducts.Length == 1 );
+            Assert.That( dbProducts, Is.Not.Empty );
         }
 
-        [ Test ]
+        [ Test, Category( "Product" ) ]
         public void ImportFromXlsx_ProductExistInDb_DoesNotAddProduct ()
         {
             // Arrange:
@@ -73,7 +77,22 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( dbProducts.Length == 1 );
         }
 
-        [ Test ]
+        [ TestCase( 0 ), TestCase( -1 ), Category( "Product" ) ] 
+        public void ImportFromXlsx_ProductHasWrongId_DoesNotAddProduct ( int id )
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.Products = new[] { new Product { Id = id, Name = "Test Product" } };
+
+            // Action:
+            service.ImportFromXlsx( PRODUCTS, null );
+
+            // Assert:
+            var dbProducts = service.DbContext.Products.ToArray();
+            Assert.That( dbProducts, Is.Empty );
+        }
+
+        [ Test, Category( "Product" ) ]
         public void ImportFromXlsx_ByDefault_CannotAddProductWithTheSameId ()
         {
             // Arrange:
@@ -91,7 +110,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( dbProducts.Length == 1 );
         }
 
-        [ Test ]
+        [ Test, Category( "Product" ) ]
         public void ImportFromXlsx_ProductExistInDb_AddingProductHasDifferentName_DoesNotChangeDbProductName ()
         {
             // Arrange:
@@ -109,7 +128,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( dbProducts[0].Name, Is.EqualTo( originName ) );
         }
 
-        [ Test ]
+        [ Test, Category( "Product" ) ]
         public void ImportFromXlsx_ProductExistInDb_AddingProductHasDifferentItemLength_UpdateDbProductItemLength ()
         {
             // Arrange:
@@ -127,7 +146,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( dbProducts[0].ItemLength, Is.EqualTo( 15.0f ) );
         }
 
-        [ Test ]
+        [ Test, Category( "Product" ) ]
         public void ImportFromXlsx_ProductExistInDb_AddingProductHasDifferentItemWidth_UpdateDbProductItemWidth ()
         {
             // Arrange:
@@ -145,7 +164,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( dbProducts[0].ItemWidth, Is.EqualTo( 15.0f ) );
         }
 
-        [ Test ]
+        [ Test, Category( "Product" ) ]
         public void ImportFromXlsx_ProductExistInDb_AddingProductHasDifferentItemHeight_UpdateDbProductItemHeight ()
         {
             // Arrange:
@@ -163,7 +182,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( dbProducts[0].ItemHeight, Is.EqualTo( 15.0f ) );
         }
 
-        [ Test ]
+        [ Test, Category( "Product" ) ]
         public void ImportFromXlsx_ProductExistInDb_AddingProductHasDifferentItemWeight_UpdateDbProductItemWeight ()
         {
             // Arrange:
@@ -181,9 +200,12 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( dbProducts[0].ItemWeight, Is.EqualTo( 15.0f ) );
         }
 
+        #endregion
 
 
-        [ Test ]
+        #region Employee
+
+        [ Test, Category( "Employee" ) ]
         public void ImportService_WhenCreating_DoesNotSeedEmployees ()
         {
             // Arrange:
@@ -195,7 +217,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( dbEmployees.Length == 0 );
         }
 
-        [ Test ]
+        [ Test, Category( "Employee" ) ]
         public void ImportFromXlsx_CanAddEmployee ()
         {
             // Arrange:
@@ -210,8 +232,8 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( dbEmployees.Length == 1 );
         }
 
-        [ Test ]
-        public void ImportFromXlsx_EmployeeExistInDb_DoesNotAddEmployee ()
+        [ Test, Category( "Employee" ) ]
+        public void ImportFromXlsx_ExistInDb_DoesNotAddEmployee ()
         {
             // Arrange:
             var service = GetImportService();
@@ -226,7 +248,67 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( dbEmployees.Length == 1 );
         }
 
-        [ Test ]
+        [ TestCase("A928374"), TestCase( "1234567" ), TestCase( "1T34567" ), Category( "Employee" ) ] 
+        public void ImportFromXlsx_IdFistNot2Letters_DoesNotAddEmployee ( string id )
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.Employees = new[] { new Employee { Id = id, Name = "Test Product" } };
+
+            // Action:
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            // Assert:
+            var dbEmployees = service.DbContext.Employees.ToArray();
+            Assert.That( dbEmployees, Is.Empty );
+        }
+
+        [TestCase("042"), TestCase("AR9283746"), Category( "Employee" ) ] 
+        public void ImportFromXlsx_IdLengthNot7_DoesNotAddEmployee ( string id )
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.Employees = new[] { new Employee { Id = id, Name = "Test Product" } };
+
+            // Action:
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            // Assert:
+            var dbEmployees = service.DbContext.Employees.ToArray();
+            Assert.That( dbEmployees, Is.Empty );
+        }
+
+        [ Test, Category( "Employee" ) ]
+        public void ImportFromXlsx_IdLastFiveNotDigits_DoesNotAddEmployee ()
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.Employees = new[] { new Employee { Id = "AR-1234", Name = "Test Employee" } };
+
+            // Action:
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            // Assert:
+            var dbEmployees = service.DbContext.Employees.ToArray();
+            Assert.That( dbEmployees, Is.Empty);
+        }
+
+        [ Test, Category( "Employee" ) ] 
+        public void ImportFromXlsx_HasNameLengthLess1_DoesNotAddEmployee ()
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.Employees = new[] { new Employee { Id = "AR12345", Name = "" } };
+
+            // Action:
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            // Assert:
+            var dbEmployees = service.DbContext.Employees.ToArray();
+            Assert.That( dbEmployees, Is.Empty );
+        }
+
+        [ Test, Category( "Employee" ) ]
         public void ImportFromXlsx_ByDefault_CannotAddEmployeesWithTheSameId()
         {
             // Arrange:
@@ -244,24 +326,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( dbEmployees.Length == 1 );
         }
 
-        [ Test ]
-        public void ImportFromXlsx_EmployeeHasKnownRank_AddsWithRank ()
-        {
-            var service = GetImportService();
-            service.Employees = new[] {
-                new Employee { Id = "AR23456", Name = "Test Employee", Rank = new Rank { Number = 3 } },
-            };
-
-            // Action:
-            service.ImportFromXlsx( EMPLOYEES, null );
-
-            // Assert:
-            var dbEmployees = service.DbContext.Employees.ToArray();
-            Assert.That( dbEmployees[0].Rank, Is.Not.Null );
-        }
-
-
-        [ Test ]
+        [ Test, Category( "Employee" ) ]
         public void ImportFromXlsx_EmployeeHasUnknownRank_AddsWithNullRank ()
         {
             var service = GetImportService();
@@ -277,12 +342,392 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( dbEmployees[0].Rank, Is.Null );
         }
 
+        [ Test, Category( "Employee" ) ]
+        public void ImportFromXlsx_EmployeeHasKnownRank_AddsWithRank ()
+        {
+            var service = GetImportService();
+            service.Employees = new[] {
+                new Employee { Id = "AR23456", Name = "Test Employee", Rank = new Rank { Number = 3 } },
+            };
+
+            // Action:
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            // Assert:
+            var dbEmployees = service.DbContext.Employees.ToArray();
+            Assert.That( dbEmployees[0].Rank, Is.Not.Null );
+        }
+
+        [ Test, Category( "Employee" ) ]
+        public void ImportFromXlsx_EmployeeWithRank_DbEmployeeWithNullRank_UpdatesDbEmployeeRank ()
+        {
+            var service = GetImportService();
+
+            service.Employees = new[] { new Employee { Id = "AR23456", Name = "Test Employee" }, };
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            service.Employees[0] = new Employee{ Id = "AR23456", Name = "Test Employee", Rank = new Rank { Number = 3} };
+
+            // Action:
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            // Assert:
+            var dbEmployees = service.DbContext.Employees.ToArray();
+            Assert.That( dbEmployees[0].Rank, Is.Not.Null );
+        }
+
+        [ Test, Category( "Employee" ) ]
+        public void ImportFromXlsx_EmployeeHasUnknownAppointment_AddsWithNullAppointment ()
+        {
+            var service = GetImportService();
+            service.Employees = new[] {
+                new Employee { Id = "AR23456", Name = "Test Employee", Appointment = new Appointment { Abbreviations = "клк" } },
+            };
+
+            // Action:
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            // Assert:
+            var dbEmployees = service.DbContext.Employees.ToArray();
+            Assert.That( dbEmployees[0].Appointment, Is.Null );
+        }
+
+        [ Test, Category( "Employee" ) ]
+        public void ImportFromXlsx_EmployeeHasKnownAppointment_AddsWithAppointment ()
+        {
+            var service = GetImportService();
+            service.Employees = new[] {
+                new Employee { Id = "AR23456", Name = "Test Employee", Appointment = new Appointment { Abbreviations = "кл" } },
+            };
+
+            // Action:
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            // Assert:
+            var dbEmployees = service.DbContext.Employees.ToArray();
+            Assert.That( dbEmployees[0].Appointment, Is.Not.Null );
+        }
+
+        [ Test, Category( "Employee" ) ]
+        public void ImportFromXlsx_EmployeeWithAppointment_DbEmployeeWithNullAppointment_UpdatesDbEmployeeAppointment ()
+        {
+            var service = GetImportService();
+
+            service.Employees = new[] { new Employee { Id = "AR23456", Name = "Test Employee" }, };
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            service.Employees[0] = new Employee{ Id = "AR23456", Name = "Test Employee", Appointment = new Appointment { Abbreviations = "кл" } };
+
+            // Action:
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            // Assert:
+            var dbEmployees = service.DbContext.Employees.ToArray();
+            Assert.That( dbEmployees[0].Appointment, Is.Not.Null );
+        }
+
+        [ Test, Category( "Employee" ) ]
+        public void ImportFromXlsx_EmployeeHasUnknownPosition_AddsWithNullPosition ()
+        {
+            var service = GetImportService();
+            service.Employees = new[] {
+                new Employee { Id = "AR23456", Name = "Test Employee", Position = new Position { Abbreviations = "крупнъяг" } },
+            };
+
+            // Action:
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            // Assert:
+            var dbEmployees = service.DbContext.Employees.ToArray();
+            Assert.That( dbEmployees[0].Position, Is.Null );
+        }
+
+        [ Test, Category( "Employee" ) ]
+        public void ImportFromXlsx_EmployeeHasKnownPosition_AddsWithPosition ()
+        {
+            var service = GetImportService();
+            service.Employees = new[] {
+                new Employee { Id = "AR23456", Name = "Test Employee", Position = new Position { Abbreviations = "мез3" } },
+            };
+
+            // Action:
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            // Assert:
+            var dbEmployees = service.DbContext.Employees.ToArray();
+            Assert.That( dbEmployees[0].Position, Is.Not.Null );
+        }
+
+        [ Test, Category( "Employee" ) ]
+        public void ImportFromXlsx_EmployeeWithPosition_DbEmployeeWithNullPosition_UpdatesDbEmployeePosition ()
+        {
+            var service = GetImportService();
+
+            service.Employees = new[] { new Employee { Id = "AR23456", Name = "Test Employee" }, };
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            service.Employees[0] = new Employee{ Id = "AR23456", Name = "Test Employee", Position = new Position { Abbreviations = "мез3" } };
+
+            // Action:
+            service.ImportFromXlsx( EMPLOYEES, null );
+
+            // Assert:
+            var dbEmployees = service.DbContext.Employees.ToArray();
+            Assert.That( dbEmployees[0].Position, Is.Not.Null );
+        }
+
+        #endregion
+
+
+        #region DoubleAddressAction
+
+        [ Test, Category( "DoubleAddressActions" ) ]
+        public void ImportService_WhenCreating_DoesNotSeedDoubleAddressActions ()
+        {
+            // Arrange:
+            // Action:
+            var service = GetImportService();
+
+            // Assert:
+            var dbEmployees = service.DbContext.DoubleAddressActions.ToArray();
+            Assert.That( dbEmployees.Length == 0 );
+        }
+
+        [ Test, Category( "DoubleAddressActions" ) ]
+        public void ImportFromXlsx_CanAddDoubleAddressAction ()
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.AllActions = new[] {
+                new AllActions { DoubleAddressAction = GetValidDoubleAddressAction() }
+            };
+
+            // Action:
+            service.ImportFromXlsx( ACTIONS, null );
+
+            // Assert:
+            var actions = service.DbContext.DoubleAddressActions.ToArray();
+            Assert.That( actions, Is.Not.Empty );
+        }
+
+        [ TestCase( "ZP8-123450" ), TestCase( "ZP8-1234" ), Category( "DoubleAddressActions" ) ]
+        public void ImportFromXlsx_IdLengthNot9_DoesNotAddDoubleAddressAction ( string id )
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.AllActions = new[] {
+                new AllActions { DoubleAddressAction = GetValidDoubleAddressAction() }
+            };
+            service.AllActions[0].DoubleAddressAction.Id = id;
+
+            // Action:
+            service.ImportFromXlsx( ACTIONS, null );
+
+            // Assert:
+            var actions = service.DbContext.DoubleAddressActions.ToArray();
+            Assert.That( actions, Is.Empty );
+        }
+
+        [ TestCase( "3P8-12345" ), TestCase( "Z38-12345" ), TestCase( "238-12345" ), Category( "DoubleAddressActions" ) ]
+        public void ImportFromXlsx_IdFirstTwoNotLetters_DoesNotAddDoubleAddressAction ( string id )
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.AllActions = new[] {
+                new AllActions { DoubleAddressAction = GetValidDoubleAddressAction() }
+            };
+            service.AllActions[0].DoubleAddressAction.Id = id;
+
+            // Action:
+            service.ImportFromXlsx( ACTIONS, null );
+
+            // Assert:
+            var actions = service.DbContext.DoubleAddressActions.ToArray();
+            Assert.That( actions, Is.Empty );
+        }
+
+        [ TestCase( "ZPD-12345" ), Category( "DoubleAddressActions" ) ]
+        public void ImportFromXlsx_IdThirdNotDigit_DoesNotAddDoubleAddressAction ( string id )
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.AllActions = new[] {
+                new AllActions { DoubleAddressAction = GetValidDoubleAddressAction() }
+            };
+            service.AllActions[0].DoubleAddressAction.Id = id;
+
+            // Action:
+            service.ImportFromXlsx( ACTIONS, null );
+
+            // Assert:
+            var actions = service.DbContext.DoubleAddressActions.ToArray();
+            Assert.That( actions, Is.Empty );
+        }
+
+        [ TestCase( "ZP8+12345" ), TestCase( "ZP8 12345" ) ]
+        [ TestCase( "ZP8Z12345" ), TestCase( "ZP8712345" ), Category( "DoubleAddressActions" ) ]
+        public void ImportFromXlsx_IdFourthNotDash_DoesNotAddDoubleAddressAction ( string id )
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.AllActions = new[] {
+                new AllActions { DoubleAddressAction = GetValidDoubleAddressAction() }
+            };
+            service.AllActions[0].DoubleAddressAction.Id = id;
+
+            // Action:
+            service.ImportFromXlsx( ACTIONS, null );
+
+            // Assert:
+            var actions = service.DbContext.DoubleAddressActions.ToArray();
+            Assert.That( actions, Is.Empty );
+        }
+
+        [ TestCase( "1997, 01, 01" ), Category( "DoubleAddressActions" ) ]
+        public void ImportFromXlsx_StartTimeLess1998_01_01_DoesNotAddDoubleAddressAction ( string date )
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.AllActions = new[] {
+                new AllActions { DoubleAddressAction = GetValidDoubleAddressAction() }
+            };
+            service.AllActions[0].DoubleAddressAction.StartTime = DateTime.Parse( date );
+
+            // Action:
+            service.ImportFromXlsx( ACTIONS, null );
+
+            // Assert:
+            var actions = service.DbContext.DoubleAddressActions.ToArray();
+            Assert.That( actions, Is.Empty );
+        }
+
+        [ TestCase( "3019, 02, 10" ), Category( "DoubleAddressActions" ) ]
+        public void ImportFromXlsx_StartTimeIsFuture_DoesNotAddDoubleAddressAction ( string date )
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.AllActions = new[] {
+                new AllActions { DoubleAddressAction = GetValidDoubleAddressAction() }
+            };
+            service.AllActions[0].DoubleAddressAction.StartTime = DateTime.Parse( date );
+
+            // Action:
+            service.ImportFromXlsx( ACTIONS, null );
+
+            // Assert:
+            var actions = service.DbContext.DoubleAddressActions.ToArray();
+            Assert.That( actions, Is.Empty );
+        }
+
+        [ Test, Category( "DoubleAddressActions" ) ]
+        public void ImportFromXlsx_DurationIsZero_DoesNotAddDoubleAddressAction ()
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.AllActions = new[] {
+                new AllActions { DoubleAddressAction = GetValidDoubleAddressAction() }
+            };
+            service.AllActions[0].DoubleAddressAction.Duration = TimeSpan.Zero;
+
+            // Action:
+            service.ImportFromXlsx( ACTIONS, null );
+
+            // Assert:
+            var actions = service.DbContext.DoubleAddressActions.ToArray();
+            Assert.That( actions, Is.Empty );
+        }
+
+        [ Test, Category( "DoubleAddressActions" ) ]
+        public void ImportFromXlsx_WrongEmployeeId_DoesNotAddDoubleAddressAction ()
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.AllActions = new[] {
+                new AllActions { DoubleAddressAction = GetValidDoubleAddressAction() }
+            };
+            service.AllActions[0].DoubleAddressAction.Employee.Id = "AR-1234";
+
+            // Action:
+            service.ImportFromXlsx( ACTIONS, null );
+
+            // Assert:
+            var actions = service.DbContext.DoubleAddressActions.ToArray();
+            Assert.That( actions, Is.Empty );
+        }
+
+        [ Test, Category( "DoubleAddressActions" ) ]
+        public void ImportFromXlsx_OperationDoesNotExist_DoesNotAddDoubleAddressAction ()
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.AllActions = new[] {
+                new AllActions { DoubleAddressAction = GetValidDoubleAddressAction() }
+            };
+            service.AllActions[0].DoubleAddressAction.Operation.Name = "";
+
+            // Action:
+            service.ImportFromXlsx( ACTIONS, null );
+
+            // Assert:
+            var actions = service.DbContext.DoubleAddressActions.ToArray();
+            Assert.That( actions, Is.Empty );
+        }
+
+        [ Test, Category( "DoubleAddressActions" ) ]
+        public void ImportFromXlsx_ProductDoesNotExist_AddsProduct ()
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.AllActions = new[] {
+                new AllActions { DoubleAddressAction = GetValidDoubleAddressAction() }
+            };
+            service.AllActions[0].DoubleAddressAction.DoubleAddressDetails[0].ProductId = 1;
+
+            // Action:
+            service.ImportFromXlsx( ACTIONS, null );
+
+            // Assert:
+            var actions = service.DbContext.DoubleAddressActions.ToArray();
+            Assert.That( actions, Is.Empty );
+        }
+
+
+
+
+
+        [ Test, Category( "DoubleAddressActions" ) ]
+        public void ImportFromXlsx_DoubleAddressActionExistInDb_DoesNotAddDoubleAddressAction ()
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.AllActions = new[] { new AllActions {
+                DoubleAddressAction = new DoubleAddressAction {
+                    Id = "ZP8-000498",
+                    StartTime = DateTime.Parse( "12.12.2017 12:23:43", CultureInfo.CurrentCulture ),
+                    Duration = TimeSpan.FromSeconds( 34 ),
+                    DocumentName = "",
+                    Employee = new Employee { Id = "AR32187", Name = "Anton" },
+                    Operation = new Operation { Name = "Подбор товара" },
+                    DoubleAddressDetails = new List< DoubleAddressActionDetail >(),
+                },
+            } };
+
+            // Action:
+            service.ImportFromXlsx( ACTIONS, null );
+            service.ImportFromXlsx( ACTIONS, null );
+
+            // Assert:
+            var actions = service.DbContext.DoubleAddressActions.ToArray();
+            Assert.That( actions, Is.Empty );
+        }
+
+        #endregion
 
         #region Factory
 
         private const string PRODUCTS = "Products";
         private const string EMPLOYEES = "Employees";
-        private const string PRODUCTIVITY = "Productivity";
+        private const string ACTIONS = "AllActions";
 
         private DbConnection _connection;
 
@@ -301,6 +746,23 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             return importServise;
         }
 
+        private DoubleAddressAction GetValidDoubleAddressAction ()
+        {
+            return new DoubleAddressAction { 
+                        Id = "ZP8-000498",
+                        StartTime = DateTime.Parse( "12.12.2017 12:23:43", CultureInfo.CurrentCulture ),
+                        Duration = TimeSpan.FromSeconds( 34 ),
+                        DocumentName = "",
+                        Employee = new Employee { Id = "AR12345", Name = "Anton" },
+                        Operation = new Operation { Name = "Подбор товара" },
+                        DoubleAddressDetails = new List< DoubleAddressActionDetail >{ new DoubleAddressActionDetail {
+                            Product = new Product { Id = 0006634, Name = "Test Product", },
+                            ProductQuantity = 1,
+                        },
+                    }
+            };
+        }
+
         /// <summary>
         /// Fake ImportService
         /// </summary>
@@ -308,9 +770,9 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         {
             public ImportServiceFake ( WorkSpeedDbContext dbContext, ITypeRepository typeRepository ) : base( dbContext, typeRepository ) { }
 
-            public IEnumerable< Product > Products { get; set; }
-            public IEnumerable< Employee > Employees { get; set; }
-            public IEnumerable< AllActions > Productivity { get; set; }
+            public Product[] Products { get; set; }
+            public Employee[] Employees { get; set; }
+            public AllActions[] AllActions { get; set; }
 
             protected override IEnumerable< IEntity > GetDataFromFile ( string fileName )
             {
@@ -319,8 +781,8 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
                         return Products;
                     case EMPLOYEES:
                         return Employees;
-                    case PRODUCTIVITY:
-                        return Productivity;
+                    case ACTIONS:
+                        return AllActions;
                     default:
                         return new IEntity[0];
                 }

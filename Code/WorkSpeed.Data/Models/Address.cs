@@ -4,7 +4,7 @@ using WorkSpeed.Data.Models.Enums;
 
 namespace WorkSpeed.Data.Models
 {
-    public class Address
+    public class Address : IEntity
     {
         [ MaxLength( 1 ), MinLength( 1 )]
         public string Letter { get; set; }
