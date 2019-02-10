@@ -76,9 +76,9 @@ namespace WorkSpeed.Productivity
                         if ( !_catchedLunches.ContainsKey( date )
                              || !_catchedLunches[ date ].Contains( shiftList[ i ] )) {
 
-                            if ( duration > shiftList[ i ].LunchDuration ) {
+                            if ( duration > shiftList[ i ].Lunch ) {
 
-                                duration -= shiftList[ i ].LunchDuration;
+                                duration -= shiftList[ i ].Lunch;
 
                                 if ( !_catchedLunches.ContainsKey( date ) ) {
                                     _catchedLunches[ date ] = new Queue< Shift >( new [] { shiftList[ i ] } );

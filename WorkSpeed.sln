@@ -50,6 +50,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 		Documents\Spec.md = Documents\Spec.md
 		Documents\Design\Vision.md = Documents\Design\Vision.md
 		Vocabulary.cs = Vocabulary.cs
+		Documents\warehousedb.vpp = Documents\warehousedb.vpp
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Agbm.Wpf.MvvmBaseLibrary", "Agbm.Wpf\Code\Agbm.Wpf.MvvmBaseLibrary\Agbm.Wpf.MvvmBaseLibrary.csproj", "{C92FF512-B9C0-4AAF-9A9B-D0DEE139AF44}"

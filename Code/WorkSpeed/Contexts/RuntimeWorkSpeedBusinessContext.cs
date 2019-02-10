@@ -433,16 +433,16 @@ namespace WorkSpeed.Data.BusinessContexts
                     Id = 1,
                     Name = "Дневная смена",
                     StartTime = new TimeSpan( 8, 0, 0),
-                    ShiftDuration = TimeSpan.FromHours( 12 ),
-                    LunchDuration = TimeSpan.FromMinutes( 30 ),
+                    Duration = TimeSpan.FromHours( 12 ),
+                    Lunch = TimeSpan.FromMinutes( 30 ),
                     RestTime = TimeSpan.FromMinutes( 60 )
                 },
                 new Shift {
                     Id = 2,
                     Name = "Ночная смена",
                     StartTime = new TimeSpan( 20, 0, 0),
-                    ShiftDuration = TimeSpan.FromHours( 12 ),
-                    LunchDuration = TimeSpan.FromMinutes( 30 ),
+                    Duration = TimeSpan.FromHours( 12 ),
+                    Lunch = TimeSpan.FromMinutes( 30 ),
                     RestTime = TimeSpan.FromMinutes( 60 )
                 },
             } );

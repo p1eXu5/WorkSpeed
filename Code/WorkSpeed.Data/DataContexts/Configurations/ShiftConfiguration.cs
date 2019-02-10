@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WorkSpeed.Data.Models;
+using System;
 
 namespace WorkSpeed.Data.DataContexts.Configurations
 {
@@ -16,9 +17,14 @@ namespace WorkSpeed.Data.DataContexts.Configurations
 
             builder.Property( s => s.Name ).HasColumnType( "varchar(20)" ).IsRequired();
             builder.Property( s => s.StartTime ).HasColumnType( "time" );
-            builder.Property( s => s.ShiftDuration ).HasColumnType( "time" );
-            builder.Property( s => s.LunchDuration ).HasColumnType( "time" );
+            builder.Property( s => s.Duration ).HasColumnType( "time" );
+            builder.Property( s => s.Lunch ).HasColumnType( "time" );
             builder.Property( s => s.RestTime ).HasColumnType( "time" );
+
+            builder.HasData( new Shift[] {
+                new Shift { Id = 1, Name = "Дневная смена", StartTime = new TimeSpan( 8, 0, 0), Duration = TimeSpan.FromHours( 12 ), Lunch = TimeSpan.FromMinutes( 30 ), RestTime = TimeSpan.FromMinutes( 60 ) },
+                new Shift { Id = 2, Name = "Ночная смена", StartTime = new TimeSpan( 20, 0, 0), Duration = TimeSpan.FromHours( 12 ), Lunch = TimeSpan.FromMinutes( 30 ), RestTime = TimeSpan.FromMinutes( 60 ) },
+            } );
         }
     }
 }

@@ -135,16 +135,16 @@ namespace WorkSpeed.Productivity
         {
             if ( shift == null ) throw new ArgumentNullException( nameof( shift ), "ShortBreak cannot be null" );
 
-            if ( shift.ShiftDuration < ShiftDurationDownLimit || shift.ShiftDuration > ShiftDurationUpLimit )
+            if ( shift.Duration < ShiftDurationDownLimit || shift.Duration > ShiftDurationUpLimit )
                 throw new ArgumentException();
 
-            if ( shift.LunchDuration < LongBreakDownLimit || shift.LunchDuration > LongBreakUpLimit )
+            if ( shift.Lunch < LongBreakDownLimit || shift.Lunch > LongBreakUpLimit )
                 throw new ArgumentException();
 
             if ( shift.StartTime < TimeSpan.Zero || shift.StartTime >= TimeSpan.FromDays( 1 ) )
                 throw new ArgumentException();
 
-            var endTime = shift.StartTime + shift.ShiftDuration;
+            var endTime = shift.StartTime + shift.Duration;
 
             if ( endTime > TimeSpan.FromDays( 1 ) )
             {
@@ -168,7 +168,7 @@ namespace WorkSpeed.Productivity
             var periodDay = period.GetDayPeriod();
 
 
-            var shift = _variableBreaks.Keys.Where( s => period.Duration >= s.LunchDuration && _variableBreaks[ s ].GetIntersectDuration( periodDay ) >= s.LunchDuration ).ToArray();
+            var shift = _variableBreaks.Keys.Where( s => period.Duration >= s.Lunch && _variableBreaks[ s ].GetIntersectDuration( periodDay ) >= s.Lunch ).ToArray();
 
             return shift;
         }
