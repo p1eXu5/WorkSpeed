@@ -13,6 +13,6 @@ namespace WorkSpeed.Data.Models.Enums
         Inventory,
         Reception,
         Shipment,
-        Unknown,
+        Other,
     }
 }
