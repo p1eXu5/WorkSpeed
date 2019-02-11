@@ -113,22 +113,22 @@ namespace WorkSpeed.Business.FileModels.Converters
 
         private static ShipmentAction GetShipmentAction ( ProductivityImportModel productivityImportModel )
         {
+            var id = productivityImportModel.DocumentNumber.Trim();
             var shipment = new ShipmentAction {
 
-                Id = productivityImportModel.DocumentNumber.Trim(),
+                Id = id,
                 DocumentName = productivityImportModel.DocumentName,
 
                 StartTime = productivityImportModel.StartTime,
                 Duration = TimeSpan.FromSeconds( productivityImportModel.OperationDuration ),
                 Operation = new Operation { Name = productivityImportModel.Operation.Trim() },
+                EmployeeId = productivityImportModel.EmployeeId,
                 Employee = GetEmployee( productivityImportModel ),
 
-                ShipmentActionDetail = new ShipmentActionDetail {
-                    Weight = ( float? )productivityImportModel.WeightPerEmployee,
-                    Volume = ( float? )productivityImportModel.VolumePerEmployee,
-                    ClientCargoQuantity = ( float? )productivityImportModel.ClientCargoQuantityt,
-                    CommonCargoQuantity = ( float? )productivityImportModel.CommonCargoQuantity
-                }
+                Weight = ( float? )productivityImportModel.WeightPerEmployee,
+                Volume = ( float? )productivityImportModel.VolumePerEmployee,
+                ClientCargoQuantity = ( float? )productivityImportModel.ClientCargoQuantityt,
+                CommonCargoQuantity = ( float? )productivityImportModel.CommonCargoQuantity
             };
 
             return shipment;

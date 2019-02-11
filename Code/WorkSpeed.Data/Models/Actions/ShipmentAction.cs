@@ -21,7 +21,11 @@ namespace WorkSpeed.Data.Models.Actions
 {
     public class ShipmentAction : EmployeeActionBase
     {
-        public int ShipmentDetailId { get; set; }
-        public ShipmentActionDetail ShipmentActionDetail { get; set; }
+        public string EmployeeId { get; set; }
+
+        public float? Weight { get; set; }
+        public float? Volume { get; set; }
+        public float? ClientCargoQuantity { get; set; }
+        public float? CommonCargoQuantity { get; set; }
     }
 }

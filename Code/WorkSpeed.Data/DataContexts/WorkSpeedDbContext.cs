@@ -49,8 +49,7 @@ namespace WorkSpeed.Data.DataContexts
 
             modelBuilder.ApplyConfiguration( new InventoryActionDetailConfiguration() )
                         .ApplyConfiguration( new ReceptionActionDetailConfiguration() )
-                        .ApplyConfiguration( new DoubleAddressActionDetailConfiguration() )
-                        .ApplyConfiguration( new ShipmentActionDetailConfiguration() );
+                        .ApplyConfiguration( new DoubleAddressActionDetailConfiguration() );
 
             modelBuilder.ApplyConfiguration( new CategoryConfiguration() )
                         .ApplyConfiguration( new CategorySetConfiguration() )

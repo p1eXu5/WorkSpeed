@@ -1022,12 +1022,10 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
                         Employee = new Employee { Id = employeeId ?? "AR12345", Name = employeeName ?? "Anton" },
                         Operation = new Operation { Name = "Выгрузка машины" },
 
-                        ShipmentActionDetail = new ShipmentActionDetail {
-                            Weight = 1.0f,
-                            Volume = 1.0f,
-                            ClientCargoQuantity = 1.0f,
-                            CommonCargoQuantity = 1.0f,
-                        },
+                        Weight = 1.0f,
+                        Volume = 1.0f,
+                        ClientCargoQuantity = 1.0f,
+                        CommonCargoQuantity = 1.0f,
             };
         }
 

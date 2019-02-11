@@ -9,7 +9,8 @@ namespace WorkSpeed.Business.Contexts.Comparers
         private static IEqualityComparer< Employee > _employeeComparer;
         private static IEqualityComparer< Product > _productComparer;
         private static IEqualityComparer< Address > _addressComparer;
-        private static IEqualityComparer< EmployeeActionBase > _doubleAddressAction;
+        private static IEqualityComparer< EmployeeActionBase > _employeeActionBaseComparer;
+        private static IEqualityComparer< ShipmentAction > _shipmentActionComperer;
 
 
         public static IEqualityComparer< Employee > EmployeeComparer 
@@ -22,9 +23,10 @@ namespace WorkSpeed.Business.Contexts.Comparers
             => _addressComparer ?? (_addressComparer = GetAddressComparer());
 
         public static IEqualityComparer< EmployeeActionBase > EmployeeActionBaseComparer 
-            => _doubleAddressAction ?? (_doubleAddressAction = GetEmployeeActionBaseComparer() );
+            => _employeeActionBaseComparer ?? (_employeeActionBaseComparer = GetEmployeeActionBaseComparer() );
 
-
+        public static IEqualityComparer< ShipmentAction > ShipmentActionComparer 
+            => _shipmentActionComperer ?? ( _shipmentActionComperer = GetShipmentActionComperer() );
 
         #region Private Methods
 
@@ -39,6 +41,9 @@ namespace WorkSpeed.Business.Contexts.Comparers
 
         private static IEqualityComparer< EmployeeActionBase > GetEmployeeActionBaseComparer()
             => new EntityEqualityComparer< EmployeeActionBase, string >();
+
+        private static IEqualityComparer< ShipmentAction > GetShipmentActionComperer()
+            => new ShipmentActionComparer();
 
         #endregion
 

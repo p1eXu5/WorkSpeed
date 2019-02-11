@@ -145,7 +145,6 @@
     <Compile Include="DataContexts\Configurations\PositionConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\ProductConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\Actions\ShipmentActionConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\ActionDetails\ShipmentActionDetailConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\RankConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\ShiftConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\ShortBreakScheduleConfiguration.cs" />
