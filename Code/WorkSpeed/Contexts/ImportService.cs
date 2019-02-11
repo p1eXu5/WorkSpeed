@@ -69,71 +69,68 @@ namespace WorkSpeed.Business.Contexts
             return ExcelImporter.GetDataFromTable( table, typeMap.propertyMap, new ImportModelConverter() );
         }
 
-        [ SuppressMessage( "ReSharper", "PossibleMultipleEnumeration" ) ]
+
         private async void StoreData ( IEnumerable< Product > data )
         {
-            var products = new HashSet< Product >( data, ComparerFactory.ProductComparer );
-            var newProducts = new List< Product >( data.Count() );
-            var updateProducts = new List< Product >( data.Count() );
+            var newProducts = new List< Product >();
             var dbProductList = await _dbContext.GetProducts().ToListAsync();
 
-            foreach ( var product in products.Where( Check.IsProductCorrect ) ) {
+            foreach ( var product in data.Where( Check.IsProductCorrect ) ) {
 
                 var dbProduct = dbProductList.FirstOrDefault( p => p.Id == product.Id );
+                var newProduct = newProducts.FirstOrDefault( p => p.Id == product.Id );
 
-                if ( dbProduct == null ) {
+                if ( dbProduct == null && newProduct == null ) {
                     newProducts.Add( product );
                     continue;
                 }
 
-                if ( Check.CheckProductDifference( product, dbProduct ) ) {
-                    updateProducts.Add( dbProduct );
+                if ( dbProduct != null ) {
+                    Check.CheckProductDifference( product, dbProduct );
+                }
+                else {
+                    Check.CheckProductDifference( product, newProduct ); 
                 }
             }
 
-            var addTask = _dbContext.AddRangeAsync( newProducts );
-            _dbContext.UpdateRange( updateProducts );
-
-            addTask.Wait();
+            await _dbContext.AddRangeAsync( newProducts );
             await _dbContext.SaveChangesAsync();
         }
 
-        
-
-        [ SuppressMessage( "ReSharper", "PossibleMultipleEnumeration" ) ]
         private async void StoreData ( IEnumerable< Employee > data )
         {
-            // new Appointment, Rank and Position can be
-
-            var employees = new HashSet< Employee >( data, ComparerFactory.EmployeeComparer );
-            var newEmployees = new List< Employee >( data.Count() );
+            var newEmployees = new List< Employee >();
 
             var dbEmployees = await _dbContext.GetEmployees().ToArrayAsync();
             var dbAppointments = await _dbContext.GetAppointments().ToArrayAsync();
             var dbRanks = await _dbContext.GetRanks().ToArrayAsync();
             var dbPositions = await _dbContext.GetPositions().ToArrayAsync();
 
-            foreach ( var employee in employees.Where( Check.IsEmployeeCorrect ) ) {
+            foreach ( var employee in data.Where( Check.IsEmployeeCorrect ) ) {
 
                 employee.Rank = dbRanks.FirstOrDefault( r => r.Number == employee.Rank?.Number );
                 employee.Appointment = dbAppointments.FirstOrDefault( a => Check.CheckAbbreviation( a.Abbreviations, employee.Appointment?.Abbreviations ) );
                 employee.Position = dbPositions.FirstOrDefault( p => Check.CheckAbbreviation( p.Abbreviations, employee.Position?.Abbreviations ) );
 
                 var dbEmployee = dbEmployees.FirstOrDefault( e => e.Id.Equals( employee.Id ) );
-
-                if ( null == dbEmployee ) {
+                var newEmployee = newEmployees.FirstOrDefault( e => e.Id.Equals( employee.Id ) );
+                
+                if ( dbEmployee == null && newEmployee == null  ) {
+                    
                     newEmployees.Add( employee );
                     continue;
                 }
 
-                dbEmployee.Rank = ( Rank )Check.CheckEntity( dbEmployee.Rank, employee.Rank );
-                dbEmployee.Appointment = ( Appointment )Check.CheckEntity( dbEmployee.Appointment, employee.Appointment );
-                dbEmployee.Position = ( Position )Check.CheckEntity( dbEmployee.Position, employee.Position );
+                if ( dbEmployee != null ) {
+                    Check.CheckEmployeeDifference( employee, dbEmployee );
+                }
+                else {
+                    Check.CheckEmployeeDifference( employee, newEmployee );
+                }
             }
 
             await _dbContext.AddRangeAsync( newEmployees );
             await _dbContext.SaveChangesAsync();
-
         }
 
         
@@ -154,9 +151,10 @@ namespace WorkSpeed.Business.Contexts
             var addresses = await _dbContext.GetAddresses().ToArrayAsync();
 
             StoreDoubleActions( doubleAddressActions, operations, addresses, employees );
-            StoreReceptionActions( receptionActions );
-
             await _dbContext.SaveChangesAsync();
+            StoreReceptionActions( receptionActions );
+            await _dbContext.SaveChangesAsync();
+
             //StoreInventoryActions( inventoryActions );
             //StoreShipmentActions( shipmentActions );
             //StoreOtherActions( otherActions );
@@ -172,11 +170,11 @@ namespace WorkSpeed.Business.Contexts
 
             var actions = data.AsParallel()
                               .Where( a => Check.IsEmployeeBaseActionCorrect( a, operations ) 
-                                           && Check.IsProductCorrect( a.DoubleAddressDetails[0].Product )
-                                           && Check.IsAddressCorrect( a.DoubleAddressDetails[0].SenderAddress )
-                                           && Check.IsAddressCorrect( a.DoubleAddressDetails[0].ReceiverAddress ) )
+                                           && Check.IsProductCorrect(a.DoubleAddressDetails[0].Product)
+                                           && Check.IsAddressCorrect(a.DoubleAddressDetails[0].SenderAddress)
+                                           && Check.IsAddressCorrect(a.DoubleAddressDetails[0].ReceiverAddress) )
                               .AsSequential()
-                              .GroupBy( a => a.Id );
+                              .GroupBy( a => a.Id ).ToArray();
 
             foreach ( var actionGrouping in actions ) {
 
@@ -251,7 +249,10 @@ namespace WorkSpeed.Business.Contexts
                 }
 
                 action.DoubleAddressDetails = details;
+                newActions.Add( action );
             }
+
+            await _dbContext.AddRangeAsync( newActions );
         }
 
         Address CheckAddress ( Address address, Address[] dbAddresses, HashSet< Address > newAddresses )
@@ -356,7 +357,7 @@ namespace WorkSpeed.Business.Contexts
 
             public static bool IsAddressCorrect ( Address a )
             {
-                return char.IsLetter( a.Letter[ 0 ] ) && a.Row > 0 && a.Section > 0 && a.Shelf > 0 && a.Box > 0;
+                return a != null && char.IsLetter( a.Letter[ 0 ] ) && a.Row > 0 && a.Section > 0 && a.Shelf > 0 && a.Box > 0;
             }
 
             public static bool CheckAbbreviation ( string abbreviations, string abbreviation )
@@ -365,7 +366,7 @@ namespace WorkSpeed.Business.Contexts
                 return abreviations.Contains( abbreviation );
             }
 
-            public static IEntity CheckEntity ( IEntity dbEntity, IEntity entity )
+            public static IEntity CheckEntity ( IEntity entity, IEntity dbEntity )
             {
                 if ( dbEntity == null && entity != null ) {
                     dbEntity = entity;
@@ -374,10 +375,8 @@ namespace WorkSpeed.Business.Contexts
                 return dbEntity;
             }
 
-            public static bool CheckProductDifference ( Product donor, Product acceptor )
+            public static void CheckProductDifference ( Product donor, Product acceptor )
             {
-                bool isDifferent = false;
-
                 acceptor.ItemLength = TryUpdateMeasure( donor.ItemLength, acceptor.ItemLength );
                 acceptor.ItemWidth = TryUpdateMeasure( donor.ItemWidth, acceptor.ItemWidth );
                 acceptor.ItemHeight = TryUpdateMeasure( donor.ItemHeight, acceptor.ItemHeight );
@@ -390,13 +389,11 @@ namespace WorkSpeed.Business.Contexts
 
                 acceptor.CartonQuantity = TryUpdateQuantity( donor.CartonQuantity, acceptor.CartonQuantity );
 
-                return isDifferent;
 
                 float? TryUpdateMeasure ( float? donorValue, float? acceptorValue )
                 {
                     if ( !acceptorValue.HasValue && donorValue.HasValue ) {
                         acceptorValue = donorValue;
-                        if ( !isDifferent ) isDifferent = true;
                     }
 
                     return acceptorValue;
@@ -406,13 +403,26 @@ namespace WorkSpeed.Business.Contexts
                 {
                     if ( !acceptorValue.HasValue && donorValue.HasValue ) {
                         acceptorValue = donorValue;
-                        if ( !isDifferent ) isDifferent = true;
                     }
 
                     return acceptorValue;
                 }
             }
 
+            public static void CheckEmployeeDifference ( Employee donor, Employee acceptor )
+            {
+                if ( acceptor.Rank == null && donor.Rank != null ) {
+                    acceptor.Rank = donor.Rank;
+                }
+
+                if ( acceptor.Appointment == null && donor.Appointment != null ) {
+                    acceptor.Appointment = donor.Appointment;
+                }
+
+                if ( acceptor.Position == null && donor.Position != null ) {
+                    acceptor.Position = donor.Position;
+                }
+            }
 
             private static bool IsOperationCorrect ( EmployeeActionBase a, Operation[] operations )
             {
