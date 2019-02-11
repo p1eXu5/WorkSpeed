@@ -164,6 +164,7 @@ namespace WorkSpeed.Business.Contexts
         private async void StoreDoubleActions ( DoubleAddressAction[] data, Operation[] operations, Address[] dbAddresses, Employee[] employees )
         {
             var newActions = new HashSet< DoubleAddressAction >( ComparerFactory.EmployeeActionBaseComparer );
+
             var newProducts = new HashSet< Product >( ComparerFactory.ProductComparer );
             var newAddresses = new HashSet< Address >( ComparerFactory.AddressComparer );
             var newEmployees = new HashSet< Employee >( ComparerFactory.EmployeeComparer );
@@ -186,9 +187,11 @@ namespace WorkSpeed.Business.Contexts
 
                 var dbOperation = operations.FirstOrDefault( o => o.Name.Equals( action.Operation.Name ) );
                 if ( null == dbOperation ) continue;
+                action.Operation = dbOperation;
 
                 var dbEmployee = employees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
                 var newEmployee = newEmployees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
+
                 if ( dbEmployee == null && newEmployee == null ) {
                     newEmployees.Add( action.Employee );
                 }
@@ -199,6 +202,7 @@ namespace WorkSpeed.Business.Contexts
                     action.Employee = newEmployee;
                 }
 
+                if ( !actionGrouping.All( a => a.Employee.Id.Equals( action.Employee.Id ) && a.Operation.Name.Equals( action.Operation.Name ) )) continue;
 
                 var details = new List< DoubleAddressActionDetail >();
 
