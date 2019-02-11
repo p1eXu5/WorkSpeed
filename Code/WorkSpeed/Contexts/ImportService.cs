@@ -259,6 +259,11 @@ namespace WorkSpeed.Business.Contexts
             await _dbContext.AddRangeAsync( newActions );
         }
 
+        private async void StoreReceptionActions ( ReceptionAction[] data )
+        {
+            throw new NotImplementedException();
+        }
+
         Address CheckAddress ( Address address, Address[] dbAddresses, HashSet< Address > newAddresses )
         {
             var dbAddress = dbAddresses.FirstOrDefault( adr => adr.Letter.Equals( address.Letter ) && adr.Row == address.Row
@@ -279,11 +284,6 @@ namespace WorkSpeed.Business.Contexts
 
             newAddresses.Add( address );
             return address;
-        }
-
-        private void StoreReceptionActions ( ReceptionAction[] data )
-        {
-            throw new NotImplementedException();
         }
 
 
