@@ -34,7 +34,8 @@ namespace WorkSpeed.Business.Contexts
         private Employee[] _employees;
         private Address[] _addresses;
 
-        private HashSet< Employee > _newEmployees = new HashSet< Employee >( ComparerFactory.EmployeeComparer );
+        private readonly HashSet< Employee > _newEmployees = new HashSet< Employee >( ComparerFactory.EmployeeComparer );
+        private readonly HashSet< Address > _newAddresses = new HashSet< Address >( ComparerFactory.AddressComparer );
 
         #region Ctor
 
@@ -160,11 +161,20 @@ namespace WorkSpeed.Business.Contexts
                 _operations = _dbContext.GetOperations().ToArray();
                 _addresses = _dbContext.GetAddresses().ToArray();
 
-                _newEmployees.Clear(); 
+                _newEmployees.Clear();
+                _newAddresses.Clear();
 
-                StoreDoubleActions( doubleAddressActions );
-                StoreReceptionActions( receptionActions );
-                StoreInventoryActions( inventoryActions );
+                if ( doubleAddressActions[0] != null ) {
+                    StoreDoubleActions( doubleAddressActions );
+                }
+
+                if ( receptionActions[0] != null ) {
+                    StoreReceptionActions( receptionActions );
+                }
+
+                if ( inventoryActions[0] != null ) {
+                    StoreInventoryActions( inventoryActions );
+                }
 
                 _dbContext.SaveChanges();
             }
@@ -174,7 +184,7 @@ namespace WorkSpeed.Business.Contexts
         {
 
             var newProducts = new HashSet< Product >( ComparerFactory.ProductComparer );
-            var newAddresses = new HashSet< Address >( ComparerFactory.AddressComparer );
+            
             var newEmployees = new HashSet< Employee >( ComparerFactory.EmployeeComparer );
 
             var actions = data.AsParallel()
@@ -189,6 +199,8 @@ namespace WorkSpeed.Business.Contexts
 
             var periodStart = actions.Min( a => a.First().StartTime );
             var periodEnd = actions.Max( a => a.First().StartTime );
+            if ( periodStart == periodEnd ) periodEnd += TimeSpan.FromMilliseconds( 1 );
+
             var dbActions = await _dbContext.GetDoubleAddressActions( periodStart, periodEnd ).ToArrayAsync();
 
             foreach ( var actionGrouping in actions ) {
@@ -196,26 +208,7 @@ namespace WorkSpeed.Business.Contexts
                 // check action
                 var action = actionGrouping.First();
                 
-                var dbAction = dbActions.FirstOrDefault( a => a.Id.Equals( action.Id ) );
-                if ( dbAction != null ) continue;
-
-                var dbOperation = _operations.FirstOrDefault( o => o.Name.Equals( action.Operation.Name ) );
-                if ( null == dbOperation ) continue;
-                action.Operation = dbOperation;
-
-                var dbEmployee = _employees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
-                var newEmployee = newEmployees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
-
-                if ( dbEmployee == null && newEmployee == null ) {
-                    newEmployees.Add( action.Employee );
-                }
-                else if ( dbEmployee != null ) {
-                    action.Employee = dbEmployee;
-                }
-                else {
-                    action.Employee = newEmployee;
-                }
-
+                if ( !(CheckWithEmployeeAction( dbActions, action ) ) ) continue;
                 if ( !actionGrouping.All( a => a.Employee.Id.Equals( action.Employee.Id ) && a.Operation.Name.Equals( action.Operation.Name ) )) continue;
 
                 var details = new List< DoubleAddressActionDetail >();
@@ -226,8 +219,8 @@ namespace WorkSpeed.Business.Contexts
                     await CheckProduct( detail, newProducts );
 
                     // check addresses
-                    detail.ReceiverAddress = CheckAddress( detail.ReceiverAddress, _addresses, newAddresses );
-                    detail.SenderAddress = CheckAddress( detail.SenderAddress, _addresses, newAddresses );
+                    CheckAddress( detail.ReceiverAddress, a => detail.ReceiverAddress = a );
+                    CheckAddress( detail.SenderAddress, a => detail.SenderAddress = a );
 
                     detail.DoubleAddressAction = action;
                     detail.DoubleAddressActionId = action.Id;
@@ -259,6 +252,7 @@ namespace WorkSpeed.Business.Contexts
 
             var periodStart = actions.Min( a => a.First().StartTime );
             var periodEnd = actions.Max( a => a.First().StartTime );
+            if ( periodStart == periodEnd ) periodEnd += TimeSpan.FromMilliseconds( 1 );
             var dbActions = await _dbContext.GetReceptionActions( periodStart, periodEnd ).ToArrayAsync();
 
             foreach ( var actionGrouping in actions ) {
@@ -296,7 +290,7 @@ namespace WorkSpeed.Business.Contexts
                     await CheckProduct( detail, newProducts );
 
                     // check addresses
-                    detail.Address = CheckAddress( detail.Address, _addresses, newAddresses );
+                    CheckAddress( detail.Address, a => detail.Address = a );
 
                     detail.ReceptionAction = action;
                     detail.ReceptionActionId = action.Id;
@@ -328,6 +322,8 @@ namespace WorkSpeed.Business.Contexts
 
             var periodStart = actions.Min( a => a.First().StartTime );
             var periodEnd = actions.Max( a => a.First().StartTime );
+            if ( periodStart == periodEnd ) periodEnd += TimeSpan.FromMilliseconds( 1 );
+
             var dbActions = await _dbContext.GetInventoryActions( periodStart, periodEnd ).ToArrayAsync();
 
             foreach ( var actionGrouping in actions ) {
@@ -365,7 +361,7 @@ namespace WorkSpeed.Business.Contexts
                     await CheckProduct( detail, newProducts );
 
                     // check addresses
-                    detail.Address = CheckAddress( detail.Address, _addresses, newAddresses );
+                    CheckAddress( detail.Address, a => detail.Address = a );
 
                     detail.InventoryAction = action;
                     detail.InventoryActionId = action.Id;
@@ -388,6 +384,7 @@ namespace WorkSpeed.Business.Contexts
 
             var periodStart = actions.Min( a => a.StartTime );
             var periodEnd = actions.Max( a => a.StartTime );
+            if ( periodStart == periodEnd ) periodEnd += TimeSpan.FromMilliseconds( 1 );
             var dbActions = await _dbContext.GetShipmentActions( periodStart, periodEnd ).ToArrayAsync();
 
             foreach ( var action in actions ) {
@@ -408,6 +405,8 @@ namespace WorkSpeed.Business.Contexts
 
             var periodStart = actions.Min( a => a.StartTime );
             var periodEnd = actions.Max( a => a.StartTime );
+            if ( periodStart == periodEnd ) periodEnd += TimeSpan.FromMilliseconds( 1 );
+
             var dbActions = await _dbContext.GetOtherActions( periodStart, periodEnd ).ToArrayAsync();
 
             foreach ( var action in actions ) {
@@ -479,26 +478,28 @@ namespace WorkSpeed.Business.Contexts
             }
         }
 
-        Address CheckAddress ( Address address, Address[] dbAddresses, HashSet< Address > newAddresses )
+        private void CheckAddress ( Address address, Action< Address > onChange )
         {
-            var dbAddress = dbAddresses.FirstOrDefault( adr => adr.Letter.Equals( address.Letter ) && adr.Row == address.Row
+            var dbAddress = _addresses.FirstOrDefault( adr => adr.Letter.Equals( address.Letter ) && adr.Row == address.Row
                                                                 && adr.Section == address.Section && adr.Shelf == address.Shelf
                                                                 && adr.Box == address.Box );
 
             if ( dbAddress != null ) {
-                return dbAddress;
+                onChange?.Invoke( dbAddress );
+                return;
             }
 
-            var newAddress = newAddresses.FirstOrDefault( adr => adr.Letter.Equals( address.Letter ) && adr.Row == address.Row
+            var newAddress = _newAddresses.FirstOrDefault( adr => adr.Letter.Equals( address.Letter ) && adr.Row == address.Row
                                                                 && adr.Section == address.Section && adr.Shelf == address.Shelf
                                                                 && adr.Box == address.Box );
 
             if ( newAddress != null ) {
-                return newAddress;
+                onChange?.Invoke( newAddress );
+                return;
             }
 
-            newAddresses.Add( address );
-            return address;
+            _newAddresses.Add( address );
+            return;
         }
 
 
