@@ -28,6 +28,14 @@ namespace WorkSpeed.Business.Contexts
     {
         private readonly ITypeRepository _typeRepository;
 
+        private readonly object _locker = new Object();
+
+        private Operation[] _operations;
+        private Employee[] _employees;
+        private Address[] _addresses;
+
+        private HashSet< Employee > _newEmployees = new HashSet< Employee >( ComparerFactory.EmployeeComparer );
+
         #region Ctor
 
         public ImportService ( WorkSpeedDbContext dbContext, ITypeRepository typeRepository ) : base( dbContext )
@@ -136,60 +144,66 @@ namespace WorkSpeed.Business.Contexts
         
 
         [ SuppressMessage( "ReSharper", "PossibleMultipleEnumeration" ) ]
-        private async void StoreData ( IEnumerable< AllActions > data )
+        private void StoreData ( IEnumerable< AllActions > data )
         {
             var actions = data.ToArray();
 
             var doubleAddressActions = actions.Select( a => a.DoubleAddressAction ).ToArray();
             var receptionActions = actions.Select( a => a.ReceptionAction ).ToArray();
-            //var inventoryActions = actions.Select( a => a.InventoryAction ).ToArray();
+            var inventoryActions = actions.Select( a => a.InventoryAction ).ToArray();
             //var shipmentActions = actions.Select( a => a.ShipmentAction ).ToArray();
             //var otherActions = actions.Select( a => a.OtherAction ).ToArray();
 
-            var employees = _dbContext.GetEmployees().ToArray();
-            var operations = _dbContext.GetOperations().ToArray();
-            var addresses = await _dbContext.GetAddresses().ToArrayAsync();
+            lock ( _locker ) {
+                
+                _employees = _dbContext.GetEmployees().ToArray();
+                _operations = _dbContext.GetOperations().ToArray();
+                _addresses = _dbContext.GetAddresses().ToArray();
 
-            StoreDoubleActions( doubleAddressActions, operations, addresses, employees );
-            await _dbContext.SaveChangesAsync();
-            StoreReceptionActions( receptionActions );
-            await _dbContext.SaveChangesAsync();
+                _newEmployees.Clear(); 
 
-            //StoreInventoryActions( inventoryActions );
-            //StoreShipmentActions( shipmentActions );
-            //StoreOtherActions( otherActions );
+                StoreDoubleActions( doubleAddressActions );
+                StoreReceptionActions( receptionActions );
+                StoreInventoryActions( inventoryActions );
 
+                _dbContext.SaveChanges();
+            }
         }
 
-        private async void StoreDoubleActions ( DoubleAddressAction[] data, Operation[] operations, Address[] dbAddresses, Employee[] employees )
+        private async void StoreDoubleActions ( DoubleAddressAction[] data )
         {
-            var newActions = new HashSet< DoubleAddressAction >( ComparerFactory.EmployeeActionBaseComparer );
 
             var newProducts = new HashSet< Product >( ComparerFactory.ProductComparer );
             var newAddresses = new HashSet< Address >( ComparerFactory.AddressComparer );
             var newEmployees = new HashSet< Employee >( ComparerFactory.EmployeeComparer );
 
             var actions = data.AsParallel()
-                              .Where( a => Check.IsEmployeeBaseActionCorrect( a, operations ) 
+                              .Where( a => Check.IsEmployeeBaseActionCorrect( a, _operations ) 
                                            && Check.IsProductCorrect(a.DoubleAddressDetails[0].Product)
                                            && Check.IsAddressCorrect(a.DoubleAddressDetails[0].SenderAddress)
                                            && Check.IsAddressCorrect(a.DoubleAddressDetails[0].ReceiverAddress) )
                               .AsSequential()
                               .GroupBy( a => a.Id ).ToArray();
 
+            var newActions = new HashSet< DoubleAddressAction >( ComparerFactory.EmployeeActionBaseComparer );
+
+            var periodStart = actions.Min( a => a.First().StartTime );
+            var periodEnd = actions.Max( a => a.First().StartTime );
+            var dbActions = await _dbContext.GetDoubleAddressActions( periodStart, periodEnd ).ToArrayAsync();
+
             foreach ( var actionGrouping in actions ) {
 
                 // check action
                 var action = actionGrouping.First();
                 
-                var dbAction = await _dbContext.GetDoubleAddressActionAsync( action );
+                var dbAction = dbActions.FirstOrDefault( a => a.Id.Equals( action.Id ) );
                 if ( dbAction != null ) continue;
 
-                var dbOperation = operations.FirstOrDefault( o => o.Name.Equals( action.Operation.Name ) );
+                var dbOperation = _operations.FirstOrDefault( o => o.Name.Equals( action.Operation.Name ) );
                 if ( null == dbOperation ) continue;
                 action.Operation = dbOperation;
 
-                var dbEmployee = employees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
+                var dbEmployee = _employees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
                 var newEmployee = newEmployees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
 
                 if ( dbEmployee == null && newEmployee == null ) {
@@ -209,42 +223,11 @@ namespace WorkSpeed.Business.Contexts
                 foreach ( var detail in actionGrouping.Select( a => a.DoubleAddressDetails[0] ) ) {
                     
                     // check product
-
-                    var dbProduct = await _dbContext.GetProductAsync( detail.Product );
-                    var newProduct = newProducts.FirstOrDefault( p => p.Id == detail.Product.Id );
-
-                    if ( dbProduct?.Parent == null && newProduct == null ) {
-
-                        if ( detail.Product.Parent != null) {
-
-                            if ( !Check.IsProductCorrect( detail.Product.Parent ) ) {
-                                detail.Product.Parent = null;
-                            }
-                            else if ( detail.Product.Parent.Parent != null && !Check.IsProductCorrect( detail.Product.Parent.Parent ) ) {
-                                detail.Product.Parent.Parent = null;
-                            }
-                        }
-
-                        if ( dbProduct != null ) {
-                            dbProduct.Parent = detail.Product.Parent;
-                        }
-                        else {
-                            newProducts.Add( detail.Product );
-                        }
-                    }
-
-                    if ( dbProduct != null ) {
-                        detail.Product = dbProduct;
-                        detail.ProductId = dbProduct.Id;
-                    }
-                    else if ( newProduct != null ) {
-                        detail.Product = newProduct;
-                        detail.ProductId = newProduct.Id;
-                    }
+                    await CheckProduct( detail, newProducts );
 
                     // check addresses
-                    detail.ReceiverAddress = CheckAddress( detail.ReceiverAddress, dbAddresses, newAddresses );
-                    detail.SenderAddress = CheckAddress( detail.SenderAddress, dbAddresses, newAddresses );
+                    detail.ReceiverAddress = CheckAddress( detail.ReceiverAddress, _addresses, newAddresses );
+                    detail.SenderAddress = CheckAddress( detail.SenderAddress, _addresses, newAddresses );
 
                     detail.DoubleAddressAction = action;
                     detail.DoubleAddressActionId = action.Id;
@@ -261,7 +244,239 @@ namespace WorkSpeed.Business.Contexts
 
         private async void StoreReceptionActions ( ReceptionAction[] data )
         {
-            throw new NotImplementedException();
+            var newActions = new HashSet< ReceptionAction >( ComparerFactory.EmployeeActionBaseComparer );
+
+            var newProducts = new HashSet< Product >( ComparerFactory.ProductComparer );
+            var newAddresses = new HashSet< Address >( ComparerFactory.AddressComparer );
+            var newEmployees = new HashSet< Employee >( ComparerFactory.EmployeeComparer );
+
+            var actions = data.AsParallel()
+                              .Where( a => Check.IsEmployeeBaseActionCorrect( a, _operations ) 
+                                           && Check.IsProductCorrect( a.ReceptionActionDetails[0].Product )
+                                           && Check.IsAddressCorrect( a.ReceptionActionDetails[0].Address ) )
+                              .AsSequential()
+                              .GroupBy( a => a.Id ).ToArray();
+
+            var periodStart = actions.Min( a => a.First().StartTime );
+            var periodEnd = actions.Max( a => a.First().StartTime );
+            var dbActions = await _dbContext.GetReceptionActions( periodStart, periodEnd ).ToArrayAsync();
+
+            foreach ( var actionGrouping in actions ) {
+
+                // check action
+                var action = actionGrouping.First();
+                
+                var dbAction = dbActions.FirstOrDefault( a => a.Id.Equals( action.Id ) );
+                if ( dbAction != null ) continue;
+
+                var dbOperation = _operations.FirstOrDefault( o => o.Name.Equals( action.Operation.Name ) );
+                if ( null == dbOperation ) continue;
+                action.Operation = dbOperation;
+
+                var dbEmployee = _employees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
+                var newEmployee = newEmployees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
+
+                if ( dbEmployee == null && newEmployee == null ) {
+                    newEmployees.Add( action.Employee );
+                }
+                else if ( dbEmployee != null ) {
+                    action.Employee = dbEmployee;
+                }
+                else {
+                    action.Employee = newEmployee;
+                }
+
+                if ( !actionGrouping.All( a => a.Employee.Id.Equals( action.Employee.Id ) && a.Operation.Name.Equals( action.Operation.Name ) )) continue;
+
+                var details = new List< ReceptionActionDetail >();
+
+                foreach ( var detail in actionGrouping.Select( a => a.ReceptionActionDetails[0] ) ) {
+                    
+                    // check product
+                    await CheckProduct( detail, newProducts );
+
+                    // check addresses
+                    detail.Address = CheckAddress( detail.Address, _addresses, newAddresses );
+
+                    detail.ReceptionAction = action;
+                    detail.ReceptionActionId = action.Id;
+
+                    details.Add( detail );
+                }
+
+                action.ReceptionActionDetails = details;
+                newActions.Add( action );
+            }
+
+            await _dbContext.AddRangeAsync( newActions );
+        }
+
+        private async void StoreInventoryActions ( InventoryAction[] data  )
+        {
+            var newActions = new HashSet< InventoryAction >( ComparerFactory.EmployeeActionBaseComparer );
+
+            var newProducts = new HashSet< Product >( ComparerFactory.ProductComparer );
+            var newAddresses = new HashSet< Address >( ComparerFactory.AddressComparer );
+            var newEmployees = new HashSet< Employee >( ComparerFactory.EmployeeComparer );
+
+            var actions = data.AsParallel()
+                              .Where( a => Check.IsEmployeeBaseActionCorrect( a, _operations ) 
+                                           && Check.IsProductCorrect( a.InventoryActionDetails[0].Product )
+                                           && Check.IsAddressCorrect( a.InventoryActionDetails[0].Address ) )
+                              .AsSequential()
+                              .GroupBy( a => a.Id ).ToArray();
+
+            var periodStart = actions.Min( a => a.First().StartTime );
+            var periodEnd = actions.Max( a => a.First().StartTime );
+            var dbActions = await _dbContext.GetInventoryActions( periodStart, periodEnd ).ToArrayAsync();
+
+            foreach ( var actionGrouping in actions ) {
+
+                // check action
+                var action = actionGrouping.First();
+                
+                var dbAction = dbActions.FirstOrDefault( a => a.Id.Equals( action.Id ) );
+                if ( dbAction != null ) continue;
+
+                var dbOperation = _operations.FirstOrDefault( o => o.Name.Equals( action.Operation.Name ) );
+                if ( null == dbOperation ) continue;
+                action.Operation = dbOperation;
+
+                var dbEmployee = _employees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
+                var newEmployee = newEmployees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
+
+                if ( dbEmployee == null && newEmployee == null ) {
+                    newEmployees.Add( action.Employee );
+                }
+                else if ( dbEmployee != null ) {
+                    action.Employee = dbEmployee;
+                }
+                else {
+                    action.Employee = newEmployee;
+                }
+
+                if ( !actionGrouping.All( a => a.Employee.Id.Equals( action.Employee.Id ) && a.Operation.Name.Equals( action.Operation.Name ) )) continue;
+
+                var details = new List< InventoryActionDetail >();
+
+                foreach ( var detail in actionGrouping.Select( a => a.InventoryActionDetails[0] ) ) {
+                    
+                    // check product
+                    await CheckProduct( detail, newProducts );
+
+                    // check addresses
+                    detail.Address = CheckAddress( detail.Address, _addresses, newAddresses );
+
+                    detail.InventoryAction = action;
+                    detail.InventoryActionId = action.Id;
+
+                    details.Add( detail );
+                }
+
+                action.InventoryActionDetails = details;
+                newActions.Add( action );
+            }
+
+            await _dbContext.AddRangeAsync( newActions );
+        }
+
+        private async void StoreShipmentActions ( ShipmentAction[] data )
+        {
+            var newActions = new HashSet< ShipmentAction >( ComparerFactory.EmployeeActionBaseComparer );
+
+            var actions = data.Where( a => Check.IsEmployeeBaseActionCorrect( a, _operations ) ).ToArray();
+
+            var periodStart = actions.Min( a => a.StartTime );
+            var periodEnd = actions.Max( a => a.StartTime );
+            var dbActions = await _dbContext.GetShipmentActions( periodStart, periodEnd ).ToArrayAsync();
+
+            foreach ( var action in actions ) {
+                // check action
+                if ( !CheckWithEmployeeAction( dbActions, action ) ) continue;
+
+                newActions.Add( action );
+            }
+
+            await _dbContext.AddRangeAsync( newActions );
+        }
+
+        private async void StoreOtherActions ( OtherAction[] data )
+        {
+            var newActions = new HashSet< OtherAction >( ComparerFactory.EmployeeActionBaseComparer );
+
+            var actions = data.Where( a => Check.IsEmployeeBaseActionCorrect( a, _operations ) ).ToArray();
+
+            var periodStart = actions.Min( a => a.StartTime );
+            var periodEnd = actions.Max( a => a.StartTime );
+            var dbActions = await _dbContext.GetOtherActions( periodStart, periodEnd ).ToArrayAsync();
+
+            foreach ( var action in actions ) {
+                // check action
+                if ( !CheckWithEmployeeAction( dbActions, action ) ) continue;
+
+                newActions.Add( action );
+            }
+
+            await _dbContext.AddRangeAsync( newActions );
+        }
+
+
+        private bool CheckWithEmployeeAction< T > ( T[] dbActions, T action ) where T : EmployeeActionBase
+        {
+            var dbAction = dbActions.FirstOrDefault( a => a.Id.Equals( action.Id ) );
+            if ( dbAction != null ) return false;
+
+            var dbOperation = _operations.FirstOrDefault( o => o.Name.Equals( action.Operation.Name ) );
+            if ( null == dbOperation ) return false;
+            action.Operation = dbOperation;
+
+            var dbEmployee = _employees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
+            var newEmployee = _newEmployees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
+
+            if ( dbEmployee == null && newEmployee == null ) {
+                _newEmployees.Add( action.Employee );
+            }
+            else if ( dbEmployee != null ) {
+                action.Employee = dbEmployee;
+            }
+            else {
+                action.Employee = newEmployee;
+            }
+
+            return true;
+        }
+
+        private async Task CheckProduct ( WithProductActionDetail detail, HashSet< Product > newProducts )
+        {
+            var dbProduct = await _dbContext.GetProductAsync( detail.Product );
+            var newProduct = newProducts.FirstOrDefault( p => p.Id == detail.Product.Id );
+
+            if ( dbProduct?.Parent == null && newProduct == null ) {
+                if ( detail.Product.Parent != null ) {
+                    if ( !Check.IsProductCorrect( detail.Product.Parent ) ) {
+                        detail.Product.Parent = null;
+                    }
+                    else if ( detail.Product.Parent.Parent != null && !Check.IsProductCorrect( detail.Product.Parent.Parent ) ) {
+                        detail.Product.Parent.Parent = null;
+                    }
+                }
+
+                if ( dbProduct != null ) {
+                    dbProduct.Parent = detail.Product.Parent;
+                }
+                else {
+                    newProducts.Add( detail.Product );
+                }
+            }
+
+            if ( dbProduct != null ) {
+                detail.Product = dbProduct;
+                detail.ProductId = dbProduct.Id;
+            }
+            else if ( newProduct != null ) {
+                detail.Product = newProduct;
+                detail.ProductId = newProduct.Id;
+            }
         }
 
         Address CheckAddress ( Address address, Address[] dbAddresses, HashSet< Address > newAddresses )
@@ -284,40 +499,6 @@ namespace WorkSpeed.Business.Contexts
 
             newAddresses.Add( address );
             return address;
-        }
-
-
-        private void StoreOtherActions ( IEnumerable< OtherAction > data )
-        {
-            throw new NotImplementedException();
-        }
-
-        private void StoreShipmentActions ( IEnumerable< ShipmentAction > data )
-        {
-            throw new NotImplementedException();
-        }
-
-        private void StoreInventoryActions ( IEnumerable< InventoryAction > data )
-        {
-            throw new NotImplementedException();
-        }
-
-        
-
-        private void RemoveAddresses ( DoubleAddressActionDetail detail )
-        {
-            if ( detail.SenderAddress != null )
-                detail.SenderAddress = null;
-
-                if ( detail.ReceiverAddress != null )
-                detail.ReceiverAddress = null;
-
-        }
-
-        private  void RemoveAddresses ( SingleAddressActionDetail detail )
-        {
-            if ( detail.Address != null )
-                detail.Address = null;
         }
 
 
@@ -363,6 +544,7 @@ namespace WorkSpeed.Business.Contexts
             {
                 return a != null && char.IsLetter( a.Letter[ 0 ] ) && a.Row > 0 && a.Section > 0 && a.Shelf > 0 && a.Box > 0;
             }
+
 
             public static bool CheckAbbreviation ( string abbreviations, string abbreviation )
             {
@@ -433,7 +615,5 @@ namespace WorkSpeed.Business.Contexts
                 return operations.FirstOrDefault( o => o.Name.Equals( a.Operation.Name ) ) != null;
             }
         }
-
-        
     }
 }

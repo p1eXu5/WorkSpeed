@@ -855,8 +855,8 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         #endregion
 
 
-        [ Test, Category( "ReceptionAction" ) ]
-        public void ImportFromXlsx_ValidReceptionAction_CanAddReceptionAction ()
+        [Test, Category("ReceptionAction")]
+        public void ImportFromXlsx_ValidReceptionAction_CanAddReceptionAction()
         {
             // Arrange:
             var service = GetImportService();
@@ -865,16 +865,16 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             };
 
             // Action:
-            service.ImportFromXlsx( ACTIONS, null );
+            service.ImportFromXlsx(ACTIONS, null);
 
             // Assert:
             var actions = service.DbContext.ReceptionActions.ToArray();
-            Assert.That( actions, Is.Not.Empty );
+            Assert.That(actions, Is.Not.Empty);
         }
 
 
-        [ Test, Category( "InventoryAction" ) ]
-        public void ImportFromXlsx_ValidInventoryAction_CanAddInventoryAction ()
+        [Test, Category("InventoryAction")]
+        public void ImportFromXlsx_ValidInventoryAction_CanAddInventoryAction()
         {
             // Arrange:
             var service = GetImportService();
@@ -883,48 +883,48 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             };
 
             // Action:
-            service.ImportFromXlsx( ACTIONS, null );
+            service.ImportFromXlsx(ACTIONS, null);
 
             // Assert:
             var actions = service.DbContext.InventoryActions.ToArray();
-            Assert.That( actions, Is.Not.Empty );
+            Assert.That(actions, Is.Not.Empty);
         }
 
 
-        [ Test, Category( "ShipmentAction" ) ]
-        public void ImportFromXlsx_ValidShipmentAction_CanAddShipmentAction ()
-        {
-            // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { ShipmentAction = GetShipmentAction() }
-            };
+        //[ Test, Category( "ShipmentAction" ) ]
+        //public void ImportFromXlsx_ValidShipmentAction_CanAddShipmentAction ()
+        //{
+        //    // Arrange:
+        //    var service = GetImportService();
+        //    service.AllActions = new[] {
+        //        new AllActions { ShipmentAction = GetShipmentAction() }
+        //    };
 
-            // Action:
-            service.ImportFromXlsx( ACTIONS, null );
+        //    // Action:
+        //    service.ImportFromXlsx( ACTIONS, null );
 
-            // Assert:
-            var actions = service.DbContext.ShipmentActions.ToArray();
-            Assert.That( actions, Is.Not.Empty );
-        }
+        //    // Assert:
+        //    var actions = service.DbContext.ShipmentActions.ToArray();
+        //    Assert.That( actions, Is.Not.Empty );
+        //}
 
 
-        [ Test, Category( "OtherAction" ) ]
-        public void ImportFromXlsx_ValidOtherAction_CanAddOtherAction ()
-        {
-            // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { OtherAction = GetOtherAction() }
-            };
+        //[ Test, Category( "OtherAction" ) ]
+        //public void ImportFromXlsx_ValidOtherAction_CanAddOtherAction ()
+        //{
+        //    // Arrange:
+        //    var service = GetImportService();
+        //    service.AllActions = new[] {
+        //        new AllActions { OtherAction = GetOtherAction() }
+        //    };
 
-            // Action:
-            service.ImportFromXlsx( ACTIONS, null );
+        //    // Action:
+        //    service.ImportFromXlsx( ACTIONS, null );
 
-            // Assert:
-            var actions = service.DbContext.OtherActions.ToArray();
-            Assert.That( actions, Is.Not.Empty );
-        }
+        //    // Assert:
+        //    var actions = service.DbContext.OtherActions.ToArray();
+        //    Assert.That( actions, Is.Not.Empty );
+        //}
 
 
 
