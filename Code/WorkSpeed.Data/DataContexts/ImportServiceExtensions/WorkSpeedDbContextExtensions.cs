@@ -32,19 +32,25 @@ namespace WorkSpeed.Data.DataContexts.ImportServiceExtensions
         public static IQueryable< Position > GetPositions ( this WorkSpeedDbContext dbContext )
             => dbContext.Positions.AsQueryable();
 
-        public static async Task< OtherAction > GetOtherActionAsync ( this WorkSpeedDbContext dbContext, OtherAction product )
-            => await dbContext.OtherActions.FirstOrDefaultAsync( p => p.Id == product.Id );
+        public static IQueryable< Operation > GetOperations ( this WorkSpeedDbContext dbContext )
+            => dbContext.Operations.AsQueryable();
 
-        public static async Task< ShipmentAction > GetShipmentActionAsync ( this WorkSpeedDbContext dbContext, ShipmentAction product )
-            => await dbContext.ShipmentActions.FirstOrDefaultAsync( p => p.Id == product.Id );
+        public static IQueryable< Address > GetAddresses ( this WorkSpeedDbContext dbContext )
+            => dbContext.Addresses.AsQueryable();
 
-        public static async Task< InventoryAction > GetInventoryActionAsync ( this WorkSpeedDbContext dbContext, InventoryAction product )
-            => await dbContext.InventoryActions.FirstOrDefaultAsync( p => p.Id == product.Id );
+        public static async Task< DoubleAddressAction > GetDoubleAddressActionAsync ( this WorkSpeedDbContext dbContext, DoubleAddressAction action )
+            => await dbContext.DoubleAddressActions.FirstOrDefaultAsync( a => a.Id.Equals( action.Id ) );
 
-        public static async Task< ReceptionAction > GetReceptionActionAsync ( this WorkSpeedDbContext dbContext, ReceptionAction product )
-            => await dbContext.ReceptionActions.FirstOrDefaultAsync( p => p.Id == product.Id );
+        public static async Task< OtherAction > GetOtherActionAsync ( this WorkSpeedDbContext dbContext, OtherAction action )
+            => await dbContext.OtherActions.FirstOrDefaultAsync( a => a.Id.Equals( action.Id ) );
 
-        public static async Task< DoubleAddressAction > GetDoubleAddressActionAsync ( this WorkSpeedDbContext dbContext, DoubleAddressAction product )
-            => await dbContext.DoubleAddressActions.FirstOrDefaultAsync( p => p.Id == product.Id );
+        public static async Task< ShipmentAction > GetShipmentActionAsync ( this WorkSpeedDbContext dbContext, ShipmentAction action )
+            => await dbContext.ShipmentActions.FirstOrDefaultAsync( a => a.Id.Equals( action.Id ) );
+
+        public static async Task< InventoryAction > GetInventoryActionAsync ( this WorkSpeedDbContext dbContext, InventoryAction action )
+            => await dbContext.InventoryActions.FirstOrDefaultAsync( a => a.Id.Equals( action.Id ) );
+
+        public static async Task< ReceptionAction > GetReceptionActionAsync ( this WorkSpeedDbContext dbContext, ReceptionAction action )
+            => await dbContext.ReceptionActions.FirstOrDefaultAsync( a => a.Id.Equals( action.Id ) );
     }
 }

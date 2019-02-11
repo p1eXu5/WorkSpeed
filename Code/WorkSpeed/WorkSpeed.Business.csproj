@@ -121,8 +121,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contexts\Comparers\AddressEqualityComparer.cs" />
     <Compile Include="Contexts\Comparers\ComparerFactory.cs" />
-    <Compile Include="Contexts\Comparers\EmployeeEqualityComparer.cs" />
+    <Compile Include="Contexts\Comparers\EntityEqualityComparer.cs" />
     <Compile Include="FileModels\OtherActionImportModel.cs" />
     <Compile Include="Models\ActionModels\Dims.cs" />
     <Compile Include="Models\ActionModels\ImportedEmployeeAction.cs" />

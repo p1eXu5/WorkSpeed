@@ -151,6 +151,7 @@
     <Compile Include="DataContexts\Configurations\ShortBreakScheduleConfiguration.cs" />
     <Compile Include="DataContexts\ImportServiceExtensions\WorkSpeedDbContextExtensions.cs" />
     <Compile Include="DataContexts\WorkSpeedDbContextExtensions.cs" />
+    <Compile Include="Models\Actions\EmployeeActionBase.cs" />
     <Compile Include="Models\CategoryCategorySet.cs" />
     <Compile Include="Models\IKeyedEntity.cs" />
     <Compile Include="DataContexts\WorkSpeedDbContext.cs" />
@@ -164,7 +165,6 @@
     <Compile Include="Models\ActionDetails\SingleAddressActionDetail.cs" />
     <Compile Include="Models\Actions\OtherAction.cs" />
     <Compile Include="Models\Category.cs" />
-    <Compile Include="Models\Actions\EmployeeActionBase.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Appointment.cs" />
     <Compile Include="Models\CategorySet.cs" />

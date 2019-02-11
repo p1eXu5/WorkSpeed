@@ -67,6 +67,7 @@ namespace WorkSpeed.Data.DataContexts
 
         public DbSet< Product > Products { get; set; }
         public DbSet< Operation > Operations { get; set; }
+        public DbSet< Address > Addresses { get; set; }
 
         public DbSet< InventoryAction > InventoryActions { get; set; }
         public DbSet< ReceptionAction > ReceptionActions { get; set; }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WorkSpeed.Data.Models.Actions
 {
-    public abstract class EmployeeActionBase : IEntity
+    public abstract class EmployeeActionBase : IKeyedEntity< string >
     {
         [ MinLength(11), MaxLength(11) ]
         public string Id { get; set; }

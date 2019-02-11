@@ -86,7 +86,7 @@ namespace WorkSpeed.Business.Contexts
                     continue;
                 }
 
-                if ( Check.CheckDifferent( product, dbProduct ) ) {
+                if ( Check.CheckProductDifference( product, dbProduct ) ) {
                     updateProducts.Add( dbProduct );
                 }
             }
@@ -149,9 +149,13 @@ namespace WorkSpeed.Business.Contexts
             //var shipmentActions = actions.Select( a => a.ShipmentAction ).ToArray();
             //var otherActions = actions.Select( a => a.OtherAction ).ToArray();
 
-            StoreDoubleActions( doubleAddressActions );
-            await _dbContext.SaveChangesAsync();
+            var employees = _dbContext.GetEmployees().ToArray();
+            var operations = _dbContext.GetOperations().ToArray();
+            var addresses = await _dbContext.GetAddresses().ToArrayAsync();
+
+            StoreDoubleActions( doubleAddressActions, operations, addresses, employees );
             StoreReceptionActions( receptionActions );
+
             await _dbContext.SaveChangesAsync();
             //StoreInventoryActions( inventoryActions );
             //StoreShipmentActions( shipmentActions );
@@ -159,114 +163,141 @@ namespace WorkSpeed.Business.Contexts
 
         }
 
-        private async void StoreDoubleActions ( DoubleAddressAction[] data )
+        private async void StoreDoubleActions ( DoubleAddressAction[] data, Operation[] operations, Address[] dbAddresses, Employee[] employees )
         {
-            var newActions = new List< DoubleAddressAction >();
-            var operations = _dbContext.Operations.ToArray();
+            var newActions = new HashSet< DoubleAddressAction >( ComparerFactory.EmployeeActionBaseComparer );
+            var newProducts = new HashSet< Product >( ComparerFactory.ProductComparer );
+            var newAddresses = new HashSet< Address >( ComparerFactory.AddressComparer );
+            var newEmployees = new HashSet< Employee >( ComparerFactory.EmployeeComparer );
 
-            foreach ( var doubleAddressAction in data.Where( a => Check.IsDoubleActionCorrect( a, operations, da => ((DoubleAddressAction)da).DoubleAddressDetails[0].Product ) ) ) {
+            var actions = data.AsParallel()
+                              .Where( a => Check.IsEmployeeBaseActionCorrect( a, operations ) 
+                                           && Check.IsProductCorrect( a.DoubleAddressDetails[0].Product )
+                                           && Check.IsAddressCorrect( a.DoubleAddressDetails[0].SenderAddress )
+                                           && Check.IsAddressCorrect( a.DoubleAddressDetails[0].ReceiverAddress ) )
+                              .AsSequential()
+                              .GroupBy( a => a.Id );
 
-                RemoveAddresses( doubleAddressAction.DoubleAddressDetails[0] );
+            foreach ( var actionGrouping in actions ) {
 
-                // check product
-                var product = doubleAddressAction.DoubleAddressDetails[0].Product;
-                var dbProduct = await _dbContext.GetProductAsync( product );
-                if ( dbProduct != null ) {
-                    doubleAddressAction.DoubleAddressDetails[0].Product = dbProduct;
-                    doubleAddressAction.DoubleAddressDetails[0].ProductId = dbProduct.Id;
+                // check action
+                var action = actionGrouping.First();
+                
+                var dbAction = await _dbContext.GetDoubleAddressActionAsync( action );
+                if ( dbAction != null ) continue;
+
+                var dbOperation = operations.FirstOrDefault( o => o.Name.Equals( action.Operation.Name ) );
+                if ( null == dbOperation ) continue;
+
+                var dbEmployee = employees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
+                var newEmployee = newEmployees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
+                if ( dbEmployee == null && newEmployee == null ) {
+                    newEmployees.Add( action.Employee );
+                }
+                else if ( dbEmployee != null ) {
+                    action.Employee = dbEmployee;
+                }
+                else {
+                    action.Employee = newEmployee;
                 }
 
-                var dbAction = await _dbContext.GetReceptionActionAsync( receptionAction );
 
-                if ( null == dbAction ) {
-                    _dbContext.Add( receptionAction );
-                }    
+                var details = new List< DoubleAddressActionDetail >();
 
-                _dbContext.SaveChanges();
-            }
+                foreach ( var detail in actionGrouping.Select( a => a.DoubleAddressDetails[0] ) ) {
+                    
+                    // check product
 
-        }
+                    var dbProduct = await _dbContext.GetProductAsync( detail.Product );
+                    var newProduct = newProducts.FirstOrDefault( p => p.Id == detail.Product.Id );
 
-        private async void StoreReceptionActions ( ReceptionAction[] data )
-        {
-            var newActions = new List< ReceptionAction >();
-            var operations = _dbContext.Operations.ToArray();
+                    if ( dbProduct?.Parent == null && newProduct == null ) {
 
-            foreach ( var receptionAction in data.Where( a => Check.IsDoubleActionCorrect( a, operations, ra => ((ReceptionAction)ra).ReceptionActionDetails[0].Product ) ) ) {
+                        if ( detail.Product.Parent != null) {
 
-                RemoveAddresses( receptionAction.ReceptionActionDetails[0] );
+                            if ( !Check.IsProductCorrect( detail.Product.Parent ) ) {
+                                detail.Product.Parent = null;
+                            }
+                            else if ( detail.Product.Parent.Parent != null && !Check.IsProductCorrect( detail.Product.Parent.Parent ) ) {
+                                detail.Product.Parent.Parent = null;
+                            }
+                        }
 
-                // check product
-                var product = receptionAction.ReceptionActionDetails[0].Product;
-                var dbProduct = await _dbContext.GetProductAsync( product );
-                if ( dbProduct != null ) {
-                    receptionAction.ReceptionActionDetails[0].Product = dbProduct;
-                    receptionAction.ReceptionActionDetails[0].ProductId = dbProduct.Id;
+                        if ( dbProduct != null ) {
+                            dbProduct.Parent = detail.Product.Parent;
+                        }
+                        else {
+                            newProducts.Add( detail.Product );
+                        }
+                    }
+
+                    if ( dbProduct != null ) {
+                        detail.Product = dbProduct;
+                        detail.ProductId = dbProduct.Id;
+                    }
+                    else if ( newProduct != null ) {
+                        detail.Product = newProduct;
+                        detail.ProductId = newProduct.Id;
+                    }
+
+                    // check addresses
+                    detail.ReceiverAddress = CheckAddress( detail.ReceiverAddress, dbAddresses, newAddresses );
+                    detail.SenderAddress = CheckAddress( detail.SenderAddress, dbAddresses, newAddresses );
+
+                    detail.DoubleAddressAction = action;
+                    detail.DoubleAddressActionId = action.Id;
+
+                    details.Add( detail );
                 }
 
-                var dbAction = await _dbContext.GetReceptionActionAsync( receptionAction );
-
-                if ( null == dbAction ) {
-                    _dbContext.Add( receptionAction );
-                }    
-
-                _dbContext.SaveChanges();
+                action.DoubleAddressDetails = details;
             }
         }
 
-
-        private async void StoreOtherActions ( IEnumerable< OtherAction > data )
+        Address CheckAddress ( Address address, Address[] dbAddresses, HashSet< Address > newAddresses )
         {
-            // new Operation and Employee can be
-            var newActions = new List< OtherAction >();
+            var dbAddress = dbAddresses.FirstOrDefault( adr => adr.Letter.Equals( address.Letter ) && adr.Row == address.Row
+                                                                && adr.Section == address.Section && adr.Shelf == address.Shelf
+                                                                && adr.Box == address.Box );
 
-            foreach ( var otherAction in data.Where( a => !string.IsNullOrWhiteSpace(a.Id ) && a.Id.Length == 11 ) ) {
-
-                var dbAction = await _dbContext.GetOtherActionAsync( otherAction );
-
-                if ( null == dbAction ) {
-                    newActions.Add( otherAction );
-                }
+            if ( dbAddress != null ) {
+                return dbAddress;
             }
 
-            await _dbContext.AddRangeAsync( newActions );
+            var newAddress = newAddresses.FirstOrDefault( adr => adr.Letter.Equals( address.Letter ) && adr.Row == address.Row
+                                                                && adr.Section == address.Section && adr.Shelf == address.Shelf
+                                                                && adr.Box == address.Box );
+
+            if ( newAddress != null ) {
+                return newAddress;
+            }
+
+            newAddresses.Add( address );
+            return address;
         }
 
-        private async void StoreShipmentActions ( IEnumerable< ShipmentAction > data )
+        private void StoreReceptionActions ( ReceptionAction[] data )
         {
-            // new Operation and Employee can be
-            var newActions = new List< ShipmentAction >();
-
-            foreach ( var shipmentAction in data.Where( a => !string.IsNullOrWhiteSpace(a.Id ) && a.Id.Length == 11 ) ) {
-
-                var dbAction = await _dbContext.GetShipmentActionAsync( shipmentAction );
-
-                if ( null == dbAction ) {
-                    newActions.Add( shipmentAction );
-                }
-            }
-
-            await _dbContext.AddRangeAsync( newActions );
+            throw new NotImplementedException();
         }
 
-        private async void StoreInventoryActions ( IEnumerable< InventoryAction > data )
+
+        private void StoreOtherActions ( IEnumerable< OtherAction > data )
         {
-            // new Operation, Employee, Product and ProductGroup can be
-            var newActions = new List< InventoryAction >();
-
-            foreach ( var inventoryAction in data.Where( a => !string.IsNullOrWhiteSpace(a.Id ) && a.Id.Length == 11 ) ) {
-
-                var dbAction = await _dbContext.GetInventoryActionAsync( inventoryAction );
-
-                if ( null == dbAction ) {
-                    newActions.Add( inventoryAction );
-                }
-            }
-
-            await _dbContext.AddRangeAsync( newActions );
+            throw new NotImplementedException();
         }
 
+        private void StoreShipmentActions ( IEnumerable< ShipmentAction > data )
+        {
+            throw new NotImplementedException();
+        }
 
+        private void StoreInventoryActions ( IEnumerable< InventoryAction > data )
+        {
+            throw new NotImplementedException();
+        }
+
+        
 
         private void RemoveAddresses ( DoubleAddressActionDetail detail )
         {
@@ -289,32 +320,25 @@ namespace WorkSpeed.Business.Contexts
         {
             private static readonly DateTime DNS_BEGIN_TIME = new DateTime( 1998, 1, 1, 0, 0, 0);
 
-            public static bool IsDoubleActionCorrect ( EmployeeActionBase a, Operation[] operations, Func< EmployeeActionBase, Product > getter )
+
+            public static bool IsEmployeeBaseActionCorrect ( EmployeeActionBase a, Operation[] operations)
             {
                 if ( a.Id.Length != 10 ) return false;
                 int.TryParse( a.Id.Substring( 4 ), out var num );
                 var now = DateTime.Now;
 
-                var product = getter.Invoke( a );
-
                 return num > 0
                        && !string.IsNullOrWhiteSpace( a.Id )
-                       && char.IsLetter( a.Id[0] ) && char.IsLetter( a.Id[1] )
-                       && char.IsDigit( a.Id[2] ) && a.Id[3].Equals( '-' )
+                       && char.IsLetter( a.Id[ 0 ] ) && char.IsLetter( a.Id[ 1 ] )
+                       && char.IsDigit( a.Id[ 2 ] ) && a.Id[ 3 ].Equals( '-' )
                        && a.StartTime >= DNS_BEGIN_TIME && a.StartTime < now && a.Duration > TimeSpan.Zero
                        && IsEmployeeCorrect( a.Employee )
-                       && IsOperationCorrect( a, operations )
-                       && product != null && Check.IsProductCorrect( product );
-            }
-
-            static bool IsOperationCorrect ( EmployeeActionBase a, Operation[] operations )
-            {
-                return operations.FirstOrDefault( o => o.Name.Equals( a.Operation.Name ) ) != null;
+                       && IsOperationCorrect( a, operations );
             }
 
             public static bool IsProductCorrect ( Product p )
             {
-                return !String.IsNullOrWhiteSpace( p.Name ) && p.Id > 0;
+                return p != null && !String.IsNullOrWhiteSpace( p.Name ) && p.Id > 0;
             }
 
             public static bool IsEmployeeCorrect ( Employee e )
@@ -328,6 +352,11 @@ namespace WorkSpeed.Business.Contexts
                        && !string.IsNullOrWhiteSpace( e.Id )
                        && e.Name.Length >= 1
                        && char.IsLetter( e.Id[0] ) && char.IsLetter( e.Id[1] );
+            }
+
+            public static bool IsAddressCorrect ( Address a )
+            {
+                return char.IsLetter( a.Letter[ 0 ] ) && a.Row > 0 && a.Section > 0 && a.Shelf > 0 && a.Box > 0;
             }
 
             public static bool CheckAbbreviation ( string abbreviations, string abbreviation )
@@ -345,7 +374,7 @@ namespace WorkSpeed.Business.Contexts
                 return dbEntity;
             }
 
-            public static bool CheckDifferent ( Product donor, Product acceptor )
+            public static bool CheckProductDifference ( Product donor, Product acceptor )
             {
                 bool isDifferent = false;
 
@@ -382,6 +411,12 @@ namespace WorkSpeed.Business.Contexts
 
                     return acceptorValue;
                 }
+            }
+
+
+            private static bool IsOperationCorrect ( EmployeeActionBase a, Operation[] operations )
+            {
+                return operations.FirstOrDefault( o => o.Name.Equals( a.Operation.Name ) ) != null;
             }
         }
 
