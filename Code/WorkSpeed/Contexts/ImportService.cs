@@ -348,7 +348,9 @@ namespace WorkSpeed.Business.Contexts
 
             foreach ( var action in actions ) {
                 // check action
-                if ( !CheckWithEmployeeAction( dbActions, action ) ) continue;
+                if ( !CheckWithEmployeeAction( dbActions, 
+                                               action, 
+                                               a => a.Id.Equals( action.Id ) && a.EmployeeId.Equals( action.EmployeeId ) ) ) continue;
 
                 newActions.Add( action );
             }
@@ -379,9 +381,9 @@ namespace WorkSpeed.Business.Contexts
         }
 
 
-        private bool CheckWithEmployeeAction< T > ( T[] dbActions, T action ) where T : EmployeeActionBase
+        private bool CheckWithEmployeeAction< T > ( T[] dbActions, T action, Predicate<T> predicate = null ) where T : EmployeeActionBase
         {
-            var dbAction = dbActions.FirstOrDefault( a => a.Id.Equals( action.Id ) );
+            var dbAction = dbActions.FirstOrDefault( a => predicate?.Invoke( a ) ?? a.Id.Equals( action.Id ) );
             if ( dbAction != null ) return false;
 
             var dbOperation = _operations.FirstOrDefault( o => o.Name.Equals( action.Operation.Name ) );
