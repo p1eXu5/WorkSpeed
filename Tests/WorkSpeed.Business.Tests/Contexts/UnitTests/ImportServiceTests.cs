@@ -891,40 +891,42 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         }
 
 
-        //[ Test, Category( "ShipmentAction" ) ]
-        //public void ImportFromXlsx_ValidShipmentAction_CanAddShipmentAction ()
-        //{
-        //    // Arrange:
-        //    var service = GetImportService();
-        //    service.AllActions = new[] {
-        //        new AllActions { ShipmentAction = GetShipmentAction() }
-        //    };
+        [Test, Category("ShipmentAction")]
+        public void ImportFromXlsx_ValidShipmentAction_CanAddShipmentAction()
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.AllActions = new[] {
+                new AllActions { ShipmentAction = GetShipmentAction() },
+                new AllActions { ShipmentAction = GetShipmentAction() },
+            };
+            service.AllActions[1].ShipmentAction.Employee = new Employee { Id = "ZZ12345", Name = "OtherEmployee" };
 
-        //    // Action:
-        //    service.ImportFromXlsx( ACTIONS, null );
+            // Action:
+            service.ImportFromXlsx(ACTIONS, null);
 
-        //    // Assert:
-        //    var actions = service.DbContext.ShipmentActions.ToArray();
-        //    Assert.That( actions, Is.Not.Empty );
-        //}
+            // Assert:
+            var actions = service.DbContext.ShipmentActions.ToArray();
+            Assert.That(actions, Is.Not.Empty);
+        }
 
 
-        //[ Test, Category( "OtherAction" ) ]
-        //public void ImportFromXlsx_ValidOtherAction_CanAddOtherAction ()
-        //{
-        //    // Arrange:
-        //    var service = GetImportService();
-        //    service.AllActions = new[] {
-        //        new AllActions { OtherAction = GetOtherAction() }
-        //    };
+        [Test, Category("OtherAction")]
+        public void ImportFromXlsx_ValidOtherAction_CanAddOtherAction()
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.AllActions = new[] {
+                new AllActions { OtherAction = GetOtherAction() }
+            };
 
-        //    // Action:
-        //    service.ImportFromXlsx( ACTIONS, null );
+            // Action:
+            service.ImportFromXlsx(ACTIONS, null);
 
-        //    // Assert:
-        //    var actions = service.DbContext.OtherActions.ToArray();
-        //    Assert.That( actions, Is.Not.Empty );
-        //}
+            // Assert:
+            var actions = service.DbContext.OtherActions.ToArray();
+            Assert.That(actions, Is.Not.Empty);
+        }
 
 
 

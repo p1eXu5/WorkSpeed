@@ -36,7 +36,7 @@ namespace WorkSpeed.Business.Contexts
 
         private readonly HashSet< Employee > _newEmployees = new HashSet< Employee >( ComparerFactory.EmployeeComparer );
         private readonly HashSet< Address > _newAddresses = new HashSet< Address >( ComparerFactory.AddressComparer );
-
+        private readonly HashSet< Product > _newProducts = new HashSet< Product >( ComparerFactory.ProductComparer );
         #region Ctor
 
         public ImportService ( WorkSpeedDbContext dbContext, ITypeRepository typeRepository ) : base( dbContext )
@@ -152,8 +152,8 @@ namespace WorkSpeed.Business.Contexts
             var doubleAddressActions = actions.Select( a => a.DoubleAddressAction ).ToArray();
             var receptionActions = actions.Select( a => a.ReceptionAction ).ToArray();
             var inventoryActions = actions.Select( a => a.InventoryAction ).ToArray();
-            //var shipmentActions = actions.Select( a => a.ShipmentAction ).ToArray();
-            //var otherActions = actions.Select( a => a.OtherAction ).ToArray();
+            var shipmentActions = actions.Select( a => a.ShipmentAction ).ToArray();
+            var otherActions = actions.Select( a => a.OtherAction ).ToArray();
 
             lock ( _locker ) {
                 
@@ -163,6 +163,7 @@ namespace WorkSpeed.Business.Contexts
 
                 _newEmployees.Clear();
                 _newAddresses.Clear();
+                _newProducts.Clear();
 
                 if ( doubleAddressActions[0] != null ) {
                     StoreDoubleActions( doubleAddressActions );
@@ -176,17 +177,20 @@ namespace WorkSpeed.Business.Contexts
                     StoreInventoryActions( inventoryActions );
                 }
 
+                if ( shipmentActions[0] != null ) {
+                    StoreShipmentActions( shipmentActions );
+                }
+
+                if ( otherActions[0] != null ) {
+                    StoreOtherActions( otherActions );
+                }
+
                 _dbContext.SaveChanges();
             }
         }
 
         private async void StoreDoubleActions ( DoubleAddressAction[] data )
         {
-
-            var newProducts = new HashSet< Product >( ComparerFactory.ProductComparer );
-            
-            var newEmployees = new HashSet< Employee >( ComparerFactory.EmployeeComparer );
-
             var actions = data.AsParallel()
                               .Where( a => Check.IsEmployeeBaseActionCorrect( a, _operations ) 
                                            && Check.IsProductCorrect(a.DoubleAddressDetails[0].Product)
@@ -207,8 +211,8 @@ namespace WorkSpeed.Business.Contexts
 
                 // check action
                 var action = actionGrouping.First();
-                
                 if ( !(CheckWithEmployeeAction( dbActions, action ) ) ) continue;
+
                 if ( !actionGrouping.All( a => a.Employee.Id.Equals( action.Employee.Id ) && a.Operation.Name.Equals( action.Operation.Name ) )) continue;
 
                 var details = new List< DoubleAddressActionDetail >();
@@ -216,7 +220,7 @@ namespace WorkSpeed.Business.Contexts
                 foreach ( var detail in actionGrouping.Select( a => a.DoubleAddressDetails[0] ) ) {
                     
                     // check product
-                    await CheckProduct( detail, newProducts );
+                    await CheckProduct( detail );
 
                     // check addresses
                     CheckAddress( detail.ReceiverAddress, a => detail.ReceiverAddress = a );
@@ -237,18 +241,14 @@ namespace WorkSpeed.Business.Contexts
 
         private async void StoreReceptionActions ( ReceptionAction[] data )
         {
-            var newActions = new HashSet< ReceptionAction >( ComparerFactory.EmployeeActionBaseComparer );
-
-            var newProducts = new HashSet< Product >( ComparerFactory.ProductComparer );
-            var newAddresses = new HashSet< Address >( ComparerFactory.AddressComparer );
-            var newEmployees = new HashSet< Employee >( ComparerFactory.EmployeeComparer );
-
             var actions = data.AsParallel()
                               .Where( a => Check.IsEmployeeBaseActionCorrect( a, _operations ) 
                                            && Check.IsProductCorrect( a.ReceptionActionDetails[0].Product )
                                            && Check.IsAddressCorrect( a.ReceptionActionDetails[0].Address ) )
                               .AsSequential()
                               .GroupBy( a => a.Id ).ToArray();
+
+            var newActions = new HashSet< ReceptionAction >( ComparerFactory.EmployeeActionBaseComparer );
 
             var periodStart = actions.Min( a => a.First().StartTime );
             var periodEnd = actions.Max( a => a.First().StartTime );
@@ -259,26 +259,7 @@ namespace WorkSpeed.Business.Contexts
 
                 // check action
                 var action = actionGrouping.First();
-                
-                var dbAction = dbActions.FirstOrDefault( a => a.Id.Equals( action.Id ) );
-                if ( dbAction != null ) continue;
-
-                var dbOperation = _operations.FirstOrDefault( o => o.Name.Equals( action.Operation.Name ) );
-                if ( null == dbOperation ) continue;
-                action.Operation = dbOperation;
-
-                var dbEmployee = _employees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
-                var newEmployee = newEmployees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
-
-                if ( dbEmployee == null && newEmployee == null ) {
-                    newEmployees.Add( action.Employee );
-                }
-                else if ( dbEmployee != null ) {
-                    action.Employee = dbEmployee;
-                }
-                else {
-                    action.Employee = newEmployee;
-                }
+                if ( !(CheckWithEmployeeAction( dbActions, action ) ) ) continue;
 
                 if ( !actionGrouping.All( a => a.Employee.Id.Equals( action.Employee.Id ) && a.Operation.Name.Equals( action.Operation.Name ) )) continue;
 
@@ -287,7 +268,7 @@ namespace WorkSpeed.Business.Contexts
                 foreach ( var detail in actionGrouping.Select( a => a.ReceptionActionDetails[0] ) ) {
                     
                     // check product
-                    await CheckProduct( detail, newProducts );
+                    await CheckProduct( detail );
 
                     // check addresses
                     CheckAddress( detail.Address, a => detail.Address = a );
@@ -307,18 +288,14 @@ namespace WorkSpeed.Business.Contexts
 
         private async void StoreInventoryActions ( InventoryAction[] data  )
         {
-            var newActions = new HashSet< InventoryAction >( ComparerFactory.EmployeeActionBaseComparer );
-
-            var newProducts = new HashSet< Product >( ComparerFactory.ProductComparer );
-            var newAddresses = new HashSet< Address >( ComparerFactory.AddressComparer );
-            var newEmployees = new HashSet< Employee >( ComparerFactory.EmployeeComparer );
-
             var actions = data.AsParallel()
                               .Where( a => Check.IsEmployeeBaseActionCorrect( a, _operations ) 
                                            && Check.IsProductCorrect( a.InventoryActionDetails[0].Product )
                                            && Check.IsAddressCorrect( a.InventoryActionDetails[0].Address ) )
                               .AsSequential()
                               .GroupBy( a => a.Id ).ToArray();
+
+            var newActions = new HashSet<InventoryAction>(ComparerFactory.EmployeeActionBaseComparer);
 
             var periodStart = actions.Min( a => a.First().StartTime );
             var periodEnd = actions.Max( a => a.First().StartTime );
@@ -330,26 +307,7 @@ namespace WorkSpeed.Business.Contexts
 
                 // check action
                 var action = actionGrouping.First();
-                
-                var dbAction = dbActions.FirstOrDefault( a => a.Id.Equals( action.Id ) );
-                if ( dbAction != null ) continue;
-
-                var dbOperation = _operations.FirstOrDefault( o => o.Name.Equals( action.Operation.Name ) );
-                if ( null == dbOperation ) continue;
-                action.Operation = dbOperation;
-
-                var dbEmployee = _employees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
-                var newEmployee = newEmployees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
-
-                if ( dbEmployee == null && newEmployee == null ) {
-                    newEmployees.Add( action.Employee );
-                }
-                else if ( dbEmployee != null ) {
-                    action.Employee = dbEmployee;
-                }
-                else {
-                    action.Employee = newEmployee;
-                }
+                if ( !(CheckWithEmployeeAction( dbActions, action ) ) ) continue;
 
                 if ( !actionGrouping.All( a => a.Employee.Id.Equals( action.Employee.Id ) && a.Operation.Name.Equals( action.Operation.Name ) )) continue;
 
@@ -358,7 +316,7 @@ namespace WorkSpeed.Business.Contexts
                 foreach ( var detail in actionGrouping.Select( a => a.InventoryActionDetails[0] ) ) {
                     
                     // check product
-                    await CheckProduct( detail, newProducts );
+                    await CheckProduct( detail );
 
                     // check addresses
                     CheckAddress( detail.Address, a => detail.Address = a );
@@ -385,6 +343,7 @@ namespace WorkSpeed.Business.Contexts
             var periodStart = actions.Min( a => a.StartTime );
             var periodEnd = actions.Max( a => a.StartTime );
             if ( periodStart == periodEnd ) periodEnd += TimeSpan.FromMilliseconds( 1 );
+
             var dbActions = await _dbContext.GetShipmentActions( periodStart, periodEnd ).ToArrayAsync();
 
             foreach ( var action in actions ) {
@@ -445,10 +404,10 @@ namespace WorkSpeed.Business.Contexts
             return true;
         }
 
-        private async Task CheckProduct ( WithProductActionDetail detail, HashSet< Product > newProducts )
+        private async Task CheckProduct ( WithProductActionDetail detail )
         {
             var dbProduct = await _dbContext.GetProductAsync( detail.Product );
-            var newProduct = newProducts.FirstOrDefault( p => p.Id == detail.Product.Id );
+            var newProduct = _newProducts.FirstOrDefault( p => p.Id == detail.Product.Id );
 
             if ( dbProduct?.Parent == null && newProduct == null ) {
                 if ( detail.Product.Parent != null ) {
@@ -464,7 +423,7 @@ namespace WorkSpeed.Business.Contexts
                     dbProduct.Parent = detail.Product.Parent;
                 }
                 else {
-                    newProducts.Add( detail.Product );
+                    _newProducts.Add( detail.Product );
                 }
             }
 
