@@ -44,16 +44,20 @@
 
         <Button DockPanel.Dock="Bottom" 
                 Background="{StaticResource br_Window.Control.Background}"
+                Width="80"
+                Height="26"
                 Content="Принял"
                 HorizontalAlignment="Center"
                 Margin="0,10,0,40"
+                Command="{Binding OkCommand}"
                 />
 
-        <Border Margin="40,40,40,20">
-            <TextBlock Text="{}}{Binding Message}"
+        <ScrollViewer Margin="40,40,40,20" VerticalScrollBarVisibility="Auto">
+            <TextBlock Text="{Binding Message}"
                        HorizontalAlignment="Center"
+                       TextWrapping="Wrap"
                        />
-        </Border>
+        </ScrollViewer>
 
     </DockPanel>
 </Window>
