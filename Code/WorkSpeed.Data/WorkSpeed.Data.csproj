@@ -150,9 +150,9 @@
     <Compile Include="DataContexts\Configurations\ShortBreakScheduleConfiguration.cs" />
     <Compile Include="DataContexts\ImportServiceExtensions\WorkSpeedDbContextExtensions.cs" />
     <Compile Include="DataContexts\WorkSpeedDbContextExtensions.cs" />
-    <Compile Include="Migrations\20190212153752_InitialCreate.cs" />
-    <Compile Include="Migrations\20190212153752_InitialCreate.designer.cs">
-      <DependentUpon>20190212153752_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\20190212164014_InitialCreate.cs" />
+    <Compile Include="Migrations\20190212164014_InitialCreate.designer.cs">
+      <DependentUpon>20190212164014_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\WorkSpeedDbContextModelSnapshot.cs" />
     <Compile Include="Models\Actions\EmployeeActionBase.cs" />

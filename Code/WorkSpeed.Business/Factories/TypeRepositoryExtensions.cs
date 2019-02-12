@@ -10,6 +10,7 @@ namespace WorkSpeed.Business.Factories
         {
             repo.RegisterType< ProductImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
             repo.RegisterType< EmployeeImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
+            repo.RegisterType< EmployeeShortImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
 
             repo.RegisterType< ShipmentImportModel >( typeof( HeaderAttribute ), typeof( HiddenAttribute ) );
 

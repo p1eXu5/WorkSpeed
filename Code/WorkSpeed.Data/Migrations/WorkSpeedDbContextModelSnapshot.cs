@@ -440,7 +440,7 @@ namespace WorkSpeed.Data.Migrations
                         new
                         {
                             Id = 6,
-                            Abbreviations = "зам.пр.;зампоприёмке;",
+                            Abbreviations = "зам.пр.;зампоприёмке;зампр;",
                             InnerName = "Заместитель управляющего склада по отгрузке",
                             OfficialName = "Менеджер по отправке груза",
                             SalaryPerOneHour = 95.70m
@@ -448,7 +448,7 @@ namespace WorkSpeed.Data.Migrations
                         new
                         {
                             Id = 7,
-                            Abbreviations = "зам.отгр.;зампоотгрузке;",
+                            Abbreviations = "зам.отгр.;зампоотгрузке;замотгр;",
                             InnerName = "Заместитель управляющего склада по приемке",
                             OfficialName = "Менеджер по приему груза",
                             SalaryPerOneHour = 92.22m
@@ -808,9 +808,9 @@ namespace WorkSpeed.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Abbreviations = "кр.;кр;",
+                            Abbreviations = "упр.;упр;склад;",
                             Complexity = 1f,
-                            Name = "Крупняк"
+                            Name = "Склад"
                         },
                         new
                         {
@@ -829,58 +829,72 @@ namespace WorkSpeed.Data.Migrations
                         new
                         {
                             Id = 4,
+                            Abbreviations = "кр.;кр;",
+                            Complexity = 1f,
+                            Name = "Крупняк"
+                        },
+                        new
+                        {
+                            Id = 5,
                             Abbreviations = "дор.;дор;",
                             Complexity = 1f,
                             Name = "Дорогая"
                         },
                         new
                         {
-                            Id = 5,
+                            Id = 6,
                             Abbreviations = "мез.1;мезонин1;мез1;",
                             Complexity = 1f,
                             Name = "Мезонин, 1-й этаж"
                         },
                         new
                         {
-                            Id = 6,
+                            Id = 7,
                             Abbreviations = "мез.2;мезонин2;мез2;",
                             Complexity = 1f,
                             Name = "Мезонин, 2-й этаж"
                         },
                         new
                         {
-                            Id = 7,
+                            Id = 8,
                             Abbreviations = "мез.3;мезонин3;мез3;",
                             Complexity = 1f,
                             Name = "Мезонин, 3-й этаж"
                         },
                         new
                         {
-                            Id = 8,
+                            Id = 9,
                             Abbreviations = "мез.4;мезонин4;мез4;",
                             Complexity = 1f,
                             Name = "Мезонин, 4-й этаж"
                         },
                         new
                         {
-                            Id = 9,
+                            Id = 10,
                             Abbreviations = "рас.;расстановка;рас;",
                             Complexity = 1f,
                             Name = "Расстановка"
                         },
                         new
                         {
-                            Id = 10,
+                            Id = 11,
                             Abbreviations = "ст.см.мез.;ссммез;",
                             Complexity = 1f,
                             Name = "Старший смены, мезонин"
                         },
                         new
                         {
-                            Id = 11,
+                            Id = 12,
                             Abbreviations = "ст.см.кр.;ссмкр;",
                             Complexity = 1f,
                             Name = "Старший смены, крупняк"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Abbreviations = "вод.;водитель;вод;",
+                            Complexity = 1f,
+                            Name = "Водитель"
                         });
                 });
 

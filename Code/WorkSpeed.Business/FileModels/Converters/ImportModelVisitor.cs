@@ -59,6 +59,16 @@ namespace WorkSpeed.Business.FileModels.Converters
             };
         }
 
+        public Employee GetDbModel( EmployeeShortImportModel employeeImportModel )
+        {
+            return new Employee
+            {
+                Id = employeeImportModel.EmployeeId,
+                Name = employeeImportModel.EmployeeName,
+                IsActive = employeeImportModel.IsActive,
+            };
+        }
+
         public AllActions GetDbModel ( ProductivityImportModel productivityImportModel )
         {
             var actions = new AllActions();

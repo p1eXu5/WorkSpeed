@@ -125,6 +125,7 @@
     <Compile Include="Contexts\Comparers\ComparerFactory.cs" />
     <Compile Include="Contexts\Comparers\EntityEqualityComparer.cs" />
     <Compile Include="Contexts\Comparers\ShipmentActionComparer.cs" />
+    <Compile Include="FileModels\EmployeeShortImportModel.cs" />
     <Compile Include="FileModels\OtherActionImportModel.cs" />
     <Compile Include="Models\ActionModels\Dims.cs" />
     <Compile Include="Models\ActionModels\ImportedEmployeeAction.cs" />
@@ -202,6 +203,10 @@
     <Compile Include="WarehouseEntities.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Agbm.Tools\Code\Agbm.Helpers\Agbm.Helpers.csproj">
+      <Project>{12faa7bd-a5d4-48e3-80c4-6d7a72be99b0}</Project>
+      <Name>Agbm.Helpers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Agbm.Tools\Code\Agbm.NpoiExcel\Agbm.NpoiExcel.csproj">
       <Project>{47680bf8-c76a-44b9-bde3-694f1a73ccb1}</Project>
       <Name>Agbm.NpoiExcel</Name>

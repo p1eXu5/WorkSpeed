@@ -269,3 +269,4 @@ __pycache__/
 *.vpp~9
 *.vpp~10
 *.vpp*
+*.xlsx#

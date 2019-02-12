@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Agbm.Helpers.Extensions;
 using Agbm.NpoiExcel;
 using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Business.FileModels.Converters;
@@ -35,6 +36,7 @@ namespace WorkSpeed.Business.Contexts
 
         private Employee[] _employees;
         private Address[] _addresses;
+        private Product[] _products;
 
         private readonly HashSet< Employee > _newEmployees = new HashSet< Employee >( ComparerFactory.EmployeeComparer );
         private readonly HashSet< Address > _newAddresses = new HashSet< Address >( ComparerFactory.AddressComparer );
@@ -88,6 +90,18 @@ namespace WorkSpeed.Business.Contexts
                 return ExcelImporter.GetDataFromTable( table, typeMap.propertyMap, new ImportModelConverter< ProductImportModel, Product >() );
             }
 
+            if ( typeMap.type == typeof( EmployeeImportModel ) ) {
+                return ExcelImporter.GetDataFromTable( table, typeMap.propertyMap, new ImportModelConverter< EmployeeImportModel, Employee >() );
+            }
+
+            if ( typeMap.type == typeof( EmployeeShortImportModel ) ) {
+                return ExcelImporter.GetDataFromTable( table, typeMap.propertyMap, new ImportModelConverter< EmployeeShortImportModel, Employee >() );
+            }
+
+            if ( typeMap.type == typeof( ProductivityImportModel ) ) {
+                return ExcelImporter.GetDataFromTable( table, typeMap.propertyMap, new ImportModelConverter< ProductivityImportModel, AllActions >() );
+            }
+
 
             return ( IEnumerable< IEntity > )null;
         }
@@ -132,8 +146,14 @@ namespace WorkSpeed.Business.Contexts
             foreach ( var employee in data.Where( Check.IsEmployeeCorrect ) ) {
 
                 employee.Rank = dbRanks.FirstOrDefault( r => r.Number == employee.Rank?.Number );
-                employee.Appointment = dbAppointments.FirstOrDefault( a => Check.CheckAbbreviation( a.Abbreviations, employee.Appointment?.Abbreviations ) );
-                employee.Position = dbPositions.FirstOrDefault( p => Check.CheckAbbreviation( p.Abbreviations, employee.Position?.Abbreviations ) );
+
+                employee.Appointment = employee.Appointment?.Abbreviations == null 
+                                           ? null 
+                                           : dbAppointments.FirstOrDefault( a => Check.CheckAbbreviation( a.Abbreviations, employee.Appointment.Abbreviations ) );
+
+                employee.Position = employee.Position?.Abbreviations == null 
+                                        ? null 
+                                        : dbPositions.FirstOrDefault( p => Check.CheckAbbreviation( p.Abbreviations, employee.Position?.Abbreviations ) );
 
                 var dbEmployee = dbEmployees.FirstOrDefault( e => e.Id.Equals( employee.Id ) );
                 var newEmployee = newEmployees.FirstOrDefault( e => e.Id.Equals( employee.Id ) );
@@ -161,18 +181,40 @@ namespace WorkSpeed.Business.Contexts
         [ SuppressMessage( "ReSharper", "PossibleMultipleEnumeration" ) ]
         private void StoreData ( IEnumerable< AllActions > data )
         {
-            var actions = data.ToArray();
+            var doubleAddressActions = new List< DoubleAddressAction >();
+            var receptionActions = new List< ReceptionAction >();
+            var inventoryActions = new List< InventoryAction >();
+            var shipmentActions = new List< ShipmentAction >();
+            var otherActions = new List< OtherAction >();
 
-            var doubleAddressActions = actions.Select( a => a.DoubleAddressAction ).ToArray();
-            var receptionActions = actions.Select( a => a.ReceptionAction ).ToArray();
-            var inventoryActions = actions.Select( a => a.InventoryAction ).ToArray();
-            var shipmentActions = actions.Select( a => a.ShipmentAction ).ToArray();
-            var otherActions = actions.Select( a => a.OtherAction ).ToArray();
+            foreach ( var action in data ) {
+
+                if ( action.DoubleAddressAction != null ) {
+                    doubleAddressActions.Add( action.DoubleAddressAction );
+                    continue;
+                }
+                if ( action.ReceptionAction != null ) {
+                    receptionActions.Add( action.ReceptionAction );
+                    continue;
+                }
+                if ( action.InventoryAction != null ) {
+                    inventoryActions.Add( action.InventoryAction );
+                    continue;
+                }
+                if ( action.ShipmentAction != null ) {
+                    shipmentActions.Add( action.ShipmentAction );
+                    continue;
+                }
+                if ( action.OtherAction != null ) {
+                    otherActions.Add( action.OtherAction );
+                }
+            }
 
             lock ( _locker ) {
                 
                 _employees = _dbContext.GetEmployees().ToArray();
                 _addresses = _dbContext.GetAddresses().ToArray();
+                _products = _dbContext.GetProducts().ToArray();
 
                 _newEmployees.Clear();
                 _newAddresses.Clear();
@@ -180,23 +222,23 @@ namespace WorkSpeed.Business.Contexts
 
                 Check._nowDate = DateTime.Now;
 
-                if ( doubleAddressActions[0] != null ) {
+                if ( doubleAddressActions.Any() ) {
                     StoreDoubleActions( doubleAddressActions );
                 }
 
-                if ( receptionActions[0] != null ) {
+                if ( receptionActions.Any() ) {
                     StoreReceptionActions( receptionActions );
                 }
 
-                if ( inventoryActions[0] != null ) {
+                if ( inventoryActions.Any() ) {
                     StoreInventoryActions( inventoryActions );
                 }
 
-                if ( shipmentActions[0] != null ) {
+                if ( shipmentActions.Any() ) {
                     StoreShipmentActions( shipmentActions );
                 }
 
-                if ( otherActions[0] != null ) {
+                if ( otherActions.Any() ) {
                     StoreOtherActions( otherActions );
                 }
 
@@ -204,9 +246,8 @@ namespace WorkSpeed.Business.Contexts
             }
         }
 
-        private async void StoreDoubleActions ( DoubleAddressAction[] data )
+        private void StoreDoubleActions ( IEnumerable< DoubleAddressAction > data )
         {
-
             var actions = data.AsParallel()
                               .Where( a => Check.IsEmployeeBaseActionCorrect( a ) 
                                            && Check.IsProductCorrect(a.DoubleAddressDetails[0].Product)
@@ -221,7 +262,7 @@ namespace WorkSpeed.Business.Contexts
             var periodEnd = actions.Max( a => a.First().StartTime );
             if ( periodStart == periodEnd ) periodEnd += TimeSpan.FromMilliseconds( 1 );
 
-            var dbActions = await _dbContext.GetDoubleAddressActions( periodStart, periodEnd ).ToArrayAsync();
+            var dbActions = _dbContext.GetDoubleAddressActions( periodStart, periodEnd ).ToArray();
             var dbOperations = _dbContext.GetOperations( OperationGroups.Gathering ).ToArray();
 
             foreach ( var actionGrouping in actions ) {
@@ -245,7 +286,7 @@ namespace WorkSpeed.Business.Contexts
                 foreach ( var detail in actionGrouping.Select( a => a.DoubleAddressDetails[0] ) ) {
                     
                     // check product
-                    await CheckProduct( detail );
+                    CheckProduct( detail );
 
                     // check addresses
                     CheckAddress( detail.ReceiverAddress, a => detail.ReceiverAddress = a );
@@ -264,7 +305,7 @@ namespace WorkSpeed.Business.Contexts
             _dbContext.AddRange( newActions );
         }
 
-        private async void StoreReceptionActions ( ReceptionAction[] data )
+        private async void StoreReceptionActions ( IEnumerable< ReceptionAction > data )
         {
             var actions = data.AsParallel()
                               .Where( a => Check.IsEmployeeBaseActionCorrect( a ) 
@@ -279,7 +320,7 @@ namespace WorkSpeed.Business.Contexts
             var periodEnd = actions.Max( a => a.First().StartTime );
             if ( periodStart == periodEnd ) periodEnd += TimeSpan.FromMilliseconds( 1 );
 
-            var dbActions = await _dbContext.GetReceptionActions( periodStart, periodEnd ).ToArrayAsync();
+            var dbActions = _dbContext.GetReceptionActions( periodStart, periodEnd ).ToArray();
             var dbOperations = _dbContext.GetOperations( OperationGroups.Reception ).ToArray();
 
             foreach ( var actionGrouping in actions ) {
@@ -302,7 +343,7 @@ namespace WorkSpeed.Business.Contexts
                 foreach ( var detail in actionGrouping.Select( a => a.ReceptionActionDetails[0] ) ) {
                     
                     // check product
-                    await CheckProduct( detail );
+                    CheckProduct( detail );
 
                     // check addresses
                     CheckAddress( detail.Address, a => detail.Address = a );
@@ -320,7 +361,7 @@ namespace WorkSpeed.Business.Contexts
             _dbContext.AddRange( newActions );
         }
 
-        private async void StoreInventoryActions ( InventoryAction[] data  )
+        private async void StoreInventoryActions ( IEnumerable< InventoryAction > data  )
         {
             var actions = data.AsParallel()
                               .Where( a => Check.IsEmployeeBaseActionCorrect( a ) 
@@ -335,7 +376,7 @@ namespace WorkSpeed.Business.Contexts
             var periodEnd = actions.Max( a => a.First().StartTime );
             if ( periodStart == periodEnd ) periodEnd += TimeSpan.FromMilliseconds( 1 );
 
-            var dbActions = await _dbContext.GetInventoryActions( periodStart, periodEnd ).ToArrayAsync();
+            var dbActions = _dbContext.GetInventoryActions( periodStart, periodEnd ).ToArray();
             var dbOperations = _dbContext.GetOperations( OperationGroups.Inventory ).ToArray();
 
             foreach ( var actionGrouping in actions ) {
@@ -358,7 +399,7 @@ namespace WorkSpeed.Business.Contexts
                 foreach ( var detail in actionGrouping.Select( a => a.InventoryActionDetails[0] ) ) {
                     
                     // check product
-                    await CheckProduct( detail );
+                    CheckProduct( detail );
 
                     // check addresses
                     CheckAddress( detail.Address, a => detail.Address = a );
@@ -376,7 +417,7 @@ namespace WorkSpeed.Business.Contexts
             _dbContext.AddRange( newActions );
         }
 
-        private async void StoreShipmentActions ( ShipmentAction[] data )
+        private void StoreShipmentActions ( IEnumerable< ShipmentAction > data )
         {
             var newActions = new HashSet< ShipmentAction >( ComparerFactory.EmployeeActionBaseComparer );
 
@@ -386,7 +427,7 @@ namespace WorkSpeed.Business.Contexts
             var periodEnd = actions.Max( a => a.StartTime );
             if ( periodStart == periodEnd ) periodEnd += TimeSpan.FromMilliseconds( 1 );
 
-            var dbActions = await _dbContext.GetShipmentActions( periodStart, periodEnd ).ToArrayAsync();
+            var dbActions = _dbContext.GetShipmentActions( periodStart, periodEnd ).ToArray();
             var dbOperations = _dbContext.GetOperations( OperationGroups.Shipment ).ToArray();
 
             foreach ( var action in actions ) {
@@ -406,7 +447,7 @@ namespace WorkSpeed.Business.Contexts
             _dbContext.AddRange( newActions );
         }
 
-        private async void StoreOtherActions ( OtherAction[] data )
+        private async void StoreOtherActions ( IEnumerable< OtherAction > data )
         {
             var newActions = new HashSet< OtherAction >( ComparerFactory.EmployeeActionBaseComparer );
 
@@ -416,7 +457,7 @@ namespace WorkSpeed.Business.Contexts
             var periodEnd = actions.Max( a => a.StartTime );
             if ( periodStart == periodEnd ) periodEnd += TimeSpan.FromMilliseconds( 1 );
 
-            var dbActions = await _dbContext.GetOtherActions( periodStart, periodEnd ).ToArrayAsync();
+            var dbActions = _dbContext.GetOtherActions( periodStart, periodEnd ).ToArray();
             var dbOperations = _dbContext.GetOperations( OperationGroups.Other ).ToArray();
 
             foreach ( var action in actions ) {
@@ -453,9 +494,9 @@ namespace WorkSpeed.Business.Contexts
             }
         }
 
-        private async Task CheckProduct ( WithProductActionDetail detail )
+        private void CheckProduct ( WithProductActionDetail detail )
         {
-            var dbProduct = await _dbContext.GetProductAsync( detail.Product );
+            var dbProduct = _products.FirstOrDefault( p => p.Id == detail.ProductId );
             var newProduct = _newProducts.FirstOrDefault( p => p.Id == detail.Product.Id );
 
             if ( dbProduct?.Parent == null && newProduct == null ) {
@@ -510,6 +551,7 @@ namespace WorkSpeed.Business.Contexts
             return;
         }
 
+
         private static class Check
         {
             internal static DateTime _nowDate;
@@ -556,7 +598,7 @@ namespace WorkSpeed.Business.Contexts
             public static bool CheckAbbreviation ( string abbreviations, string abbreviation )
             {
                 var abreviations = abbreviations.Split( new[] { ';' } );
-                return abreviations.Contains( abbreviation );
+                return abreviations.Contains( abbreviation.RemoveWhitespaces() );
             }
 
             public static void CheckProductDifference ( Product donor, Product acceptor )
@@ -593,6 +635,11 @@ namespace WorkSpeed.Business.Contexts
                 }
             }
 
+            /// <summary>
+            /// Check new or changed data.
+            /// </summary>
+            /// <param name="donor">Current employee</param>
+            /// <param name="acceptor">Db or handled new employee</param>
             public static void CheckEmployeeDifference ( Employee donor, Employee acceptor )
             {
                 if ( acceptor.Rank == null && donor.Rank != null ) {
@@ -605,6 +652,10 @@ namespace WorkSpeed.Business.Contexts
 
                 if ( acceptor.Position == null && donor.Position != null ) {
                     acceptor.Position = donor.Position;
+                }
+
+                if ( acceptor.IsActive != donor.IsActive ) {
+                    acceptor.IsActive = donor.IsActive;
                 }
             }
         }
