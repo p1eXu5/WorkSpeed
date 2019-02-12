@@ -547,15 +547,6 @@ namespace WorkSpeed.Business.Contexts
                 return abreviations.Contains( abbreviation );
             }
 
-            public static IEntity CheckEntity ( IEntity entity, IEntity dbEntity )
-            {
-                if ( dbEntity == null && entity != null ) {
-                    dbEntity = entity;
-                }
-
-                return dbEntity;
-            }
-
             public static void CheckProductDifference ( Product donor, Product acceptor )
             {
                 acceptor.ItemLength = TryUpdateMeasure( donor.ItemLength, acceptor.ItemLength );
