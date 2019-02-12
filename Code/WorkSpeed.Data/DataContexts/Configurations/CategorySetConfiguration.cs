@@ -14,7 +14,7 @@ namespace WorkSpeed.Data.DataContexts.Configurations
             builder.HasKey( c => c.Id );
             builder.Property( c => c.Id ).UseSqlServerIdentityColumn();
 
-            builder.Property( a => a.Name ).HasColumnType( "varchar(255)" );
+            builder.Property( a => a.Name ).HasColumnType( "nvarchar(50)" );
 
             builder.HasMany( c => c.Categories ).WithOne( ccs => ccs.CategorySet );
 

@@ -14,7 +14,7 @@ namespace WorkSpeed.Data.DataContexts.Configurations
             builder.HasKey( p => p.Id );
             builder.Property( p => p.Id ).ValueGeneratedNever();
 
-            builder.Property( p => p.Name ).HasColumnType( "varchar(255)" ).IsRequired();
+            builder.Property( p => p.Name ).HasColumnType( "nvarchar(255)" ).IsRequired();
             builder.Property( p => p.IsGroup ).HasColumnType( "bit" ).IsRequired();
             builder.Property( p => p.ItemLength ).HasColumnType( "real" );
             builder.Property( p => p.ItemWidth ).HasColumnType( "real" );

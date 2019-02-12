@@ -12,9 +12,9 @@ namespace WorkSpeed.Data.DataContexts.Configurations
             builder.ToTable( "Employees", "dbo" );
 
             builder.HasKey( p => p.Id );
-            builder.Property( p => p.Id ).HasColumnType( "varchar(7)" );
+            builder.Property( p => p.Id ).HasColumnType( "nvarchar(7)" );
 
-            builder.Property( p => p.Name ).HasColumnType( "varchar(255)" ).IsRequired();
+            builder.Property( p => p.Name ).HasColumnType( "nvarchar(255)" ).IsRequired();
             builder.Property( p => p.IsActive ).HasColumnType( "bit" ).IsRequired();
             builder.Property( p => p.IsSmoker ).HasColumnType( "bit" );
             builder.Property( p => p.ProbationEnd ).HasColumnType( "datetime2" );

@@ -14,7 +14,7 @@ namespace WorkSpeed.Data.DataContexts.Configurations
             builder.HasKey( b => b.Id );
             builder.Property( b => b.Id ).UseSqlServerIdentityColumn();
 
-            builder.Property( b => b.Name ).HasColumnType( "varchar(25)" ).IsRequired();
+            builder.Property( b => b.Name ).HasColumnType( "nvarchar(25)" ).IsRequired();
             builder.Property( b => b.Duration ).HasColumnType( "time" );
             builder.Property( b => b.Periodicity ).HasColumnType( "time" );
             builder.Property( b => b.FirstBreakTime ).HasColumnType( "time" );

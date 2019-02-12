@@ -116,8 +116,8 @@ namespace WorkSpeed.Business.Contexts
                 }
             }
 
-            await _dbContext.AddRangeAsync( newProducts );
-            await _dbContext.SaveChangesAsync();
+            _dbContext.AddRange( newProducts );
+            _dbContext.SaveChanges();
         }
 
         private async void StoreData ( IEnumerable< Employee > data )
@@ -152,8 +152,8 @@ namespace WorkSpeed.Business.Contexts
                 }
             }
 
-            await _dbContext.AddRangeAsync( newEmployees );
-            await _dbContext.SaveChangesAsync();
+            _dbContext.AddRange( newEmployees );
+            _dbContext.SaveChanges();
         }
 
         
@@ -261,7 +261,7 @@ namespace WorkSpeed.Business.Contexts
                 newActions.Add( action );
             }
 
-            await _dbContext.AddRangeAsync( newActions );
+            _dbContext.AddRange( newActions );
         }
 
         private async void StoreReceptionActions ( ReceptionAction[] data )
@@ -317,7 +317,7 @@ namespace WorkSpeed.Business.Contexts
                 newActions.Add( action );
             }
 
-            await _dbContext.AddRangeAsync( newActions );
+            _dbContext.AddRange( newActions );
         }
 
         private async void StoreInventoryActions ( InventoryAction[] data  )
@@ -373,7 +373,7 @@ namespace WorkSpeed.Business.Contexts
                 newActions.Add( action );
             }
 
-            await _dbContext.AddRangeAsync( newActions );
+            _dbContext.AddRange( newActions );
         }
 
         private async void StoreShipmentActions ( ShipmentAction[] data )
@@ -403,7 +403,7 @@ namespace WorkSpeed.Business.Contexts
                 newActions.Add( action );
             }
 
-            await _dbContext.AddRangeAsync( newActions );
+            _dbContext.AddRange( newActions );
         }
 
         private async void StoreOtherActions ( OtherAction[] data )
@@ -433,7 +433,7 @@ namespace WorkSpeed.Business.Contexts
                 newActions.Add( action );
             }
 
-            await _dbContext.AddRangeAsync( newActions );
+            _dbContext.AddRange( newActions );
         }
 
 
@@ -509,7 +509,6 @@ namespace WorkSpeed.Business.Contexts
             _newAddresses.Add( address );
             return;
         }
-
 
         private static class Check
         {

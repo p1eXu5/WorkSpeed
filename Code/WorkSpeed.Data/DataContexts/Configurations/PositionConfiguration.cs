@@ -14,8 +14,8 @@ namespace WorkSpeed.Data.DataContexts.Configurations
             builder.HasKey( p => p.Id );
             builder.Property( p => p.Id ).UseSqlServerIdentityColumn();
 
-            builder.Property( p => p.Name ).HasColumnType( "varchar(50)" ).IsRequired();
-            builder.Property( p => p.Abbreviations ).HasColumnType( "varchar(50)").IsRequired();
+            builder.Property( p => p.Name ).HasColumnType( "nvarchar(50)" ).IsRequired();
+            builder.Property( p => p.Abbreviations ).HasColumnType( "nvarchar(50)").IsRequired();
             builder.Property( p => p.Complexity ).HasColumnType( "real" );
 
             builder.HasData( new Position[] {

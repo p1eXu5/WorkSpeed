@@ -14,10 +14,10 @@ namespace WorkSpeed.Data.DataContexts.Configurations
             builder.HasKey( a => a.Id );
             builder.Property( a => a.Id ).UseSqlServerIdentityColumn();
 
-            builder.Property( a => a.OfficialName ).HasColumnType( "varchar(50)" );
-            builder.Property( a => a.InnerName ).HasColumnType( "varchar(50)" ).IsRequired();
+            builder.Property( a => a.OfficialName ).HasColumnType( "nvarchar(50)" );
+            builder.Property( a => a.InnerName ).HasColumnType( "nvarchar(50)" ).IsRequired();
             builder.Property( a => a.SalaryPerOneHour ).HasColumnType( "decimal" );
-            builder.Property( a => a.Abbreviations ).HasColumnType( "varchar(50)" ).IsRequired();
+            builder.Property( a => a.Abbreviations ).HasColumnType( "nvarchar(50)" ).IsRequired();
 
             builder.HasData( new Appointment[] {
                 new Appointment { Id = 1, InnerName = "Грузчик", OfficialName = "Грузчик", SalaryPerOneHour = 47.85m, Abbreviations = "гр.;гр;груз;грузч.;" },
