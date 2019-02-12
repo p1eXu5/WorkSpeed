@@ -12,10 +12,8 @@ namespace WorkSpeed.Data.Models.Actions
         public TimeSpan Duration { get; set; }
         public string DocumentName { get; set; }
 
-        [Required]
         public Employee Employee { get; set; }
 
-        [Required]
         public Operation Operation { get; set; }
     }
 }

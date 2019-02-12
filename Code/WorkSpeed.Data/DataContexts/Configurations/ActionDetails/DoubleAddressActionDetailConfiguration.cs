@@ -8,7 +8,7 @@ namespace WorkSpeed.Data.DataContexts.Configurations.ActionDetails
     {
         public void Configure ( EntityTypeBuilder< DoubleAddressActionDetail > builder )
         {
-            builder.ToTable( "DoubleAddressDetails", "dbo" );
+            builder.ToTable( "DoubleAddressActionDetails", "dbo" );
 
             builder.HasKey( d => d.Id );
             builder.Property( d => d.Id ).UseSqlServerIdentityColumn();
@@ -22,10 +22,10 @@ namespace WorkSpeed.Data.DataContexts.Configurations.ActionDetails
             builder.HasOne( d => d.ReceiverAddress )
                    .WithMany();
 
-            builder.HasOne( d => d.DoubleAddressAction )
-                   .WithMany( a => a.DoubleAddressDetails )
-                   .HasForeignKey( d => d.DoubleAddressActionId )
-                   .IsRequired();
+            //builder.HasOne( d => d.DoubleAddressAction )
+            //       .WithMany( a => a.DoubleAddressDetails )
+            //       .HasForeignKey( d => d.DoubleAddressActionId )
+            //       .IsRequired();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace WorkSpeed.Data.DataContexts.Configurations.Actions
             builder.Property( d => d.ClientCargoQuantity ).HasColumnType( "real" );
             builder.Property( d => d.CommonCargoQuantity ).HasColumnType( "real" );
 
-            builder.HasOne( p => p.Employee ).WithMany().HasForeignKey( p => p.EmployeeId ).IsRequired();
+            builder.HasOne( p => p.Employee ).WithMany( e => e.ShipmentActions ).HasForeignKey( p => p.EmployeeId ).IsRequired();
             builder.HasOne( p => p.Operation ).WithMany().IsRequired();
         }
     }

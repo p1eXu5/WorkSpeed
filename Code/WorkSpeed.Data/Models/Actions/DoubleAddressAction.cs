@@ -5,6 +5,6 @@ namespace WorkSpeed.Data.Models.Actions
 {
     public class DoubleAddressAction : EmployeeActionBase
     {
-        public List< DoubleAddressActionDetail > DoubleAddressDetails { get; set; }
+        public List<DoubleAddressActionDetail> DoubleAddressDetails { get; set; }
     }
 }
