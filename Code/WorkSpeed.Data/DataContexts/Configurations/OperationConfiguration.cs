@@ -20,10 +20,10 @@ namespace WorkSpeed.Data.DataContexts.Configurations
             builder.HasKey( p => p.Id );
             builder.Property( p => p.Id ).UseSqlServerIdentityColumn();
 
-            builder.Property( p => p.Name ).HasColumnType( "varchar(255)" ).IsRequired( true );
+            builder.Property( p => p.Name ).HasColumnType( "varchar(50)" ).IsRequired( true );
 
             var converter = new EnumToStringConverter< OperationGroups >();
-            builder.Property( p => p.OperationGroup ).HasConversion( converter ).HasColumnType( "varchar(50)" ).IsRequired( true );
+            builder.Property( p => p.OperationGroup ).HasConversion( converter ).HasColumnType( "varchar(10)" ).IsRequired( true );
 
             builder.Property( p => p.Complexity ).HasColumnType( "real" );
 

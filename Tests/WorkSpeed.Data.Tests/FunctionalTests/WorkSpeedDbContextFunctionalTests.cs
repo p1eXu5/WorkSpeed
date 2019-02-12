@@ -7,6 +7,15 @@ namespace WorkSpeed.Data.Tests.FunctionalTests
     [TestFixture]
     public class WorkSpeedDbContextFunctionalTests
     {
+        [TearDown]
+        public void DeleteDataBase()
+        {
+            using (var context = new WorkSpeedDbContext()) {
+
+                context.Database.EnsureDeleted();
+            }
+        }
+
         [Test]
         public void CanCreateDatabase()
         {
@@ -16,13 +25,5 @@ namespace WorkSpeed.Data.Tests.FunctionalTests
             }
         }
 
-        [TearDown]
-        public void DeleteDataBase()
-        {
-            using (var context = new WorkSpeedDbContext()) {
-
-                context.Database.EnsureDeleted();
-            }
-        }
     }
 }

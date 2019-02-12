@@ -13,6 +13,8 @@ namespace WorkSpeed.Data.DataContexts.Configurations.Actions
             builder.ToTable( "ShipmentActions", "dbo" );
 
             builder.HasKey( p => new { p.Id, p.EmployeeId } );
+            builder.Property( p => p.Id ).HasColumnType( "varchar(11)" ).ValueGeneratedNever();
+            builder.Property( p => p.EmployeeId ).HasColumnType( "varchar(7)" ).ValueGeneratedNever();
             builder.Property( p => p.DocumentName ).HasColumnType( "varchar(100)" );
 
             builder.Property( p => p.StartTime ).HasColumnType( "datetime2" ).IsRequired();

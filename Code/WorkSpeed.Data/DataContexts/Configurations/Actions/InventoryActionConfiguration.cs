@@ -16,7 +16,7 @@ namespace WorkSpeed.Data.DataContexts.Configurations.Actions
             builder.ToTable( "InventoryActions", "dbo" );
 
             builder.HasKey( p => p.Id );
-            builder.Property( p => p.Id ).ValueGeneratedNever();
+            builder.Property( p => p.Id ).HasColumnType( "varchar(11)" ).ValueGeneratedNever();
             builder.Property( p => p.DocumentName ).HasColumnType( "varchar(100)" );
 
             builder.Property( p => p.StartTime ).HasColumnType( "datetime2" ).IsRequired();
