@@ -10,7 +10,7 @@ using WorkSpeed.Data.DataContexts;
 namespace WorkSpeed.Data.Migrations
 {
     [DbContext(typeof(WorkSpeedDbContext))]
-    [Migration("20190212164014_InitialCreate")]
+    [Migration("20190212182014_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1205,7 +1205,7 @@ namespace WorkSpeed.Data.Migrations
                     b.HasOne("WorkSpeed.Data.Models.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("WorkSpeed.Data.Models.Employee")
                         .WithMany("DoubleAddressActions")
@@ -1222,7 +1222,7 @@ namespace WorkSpeed.Data.Migrations
                     b.HasOne("WorkSpeed.Data.Models.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("WorkSpeed.Data.Models.Employee")
                         .WithMany("InventoryActions")
@@ -1239,7 +1239,7 @@ namespace WorkSpeed.Data.Migrations
                     b.HasOne("WorkSpeed.Data.Models.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("WorkSpeed.Data.Models.Employee")
                         .WithMany("OtherActions")
@@ -1256,7 +1256,7 @@ namespace WorkSpeed.Data.Migrations
                     b.HasOne("WorkSpeed.Data.Models.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("WorkSpeed.Data.Models.Employee")
                         .WithMany("ReceptionActions")

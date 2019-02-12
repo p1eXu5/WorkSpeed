@@ -313,7 +313,7 @@ namespace WorkSpeed.Data.Migrations
                         principalSchema: "dbo",
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_DoubleAddressActions_Employees_EmployeeId1",
                         column: x => x.EmployeeId1,
@@ -352,7 +352,7 @@ namespace WorkSpeed.Data.Migrations
                         principalSchema: "dbo",
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_InventoryActions_Employees_EmployeeId1",
                         column: x => x.EmployeeId1,
@@ -391,7 +391,7 @@ namespace WorkSpeed.Data.Migrations
                         principalSchema: "dbo",
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_OtherActions_Employees_EmployeeId1",
                         column: x => x.EmployeeId1,
@@ -430,7 +430,7 @@ namespace WorkSpeed.Data.Migrations
                         principalSchema: "dbo",
                         principalTable: "Employees",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ReceptionActions_Employees_EmployeeId1",
                         column: x => x.EmployeeId1,

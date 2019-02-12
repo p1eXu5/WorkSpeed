@@ -305,7 +305,7 @@ namespace WorkSpeed.Business.Contexts
             _dbContext.AddRange( newActions );
         }
 
-        private async void StoreReceptionActions ( IEnumerable< ReceptionAction > data )
+        private void StoreReceptionActions ( IEnumerable< ReceptionAction > data )
         {
             var actions = data.AsParallel()
                               .Where( a => Check.IsEmployeeBaseActionCorrect( a ) 
@@ -361,7 +361,7 @@ namespace WorkSpeed.Business.Contexts
             _dbContext.AddRange( newActions );
         }
 
-        private async void StoreInventoryActions ( IEnumerable< InventoryAction > data  )
+        private void StoreInventoryActions ( IEnumerable< InventoryAction > data  )
         {
             var actions = data.AsParallel()
                               .Where( a => Check.IsEmployeeBaseActionCorrect( a ) 
@@ -447,7 +447,7 @@ namespace WorkSpeed.Business.Contexts
             _dbContext.AddRange( newActions );
         }
 
-        private async void StoreOtherActions ( IEnumerable< OtherAction > data )
+        private void StoreOtherActions ( IEnumerable< OtherAction > data )
         {
             var newActions = new HashSet< OtherAction >( ComparerFactory.EmployeeActionBaseComparer );
 
