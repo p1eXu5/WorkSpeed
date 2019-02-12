@@ -8,11 +8,13 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Business.FileModels.Converters
 {
-    public class ImportModelConverter : ITypeConverter< IImportModel, IEntity >
+    public class ImportModelConverter< TImportModel, TEntity> : ITypeConverter< TImportModel, TEntity >
+        where TEntity : IEntity
+        where TImportModel : IImportModel
     {
         private readonly IImportModelVisitor _visitor;
 
-        public ImportModelConverter ()
+        public ImportModelConverter (  )
         {
             _visitor = new ImportModelVisitor();
         }
@@ -22,9 +24,9 @@ namespace WorkSpeed.Business.FileModels.Converters
             _visitor = visitor ?? throw new ArgumentNullException();
         }
 
-        public IEntity Convert ( IImportModel obj )
+        public TEntity Convert ( TImportModel obj )
         {
-            return obj.Accept( _visitor );
+            return (TEntity)obj.Accept( _visitor );
         }
     }
 }

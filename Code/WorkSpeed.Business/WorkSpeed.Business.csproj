@@ -149,7 +149,7 @@
     <Compile Include="Contexts\RuntimeWorkSpeedBusinessContext.cs" />
     <Compile Include="Contexts\Service.cs" />
     <Compile Include="Contexts\WarehouseService.cs" />
-    <Compile Include="Contexts\WorkSpeedBusinessContextCreator.cs" />
+    <Compile Include="Factories\WorkSpeedBusinessContextCreator.cs" />
     <Compile Include="CategoryConstraints.cs" />
     <Compile Include="Constraints\BreakConstraints.cs" />
     <Compile Include="Constraints\DefaultCategoryConstraints.cs" />

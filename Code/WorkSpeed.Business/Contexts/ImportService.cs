@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
@@ -18,6 +19,7 @@ using WorkSpeed.Data.DataContexts.ImportServiceExtensions;
 using WorkSpeed.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using WorkSpeed.Business.Contexts.Comparers;
+using WorkSpeed.Business.FileModels;
 using WorkSpeed.Business.Models;
 using WorkSpeed.Data.Models.ActionDetails;
 using WorkSpeed.Data.Models.Actions;
@@ -59,10 +61,16 @@ namespace WorkSpeed.Business.Contexts
         {
             try {
                 var data = GetDataFromFile( fileName );
-           
-                if ( data.Any() ) {
+
+                if ( data != null && data.Any() ) {
                     StoreData( ( dynamic )data );
                 }
+            }
+            catch ( FileNotFoundException ) {
+                progress?.Report( (-1, @"Файл не найден.") );
+            }
+            catch ( DirectoryNotFoundException ) {
+                progress?.Report( (-1, @"Путь к файлу не найден.") );
             }
             catch ( Exception ex ) {
                 progress?.Report( (-1, @"Не удалось прочитать файл. Файл либо открыт в другой программе, " 
@@ -75,7 +83,13 @@ namespace WorkSpeed.Business.Contexts
         {
             var table = ExcelImporter.GetSheetTable( fileName );
             var typeMap = _typeRepository.GetTypeAndPropertyMap( table );
-            return ExcelImporter.GetDataFromTable( table, typeMap.propertyMap, new ImportModelConverter() );
+
+            if ( typeMap.type == typeof( ProductImportModel ) ) {
+                return ExcelImporter.GetDataFromTable( table, typeMap.propertyMap, new ImportModelConverter< ProductImportModel, Product >() );
+            }
+
+
+            return ( IEnumerable< IEntity > )null;
         }
 
 

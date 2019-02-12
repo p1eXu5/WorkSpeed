@@ -4,6 +4,7 @@ using Agbm.NpoiExcel;
 using Agbm.NpoiExcel.Attributes;
 using Agbm.Wpf.MvvmBaseLibrary;
 using WorkSpeed.Business.Contexts;
+using WorkSpeed.Business.Factories;
 using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.Data.DataContexts;
 using WorkSpeed.DesktopClient.ViewModels;
@@ -26,18 +27,12 @@ namespace WorkSpeed.DesktopClient
             dialogRepository.Register< ErrorViewModel, ErrorWindow >();
 
             ImportService importService = null; 
-            try {
-                importService = WorkSpeedBusinessContextCreator.Create();
-                var mvm = new MainViewModel( importService, dialogRepository );
 
-                mainWindow.DataContext = mvm;
-                mainWindow.Show();
-            }
-            finally {
-                importService?.Dispose();
-            }
+            importService = WorkSpeedBusinessContextCreator.Create();
+            var mvm = new MainViewModel( importService, dialogRepository );
+
+            mainWindow.DataContext = mvm;
+            mainWindow.Show();
         }
-
-        
     }
 }

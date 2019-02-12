@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.1.0.145, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\SharpZipLib.1.1.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Xaml.Behaviors.Wpf.1.0.1\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
@@ -280,6 +284,10 @@
       <Project>{c92ff512-b9c0-4aaf-9a9b-d0dee139af44}</Project>
       <Name>Agbm.Wpf.MvvmBaseLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WorkSpeed.Business\WorkSpeed.Business.csproj">
+      <Project>{035d995a-6f8a-47c1-aebd-41b2cc5d6d7d}</Project>
+      <Name>WorkSpeed.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WorkSpeed.Data\WorkSpeed.Data.csproj">
       <Project>{72e065c5-8769-4008-9529-11194be488e0}</Project>
       <Name>WorkSpeed.Data</Name>
@@ -287,10 +295,6 @@
     <ProjectReference Include="..\WorkSpeed.Productivity\WorkSpeed.Productivity.csproj">
       <Project>{61c2a155-2641-4617-826e-82911531837a}</Project>
       <Name>WorkSpeed.Productivity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WorkSpeed\WorkSpeed.Business.csproj">
-      <Project>{035d995a-6f8a-47c1-aebd-41b2cc5d6d7d}</Project>
-      <Name>WorkSpeed.Business</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
