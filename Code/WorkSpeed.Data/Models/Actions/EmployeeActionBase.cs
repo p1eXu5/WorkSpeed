@@ -5,7 +5,7 @@ namespace WorkSpeed.Data.Models.Actions
 {
     public abstract class EmployeeActionBase : IKeyedEntity< string >
     {
-        [ MinLength(11), MaxLength(11) ]
+        [ MinLength(11) ]
         public string Id { get; set; }
 
         public DateTime StartTime { get; set; }

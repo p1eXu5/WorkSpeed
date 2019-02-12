@@ -166,6 +166,8 @@ namespace WorkSpeed.Business.Contexts
                 _newAddresses.Clear();
                 _newProducts.Clear();
 
+                Check._nowDate = DateTime.Now;
+
                 if ( doubleAddressActions[0] != null ) {
                     StoreDoubleActions( doubleAddressActions );
                 }
@@ -499,20 +501,19 @@ namespace WorkSpeed.Business.Contexts
 
         private static class Check
         {
+            internal static DateTime _nowDate;
             private static readonly DateTime DNS_BEGIN_TIME = new DateTime( 1998, 1, 1, 0, 0, 0);
-
 
             public static bool IsEmployeeBaseActionCorrect ( EmployeeActionBase a )
             {
-                if ( a.Id.Length != 10 ) return false;
+                if ( a.Id.Length < 10 ) return false;
                 int.TryParse( a.Id.Substring( 4 ), out var num );
-                var now = DateTime.Now;
 
                 return num > 0
                        && !string.IsNullOrWhiteSpace( a.Id )
                        && char.IsLetter( a.Id[ 0 ] ) && char.IsLetter( a.Id[ 1 ] )
                        && char.IsDigit( a.Id[ 2 ] ) && a.Id[ 3 ].Equals( '-' )
-                       && a.StartTime >= DNS_BEGIN_TIME && a.StartTime < now && a.Duration > TimeSpan.Zero
+                       && a.StartTime >= DNS_BEGIN_TIME && a.StartTime < _nowDate && a.Duration > TimeSpan.Zero
                        && IsEmployeeCorrect( a.Employee )
                        && a.Operation?.Name?.Length > 1;
             }

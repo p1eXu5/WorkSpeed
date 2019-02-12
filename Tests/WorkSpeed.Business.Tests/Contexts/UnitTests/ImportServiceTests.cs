@@ -614,8 +614,26 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             Assert.That( actions, Is.Not.Empty );
         }
 
-        [ TestCase( "ZP8-1234560" ), TestCase( "ZP8-12345" ), Category( "DoubleAddressAction" ) ]
-        public void ImportFromXlsx_IdLengthNot10_DoesNotAddDoubleAddressAction ( string id )
+        [ TestCase( "ZP8-12345" ), Category( "DoubleAddressAction" ) ]
+        public void ImportFromXlsx_IdLengthLess10_DoesNotAddDoubleAddressAction ( string id )
+        {
+            // Arrange:
+            var service = GetImportService();
+            service.AllActions = new[] {
+                new AllActions { DoubleAddressAction = GetDoubleAddressAction() }
+            };
+            service.AllActions[0].DoubleAddressAction.Id = id;
+
+            // Action:
+            service.ImportFromXlsx( ACTIONS, null );
+
+            // Assert:
+            var actions = service.DbContext.DoubleAddressActions.ToArray();
+            Assert.That( actions, Is.Empty );
+        }
+
+        [ TestCase( "ZP8-12345T5" ), Category( "DoubleAddressAction" ) ]
+        public void ImportFromXlsx_IdContainsLetterInSuffix_DoesNotAddDoubleAddressAction ( string id )
         {
             // Arrange:
             var service = GetImportService();
