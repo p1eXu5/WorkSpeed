@@ -28,6 +28,7 @@
 
 
     <Color x:Key="col_Window.Control.Background">#cfcfcf</Color>
+    <Color x:Key="col_Window.Control.BackgroundMouseOver">#c0c0c0</Color>
     <Color x:Key="col_Window.Control.Foreground">#404040</Color>
     <Color x:Key="col_Window.Control.ForegroundAlternative">#e0e0e0</Color>
     <Color x:Key="col_Window.Control.BackgroundAlternative">#4d4d4d</Color>

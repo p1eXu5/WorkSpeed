@@ -3,7 +3,19 @@
                     >
 
     <Storyboard x:Key="an_TabItem.MouseOver">
+        <ColorAnimationUsingKeyFrames Duration="0:0:.2" Storyboard.TargetName="container"
+                                      Storyboard.TargetProperty="(GeometryDrawing.Brush).(SolidColorBrush.Color)"
+                                      >
+            <LinearColorKeyFrame Value="{StaticResource col_Window.Control.BackgroundMouseOver}" KeyTime="0:0:0"/>
+        </ColorAnimationUsingKeyFrames>
+    </Storyboard>
 
+    <Storyboard x:Key="an_TabItem.Normal">
+        <ColorAnimationUsingKeyFrames Duration="0:0:.2" Storyboard.TargetName="container"
+                                      Storyboard.TargetProperty="(GeometryDrawing.Brush).(SolidColorBrush.Color)"
+                                      >
+            <LinearColorKeyFrame Value="{StaticResource col_Window.Control.Background}" KeyTime="0:0:0"/>
+        </ColorAnimationUsingKeyFrames>
     </Storyboard>
 
     <Storyboard x:Key="an_TabItem.Choosed">
@@ -122,7 +134,7 @@
                                 </DrawingImage>
                             </Image.Source>
                         </Image>
-                        
+
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="SelectionStates">
                                 <VisualState x:Name="Unselected" />
@@ -130,7 +142,20 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                     </Grid>
-
+                <ControlTemplate.Triggers>
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="IsSelected" Value="False" />
+                            <Condition Property="IsMouseOver" Value="True" />
+                        </MultiTrigger.Conditions>
+                        <MultiTrigger.EnterActions>
+                            <BeginStoryboard Storyboard="{StaticResource an_TabItem.MouseOver}" />
+                        </MultiTrigger.EnterActions>
+                        <MultiTrigger.ExitActions>
+                            <BeginStoryboard Storyboard="{StaticResource an_TabItem.Normal}" />
+                        </MultiTrigger.ExitActions>
+                    </MultiTrigger>
+                </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -245,6 +270,7 @@
                                                 </GeometryDrawing.Geometry>
                                             </GeometryDrawing>
 
+                                            <!-- when pressed -->
                                             <GeometryDrawing >
                                                 <GeometryDrawing.Pen>
                                                     <Pen Thickness="1" 
