@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
+using WorkSpeed.Data.Models.Enums;
 
 namespace WorkSpeed.Data.DataContexts.ImportServiceExtensions
 {
@@ -32,8 +33,12 @@ namespace WorkSpeed.Data.DataContexts.ImportServiceExtensions
         public static IQueryable< Position > GetPositions ( this WorkSpeedDbContext dbContext )
             => dbContext.Positions.AsQueryable();
 
-        public static IQueryable< Operation > GetOperations ( this WorkSpeedDbContext dbContext )
-            => dbContext.Operations.AsQueryable();
+
+
+        public static IQueryable< Operation > GetOperations ( this WorkSpeedDbContext dbContext, OperationGroups group )
+            => dbContext.Operations.Where( o => o.OperationGroup == group ).AsQueryable();
+
+
 
         public static IQueryable< Address > GetAddresses ( this WorkSpeedDbContext dbContext )
             => dbContext.Addresses.AsQueryable();

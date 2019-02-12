@@ -980,7 +980,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
                         Duration = TimeSpan.FromSeconds( 34 ),
                         DocumentName = "",
                         Employee = new Employee { Id = "AR12345", Name = "Anton" },
-                        Operation = new Operation { Name = "Подбор товара" },
+                        Operation = new Operation { Name = "Сканирование товара" },
 
                         ReceptionActionDetails = new List< ReceptionActionDetail >{ new ReceptionActionDetail {
                             Product = new Product { Id = 0006634, Name = "Test Product", },
@@ -1000,7 +1000,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
                         Duration = TimeSpan.FromSeconds( 34 ),
                         DocumentName = "",
                         Employee = new Employee { Id = "AR12345", Name = "Anton" },
-                        Operation = new Operation { Name = "Подбор товара" },
+                        Operation = new Operation { Name = "Инвентаризация" },
 
                         InventoryActionDetails = new List< InventoryActionDetail >{ new InventoryActionDetail {
                             Product = new Product { Id = 0006634, Name = "Test Product", },

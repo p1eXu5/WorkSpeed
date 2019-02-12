@@ -28,22 +28,22 @@ namespace WorkSpeed.Data.DataContexts.Configurations
             builder.Property( p => p.Complexity ).HasColumnType( "real" );
 
             builder.HasData( new Operation[] {
-                new Operation { Id = 1, Name = "Сканирование товара", OperationGroup = OperationGroups.Reception, Complexity = (float) 1.0 },
+                new Operation { Id = 1, Name = "Сканирование товара",    OperationGroup = OperationGroups.Reception, Complexity = (float) 1.0 },
                 new Operation { Id = 2, Name = "Сканирование транзитов", OperationGroup = OperationGroups.Reception, Complexity = (float) 1.0 },
 
-                new Operation { Id = 3, Name = "Размещение товара", OperationGroup = OperationGroups.Placing, Complexity = (float) 1.0 },
-                new Operation { Id = 4, Name = "Перемещение товара", OperationGroup = OperationGroups.Placing, Complexity = (float) 1.0 },
-                new Operation { Id = 5, Name = "Подтоварка", OperationGroup = OperationGroups.Defragmentation, Complexity = (float) 1.0 },
-                new Operation { Id = 6, Name = "Верт. дефрагментация", OperationGroup = OperationGroups.Defragmentation, Complexity = (float) 1.0 },
-                new Operation { Id = 7, Name = "Гор. дефрагментация", OperationGroup = OperationGroups.Defragmentation, Complexity = (float) 1.0 },
+                new Operation { Id = 3, Name = "Размещение товара",    OperationGroup = OperationGroups.Gathering, Complexity = (float) 1.0 },
+                new Operation { Id = 4, Name = "Перемещение товара",   OperationGroup = OperationGroups.Gathering, Complexity = (float) 1.0 },
+                new Operation { Id = 5, Name = "Подтоварка",           OperationGroup = OperationGroups.Gathering, Complexity = (float) 1.0 },
+                new Operation { Id = 6, Name = "Верт. дефрагментация", OperationGroup = OperationGroups.Gathering, Complexity = (float) 1.0 },
+                new Operation { Id = 7, Name = "Гор. дефрагментация",  OperationGroup = OperationGroups.Gathering, Complexity = (float) 1.0 },
 
-                new Operation { Id = 8, Name = "Подбор товара", OperationGroup = OperationGroups.Gathering, Complexity = (float) 1.0 },
-                new Operation { Id = 9, Name = "Подбор клиентского товара", OperationGroup = OperationGroups.Gathering, Complexity = (float) 1.0 },
-                new Operation { Id = 10, Name = "Подбор товаров покупателей", OperationGroup = OperationGroups.Gathering, Complexity = (float) 1.0 },
+                new Operation { Id = 8,  Name = "Подбор товара",                 OperationGroup = OperationGroups.Gathering, Complexity = (float) 1.0 },
+                new Operation { Id = 9,  Name = "Подбор клиентского товара",     OperationGroup = OperationGroups.Gathering, Complexity = (float) 1.0 },
+                new Operation { Id = 10, Name = "Подбор товаров покупателей",    OperationGroup = OperationGroups.Gathering, Complexity = (float) 1.0 },
                 new Operation { Id = 11, Name = "Предварительный подбор товара", OperationGroup = OperationGroups.Gathering, Complexity = (float) 1.0 },
-                new Operation { Id = 12, Name = "Упаковка товара в места", OperationGroup = OperationGroups.Packing, Complexity = (float) 1.0 },
+                new Operation { Id = 12, Name = "Упаковка товара в места",       OperationGroup = OperationGroups.Gathering, Complexity = (float) 1.0 },
 
-                new Operation { Id = 13, Name = "Инвентаризация", OperationGroup = OperationGroups.Inventory, Complexity = (float?) 1.0 },
+                new Operation { Id = 13, Name = "Инвентаризация",  OperationGroup = OperationGroups.Inventory, Complexity = (float?) 1.0 },
 
                 new Operation { Id = 14, Name = "Выгрузка машины", OperationGroup = OperationGroups.Shipment, Complexity = (float) 1.0 },
                 new Operation { Id = 15, Name = "Погрузка машины", OperationGroup = OperationGroups.Shipment, Complexity = (float) 1.0 },
