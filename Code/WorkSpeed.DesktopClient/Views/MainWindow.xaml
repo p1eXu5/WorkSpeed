@@ -298,6 +298,12 @@
                                         </Border>
                                     </StackPanel>
                                 </TabItem.Header>
+
+                                <behavior:Interaction.Triggers>
+                                    <behavior:EventTrigger EventName="GotFocus">
+                                        <behavior:InvokeCommandAction Command="{Binding LoadEmployeesCommand}"/>
+                                    </behavior:EventTrigger>
+                                </behavior:Interaction.Triggers>
                             </TabItem>
 
                             <TabItem >

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -9,6 +10,8 @@ using Agbm.Wpf.MvvmBaseLibrary;
 using Microsoft.Win32;
 using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Data.BusinessContexts;
+using WorkSpeed.Data.DataContexts;
+using WorkSpeed.Data.DataContexts.MainViewModel;
 using WorkSpeed.DesktopClient.ViewModels.Dialogs;
 using WorkSpeed.Productivity;
 
@@ -18,6 +21,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
     {
         private readonly IImportService _importService;
         private readonly IDialogRepository _dialogRepository;
+        private readonly WorkSpeedDbContext _dbContext = new WorkSpeedDbContext();
 
         private CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
         private IProgress< (int, string) > _progress;
@@ -61,6 +65,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
         }
 
         public ICommand ImportAsyncCommand => new MvvmCommand( Import );
+        public ICommand LoadEmployeesCommand => new MvvmCommand( LoadEmployees );
 
         private async void Import ( object obj )
         {
@@ -100,6 +105,12 @@ namespace WorkSpeed.DesktopClient.ViewModels
         {
             var view = _dialogRepository.GetView( new ErrorViewModel( message ) );
             view?.ShowDialog();
+        }
+
+        private void LoadEmployees ( object obj )
+        {
+            Debug.WriteLine( "TabItem loaded" );
+
         }
     }
 }

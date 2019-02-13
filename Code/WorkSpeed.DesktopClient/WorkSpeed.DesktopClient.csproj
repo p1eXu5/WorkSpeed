@@ -67,17 +67,19 @@
     <Compile Include="Converters\BorderThicknessToStrokeThicknessConverter.cs" />
     <Compile Include="Converters\EvenOddToZeroOneConverter.cs" />
     <Compile Include="TemplateSelectors\StageDataTemplateSelector.cs" />
+    <Compile Include="ViewModels\EntityViewModels\AppointmentViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\ErrorViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\ProductivityViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\ShortBreakViewModel.cs" />
+    <Compile Include="ViewModels\EntityViewModels\PositionViewModel.cs" />
+    <Compile Include="ViewModels\EntityViewModels\ShiftViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ActionsImportStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\CategoriesThresholdStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\CheckEmployeesStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\Directions.cs" />
     <Compile Include="ViewModels\StageViewModels\EmployeesImportStageViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\EmployeeViewModel.cs" />
-    <Compile Include="ViewModels\IFastProductivityViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ImportStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\IStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\MoveRequestedEventArgs.cs" />
@@ -127,7 +129,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\ComboBoxStyles.xaml">
+    <Page Include="Resources\Window\ComboBoxStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -191,9 +193,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ViewModels\ImportViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\FastProductivityViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

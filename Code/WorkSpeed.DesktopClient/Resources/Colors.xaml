@@ -22,6 +22,7 @@
     <Color x:Key="col_Window.Background">#ebebeb</Color>
     <Color x:Key="col_Window.Border">#6e6e6e</Color>
     <Color x:Key="col_Window.BorderAlternative">#3b3b3b</Color>
+    <Color x:Key="col_Window.Foreground">#111111</Color>
 
     <Color x:Key="col_Window.GlowLight.Top">#d9d9d9</Color>
     <Color x:Key="col_Window.GlowLight.Bottom">#ffffff</Color>
@@ -36,6 +37,7 @@
 
     <SolidColorBrush x:Key="br_Window.Background" Color="{StaticResource col_Window.Background}" />
     <SolidColorBrush x:Key="br_Window.Border" Color="{DynamicResource col_Window.Border }" />
+    <SolidColorBrush x:Key="br_Window.Foreground" Color="{DynamicResource col_Window.Foreground }" />
     <SolidColorBrush x:Key="br_Window.Control.Background" Color="{DynamicResource col_Window.Control.Background }" />
     <SolidColorBrush x:Key="br_Window.Control.BackgroundAlternative" Color="{DynamicResource col_Window.Control.BackgroundAlternative }" />
     <SolidColorBrush x:Key="br_Window.Control.Foreground" Color="{DynamicResource col_Window.Control.Foreground }" />

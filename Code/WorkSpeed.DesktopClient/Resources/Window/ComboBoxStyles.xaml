@@ -44,8 +44,14 @@
     <Color x:Key="col_ComboBox.ToggleButton.Pressed1">#000000</Color>
 
     <PathGeometry x:Key="g_ComboBox.ToggleButton.ArrowDown" 
-                  Figures="M 0,0 L 0,1.25 L 3.5,6 L 7,1.25 L 7,0 L 5.75,0 L 5.75,0.8 L 3.5,3.8 L 1.25,0.8 L 1.25,0 Z" 
-                  />
+                  >
+        <PathGeometry.Figures>
+            <PathFigure StartPoint="0,1">
+                <LineSegment Point="2.2,4" />
+                <LineSegment Point="4.4,1" />
+            </PathFigure>
+        </PathGeometry.Figures>
+    </PathGeometry>
 
     <!-- NumericComboBox Brushes -->
     <LinearGradientBrush x:Key="brg_NumericComboBox.Foreground" StartPoint="0,0" EndPoint="0,1">
@@ -160,16 +166,16 @@
     </Style>
 
     <!-- ComboBox.TextBox Style -->
-    <Style TargetType="TextBox" x:Key="st_ComboBox.TextBox" >
-        <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Style x:Key="st_ComboBox.TextBox" TargetType="TextBox" >
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
-                    <Border BorderThickness="0,0,0,1"
-                            BorderBrush="{StaticResource brg_ComboBox.TextBox.Border}"
+                    <Border BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
                             >
 
-                        <ScrollViewer x:Name="PART_ContentHost"></ScrollViewer>
+                        <ScrollViewer HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                      x:Name="PART_ContentHost"></ScrollViewer>
 
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
@@ -213,27 +219,25 @@
     </Style>
 
     <!-- ComboBox.ToggleButton Style -->
-    <Style TargetType="ToggleButton" x:Key="st_ComboBox.ToggleButton" >
+    <Style x:Key="st_ComboBox.ToggleButton" TargetType="ToggleButton" >
         <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="Foreground" Value="{StaticResource brg_ComboBox.Foreground}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
 
-                    <Grid Margin="2" Background="Transparent">
-
-                        <Viewbox HorizontalAlignment="Center" VerticalAlignment="Bottom">
-
-                            <Path Data="{StaticResource g_ComboBox.ToggleButton.ArrowDown}"
-                                  Fill="{TemplateBinding Foreground}"
-                                  Style="{x:Null}"
-                                  >
-                                <Path.RenderTransform>
-                                    <ScaleTransform x:Name="ScaleTransform" CenterX="4" CenterY="4" ScaleX=".5" ScaleY=".5" />
-                                </Path.RenderTransform>
-                            </Path>
-                        </Viewbox>
-
+                    <Border Margin="0" 
+                            Background="Transparent" 
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            >
+                        <Path Data="{StaticResource g_ComboBox.ToggleButton.ArrowDown}"
+                              Fill="{x:Null}"
+                              Stroke="{TemplateBinding BorderBrush}"
+                              Style="{x:Null}"
+                              VerticalAlignment="Center" HorizontalAlignment="Center"
+                              SnapsToDevicePixels="True" 
+                              >
+                        </Path>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonState">
                                 <VisualState x:Name="Normal" />
@@ -273,7 +277,7 @@
 
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                    </Grid>
+                    </Border>
 
                 </ControlTemplate>
             </Setter.Value>
@@ -293,23 +297,33 @@
         <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
         <Setter Property="MaxDropDownHeight" Value="100" />
         <Setter Property="Background" Value="{StaticResource br_Window.Background}" />
-        <Setter Property="Foreground" Value="{StaticResource brg_ComboBox.Foreground}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource br_ComboBox.Border}" />
+        <Setter Property="Foreground" Value="{StaticResource br_Window.Foreground}"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="BorderBrush" Value="{StaticResource br_Window.Border}" />
+        <Setter Property="Margin" Value="0,0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
-                    <Grid x:Name="root" SnapsToDevicePixels="True">
+                    <Grid x:Name="root" SnapsToDevicePixels="True"
+                          HorizontalAlignment="Stretch"
+                          >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
                         </Grid.ColumnDefinitions>
 
                         <!--TextBox-->
-                        <TextBox x:Name="PART_EditableTextBox" Grid.Column="0" 
+                        <TextBox x:Name="PART_EditableTextBox" Grid.Column="0"
+                                 BorderThickness="{TemplateBinding BorderThickness}"
+                                 BorderBrush="{TemplateBinding BorderBrush}"
                                  Foreground="{TemplateBinding Foreground}"
                                  Style="{StaticResource st_ComboBox.TextBox}"
                                  Background="Transparent"
                                  VerticalContentAlignment="Bottom"
+                                 HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                 HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                                  />
 
                         <!--ToggleButton-->
@@ -319,6 +333,7 @@
                                       IsEnabled="{TemplateBinding IsEnabled}"
                                       KeyboardNavigation.IsTabStop="False"
                                       Focusable="False"
+                                      BorderThickness="{TemplateBinding BorderThickness}"
                                       />
 
                         <Popup x:Name="PART_Popup" Grid.Column="0"  Grid.ColumnSpan="2"
@@ -375,7 +390,8 @@
 
                         <ToggleButton x:Name="toggle"
                                       ClickMode="Release"
-                                      Width="{TemplateBinding Width}" Height="{TemplateBinding Height}"
+                                      Width="{TemplateBinding Width}" 
+                                      Height="{TemplateBinding Height}"
                                       IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsDropDownOpen}"
                                       Foreground="{TemplateBinding Foreground}"
                                       FontFamily="{TemplateBinding FontFamily}"

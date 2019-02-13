@@ -16,15 +16,16 @@
     </Style>
 
     <Style TargetType="HeaderedContentControl">
-        <Setter Property="Margin" Value="10,0"/>
+        <Setter Property="Margin" Value="10,2"/>
         <Setter Property="Focusable" Value="False"/>
+        <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="HeaderedContentControl">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" SharedSizeGroup="Shift" />
-                            <ColumnDefinition Width="*" SharedSizeGroup="Shift"/>
+                            <ColumnDefinition Width="Auto"  />
+                            <ColumnDefinition Width="134"/>
                         </Grid.ColumnDefinitions>
                         <ContentPresenter ContentSource="Header" 
                                           DockPanel.Dock="Left"
@@ -44,7 +45,7 @@
                                           Margin="5,0,0,0"
                                           DockPanel.Dock="Right" 
                                           VerticalAlignment="Bottom"
-                                          HorizontalAlignment="Left"
+                                          HorizontalAlignment="Stretch"
                                           /> 
                     </Grid>
                 </ControlTemplate>
