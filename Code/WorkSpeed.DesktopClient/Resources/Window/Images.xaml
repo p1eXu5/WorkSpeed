@@ -4,5 +4,8 @@
 
     <BitmapImage x:Key="im_OpenFile" UriSource="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Images/openfile.png" 
                  CacheOption="OnLoad" CreateOptions="IgnoreImageCache"/>
+
+    <BitmapImage x:Key="im_Face" UriSource="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Images/default_face.bmp" 
+                 CacheOption="OnLoad" CreateOptions="IgnoreImageCache"/>
     
 </ResourceDictionary>

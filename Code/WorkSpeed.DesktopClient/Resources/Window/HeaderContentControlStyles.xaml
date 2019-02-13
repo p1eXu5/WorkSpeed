@@ -16,7 +16,7 @@
     </Style>
 
     <Style TargetType="HeaderedContentControl">
-        <Setter Property="Margin" Value="2,6"/>
+        <Setter Property="Margin" Value="10,0"/>
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="Template">
             <Setter.Value>

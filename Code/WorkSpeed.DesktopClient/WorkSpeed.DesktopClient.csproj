@@ -85,6 +85,9 @@
     <Compile Include="ViewModels\StageViewModels\ProductivityStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ShiftSetupStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\StageViewModel.cs" />
+    <Compile Include="Views\DataTemplates\ShiftEmployeeUserControl.xaml.cs">
+      <DependentUpon>ShiftEmployeeUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dialogs\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
@@ -144,11 +147,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\HeaderContentControlStyles.xaml">
+    <Page Include="Resources\Window\HeaderContentControlStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Images.xaml">
+    <Page Include="Resources\Window\Images.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -161,6 +164,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Window\TabControlStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DataTemplates\ShiftEmployeeUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -262,7 +269,7 @@
     <Resource Include="Resources\Images\openfile.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\DataTemplates\" />
+    <Resource Include="Resources\Images\default_face.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Fonts\Noto_Serif\LICENSE.txt" />

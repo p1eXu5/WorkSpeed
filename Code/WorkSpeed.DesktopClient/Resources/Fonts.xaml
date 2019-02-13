@@ -3,5 +3,7 @@
                     >
     <FontFamily x:Key="font_NotoSerif">pack://application:,,,/../../Resources/Fonts/Noto_Serif/#Noto Serif</FontFamily>
     <FontFamily x:Key="font_Rubik">pack://application:,,,/../../Resources/Fonts/Rubik/#Rubik</FontFamily>
+    <FontFamily x:Key="font_RubikMedium">pack://application:,,,/../../Resources/Fonts/Rubik/#Rubik Medium</FontFamily>
+    <FontFamily x:Key="font_RubikLight">pack://application:,,,/../../Resources/Fonts/Rubik/#Rubik Light</FontFamily>
     <FontFamily x:Key="font_SuiGeneris">pack://application:,,,/../../Resources/Fonts/#Sui Generis Rg</FontFamily>
 </ResourceDictionary>
