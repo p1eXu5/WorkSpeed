@@ -85,9 +85,6 @@
     <Compile Include="ViewModels\StageViewModels\ProductivityStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ShiftSetupStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\StageViewModel.cs" />
-    <Compile Include="Views\Design\DesignWindow.xaml.cs">
-      <DependentUpon>DesignWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Dialogs\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
@@ -164,10 +161,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Window\TabControlStyles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Design\DesignWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
