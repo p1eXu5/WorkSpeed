@@ -32,7 +32,10 @@ namespace WorkSpeed.Business.Contexts
     {
         private readonly ITypeRepository _typeRepository;
 
+        private IProgress< (int, string) > _progress;
         private readonly object _locker = new Object();
+
+
 
         private Employee[] _employees;
         private Address[] _addresses;
@@ -59,23 +62,27 @@ namespace WorkSpeed.Business.Contexts
             return Task.Run( () => ImportFromXlsx( fileName, progress ), cancellationToken );
         }
 
-        public void ImportFromXlsx ( string fileName, IProgress< (int, string) > progress )
+        public void ImportFromXlsx ( string fileName, IProgress< (int, string) > progress = null )
         {
+            _progress = progress;
+
             try {
+                _progress?.Report( (1, @"Чтение файла") );
                 var data = GetDataFromFile( fileName );
 
                 if ( data != null && data.Any() ) {
+                    _progress?.Report( (50, @"Распознавание данных") );
                     StoreData( ( dynamic )data );
                 }
             }
             catch ( FileNotFoundException ) {
-                progress?.Report( (-1, @"Файл не найден.") );
+                _progress?.Report( (-1, @"Файл не найден.") );
             }
             catch ( DirectoryNotFoundException ) {
-                progress?.Report( (-1, @"Путь к файлу не найден.") );
+                _progress?.Report( (-1, @"Путь к файлу не найден.") );
             }
             catch ( Exception ex ) {
-                progress?.Report( (-1, @"Не удалось прочитать файл. Файл либо открыт в другой программе, " 
+                _progress?.Report( (-1, @"Не удалось прочитать файл. Файл либо открыт в другой программе, " 
                                           + @"либо содержит таблицу, тип которой определить не удалось." + $"\n{ex.Message}") );
             }
         }
@@ -87,18 +94,22 @@ namespace WorkSpeed.Business.Contexts
             var typeMap = _typeRepository.GetTypeAndPropertyMap( table );
 
             if ( typeMap.type == typeof( ProductImportModel ) ) {
+                _progress?.Report( (10, @"Чтение из файла данных о товаре") );
                 return ExcelImporter.GetDataFromTable( table, typeMap.propertyMap, new ImportModelConverter< ProductImportModel, Product >() );
             }
 
             if ( typeMap.type == typeof( EmployeeImportModel ) ) {
+                _progress?.Report( (10, @"Чтение из файла данных о сотрудниках") );
                 return ExcelImporter.GetDataFromTable( table, typeMap.propertyMap, new ImportModelConverter< EmployeeImportModel, Employee >() );
             }
 
             if ( typeMap.type == typeof( EmployeeShortImportModel ) ) {
+                _progress?.Report( (10, @"Чтение из файла данных о сотрудниках") );
                 return ExcelImporter.GetDataFromTable( table, typeMap.propertyMap, new ImportModelConverter< EmployeeShortImportModel, Employee >() );
             }
 
             if ( typeMap.type == typeof( ProductivityImportModel ) ) {
+                _progress?.Report( (10, @"Чтение из файла данных о действиях сотрудников") );
                 return ExcelImporter.GetDataFromTable( table, typeMap.propertyMap, new ImportModelConverter< ProductivityImportModel, AllActions >() );
             }
 
@@ -130,6 +141,7 @@ namespace WorkSpeed.Business.Contexts
                 }
             }
 
+            _progress?.Report( (90, @"Сохрание данных") );
             _dbContext.AddRange( newProducts );
             _dbContext.SaveChanges();
         }
@@ -172,6 +184,7 @@ namespace WorkSpeed.Business.Contexts
                 }
             }
 
+            _progress?.Report( (90, @"Сохрание данных") );
             _dbContext.AddRange( newEmployees );
             _dbContext.SaveChanges();
         }
@@ -223,25 +236,31 @@ namespace WorkSpeed.Business.Contexts
                 Check._nowDate = DateTime.Now;
 
                 if ( doubleAddressActions.Any() ) {
+                    _progress?.Report( (51, @"Распознавание данных. Отгрузка.") );
                     StoreDoubleActions( doubleAddressActions );
                 }
 
                 if ( receptionActions.Any() ) {
+                    _progress?.Report( (61, @"Распознавание данных. Приёмка.") );
                     StoreReceptionActions( receptionActions );
                 }
 
                 if ( inventoryActions.Any() ) {
+                    _progress?.Report( (71, @"Распознавание данных. Инвентаризация.") );
                     StoreInventoryActions( inventoryActions );
                 }
 
                 if ( shipmentActions.Any() ) {
+                    _progress?.Report( (81, @"Распознавание данных. ПРР.") );
                     StoreShipmentActions( shipmentActions );
                 }
 
                 if ( otherActions.Any() ) {
+                    _progress?.Report( (86, @"Распознавание данных. Остальные операции.") );
                     StoreOtherActions( otherActions );
                 }
 
+                _progress?.Report( (90, @"Сохрание данных") );
                 _dbContext.SaveChanges();
             }
         }
