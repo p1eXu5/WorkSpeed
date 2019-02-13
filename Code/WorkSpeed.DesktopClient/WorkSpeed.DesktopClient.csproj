@@ -261,7 +261,9 @@
   <ItemGroup>
     <Resource Include="Resources\Images\openfile.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\DataTemplates\" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Fonts\Noto_Serif\LICENSE.txt" />
   </ItemGroup>
