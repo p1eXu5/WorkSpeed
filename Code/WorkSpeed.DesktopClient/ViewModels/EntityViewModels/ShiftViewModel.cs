@@ -22,6 +22,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
         }
 
         public Shift Shift { get; }
-        public ReadOnlyObservableCollection< AppointmentViewModel > Appointments { get; set; }
+        public ReadOnlyObservableCollection< AppointmentViewModel > Appointments { get; }
     }
 }
