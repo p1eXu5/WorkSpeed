@@ -31,7 +31,8 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
         private bool _isImporting;
         private int? _importPercentage;
-        private string _importMessage;
+        private string _importStatusMessage;
+        private string _employeesStatusMessage;
 
         public MainViewModel ( IImportService importService, ReportService reportService, IDialogRepository dialogRepository )
         {
@@ -64,11 +65,20 @@ namespace WorkSpeed.DesktopClient.ViewModels
             }
         }
 
-        public string ImportMessage
+        public string ImportStatusMessage
         {
-            get => _importMessage;
+            get => _importStatusMessage;
             set {
-                _importMessage = value;
+                _importStatusMessage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string EmployeesStatusMessage
+        {
+            get => _employeesStatusMessage;
+            set {
+                _employeesStatusMessage = value;
                 OnPropertyChanged();
             }
         }
@@ -108,7 +118,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
             if ( code > 0 && code <= 100 ) {
                 
                 ImportPercentage = code;
-                ImportMessage = message;
+                ImportStatusMessage = message;
             }
         }
 
@@ -121,7 +131,15 @@ namespace WorkSpeed.DesktopClient.ViewModels
         private void LoadEmployees ( object obj )
         {
             Debug.WriteLine( "TabItem loaded" );
+            EmployeesStatusMessage = "Идёт загрузка сотрудников";
             _reportService.LoadEmployees();
+            if ( _reportService.Shifts.Any() ) {
+                EmployeesStatusMessage = "";
+                _reportService.Shifts.Select( s => _shifts.Add( s ) );
+            }
+            else {
+                EmployeesStatusMessage = "Сотрудники отсутствуют. Чтобы добавить сотрудников, имортируйте их.";
+            }
         }
     }
 }

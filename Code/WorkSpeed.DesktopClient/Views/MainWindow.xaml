@@ -346,7 +346,7 @@
                         <TextBlock Text="{Binding ImportPercentage}" />
                     </StackPanel>
 
-                    <TextBlock Margin="0,10,0,0" Text="{Binding ImportMessage}" />
+                    <TextBlock Margin="0,10,0,0" Text="{Binding ImportStatusMessage}" />
                 </StackPanel>
 
                 <Grid.Style>
