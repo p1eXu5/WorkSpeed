@@ -125,6 +125,7 @@
     <Compile Include="Contexts\Comparers\ComparerFactory.cs" />
     <Compile Include="Contexts\Comparers\EntityEqualityComparer.cs" />
     <Compile Include="Contexts\Comparers\ShipmentActionComparer.cs" />
+    <Compile Include="Contexts\ReportService.cs" />
     <Compile Include="FileModels\EmployeeShortImportModel.cs" />
     <Compile Include="FileModels\OtherActionImportModel.cs" />
     <Compile Include="Models\ActionModels\Dims.cs" />
@@ -170,6 +171,9 @@
     <Compile Include="FileModels\WithEmployeeImportModel.cs" />
     <Compile Include="FileModels\Converters\IImportModelVisitor.cs" />
     <Compile Include="Models\AllActions.cs" />
+    <Compile Include="Models\AppointmentGrouping.cs" />
+    <Compile Include="Models\PositionGrouping.cs" />
+    <Compile Include="Models\ShiftGrouping.cs" />
     <Compile Include="Period.cs" />
     <Compile Include="ProductivityCalculator\AddTimeOptions.cs" />
     <Compile Include="ProductivityCalculator\IProductivityCalculator.cs" />

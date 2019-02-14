@@ -10,13 +10,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
 {
     public class ShiftViewModel : ViewModel
     {
-        private readonly Shift _shift;
-
         public ShiftViewModel ( Shift shift )
         {
-            _shift = shift;
+            Shift = shift;
         }
 
-
+        public Shift Shift { get; }
     }
 }

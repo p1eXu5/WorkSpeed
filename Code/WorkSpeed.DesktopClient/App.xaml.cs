@@ -26,10 +26,9 @@ namespace WorkSpeed.DesktopClient
             var dialogRepository = new DialogRepository( mainWindow );
             dialogRepository.Register< ErrorViewModel, ErrorWindow >();
 
-            ImportService importService = null; 
 
-            importService = WorkSpeedBusinessContextCreator.Create();
-            var mvm = new MainViewModel( importService, dialogRepository );
+            var (importService, reportService) = WorkSpeedBusinessContextCreator.Create();
+            var mvm = new MainViewModel( importService, reportService, dialogRepository );
 
             mainWindow.DataContext = mvm;
             mainWindow.Show();

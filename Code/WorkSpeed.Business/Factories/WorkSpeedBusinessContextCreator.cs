@@ -13,7 +13,7 @@ namespace WorkSpeed.Business.Factories
 {
     public static class WorkSpeedBusinessContextCreator
     {
-        public static ImportService Create ()
+        public static (ImportService,ReportService) Create ()
         {
             var typeRepo = GetTypeRepository();
 
@@ -21,8 +21,9 @@ namespace WorkSpeed.Business.Factories
             context.Database.Migrate();
 
             var importService = new ImportService( context, typeRepo );
+            var reportService = new ReportService( new WorkSpeedDbContext() );
 
-            return importService;
+            return (importService, reportService);
         }
 
         private static ITypeRepository GetTypeRepository ()

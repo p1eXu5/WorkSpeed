@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,12 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Agbm.Wpf.MvvmBaseLibrary;
 using Microsoft.Win32;
+using WorkSpeed.Business.Contexts;
 using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.Data.DataContexts;
-using WorkSpeed.Data.DataContexts.MainViewModel;
 using WorkSpeed.DesktopClient.ViewModels.Dialogs;
+using WorkSpeed.DesktopClient.ViewModels.EntityViewModels;
 using WorkSpeed.Productivity;
 
 namespace WorkSpeed.DesktopClient.ViewModels
@@ -21,20 +23,27 @@ namespace WorkSpeed.DesktopClient.ViewModels
     {
         private readonly IImportService _importService;
         private readonly IDialogRepository _dialogRepository;
-        private readonly WorkSpeedDbContext _dbContext = new WorkSpeedDbContext();
+        private readonly ReportService _reportService;
+        private readonly ObservableCollection< ShiftViewModel > _shifts;
 
-        private CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private IProgress< (int, string) > _progress;
 
         private bool _isImporting;
         private int? _importPercentage;
         private string _importMessage;
 
-        public MainViewModel ( IImportService importService, IDialogRepository dialogRepository )
+        public MainViewModel ( IImportService importService, ReportService reportService, IDialogRepository dialogRepository )
         {
-            _importService = importService ?? throw new ArgumentNullException(nameof(importService), @"type cannot be null.");
+            _importService = importService ?? throw new ArgumentNullException(nameof(importService), @"IImportService cannot be null.");
+            _reportService = reportService ?? throw new ArgumentNullException(nameof(reportService), @"ReportService cannot be null.");
             _dialogRepository = dialogRepository;
             _progress = new Progress< (int code, string message) >( t => ProgressReport( t.code, t.message ) );
+
+            _shifts = new ObservableCollection< ShiftViewModel >();
+            Shifts = new ReadOnlyObservableCollection< ShiftViewModel >( _shifts );
+
+            //Observe( _reportService.Shifts, _shifts, vm => vm.Shift );
         }
 
         public bool IsImporting
@@ -64,6 +73,8 @@ namespace WorkSpeed.DesktopClient.ViewModels
             }
         }
 
+        public ReadOnlyObservableCollection< ShiftViewModel > Shifts { get; set; }
+
         public ICommand ImportAsyncCommand => new MvvmCommand( Import );
         public ICommand LoadEmployeesCommand => new MvvmCommand( LoadEmployees );
 
@@ -80,7 +91,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
                 IsImporting = true;
 
-                var token = CancellationTokenSource.Token;
+                var token = _cancellationTokenSource.Token;
                 await _importService.ImportFromXlsxAsync( ofd.FileName, _progress, token );
 
                 IsImporting = false;
@@ -110,7 +121,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
         private void LoadEmployees ( object obj )
         {
             Debug.WriteLine( "TabItem loaded" );
-
+            _reportService.LoadEmployees();
         }
     }
 }

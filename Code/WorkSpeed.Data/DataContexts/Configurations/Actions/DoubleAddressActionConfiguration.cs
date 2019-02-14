@@ -18,7 +18,7 @@ namespace WorkSpeed.Data.DataContexts.Configurations.Actions
             builder.Property( p => p.StartTime ).HasColumnType( "datetime2" ).IsRequired();
             builder.Property( p => p.Duration ).HasColumnType( "time" ).IsRequired();
 
-            builder.HasOne(p => p.Employee).WithMany( e => e.DoubleAddressActions).IsRequired();
+            builder.HasOne(p => p.Employee).WithMany( e => e.DoubleAddressActions).OnDelete( DeleteBehavior.Cascade ).IsRequired();
             builder.HasOne(p => p.Operation).WithMany().IsRequired();
 
             builder.HasMany(p => p.DoubleAddressDetails)

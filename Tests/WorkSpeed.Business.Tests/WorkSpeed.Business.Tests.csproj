@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contexts\UnitTests\ImportServiceTests.cs" />
+    <Compile Include="Contexts\UnitTests\ReportServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
