@@ -23,13 +23,27 @@
 
     <DataTemplate DataType="{x:Type vm:AppointmentGroupingViewModel}">
         <GroupBox Header="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <ListBox ItemsSource="{Binding Positions}" />
+            <ListBox ItemsSource="{Binding Positions}"
+                     VerticalAlignment="Top"
+                     HorizontalAlignment="Left"
+                     />
         </GroupBox>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:ShiftGroupingViewModel}">
         <GroupBox Header="{Binding Name}" Padding="10">
-            <ListBox ItemsSource="{Binding Appointments}" />
+            <ListBox ItemsSource="{Binding Appointments}"
+                     HorizontalAlignment="Left" VerticalAlignment="Top"
+                     >
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left"
+                                    />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
         </GroupBox>
     </DataTemplate>
 

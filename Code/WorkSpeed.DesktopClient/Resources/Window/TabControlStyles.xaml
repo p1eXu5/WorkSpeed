@@ -170,7 +170,7 @@
                     <Grid ClipToBounds="True" 
                           SnapsToDevicePixels="True" 
                           KeyboardNavigation.TabNavigation="Local"
-                            >
+                          >
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition  />

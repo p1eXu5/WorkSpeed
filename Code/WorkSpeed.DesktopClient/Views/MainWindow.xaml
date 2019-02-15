@@ -146,7 +146,7 @@
                                 />
                     </Border>
 
-                    <Border BorderThickness="0,0,1,0" BorderBrush="{StaticResource br_Window.Border}"></Border>
+                    <Border BorderThickness="0,0,1,0" BorderBrush="{StaticResource br_Window.Border}" />
 
                 </DockPanel>
 
@@ -261,13 +261,14 @@
                         </Button>
 
                         <TabControl x:Name="m_TabControl" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="2"
-                                Padding="0"
-                                TabStripPlacement="Top"
-                                Background="{StaticResource br_Window.Background}"
-                                BorderThickness="0"
-                                HorizontalAlignment="Stretch"
-                                IsHitTestVisible="True"
-                                >
+                                    Padding="0"
+                                    TabStripPlacement="Top"
+                                    Background="{StaticResource br_Window.Background}"
+                                    BorderThickness="0"
+                                    HorizontalAlignment="Stretch"
+                                    IsHitTestVisible="True"
+                                    Height="500"
+                                    >
                             <behavior:Interaction.Triggers>
                                 <behavior:EventTrigger EventName="SelectionChanged" SourceObject="{Binding ElementName=m_TabControl}" >
                                     <behavior:InvokeCommandAction Command="{Binding TabItemChangedCommand}"
@@ -293,6 +294,7 @@
                             </TabItem>
 
                             <TabItem RenderTransform="1,0,0,1,1,0"
+
                                     >
                                 <TabItem.Header>
                                     <StackPanel Orientation="Vertical">
@@ -307,14 +309,24 @@
                                     </StackPanel>
                                 </TabItem.Header>
 
-                                <ListBox ItemsSource="{Binding ShiftHierarchy}">
-                                    <ListBox.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <StackPanel Orientation="Horizontal" />
-                                        </ItemsPanelTemplate>
-                                    </ListBox.ItemsPanel>
-                                </ListBox>
-
+                                <Grid Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType=TabControl}}"
+                                      Height="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType=TabControl}}"
+                                      >
+                                    <ListBox 
+                                         Height="Auto" Width="Auto" 
+                                         HorizontalAlignment="Left" VerticalAlignment="Top"
+                                         >
+                                        <ListBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal"
+                                                        VerticalAlignment="Top"
+                                                        HorizontalAlignment="Left"
+                                                        />
+                                            </ItemsPanelTemplate>
+                                        </ListBox.ItemsPanel>
+                                        <ListBox></ListBox>
+                                    </ListBox>
+                                </Grid>
                             </TabItem>
 
                             <TabItem >
