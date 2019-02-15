@@ -259,7 +259,7 @@
                             </Button.Content>
                         </Button>
 
-                        <TabControl Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="2"
+                        <TabControl x:Name="TabControl" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="2"
                                 Padding="0"
                                 TabStripPlacement="Top"
                                 Background="{StaticResource br_Window.Background}"
@@ -267,6 +267,13 @@
                                 HorizontalAlignment="Stretch"
                                 IsHitTestVisible="True"
                                 >
+                            <behavior:Interaction.Triggers>
+                                <behavior:EventTrigger EventName="SelectionChanged">
+                                    <behavior:InvokeCommandAction Command="{Binding TabItemChangedCommand}"
+                                                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=TabControl}, Path=SelectedIndex}"
+                                                                  />
+                                </behavior:EventTrigger>
+                            </behavior:Interaction.Triggers>
 
                             <TabItem RenderTransform="1,0,0,1,2,0"
                                     >
@@ -307,11 +314,6 @@
                                     </ListBox.ItemsPanel>
                                 </ListBox>
 
-                                <behavior:Interaction.Triggers>
-                                    <behavior:EventTrigger EventName="GotFocus">
-                                        <behavior:InvokeCommandAction Command="{Binding LoadEmployeesCommand}"/>
-                                    </behavior:EventTrigger>
-                                </behavior:Interaction.Triggers>
                             </TabItem>
 
                             <TabItem >
