@@ -72,6 +72,8 @@
     <Compile Include="ViewModels\Dialogs\ErrorViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\ProductivityViewModel.cs" />
+    <Compile Include="ViewModels\EntityViewModels\ShiftViewModel.cs" />
+    <Compile Include="ViewModels\EntityViewModels\ShortBreakScheduleViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\ShortBreakViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\PositionGroupingViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\ShiftGroupingViewModel.cs" />
