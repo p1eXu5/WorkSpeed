@@ -88,8 +88,8 @@
     <Compile Include="ViewModels\StageViewModels\ProductivityStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ShiftSetupStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\StageViewModel.cs" />
-    <Compile Include="Views\DataTemplates\ShiftEmployeeUserControl.xaml.cs">
-      <DependentUpon>ShiftEmployeeUserControl.xaml</DependentUpon>
+    <Compile Include="Views\DataTemplates\EmployeeUserControl.xaml.cs">
+      <DependentUpon>EmployeeUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Dialogs\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
@@ -174,7 +174,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DataTemplates\ShiftEmployeeUserControl.xaml">
+    <Page Include="Views\DataTemplates\EmployeeUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -18,9 +18,9 @@ namespace WorkSpeed.DesktopClient.Views.DataTemplates
     /// <summary>
     /// Interaction logic for ShiftEmployeeUserControl.xaml
     /// </summary>
-    public partial class ShiftEmployeeUserControl : UserControl
+    public partial class EmployeeUserControl : UserControl
     {
-        public ShiftEmployeeUserControl()
+        public EmployeeUserControl()
         {
             InitializeComponent();
         }

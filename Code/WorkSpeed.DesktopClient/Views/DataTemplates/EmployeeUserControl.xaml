@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="WorkSpeed.DesktopClient.Views.DataTemplates.ShiftEmployeeUserControl"
+﻿<UserControl x:Class="WorkSpeed.DesktopClient.Views.DataTemplates.EmployeeUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -49,15 +49,14 @@
                            Text="{Binding FirstMiddleName}" />
             </Border>
 
-            <StackPanel Grid.Row="2" 
-                        Grid.Column="1" 
+            <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
                         Orientation="Horizontal"
                         VerticalAlignment="Top"
                         TextElement.FontSize="11"
                         TextElement.FontWeight="Regular"
                         >
 
-                <ComboBox BorderThickness="0" 
+                <ComboBox BorderThickness="0" Width="40"
                           ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.Appointments}"
                           />
                 <Grid>
@@ -76,7 +75,7 @@
                               ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.Ranks}"
                               />
                 </Grid>
-                <ComboBox BorderThickness="0" 
+                <ComboBox BorderThickness="0" Width="80"
                           ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.Positions}"
                           />
             </StackPanel>
