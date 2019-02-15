@@ -14,10 +14,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
     {
         private readonly ObservableCollection< EmployeeViewModel > _employees;
 
-        public PositionGroupingViewModel ( PositionGrouping position )
+        public PositionGroupingViewModel ( PositionGrouping positionGrouping )
         {
-            Position = position.Position;
-            _employees = new ObservableCollection< EmployeeViewModel >( position.Employees.Select( e => new EmployeeViewModel( e ) ) );
+            Position = positionGrouping.Position ?? throw new ArgumentNullException(nameof(positionGrouping), @"PositionGrouping cannot be null."); ;
+            _employees = new ObservableCollection< EmployeeViewModel >( positionGrouping.Employees.Select( e => new EmployeeViewModel( e ) ) );
             Employees = new ReadOnlyObservableCollection< EmployeeViewModel >( _employees );
         }
 

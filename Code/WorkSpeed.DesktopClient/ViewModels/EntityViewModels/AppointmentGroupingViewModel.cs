@@ -14,10 +14,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
     {
         private readonly ObservableCollection< PositionGroupingViewModel > _positions;
 
-        public AppointmentGroupingViewModel ( AppointmentGrouping appointment )
+        public AppointmentGroupingViewModel ( AppointmentGrouping appointmentGrouping )
         {
-            Appointment = appointment.Appointment;
-            _positions = new ObservableCollection< PositionGroupingViewModel >( appointment.PositionGrouping.Select( p => new PositionGroupingViewModel( p ) ) );
+            Appointment = appointmentGrouping.Appointment ?? throw new ArgumentNullException( nameof( appointmentGrouping ), @"AppointmentGrouping cannot be null." );
+            _positions = new ObservableCollection< PositionGroupingViewModel >( appointmentGrouping.PositionGrouping.Select( p => new PositionGroupingViewModel( p ) ) );
             Positions = new ReadOnlyObservableCollection< PositionGroupingViewModel >( _positions );
         }
 

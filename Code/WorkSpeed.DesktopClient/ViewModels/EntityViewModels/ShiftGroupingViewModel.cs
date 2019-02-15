@@ -14,10 +14,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
     {
         private readonly ObservableCollection< AppointmentGroupingViewModel > _appointments;
 
-        public ShiftGroupingViewModel ( ShiftGrouping shift )
+        public ShiftGroupingViewModel ( ShiftGrouping shiftGrouping )
         {
-            Shift = shift.Shift;
-            _appointments = new ObservableCollection< AppointmentGroupingViewModel >( shift.Appointments.Select( a => new AppointmentGroupingViewModel( a ) ) );
+            Shift = shiftGrouping.Shift ?? throw new ArgumentNullException(nameof(shiftGrouping), @"ShiftGrouping cannot be null."); ;
+            _appointments = new ObservableCollection< AppointmentGroupingViewModel >( shiftGrouping.Appointments.Select( a => new AppointmentGroupingViewModel( a ) ) );
             Appointments = new ReadOnlyObservableCollection< AppointmentGroupingViewModel >( _appointments );
         }
 
