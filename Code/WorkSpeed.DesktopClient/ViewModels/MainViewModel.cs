@@ -25,9 +25,11 @@ namespace WorkSpeed.DesktopClient.ViewModels
         private readonly IImportService _importService;
         private readonly IDialogRepository _dialogRepository;
         private readonly ReportService _reportService;
+
+        private readonly ObservableCollection< ShiftViewModel > _shifts;
+        private readonly ObservableCollection< ShortBreakScheduleViewModel > _shortBreakSchedules;
+
         private readonly ObservableCollection< ShiftGroupingViewModel > _shiftHierarchy;
-        private readonly ObservableCollection< Shift > _shifts;
-        private readonly ObservableCollection< ShortBreakSchedule > _shortBreakSchedules;
 
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private IProgress< (int, string) > _progress;
@@ -44,18 +46,21 @@ namespace WorkSpeed.DesktopClient.ViewModels
             _dialogRepository = dialogRepository;
             _progress = new Progress< (int code, string message) >( t => ProgressReport( t.code, t.message ) );
 
-            _shiftHierarchy = new ObservableCollection< ShiftGroupingViewModel >();
-            ShiftHierarchy = new ReadOnlyObservableCollection< ShiftGroupingViewModel >( _shiftHierarchy );
+            _shifts = new ObservableCollection< ShiftViewModel >( _reportService.Shifts.Select( sh => new ShiftViewModel( sh ) ) );
+            Shifts = new ReadOnlyObservableCollection< ShiftViewModel >( _shifts );
+            Observe( _reportService.Shifts, _shifts, sh => sh.Shift );
 
-            _shifts = new ObservableCollection< Shift >();
-            Shifts = new ReadOnlyObservableCollection< Shift >( _shifts );
+            _shortBreakSchedules = new ObservableCollection< ShortBreakScheduleViewModel >( _reportService.ShortBreakSchedules.Select( sbs => new ShortBreakScheduleViewModel( sbs ) ));
+            ShortBreakSchedules = new ReadOnlyObservableCollection< ShortBreakScheduleViewModel >( _shortBreakSchedules );
+            Observe( _reportService.ShortBreakSchedules, _shortBreakSchedules, sbs => sbs.ShortBreakSchedule  );
 
             Appointments = _reportService.Appointments;
             Ranks = _reportService.Ranks;
             Positions = _reportService.Positions;
 
-            _shortBreakSchedules = new ObservableCollection< ShortBreakSchedule >();
-            ShortBreakSchedules = new ReadOnlyObservableCollection< ShortBreakSchedule >( _shortBreakSchedules );
+            _shiftHierarchy = new ObservableCollection< ShiftGroupingViewModel >();
+            ShiftHierarchy = new ReadOnlyObservableCollection< ShiftGroupingViewModel >( _shiftHierarchy );
+
 
             //Observe( _reportService.ShiftGrouping, _shiftHierarchy, vm => vm.Shift );
         }
@@ -100,12 +105,14 @@ namespace WorkSpeed.DesktopClient.ViewModels
         public IEnumerable< Rank > Ranks { get; }
         public IEnumerable< Position > Positions { get; }
 
+        public ReadOnlyObservableCollection< ShiftViewModel > Shifts { get; }
+        public ReadOnlyObservableCollection< ShortBreakScheduleViewModel > ShortBreakSchedules { get; }
+
         public ReadOnlyObservableCollection< ShiftGroupingViewModel > ShiftHierarchy { get; }
-        public ReadOnlyObservableCollection< Shift > Shifts { get; }
-        public ReadOnlyObservableCollection< ShortBreakSchedule > ShortBreakSchedules { get; }
 
         public ICommand ImportAsyncCommand => new MvvmCommand( Import );
         public ICommand LoadEmployeesCommand => new MvvmCommand( LoadEmployees );
+        public ICommand TabItemChangedCommand => new MvvmCommand( TabItemChanged );
 
         private async void Import ( object obj )
         {
@@ -147,24 +154,32 @@ namespace WorkSpeed.DesktopClient.ViewModels
             view?.ShowDialog();
         }
 
+        private void TabItemChanged ( object obj )
+        {
+            if ( (int)obj == 1 ) { LoadEmployees( obj ); }
+        }
+
         private void LoadEmployees ( object obj )
         {
             EmployeesStatusMessage = "Идёт загрузка сотрудников";
             _reportService.LoadEmployees();
 
-            if ( _reportService.ShiftGrouping.Any() ) {
-            
+            if (_reportService.ShiftGrouping.Any())
+            {
+
                 EmployeesStatusMessage = "";
 
-                if ( _shifts.Any() ) { _shifts.Clear(); }
-                if ( _shortBreakSchedules.Any() ) { _shortBreakSchedules.Clear(); }
-                if ( _shiftHierarchy.Any() ) { _shiftHierarchy.Clear(); }
+                if (_shifts.Any()) { _shifts.Clear(); }
+                if (_shortBreakSchedules.Any()) { _shortBreakSchedules.Clear(); }
+                if (_shiftHierarchy.Any()) { _shiftHierarchy.Clear(); }
 
-                foreach ( var shiftGrouping in _reportService.ShiftGrouping ) {
-                    _shiftHierarchy.Add( new ShiftGroupingViewModel( shiftGrouping ) ) ;
+                foreach (var shiftGrouping in _reportService.ShiftGrouping)
+                {
+                    _shiftHierarchy.Add(new ShiftGroupingViewModel(shiftGrouping));
                 }
             }
-            else {
+            else
+            {
                 EmployeesStatusMessage = "Сотрудники отсутствуют. Чтобы добавить сотрудников, имортируйте их.";
             }
         }
