@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
 using WorkSpeed.Data.Models.Enums;
@@ -24,7 +26,11 @@ namespace WorkSpeed.Data.DataContexts.ImportService
         public static IQueryable< Position > GetPositions ( this WorkSpeedDbContext dbContext )
             => dbContext.Positions.AsQueryable();
 
+        public static async Task< Shift > GetDefaultShiftAsync ( this WorkSpeedDbContext dbContext )
+            => await dbContext.Shifts.FirstAsync( s => s.Id == 1 );
 
+        public static async Task< ShortBreakSchedule > GetDefaultShortBreakScheduleAsync ( this WorkSpeedDbContext dbContext )
+            => await dbContext.ShortBreakSchedules.FirstAsync( s => s.Id == 1 );
 
         public static IQueryable< Operation > GetOperations ( this WorkSpeedDbContext dbContext, OperationGroups group )
             => dbContext.Operations.Where( o => o.OperationGroup == group ).AsQueryable();
