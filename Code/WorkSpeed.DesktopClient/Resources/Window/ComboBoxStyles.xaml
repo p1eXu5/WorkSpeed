@@ -7,7 +7,7 @@
     <!-- __________________Colors, Brushes And Geometry___________________ -->
 
 
-    <!-- Common Colors And Brushes -->
+    <!-- Common Colors And Brushes --><!--
     <Color x:Key="col_ComboBox.Disabled">#BBBBBB</Color>
 
     <Color x:Key="col_ComboBox.Foreground0">#666666</Color>
@@ -22,11 +22,11 @@
         <GradientStop Color="{DynamicResource col_ComboBox.Foreground1}" Offset="1" />
     </LinearGradientBrush>
 
-    <!-- ComboBoxItem Colors -->
+    --><!-- ComboBoxItem Colors --><!--
     <Color x:Key="col_ComboBoxItem.CoveredItem">#C3C3C3</Color>
     <Color x:Key="col_ComboBoxItem.SelectedUnfocused">#EEEEEE</Color>
 
-    <!-- ComboBox.TextBox Colors And Brushes -->
+    --><!-- ComboBox.TextBox Colors And Brushes --><!--
 
     <LinearGradientBrush x:Key="brg_ComboBox.TextBox.Border">
         <GradientStop Color="{DynamicResource col_ComboBox.Border}" Offset="0.5" />
@@ -35,7 +35,7 @@
         <GradientStop Color="{DynamicResource col_ComboBox.Border}" Offset="0.5" />
     </LinearGradientBrush>
 
-    <!-- ComboBox.ToggleButton Colors And Geometry -->
+    --><!-- ComboBox.ToggleButton Colors And Geometry --><!--
 
     <Color x:Key="col_ComboBox.ToggleButton.MouseOver0">#000077</Color>
     <Color x:Key="col_ComboBox.ToggleButton.MouseOver1">#000022</Color>
@@ -53,7 +53,7 @@
         </PathGeometry.Figures>
     </PathGeometry>
 
-    <!-- NumericComboBox Brushes -->
+    --><!-- NumericComboBox Brushes --><!--
     <LinearGradientBrush x:Key="brg_NumericComboBox.Foreground" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="{DynamicResource col_ComboBox.Foreground0}" />
         <GradientStop Offset="1" Color="{DynamicResource col_ComboBox.Foreground1}" />
@@ -62,10 +62,10 @@
 
 
 
-    <!-- __________________Styles___________________ -->
+    --><!-- __________________Styles___________________ -->
 
 
-    <!-- ComboBoxItem Style -->
+    <!-- ComboBoxItem Style --><!--
     <Style TargetType="ComboBoxItem" x:Key="{x:Type ComboBoxItem}" >
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -165,7 +165,7 @@
         </Setter>
     </Style>
 
-    <!-- ComboBox.TextBox Style -->
+    --><!-- ComboBox.TextBox Style --><!--
     <Style x:Key="st_ComboBox.TextBox" TargetType="TextBox" >
         <Setter Property="Template">
             <Setter.Value>
@@ -218,7 +218,7 @@
         </Setter>
     </Style>
 
-    <!-- ComboBox.ToggleButton Style -->
+    --><!-- ComboBox.ToggleButton Style --><!--
     <Style x:Key="st_ComboBox.ToggleButton" TargetType="ToggleButton" >
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Template">
@@ -284,7 +284,7 @@
         </Setter>
     </Style>
 
-    <!-- ComboBox Style -->
+    --><!-- ComboBox Style --><!--
     <Style TargetType="ComboBox">
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -314,7 +314,7 @@
                             <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="0"/>
                         </Grid.ColumnDefinitions>
 
-                        <!--TextBox-->
+                        --><!--TextBox--><!--
                         <TextBox x:Name="PART_EditableTextBox" Grid.Column="0"
                                  BorderThickness="{TemplateBinding BorderThickness}"
                                  BorderBrush="{TemplateBinding BorderBrush}"
@@ -326,7 +326,7 @@
                                  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                                  />
 
-                        <!--ToggleButton-->
+                        --><!--ToggleButton--><!--
                         <ToggleButton Grid.Column="1"
                                       IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsDropDownOpen}"
                                       Style="{StaticResource st_ComboBox.ToggleButton}"
@@ -367,8 +367,8 @@
         </Setter>
     </Style>
 
-    <!-- NumericComboBox -->
-    <Style TargetType="ComboBox" x:Key="style_NumericComboBox">
+    --><!-- NumericComboBox -->
+    <!--<Style TargetType="ComboBox" x:Key="style_NumericComboBox">
         <Setter Property="MinWidth" Value="40" />
         <Setter Property="MinHeight" Value="30" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -454,7 +454,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style>-->
 
 
 
