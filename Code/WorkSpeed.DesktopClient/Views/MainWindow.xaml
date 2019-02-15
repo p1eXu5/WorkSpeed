@@ -152,9 +152,10 @@
 
                 <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="2" />
 
-                <!-- tab control -->
+                <!-- main -->
                 <Grid Grid.Column="2">
 
+                    <!-- window buttons-->
                     <StackPanel HorizontalAlignment="Right"
                             IsHitTestVisible="True"
                             VerticalAlignment="Top"
@@ -259,7 +260,7 @@
                             </Button.Content>
                         </Button>
 
-                        <TabControl x:Name="TabControl" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="2"
+                        <TabControl x:Name="m_TabControl" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="2"
                                 Padding="0"
                                 TabStripPlacement="Top"
                                 Background="{StaticResource br_Window.Background}"
@@ -268,7 +269,7 @@
                                 IsHitTestVisible="True"
                                 >
                             <behavior:Interaction.Triggers>
-                                <behavior:EventTrigger EventName="SelectionChanged">
+                                <behavior:EventTrigger EventName="SelectionChanged" SourceObject="{Binding ElementName=m_TabControl}" >
                                     <behavior:InvokeCommandAction Command="{Binding TabItemChangedCommand}"
                                                                   CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=TabControl}, Path=SelectedIndex}"
                                                                   />

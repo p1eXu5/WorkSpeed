@@ -111,7 +111,6 @@ namespace WorkSpeed.DesktopClient.ViewModels
         public ReadOnlyObservableCollection< ShiftGroupingViewModel > ShiftHierarchy { get; }
 
         public ICommand ImportAsyncCommand => new MvvmCommand( Import );
-        public ICommand LoadEmployeesCommand => new MvvmCommand( LoadEmployees );
         public ICommand TabItemChangedCommand => new MvvmCommand( TabItemChanged );
 
         private async void Import ( object obj )
@@ -169,8 +168,6 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
                 EmployeesStatusMessage = "";
 
-                if (_shifts.Any()) { _shifts.Clear(); }
-                if (_shortBreakSchedules.Any()) { _shortBreakSchedules.Clear(); }
                 if (_shiftHierarchy.Any()) { _shiftHierarchy.Clear(); }
 
                 foreach (var shiftGrouping in _reportService.ShiftGrouping)
