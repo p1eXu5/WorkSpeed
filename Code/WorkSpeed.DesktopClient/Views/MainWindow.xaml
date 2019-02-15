@@ -299,7 +299,7 @@
                                     </StackPanel>
                                 </TabItem.Header>
 
-                                <ListBox ItemsSource="{Binding Shifts}">
+                                <ListBox ItemsSource="{Binding ShiftHierarchy}">
                                     <ListBox.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <StackPanel Orientation="Horizontal" />

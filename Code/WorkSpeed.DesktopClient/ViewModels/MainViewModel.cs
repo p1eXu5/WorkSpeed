@@ -83,7 +83,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
             }
         }
 
-        public ReadOnlyObservableCollection< ShiftViewModel > Shifts { get; set; }
+        public ReadOnlyObservableCollection< ShiftViewModel > ShiftHierarchy { get; set; }
 
         public ICommand ImportAsyncCommand => new MvvmCommand( Import );
         public ICommand LoadEmployeesCommand => new MvvmCommand( LoadEmployees );
