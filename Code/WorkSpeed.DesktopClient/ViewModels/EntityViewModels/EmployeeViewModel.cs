@@ -17,7 +17,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
 
         public EmployeeViewModel(Employee employee)
         {
-            _employee = employee ?? throw new ArgumentNullException(nameof(employee));
+            _employee = employee ?? throw new ArgumentNullException( nameof( employee ), @"Employee can not be null." );
 
             var name = _employee.Name.Split( new[] { ' ' } );
             SecondName = name[ 0 ];
@@ -25,9 +25,14 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
                                   ? $"{name[ 1 ]} {name[ 2 ]}" 
                                   : $"{name[ 1 ]} ";
 
-            using ( var stream = new MemoryStream( _employee.Avatar.Picture ) ) {
+            if ( _employee.Avatar == null ) {
+                Picture = WorkSpeed.DesktopClient.Properties.Resources.default_face;
+            }
+            else {
+                using ( var stream = new MemoryStream( _employee.Avatar.Picture ) ) {
 
-                Picture = new Bitmap( stream );
+                    Picture = new Bitmap( stream );
+                }
             }
         }
 
