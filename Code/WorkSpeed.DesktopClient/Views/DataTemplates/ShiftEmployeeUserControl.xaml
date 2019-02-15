@@ -3,325 +3,111 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WorkSpeed.DesktopClient.Views.DataTemplates"
+             xmlns:vm="clr-namespace:WorkSpeed.DesktopClient.ViewModels.EntityViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance vm:EmployeeViewModel}"
              FontFamily="{StaticResource font_Rubik}"
+             Width="266" Height="116" Margin="2,5"
+             Padding="0"
              >
-    <Grid>
-        <GroupBox Header="5/2" Padding="10">
-            <GroupBox Header="Заместители" HorizontalAlignment="Left" VerticalAlignment="Top">
-                <ListBox Background="Transparent" BorderBrush="{x:Null}" Margin="0,5">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel MaxWidth="570" />
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <Border BorderThickness="1" 
-                            BorderBrush="{StaticResource br_Window.Border}"
-                            Margin="2,5"
-                            >
-                        <Grid Background="{StaticResource br_Window.Control.Background}"
-                              Width="265" MinHeight="115"
-                              >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="3*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Image Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" 
-                                   Source="{StaticResource im_Face}" 
-                                   Width="50" Height="65"
-                                   Margin="10,10,10,5"
-                                   />
-                            <Border Grid.Row="0" Grid.Column="1" Margin="0,0,0,-15">
-                                <TextBlock FontSize="18" FontWeight="Regular"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       Text="Панкариков" />
-                            </Border>
-                            <Border Grid.Row="1" Grid.Column="1">
-                                <TextBlock FontSize="12" FontFamily="{StaticResource font_RubikLight}"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       Text="Сергей Александрович" />
-                            </Border>
-                            <StackPanel Grid.Row="2" 
-                                        Grid.Column="1" 
-                                        Orientation="Horizontal"
-                                        VerticalAlignment="Top"
-                                        TextElement.FontSize="11"
-                                        TextElement.FontWeight="Regular"
-                                        >
+    <Border BorderThickness="1" 
+            BorderBrush="{StaticResource br_Window.Border}"              
+            >
+        <Grid Background="{StaticResource br_Window.Control.Background}"
+              >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="27" />
+                <RowDefinition Height="18" />
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-                                <ComboBox SelectedIndex="0" BorderThickness="0" >
-                                    <ComboBoxItem>зам.</ComboBoxItem>
-                                </ComboBox>
-                                <Grid>
-                                    <Path Data="{StaticResource g_Emblem}"
-                                          Stroke="{StaticResource br_Window.Border}"
-                                          Fill="Yellow"
-                                          Panel.ZIndex="-100"
-                                          >
-                                        <Path.RenderTransform>
-                                            <TranslateTransform X="4" Y="4" />
-                                        </Path.RenderTransform>
-                                    </Path>
-                                    <ComboBox SelectedIndex="0" BorderThickness="0" 
-                                              Margin="5,0" Width="30"
-                                              HorizontalContentAlignment="Center"
-                                              >
-                                        <ComboBoxItem>15</ComboBoxItem>
-                                    </ComboBox>
-                                </Grid>
-                                <ComboBox SelectedIndex="0" BorderThickness="0" >
-                                    <ComboBoxItem>отгрузка</ComboBoxItem>
-                                </ComboBox>
-                            </StackPanel>
+            <Image Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" 
+                   Source="{Binding Picture}" 
+                   Width="50" Height="65"
+                   Margin="10,10,10,0"
+                   VerticalAlignment="Top"
+                   />
 
-                            <HeaderedContentControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"
-                                                    FontSize="11"
-                                                    >
-                                <HeaderedContentControl.Header>
-                                    <Border>
-                                        <TextBlock FontFamily="{StaticResource font_RubikMedium}" 
+            <Border Grid.Row="0" Grid.Column="1" Margin="0,10,0,0">
+                <TextBlock FontSize="18" FontWeight="Regular"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Bottom"
+                           Text="{Binding SecondName}" />
+            </Border>
+            <Border Grid.Row="1" Grid.Column="1">
+                <TextBlock FontSize="12" FontFamily="{StaticResource font_RubikLight}"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           Text="{Binding FirstMiddleName}" />
+            </Border>
+
+            <StackPanel Grid.Row="2" 
+                        Grid.Column="1" 
+                        Orientation="Horizontal"
+                        VerticalAlignment="Top"
+                        TextElement.FontSize="11"
+                        TextElement.FontWeight="Regular"
+                        >
+
+                <ComboBox BorderThickness="0" 
+                          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.Appointments}"
+                          />
+                <Grid>
+                    <Path Data="{StaticResource g_Emblem}"
+                          Stroke="{StaticResource br_Window.Border}"
+                          Fill="Yellow"
+                          Panel.ZIndex="-100"
+                          >
+                        <Path.RenderTransform>
+                            <TranslateTransform X="4" Y="4" />
+                        </Path.RenderTransform>
+                    </Path>
+                    <ComboBox BorderThickness="0" 
+                              Margin="5,0" Width="30"
+                              HorizontalContentAlignment="Center"
+                              ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.Ranks}"
+                              />
+                </Grid>
+                <ComboBox BorderThickness="0" 
+                          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.Positions}"
+                          />
+            </StackPanel>
+
+            <HeaderedContentControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"
+                                    FontSize="11"
+                                    >
+                <HeaderedContentControl.Header>
+                    <Border>
+                        <TextBlock FontFamily="{StaticResource font_RubikMedium}" 
                                                    Text="Смена:" />
-                                    </Border>
-                                </HeaderedContentControl.Header>
-                                <ComboBox SelectedIndex="0" >
-                                    <ComboBoxItem>5/2</ComboBoxItem>
-                                </ComboBox>
-                            </HeaderedContentControl>
+                    </Border>
+                </HeaderedContentControl.Header>
+                <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.Shifts}" />
+            </HeaderedContentControl>
 
-                            <HeaderedContentControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"
-                                                    FontSize="11"
-                                                    Margin="10,0,10,4"
-                                                    >
-                                <HeaderedContentControl.Header>
-                                    <Border>
-                                        <TextBlock FontSize="11" 
+            <HeaderedContentControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"
+                                    FontSize="11"
+                                    Margin="10,0,10,8"
+                                    >
+                <HeaderedContentControl.Header>
+                    <Border>
+                        <TextBlock FontSize="11" 
                                                FontFamily="{StaticResource font_RubikMedium}" 
                                                Text="График перерывов:" 
                                                />
-                                    </Border>
-                                </HeaderedContentControl.Header>
-                                <ComboBox SelectedIndex="0"  >
-                                    <ComboBoxItem>Для</ComboBoxItem>
-                                </ComboBox>
-                            </HeaderedContentControl>
-                        </Grid>
                     </Border>
-                    <Border BorderThickness="1" 
-                            BorderBrush="{StaticResource br_Window.Border}"
-                            Margin="2,5"
-                            >
-                        <Grid Background="{StaticResource br_Window.Control.Background}"
-                              Width="265" MinHeight="115"
-                              >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="3*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Image Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" 
-                                   Source="{StaticResource im_Face}" 
-                                   Width="50" Height="65"
-                                   Margin="10,10,10,5"
-                                   />
-                            <Border Grid.Row="0" Grid.Column="1" Margin="0,0,0,-15">
-                                <TextBlock FontSize="18" FontWeight="Regular"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       Text="Панкариков" />
-                            </Border>
-                            <Border Grid.Row="1" Grid.Column="1">
-                                <TextBlock FontSize="12" FontFamily="{StaticResource font_RubikLight}"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       Text="Сергей Александрович" />
-                            </Border>
-                            <StackPanel Grid.Row="2" 
-                                        Grid.Column="1" 
-                                        Orientation="Horizontal"
-                                        VerticalAlignment="Top"
-                                        TextElement.FontSize="11"
-                                        TextElement.FontWeight="Regular"
-                                        >
-
-                                <ComboBox SelectedIndex="0" BorderThickness="0" >
-                                    <ComboBoxItem>зам.</ComboBoxItem>
-                                </ComboBox>
-                                <Grid>
-                                    <Path Data="{StaticResource g_Emblem}"
-                                          Stroke="{StaticResource br_Window.Border}"
-                                          Fill="Yellow"
-                                          Panel.ZIndex="-100"
-                                          >
-                                        <Path.RenderTransform>
-                                            <TranslateTransform X="4" Y="4" />
-                                        </Path.RenderTransform>
-                                    </Path>
-                                    <ComboBox SelectedIndex="0" BorderThickness="0" 
-                                              Margin="5,0" Width="30"
-                                              HorizontalContentAlignment="Center"
-                                              >
-                                        <ComboBoxItem>15</ComboBoxItem>
-                                    </ComboBox>
-                                </Grid>
-                                <ComboBox SelectedIndex="0" BorderThickness="0" >
-                                    <ComboBoxItem>отгрузка</ComboBoxItem>
-                                </ComboBox>
-                            </StackPanel>
-
-                            <HeaderedContentControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"
-                                                    FontSize="11"
-                                                    >
-                                <HeaderedContentControl.Header>
-                                    <Border>
-                                        <TextBlock FontFamily="{StaticResource font_RubikMedium}" 
-                                                   Text="Смена:" />
-                                    </Border>
-                                </HeaderedContentControl.Header>
-                                <ComboBox SelectedIndex="0" >
-                                    <ComboBoxItem>5/2</ComboBoxItem>
-                                </ComboBox>
-                            </HeaderedContentControl>
-
-                            <HeaderedContentControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"
-                                                    FontSize="11"
-                                                    Margin="10,0,10,4"
-                                                    >
-                                <HeaderedContentControl.Header>
-                                    <Border>
-                                        <TextBlock FontSize="11" 
-                                               FontFamily="{StaticResource font_RubikMedium}" 
-                                               Text="График перерывов:" 
-                                               />
-                                    </Border>
-                                </HeaderedContentControl.Header>
-                                <ComboBox SelectedIndex="0"  >
-                                    <ComboBoxItem>Для</ComboBoxItem>
-                                </ComboBox>
-                            </HeaderedContentControl>
-                        </Grid>
-                    </Border>
-                    <Border BorderThickness="1" 
-                            BorderBrush="{StaticResource br_Window.Border}"
-                            Margin="2,5"
-                            >
-                        <Grid Background="{StaticResource br_Window.Control.Background}"
-                              Width="265" MinHeight="115"
-                              >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="3*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Image Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" 
-                                   Source="{StaticResource im_Face}" 
-                                   Width="50" Height="65"
-                                   Margin="10,10,10,5"
-                                   />
-                            <Border Grid.Row="0" Grid.Column="1" Margin="0,0,0,-15">
-                                <TextBlock FontSize="18" FontWeight="Regular"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       Text="Панкариков" />
-                            </Border>
-                            <Border Grid.Row="1" Grid.Column="1">
-                                <TextBlock FontSize="12" FontFamily="{StaticResource font_RubikLight}"
-                                       HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       Text="Сергей Александрович" />
-                            </Border>
-                            <StackPanel Grid.Row="2" 
-                                        Grid.Column="1" 
-                                        Orientation="Horizontal"
-                                        VerticalAlignment="Top"
-                                        TextElement.FontSize="11"
-                                        TextElement.FontWeight="Regular"
-                                        >
-
-                                <ComboBox SelectedIndex="0" BorderThickness="0" >
-                                    <ComboBoxItem>зам.</ComboBoxItem>
-                                </ComboBox>
-                                <Grid>
-                                    <Path Data="{StaticResource g_Emblem}"
-                                          Stroke="{StaticResource br_Window.Border}"
-                                          Fill="Yellow"
-                                          Panel.ZIndex="-100"
-                                          >
-                                        <Path.RenderTransform>
-                                            <TranslateTransform X="4" Y="4" />
-                                        </Path.RenderTransform>
-                                    </Path>
-                                    <ComboBox SelectedIndex="0" BorderThickness="0" 
-                                              Margin="5,0" Width="30"
-                                              HorizontalContentAlignment="Center"
-                                              >
-                                        <ComboBoxItem>15</ComboBoxItem>
-                                    </ComboBox>
-                                </Grid>
-                                <ComboBox SelectedIndex="0" BorderThickness="0" >
-                                    <ComboBoxItem>отгрузка</ComboBoxItem>
-                                </ComboBox>
-                            </StackPanel>
-
-                            <HeaderedContentControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"
-                                                    FontSize="11"
-                                                    >
-                                <HeaderedContentControl.Header>
-                                    <Border>
-                                        <TextBlock FontFamily="{StaticResource font_RubikMedium}" 
-                                                   Text="Смена:" />
-                                    </Border>
-                                </HeaderedContentControl.Header>
-                                <ComboBox SelectedIndex="0" >
-                                    <ComboBoxItem>5/2</ComboBoxItem>
-                                </ComboBox>
-                            </HeaderedContentControl>
-
-                            <HeaderedContentControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"
-                                                    FontSize="11"
-                                                    Margin="10,0,10,4"
-                                                    >
-                                <HeaderedContentControl.Header>
-                                    <Border>
-                                        <TextBlock FontSize="11" 
-                                               FontFamily="{StaticResource font_RubikMedium}" 
-                                               Text="График перерывов:" 
-                                               />
-                                    </Border>
-                                </HeaderedContentControl.Header>
-                                <ComboBox SelectedIndex="0"  >
-                                    <ComboBoxItem>Для</ComboBoxItem>
-                                </ComboBox>
-                            </HeaderedContentControl>
-                        </Grid>
-                    </Border>
-                </ListBox>
-            </GroupBox>
-        </GroupBox>
-    </Grid>
+                </HeaderedContentControl.Header>
+                <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.ShortBreakSchedules}"  >
+                </ComboBox>
+            </HeaderedContentControl>
+        </Grid>
+    </Border>
 </UserControl>

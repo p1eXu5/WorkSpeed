@@ -23,5 +23,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
 
         public Appointment Appointment { get;}
         public ReadOnlyObservableCollection< PositionViewModel > Positions { get; }
+
+        public string Name => Appointment.InnerName;
     }
 }

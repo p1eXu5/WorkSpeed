@@ -299,6 +299,14 @@
                                     </StackPanel>
                                 </TabItem.Header>
 
+                                <ListBox ItemsSource="{Binding Shifts}">
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                </ListBox>
+
                                 <behavior:Interaction.Triggers>
                                     <behavior:EventTrigger EventName="GotFocus">
                                         <behavior:InvokeCommandAction Command="{Binding LoadEmployeesCommand}"/>

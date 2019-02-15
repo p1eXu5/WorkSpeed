@@ -42,7 +42,10 @@ namespace WorkSpeed.Data.DataContexts.ReportService
 
             return query.AsEnumerable().Select( s => (
                                                        s.Shift,
-                                                       s.Appointments?.Select( a => (a.Appointment, a.Positions.Select( p => (p.Position, p.Employees?.ToArray()) ).ToArray()) ).ToArray()
+                                                       s.Appointments?.Select( a => 
+                                                                ( a.Appointment, 
+                                                                  a.Positions.Select( p => 
+                                                                        ( p.Position, p.Employees?.ToArray() ) ).ToArray() ) ).ToArray()
                                                    ));
         }
 

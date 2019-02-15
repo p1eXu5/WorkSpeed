@@ -138,6 +138,7 @@
     <Compile Include="DataContexts\Configurations\Actions\ReceptionActionConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\AddressConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\AppointmentConfiguration.cs" />
+    <Compile Include="DataContexts\Configurations\AvatarConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\CategoryConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\CategorySetConfiguration.cs" />
     <Compile Include="DataContexts\Configurations\EmployeeConfiguration.cs" />
@@ -157,6 +158,7 @@
     </Compile>
     <Compile Include="Migrations\WorkSpeedDbContextModelSnapshot.cs" />
     <Compile Include="Models\Actions\EmployeeActionBase.cs" />
+    <Compile Include="Models\Avatar.cs" />
     <Compile Include="Models\CategoryCategorySet.cs" />
     <Compile Include="Models\IKeyedEntity.cs" />
     <Compile Include="DataContexts\WorkSpeedDbContext.cs" />

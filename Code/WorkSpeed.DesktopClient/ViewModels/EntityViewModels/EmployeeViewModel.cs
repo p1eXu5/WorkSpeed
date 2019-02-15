@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Drawing;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using Agbm.Wpf.MvvmBaseLibrary;
 using WorkSpeed.Data.Models;
 
@@ -15,9 +18,25 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
         public EmployeeViewModel(Employee employee)
         {
             _employee = employee ?? throw new ArgumentNullException(nameof(employee));
+
+            var name = _employee.Name.Split( new[] { ' ' } );
+            SecondName = name[ 0 ];
+            FirstMiddleName = name.Length == 3 
+                                  ? $"{name[ 1 ]} {name[ 2 ]}" 
+                                  : $"{name[ 1 ]} ";
+
+            using ( var stream = new MemoryStream( _employee.Avatar.Picture ) ) {
+
+                Picture = new Bitmap( stream );
+            }
         }
 
         public Employee Employee => _employee;
+
+        public string SecondName { get; }
+        public string FirstMiddleName { get; }
+
+        public Bitmap Picture { get; }
 
         public string EmployeeId => _employee.Id;
 
@@ -30,7 +49,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
             }
         }
 
-        public string EmployeeName => _employee.Name;
 
         public bool IsActive
         {
