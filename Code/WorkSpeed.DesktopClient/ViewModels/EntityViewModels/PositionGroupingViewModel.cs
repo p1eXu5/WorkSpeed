@@ -10,11 +10,11 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
 {
-    public class PositionViewModel : ViewModel
+    public class PositionGroupingViewModel : ViewModel
     {
         private readonly ObservableCollection< EmployeeViewModel > _employees;
 
-        public PositionViewModel ( PositionGrouping position )
+        public PositionGroupingViewModel ( PositionGrouping position )
         {
             Position = position.Position;
             _employees = new ObservableCollection< EmployeeViewModel >( position.Employees.Select( e => new EmployeeViewModel( e ) ) );

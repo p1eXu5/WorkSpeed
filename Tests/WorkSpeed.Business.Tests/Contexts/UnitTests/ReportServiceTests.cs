@@ -37,7 +37,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
 
             service.LoadEmployees();
 
-            Assert.That( service.Shifts, Is.Not.Empty );
+            Assert.That( service.ShiftGrouping, Is.Not.Empty );
         }
 
         [ Test ]
@@ -47,7 +47,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
 
             service.LoadEmployees();
 
-            Assert.That( service.Shifts, Is.Empty );
+            Assert.That( service.ShiftGrouping, Is.Empty );
         }
 
         #region Factory

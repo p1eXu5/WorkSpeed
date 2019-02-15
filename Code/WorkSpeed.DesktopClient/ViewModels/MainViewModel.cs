@@ -13,6 +13,7 @@ using WorkSpeed.Business.Contexts;
 using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.Data.DataContexts;
+using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.Dialogs;
 using WorkSpeed.DesktopClient.ViewModels.EntityViewModels;
 using WorkSpeed.Productivity;
@@ -24,7 +25,9 @@ namespace WorkSpeed.DesktopClient.ViewModels
         private readonly IImportService _importService;
         private readonly IDialogRepository _dialogRepository;
         private readonly ReportService _reportService;
-        private readonly ObservableCollection< ShiftViewModel > _shifts;
+        private readonly ObservableCollection< ShiftGroupingViewModel > _shiftHierarchy;
+        private readonly ObservableCollection< Shift > _shifts;
+        private readonly ObservableCollection< ShortBreakSchedule > _shortBreakSchedules;
 
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private IProgress< (int, string) > _progress;
@@ -41,10 +44,20 @@ namespace WorkSpeed.DesktopClient.ViewModels
             _dialogRepository = dialogRepository;
             _progress = new Progress< (int code, string message) >( t => ProgressReport( t.code, t.message ) );
 
-            _shifts = new ObservableCollection< ShiftViewModel >();
-            Shifts = new ReadOnlyObservableCollection< ShiftViewModel >( _shifts );
+            _shiftHierarchy = new ObservableCollection< ShiftGroupingViewModel >();
+            ShiftHierarchy = new ReadOnlyObservableCollection< ShiftGroupingViewModel >( _shiftHierarchy );
 
-            //Observe( _reportService.Shifts, _shifts, vm => vm.Shift );
+            _shifts = new ObservableCollection< Shift >();
+            Shifts = new ReadOnlyObservableCollection< Shift >( _shifts );
+
+            Appointments = _reportService.Appointments;
+            Ranks = _reportService.Ranks;
+            Positions = _reportService.Positions;
+
+            _shortBreakSchedules = new ObservableCollection< ShortBreakSchedule >();
+            ShortBreakSchedules = new ReadOnlyObservableCollection< ShortBreakSchedule >( _shortBreakSchedules );
+
+            //Observe( _reportService.ShiftGrouping, _shiftHierarchy, vm => vm.Shift );
         }
 
         public bool IsImporting
@@ -83,7 +96,13 @@ namespace WorkSpeed.DesktopClient.ViewModels
             }
         }
 
-        public ReadOnlyObservableCollection< ShiftViewModel > ShiftHierarchy { get; set; }
+        public IEnumerable< Appointment > Appointments { get; }
+        public IEnumerable< Rank > Ranks { get; }
+        public IEnumerable< Position > Positions { get; }
+
+        public ReadOnlyObservableCollection< ShiftGroupingViewModel > ShiftHierarchy { get; }
+        public ReadOnlyObservableCollection< Shift > Shifts { get; }
+        public ReadOnlyObservableCollection< ShortBreakSchedule > ShortBreakSchedules { get; }
 
         public ICommand ImportAsyncCommand => new MvvmCommand( Import );
         public ICommand LoadEmployeesCommand => new MvvmCommand( LoadEmployees );
@@ -130,12 +149,20 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
         private void LoadEmployees ( object obj )
         {
-            Debug.WriteLine( "TabItem loaded" );
             EmployeesStatusMessage = "Идёт загрузка сотрудников";
             _reportService.LoadEmployees();
-            if ( _reportService.Shifts.Any() ) {
+
+            if ( _reportService.ShiftGrouping.Any() ) {
+            
                 EmployeesStatusMessage = "";
-                _reportService.Shifts.Select( s => _shifts.Add( s ) );
+
+                if ( _shifts.Any() ) { _shifts.Clear(); }
+                if ( _shortBreakSchedules.Any() ) { _shortBreakSchedules.Clear(); }
+                if ( _shiftHierarchy.Any() ) { _shiftHierarchy.Clear(); }
+
+                foreach ( var shiftGrouping in _reportService.ShiftGrouping ) {
+                    _shiftHierarchy.Add( new ShiftGroupingViewModel( shiftGrouping ) ) ;
+                }
             }
             else {
                 EmployeesStatusMessage = "Сотрудники отсутствуют. Чтобы добавить сотрудников, имортируйте их.";

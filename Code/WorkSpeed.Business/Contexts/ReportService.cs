@@ -13,17 +13,26 @@ namespace WorkSpeed.Business.Contexts
 {
     public class ReportService : Service
     {
-        public ReportService ( WorkSpeedDbContext dbContext ) : base( dbContext ) { }
+        public ReportService ( WorkSpeedDbContext dbContext ) : base( dbContext )
+        {
+            Appointments = _dbContext.Appointments.ToArray();
+            Ranks = _dbContext.Ranks.ToArray();
+            Positions = _dbContext.Positions.ToArray();
+        }
 
-        public ShiftGrouping[] Shifts { get; private set; }
+        public Appointment[] Appointments { get; }
+        public Rank[] Ranks { get; }
+        public Position[] Positions { get; }
+
+        public ShiftGrouping[] ShiftGrouping { get; private set; }
 
         public void LoadEmployees ()
         {
             try {
-                Shifts = _dbContext.GetShiftGrouping().Select( s => new ShiftGrouping( s.shift, s.appointments ) ).ToArray();
+                ShiftGrouping = _dbContext.GetShiftGrouping().Select( s => new ShiftGrouping( s.shift, s.appointments ) ).ToArray();
             }
             catch ( Exception ) {
-                Shifts = new ShiftGrouping[0];
+                ShiftGrouping = new ShiftGrouping[0];
             }
         }
     }

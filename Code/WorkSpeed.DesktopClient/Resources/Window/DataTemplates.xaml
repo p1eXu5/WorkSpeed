@@ -5,10 +5,10 @@
                     >
     
     <DataTemplate DataType="{x:Type vm:EmployeeViewModel}">
-        <v:ShiftEmployeeUserControl DataContext="{Binding}" />
+        <v:EmployeeUserControl DataContext="{Binding}" />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:PositionViewModel}">
+    <DataTemplate DataType="{x:Type vm:PositionGroupingViewModel}">
         <ListBox Background="Transparent" BorderBrush="{x:Null}" Margin="0,5"
                  HorizontalAlignment="Left" VerticalAlignment="Top"
                  ItemsSource="{Binding Employees}"
@@ -21,13 +21,13 @@
         </ListBox>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:AppointmentViewModel}">
+    <DataTemplate DataType="{x:Type vm:AppointmentGroupingViewModel}">
         <GroupBox Header="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Top">
             <ListBox ItemsSource="{Binding Positions}" />
         </GroupBox>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:ShiftViewModel}">
+    <DataTemplate DataType="{x:Type vm:ShiftGroupingViewModel}">
         <GroupBox Header="{Binding Name}" Padding="10">
             <ListBox ItemsSource="{Binding Appointments}" />
         </GroupBox>
