@@ -152,9 +152,9 @@
     <Compile Include="DataContexts\ImportService\WorkSpeedDbContextExtensions.cs" />
     <Compile Include="DataContexts\ReportService\WorkSpeedDbContextExtensions.cs" />
     <Compile Include="DataContexts\WorkSpeedDbContextExtensions.cs" />
-    <Compile Include="Migrations\20190212192117_InitialCreate.cs" />
-    <Compile Include="Migrations\20190212192117_InitialCreate.designer.cs">
-      <DependentUpon>20190212192117_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\20190215090238_InitialCreate.cs" />
+    <Compile Include="Migrations\20190215090238_InitialCreate.designer.cs">
+      <DependentUpon>20190215090238_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\WorkSpeedDbContextModelSnapshot.cs" />
     <Compile Include="Models\Actions\EmployeeActionBase.cs" />

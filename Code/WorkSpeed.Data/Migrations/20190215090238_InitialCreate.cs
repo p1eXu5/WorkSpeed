@@ -29,6 +29,20 @@ namespace WorkSpeed.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Avatars",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Picture = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Avatars", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Categories",
                 schema: "dbo",
                 columns: table => new
@@ -245,6 +259,7 @@ namespace WorkSpeed.Data.Migrations
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     IsSmoker = table.Column<bool>(type: "bit", nullable: true),
                     ProbationEnd = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AvatarId = table.Column<int>(nullable: true),
                     PositionId = table.Column<int>(nullable: true),
                     RankNumber = table.Column<int>(nullable: true),
                     AppointmentId = table.Column<int>(nullable: true),
@@ -259,6 +274,13 @@ namespace WorkSpeed.Data.Migrations
                         column: x => x.AppointmentId,
                         principalSchema: "dbo",
                         principalTable: "Appointments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Employees_Avatars_AvatarId",
+                        column: x => x.AvatarId,
+                        principalSchema: "dbo",
+                        principalTable: "Avatars",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -780,6 +802,14 @@ namespace WorkSpeed.Data.Migrations
                 column: "AppointmentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Employees_AvatarId",
+                schema: "dbo",
+                table: "Employees",
+                column: "AvatarId",
+                unique: true,
+                filter: "[AvatarId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Employees_PositionId",
                 schema: "dbo",
                 table: "Employees",
@@ -957,6 +987,10 @@ namespace WorkSpeed.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Appointments",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "Avatars",
                 schema: "dbo");
 
             migrationBuilder.DropTable(

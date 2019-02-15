@@ -442,6 +442,20 @@ namespace WorkSpeed.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("WorkSpeed.Data.Models.Avatar", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte[]>("Picture")
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Avatars","dbo");
+                });
+
             modelBuilder.Entity("WorkSpeed.Data.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -590,6 +604,8 @@ namespace WorkSpeed.Data.Migrations
 
                     b.Property<int?>("AppointmentId");
 
+                    b.Property<int?>("AvatarId");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -614,6 +630,10 @@ namespace WorkSpeed.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AppointmentId");
+
+                    b.HasIndex("AvatarId")
+                        .IsUnique()
+                        .HasFilter("[AvatarId] IS NOT NULL");
 
                     b.HasIndex("PositionId");
 
@@ -1266,6 +1286,10 @@ namespace WorkSpeed.Data.Migrations
                     b.HasOne("WorkSpeed.Data.Models.Appointment", "Appointment")
                         .WithMany()
                         .HasForeignKey("AppointmentId");
+
+                    b.HasOne("WorkSpeed.Data.Models.Avatar", "Avatar")
+                        .WithOne()
+                        .HasForeignKey("WorkSpeed.Data.Models.Employee", "AvatarId");
 
                     b.HasOne("WorkSpeed.Data.Models.Position", "Position")
                         .WithMany()

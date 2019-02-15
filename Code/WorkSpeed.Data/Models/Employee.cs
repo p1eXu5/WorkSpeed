@@ -15,6 +15,7 @@ namespace WorkSpeed.Data.Models
         public bool? IsSmoker { get; set; }
         public DateTime? ProbationEnd { get; set; }
 
+        public int? AvatarId { get; set; }
         public Avatar Avatar { get; set; }
 
         public int? PositionId { get; set; }
