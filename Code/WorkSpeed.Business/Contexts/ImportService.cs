@@ -156,6 +156,7 @@ namespace WorkSpeed.Business.Contexts
             var dbPositions = await _dbContext.GetPositions().ToArrayAsync();
             var defaultShift = await _dbContext.GetDefaultShiftAsync();
             var defaultShortBreakSchedule = await _dbContext.GetDefaultShortBreakScheduleAsync();
+            var defaultAvatar = await _dbContext.GetDefaultAvatarAsync();
 
             foreach ( var employee in data.Where( Check.IsEmployeeCorrect ) ) {
 
@@ -171,6 +172,7 @@ namespace WorkSpeed.Business.Contexts
 
                 employee.Shift = defaultShift;
                 employee.ShortBreakSchedule = defaultShortBreakSchedule;
+                employee.Avatar = defaultAvatar;
 
 
                 var dbEmployee = dbEmployees.FirstOrDefault( e => e.Id.Equals( employee.Id ) );

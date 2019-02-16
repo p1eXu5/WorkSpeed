@@ -32,6 +32,9 @@ namespace WorkSpeed.Data.DataContexts.ImportService
         public static async Task< ShortBreakSchedule > GetDefaultShortBreakScheduleAsync ( this WorkSpeedDbContext dbContext )
             => await dbContext.ShortBreakSchedules.FirstAsync( s => s.Id == 1 );
 
+        public static async Task< Avatar > GetDefaultAvatarAsync ( this WorkSpeedDbContext dbContext )
+            => await dbContext.Avatars.FirstAsync( a => a.Id == 1 );
+
         public static IQueryable< Operation > GetOperations ( this WorkSpeedDbContext dbContext, OperationGroups group )
             => dbContext.Operations.Where( o => o.OperationGroup == group ).AsQueryable();
 

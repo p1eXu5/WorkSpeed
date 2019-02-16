@@ -59,6 +59,7 @@ namespace WorkSpeed.Data.DataContexts
         public DbSet< Appointment > Appointments { get; set; }
         public DbSet< Shift > Shifts { get; set; }
         public DbSet< ShortBreakSchedule > ShortBreakSchedules { get; set; }
+        public DbSet< Avatar > Avatars { get; set; }
 
         public DbSet< Employee > Employees { get; set; }
 
