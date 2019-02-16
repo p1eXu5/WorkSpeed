@@ -11,14 +11,23 @@
     <DataTemplate DataType="{x:Type vm:PositionGroupingViewModel}">
         <ListBox Background="Transparent" BorderBrush="{x:Null}" Margin="0,5"
                  HorizontalAlignment="Left" VerticalAlignment="Top"
+                 VerticalContentAlignment="Top"
                  ItemsSource="{Binding Employees}"
                  >
+            <ListBox.Template>
+                <ControlTemplate TargetType="ItemsControl">
+                    <Border>
+                        <ItemsPresenter />
+                    </Border>
+                </ControlTemplate>
+            </ListBox.Template>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel MaxWidth="570" />
+                    <WrapPanel MaxWidth="570" VerticalAlignment="Top" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
+
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:AppointmentGroupingViewModel}">
@@ -26,23 +35,60 @@
             <ListBox ItemsSource="{Binding Positions}"
                      VerticalAlignment="Top"
                      HorizontalAlignment="Left"
-                     />
+                     Background="{x:Null}"
+                     BorderThickness="0"
+                     BorderBrush="{x:Null}"
+                     >
+                <ListBox.Template>
+                    <ControlTemplate TargetType="ItemsControl">
+                        <Border>
+                            <ItemsPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </ListBox.Template>
+            </ListBox>
         </GroupBox>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:ShiftGroupingViewModel}">
-        <GroupBox Header="{Binding Name}" Padding="10">
+        <GroupBox Header="{Binding Name}" Padding="10" IsHitTestVisible="True">
             <ListBox ItemsSource="{Binding Appointments}"
                      HorizontalAlignment="Left" VerticalAlignment="Top"
+                     Background="{x:Null}"
+                     BorderThickness="0"
+                     BorderBrush="{x:Null}"
                      >
+                <ListBox.Template>
+                    <ControlTemplate TargetType="ItemsControl">
+                        <Border>
+                            <ItemsPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </ListBox.Template>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"
                                     VerticalAlignment="Top"
                                     HorizontalAlignment="Left"
+                                    
                                     />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                <Grid>
+                                        <ContentPresenter Content="{TemplateBinding Content}" 
+                                                        VerticalAlignment="Top"
+                                                        />
+                                </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
             </ListBox>
         </GroupBox>
     </DataTemplate>

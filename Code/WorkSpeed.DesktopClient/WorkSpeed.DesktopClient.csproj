@@ -67,6 +67,8 @@
     <Compile Include="Attributes\SegmentAttribute.cs" />
     <Compile Include="Converters\BorderThicknessToStrokeThicknessConverter.cs" />
     <Compile Include="Converters\EvenOddToZeroOneConverter.cs" />
+    <Compile Include="Converters\ImageConverter.cs" />
+    <Compile Include="Converters\TabControlHeightConverter.cs" />
     <Compile Include="TemplateSelectors\StageDataTemplateSelector.cs" />
     <Compile Include="ViewModels\EntityViewModels\AppointmentGroupingViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\ErrorViewModel.cs" />

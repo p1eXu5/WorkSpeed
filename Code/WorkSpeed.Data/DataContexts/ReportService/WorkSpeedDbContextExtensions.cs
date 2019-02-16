@@ -13,10 +13,11 @@ namespace WorkSpeed.Data.DataContexts.ReportService
     {
         public static IEnumerable<
                 (Shift shift, ( Appointment appointment, (Position position, Employee[] employees)[] positions)[] appointments) >
-
         GetShiftGrouping ( this WorkSpeedDbContext dbContext )
         {
-            var query = (from e in dbContext.Employees
+            var employees = dbContext.Employees.Include( e => e.Avatar ).AsQueryable();
+
+            var query = (from e in employees
                          where e.IsActive
                          group e by e.Shift
                          into s

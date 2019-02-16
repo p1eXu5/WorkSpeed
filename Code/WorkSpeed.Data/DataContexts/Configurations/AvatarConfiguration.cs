@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WorkSpeed.Data.Models;
@@ -23,6 +17,11 @@ namespace WorkSpeed.Data.DataContexts.Configurations
             builder.Property( p => p.Id ).UseSqlServerIdentityColumn();
 
             builder.Property( p => p.Picture ).HasColumnType( "varbinary(max)" );
+            builder.Property( p => p.Stride ).HasColumnType( "int" ).IsRequired();
+            builder.Property( p => p.Width ).HasColumnType( "int" ).IsRequired();
+            builder.Property( p => p.Height ).HasColumnType( "int" ).IsRequired();
+
+            builder.HasMany( p => p.Employees ).WithOne( e => e.Avatar );
 
             var bitmap = Properties.Resources.default_face;
             var rect = new Rectangle( 0, 0, bitmap.Width, bitmap.Height );
@@ -31,11 +30,12 @@ namespace WorkSpeed.Data.DataContexts.Configurations
             var size = bitmapData.Stride * bitmap.Height;
             var array = new byte[ size ];
             System.Runtime.InteropServices.Marshal.Copy( firstPixel, array, 0, size );
-            bitmap.UnlockBits( bitmapData );
 
             builder.HasData( new[] {
-                new Avatar { Id = 1, Picture = array }
+                new Avatar { Id = 1, Picture = array, Stride = bitmapData.Stride, Width = bitmapData.Width, Height = bitmapData.Height }
             });
+
+            bitmap.UnlockBits( bitmapData );
         }
     }
 }

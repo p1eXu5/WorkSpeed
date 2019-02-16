@@ -10,5 +10,10 @@ namespace WorkSpeed.Data.Models
     {
         public int Id { get; set; }
         public byte[] Picture { get; set; }
+        public int Stride { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+
+        public List< Employee > Employees { get; set; }
     }
 }

@@ -153,9 +153,9 @@
     <Compile Include="DataContexts\ImportService\WorkSpeedDbContextExtensions.cs" />
     <Compile Include="DataContexts\ReportService\WorkSpeedDbContextExtensions.cs" />
     <Compile Include="DataContexts\WorkSpeedDbContextExtensions.cs" />
-    <Compile Include="Migrations\20190215090238_InitialCreate.cs" />
-    <Compile Include="Migrations\20190215090238_InitialCreate.designer.cs">
-      <DependentUpon>20190215090238_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\20190216142609_InitialCreate.cs" />
+    <Compile Include="Migrations\20190216142609_InitialCreate.designer.cs">
+      <DependentUpon>20190216142609_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\WorkSpeedDbContextModelSnapshot.cs" />
     <Compile Include="Models\Actions\EmployeeActionBase.cs" />
@@ -226,6 +226,7 @@
   <ItemGroup>
     <None Include="Resources\default_face.bmp" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -29,7 +29,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
         private readonly ObservableCollection< ShiftViewModel > _shifts;
         private readonly ObservableCollection< ShortBreakScheduleViewModel > _shortBreakSchedules;
 
-        private readonly ObservableCollection< ShiftGroupingViewModel > _shiftHierarchy;
+        private readonly ObservableCollection< ShiftGroupingViewModel > _shiftGrouping;
 
         private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private IProgress< (int, string) > _progress;
@@ -58,11 +58,11 @@ namespace WorkSpeed.DesktopClient.ViewModels
             Ranks = _reportService.Ranks;
             Positions = _reportService.Positions;
 
-            _shiftHierarchy = new ObservableCollection< ShiftGroupingViewModel >();
-            ShiftHierarchy = new ReadOnlyObservableCollection< ShiftGroupingViewModel >( _shiftHierarchy );
+            _shiftGrouping = new ObservableCollection< ShiftGroupingViewModel >();
+            ShiftGrouping = new ReadOnlyObservableCollection< ShiftGroupingViewModel >( _shiftGrouping );
 
 
-            //Observe( _reportService.ShiftGrouping, _shiftHierarchy, vm => vm.Shift );
+            //Observe( _reportService.ShiftGrouping, _shiftGrouping, vm => vm.Shift );
         }
 
         public bool IsImporting
@@ -108,7 +108,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
         public ReadOnlyObservableCollection< ShiftViewModel > Shifts { get; }
         public ReadOnlyObservableCollection< ShortBreakScheduleViewModel > ShortBreakSchedules { get; }
 
-        public ReadOnlyObservableCollection< ShiftGroupingViewModel > ShiftHierarchy { get; }
+        public ReadOnlyObservableCollection< ShiftGroupingViewModel > ShiftGrouping { get; }
 
         public ICommand ImportAsyncCommand => new MvvmCommand( Import );
         public ICommand TabItemChangedCommand => new MvvmCommand( TabItemChanged );
@@ -168,11 +168,11 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
                 EmployeesStatusMessage = "";
 
-                if (_shiftHierarchy.Any()) { _shiftHierarchy.Clear(); }
+                if (_shiftGrouping.Any()) { _shiftGrouping.Clear(); }
 
                 foreach (var shiftGrouping in _reportService.ShiftGrouping)
                 {
-                    _shiftHierarchy.Add(new ShiftGroupingViewModel(shiftGrouping));
+                    _shiftGrouping.Add(new ShiftGroupingViewModel(shiftGrouping));
                 }
             }
             else

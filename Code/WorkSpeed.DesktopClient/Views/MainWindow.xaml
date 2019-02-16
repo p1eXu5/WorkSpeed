@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:WorkSpeed.DesktopClient.ViewModels"
         xmlns:views="clr-namespace:WorkSpeed.DesktopClient.Views"
         xmlns:behavior="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:con="clr-namespace:WorkSpeed.DesktopClient.Converters"
         mc:Ignorable="d"
 
         d:DataContext="{d:DesignInstance local:MainViewModel}"
@@ -58,11 +59,11 @@
                       />
     </WindowChrome.WindowChrome>
 
-    <behavior:Interaction.Triggers>
+    <!--<behavior:Interaction.Triggers>
         <behavior:EventTrigger EventName="Loaded" SourceObject="{Binding ElementName=m_Window}">
             <behavior:InvokeCommandAction Command="{Binding LoadedCommand}" />
         </behavior:EventTrigger>
-    </behavior:Interaction.Triggers>
+    </behavior:Interaction.Triggers>-->
 
     <DockPanel LastChildFill="True">
 
@@ -123,7 +124,7 @@
         <Grid>
             <Grid x:Name="content">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" MinWidth="100" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="5*" MinWidth="1000"/>
                 </Grid.ColumnDefinitions>
@@ -265,10 +266,14 @@
                                     TabStripPlacement="Top"
                                     Background="{StaticResource br_Window.Background}"
                                     BorderThickness="0"
-                                    HorizontalAlignment="Stretch"
+                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                     IsHitTestVisible="True"
-                                    Height="500"
                                     >
+
+                            <TabControl.Resources>
+                                <!--<con:TabControlHeightConverter x:Key="con_TabControlConverter" />-->
+                                <con:TabControlHeightConverter x:Key="con_TabControlConverter" />
+                            </TabControl.Resources>
                             <behavior:Interaction.Triggers>
                                 <behavior:EventTrigger EventName="SelectionChanged" SourceObject="{Binding ElementName=m_TabControl}" >
                                     <behavior:InvokeCommandAction Command="{Binding TabItemChangedCommand}"
@@ -294,7 +299,6 @@
                             </TabItem>
 
                             <TabItem RenderTransform="1,0,0,1,1,0"
-
                                     >
                                 <TabItem.Header>
                                     <StackPanel Orientation="Vertical">
@@ -310,22 +314,63 @@
                                 </TabItem.Header>
 
                                 <Grid Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType=TabControl}}"
-                                      Height="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType=TabControl}}"
                                       >
-                                    <ListBox 
-                                         Height="Auto" Width="Auto" 
-                                         HorizontalAlignment="Left" VerticalAlignment="Top"
-                                         >
+                                    <Grid.Height>
+                                        <MultiBinding Converter="{StaticResource con_TabControlConverter}">
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=TabItem}" Path="ActualHeight" />
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=TabControl}" Path="ActualHeight" />
+                                        </MultiBinding>
+                                    </Grid.Height>
+                                    
+                                    <ScrollViewer HorizontalScrollBarVisibility="Visible">
+                                    <ListBox ItemsSource="{Binding ShiftGrouping}"
+                                             Height="Auto" Width="Auto" 
+                                             HorizontalAlignment="Left" VerticalAlignment="Top"
+                                             Background="{x:Null}"
+                                             BorderThickness="0" BorderBrush="{x:Null}"
+                                             VerticalContentAlignment="Top"
+                                             >
+                                        <ListBox.Template>
+                                            <ControlTemplate TargetType="ItemsControl">
+                                                <Border>
+                                                    <ItemsPresenter />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </ListBox.Template>
                                         <ListBox.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <StackPanel Orientation="Horizontal"
+                                                <VirtualizingStackPanel Orientation="Horizontal"
                                                         VerticalAlignment="Top"
                                                         HorizontalAlignment="Left"
                                                         />
                                             </ItemsPanelTemplate>
                                         </ListBox.ItemsPanel>
-                                        <ListBox></ListBox>
+
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem">
+                                                <Setter Property="IsHitTestVisible" Value="True" />
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="ListBoxItem">
+                                                        <Grid>
+                                                                <ContentPresenter Content="{TemplateBinding Content}" 
+                                                                                VerticalAlignment="Top"
+                                                                                />
+                                                        </Grid>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ListBox.ItemContainerStyle>
+                                        <!--<GroupBox Height="100" Width="200" />
+                                        <GroupBox Height="100" Width="200" />
+                                        <GroupBox Height="100" Width="200" />-->
                                     </ListBox>
+</ScrollViewer>
+                                    <TextBlock Text="{Binding EmployeesStatusMessage}" 
+                                               VerticalAlignment="Center" HorizontalAlignment="Center"
+                                               Foreground="{StaticResource br_Window.Foreground}"
+                                               />
                                 </Grid>
                             </TabItem>
 
@@ -348,9 +393,9 @@
                     </Grid>
 
                 </Grid>
-
             </Grid>
 
+            <!-- import -->
             <Grid>
                 <Rectangle Fill="{StaticResource br_Window.Background}" />
                 <Rectangle Opacity="0.9" >

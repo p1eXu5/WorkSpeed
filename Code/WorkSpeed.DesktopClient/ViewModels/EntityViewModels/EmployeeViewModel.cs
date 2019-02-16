@@ -21,19 +21,9 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
 
             var name = _employee.Name.Split( new[] { ' ' } );
             SecondName = name[ 0 ];
-            FirstMiddleName = name.Length == 3 
+            FirstMiddleName = name.Length >= 3 
                                   ? $"{name[ 1 ]} {name[ 2 ]}" 
                                   : $"{name[ 1 ]} ";
-
-            if ( _employee.Avatar == null ) {
-                Picture = WorkSpeed.DesktopClient.Properties.Resources.default_face;
-            }
-            else {
-                using ( var stream = new MemoryStream( _employee.Avatar.Picture ) ) {
-
-                    Picture = new Bitmap( stream );
-                }
-            }
         }
 
         public Employee Employee => _employee;
@@ -41,7 +31,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
         public string SecondName { get; }
         public string FirstMiddleName { get; }
 
-        public Bitmap Picture { get; }
+        public Avatar Avatar => _employee.Avatar;
 
         public string EmployeeId => _employee.Id;
 

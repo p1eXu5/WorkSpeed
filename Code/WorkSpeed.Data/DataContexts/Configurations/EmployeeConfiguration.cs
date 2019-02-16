@@ -19,7 +19,7 @@ namespace WorkSpeed.Data.DataContexts.Configurations
             builder.Property( p => p.IsSmoker ).HasColumnType( "bit" );
             builder.Property( p => p.ProbationEnd ).HasColumnType( "datetime2" );
 
-            builder.HasOne( p => p.Avatar ).WithOne().HasForeignKey<Employee>( p => p.AvatarId );
+            builder.HasOne( p => p.Avatar ).WithMany( a => a.Employees ).HasForeignKey( p => p.AvatarId );
 
             builder.HasOne( p => p.Position ).WithMany().HasForeignKey( p => p.PositionId );
             builder.HasOne( p => p.Rank ).WithMany();
