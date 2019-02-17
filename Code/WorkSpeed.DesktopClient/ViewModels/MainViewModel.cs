@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 using Agbm.Wpf.MvvmBaseLibrary;
 using Microsoft.Win32;
@@ -39,6 +41,8 @@ namespace WorkSpeed.DesktopClient.ViewModels
         private string _importStatusMessage;
         private string _employeesStatusMessage;
 
+        private int _selectedTab;
+
         public MainViewModel ( IImportService importService, ReportService reportService, IDialogRepository dialogRepository )
         {
             _importService = importService ?? throw new ArgumentNullException(nameof(importService), @"IImportService cannot be null.");
@@ -61,8 +65,8 @@ namespace WorkSpeed.DesktopClient.ViewModels
             _shiftGrouping = new ObservableCollection< ShiftGroupingViewModel >();
             ShiftGrouping = new ReadOnlyObservableCollection< ShiftGroupingViewModel >( _shiftGrouping );
 
-
-            //Observe( _reportService.ShiftGrouping, _shiftGrouping, vm => vm.Shift );
+            var view = CollectionViewSource.GetDefaultView( ShiftGrouping );
+            view.SortDescriptions.Add( new SortDescription( "Shift.Id", ListSortDirection.Ascending ) );
         }
 
         public bool IsImporting
@@ -155,7 +159,12 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
         private void TabItemChanged ( object obj )
         {
-            if ( (int)obj == 1 ) { LoadEmployees( obj ); }
+            int selected = (int)obj;
+            if ( selected == _selectedTab ) return;
+
+            _selectedTab = selected;
+            
+            if ( selected == 1 ) { LoadEmployees( obj ); }
         }
 
         private void LoadEmployees ( object obj )
