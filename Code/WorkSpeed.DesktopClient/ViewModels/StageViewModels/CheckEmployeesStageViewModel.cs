@@ -16,7 +16,7 @@
 //        //    _employees = new ObservableCollection< EmployeeViewModel >( Warehouse.GetEmployees().Select( e => new EmployeeViewModel( e ) ) );
 //        //    Employees = new ReadOnlyObservableCollection< EmployeeViewModel >( _employees );
 
-//        //    Positions = new List< Position >( Warehouse.GetPositions() );
+//        //    PositionVms = new List< Position >( Warehouse.GetPositions() );
 //        //    Ranks = new List< Rank >( Warehouse.GetRanks() );
 
 //        //    _canMoveNext = true;
@@ -26,8 +26,8 @@
 
 //        //public ReadOnlyObservableCollection< EmployeeViewModel > Employees { get; }
 
-//        //public IEnumerable< Appointment > Appointments => Warehouse.GetAppointments();
-//        //public List< Position > Positions { get; set; }
+//        //public IEnumerable< Appointment > AppointmentVms => Warehouse.GetAppointments();
+//        //public List< Position > PositionVms { get; set; }
 //        //public List< Rank > Ranks { get; set; }
 
 //    }

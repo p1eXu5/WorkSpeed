@@ -65,14 +65,18 @@
     </ApplicationDefinition>
     <Compile Include="Attributes\DistanceAttribute.cs" />
     <Compile Include="Attributes\SegmentAttribute.cs" />
+    <Compile Include="Converters\AbbreviationsConverter.cs" />
     <Compile Include="Converters\BorderThicknessToStrokeThicknessConverter.cs" />
     <Compile Include="Converters\EvenOddToZeroOneConverter.cs" />
     <Compile Include="Converters\ImageConverter.cs" />
     <Compile Include="Converters\TabControlHeightConverter.cs" />
     <Compile Include="TemplateSelectors\StageDataTemplateSelector.cs" />
+    <Compile Include="ViewModels\EntityViewModels\AbbreviationViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\AppointmentGroupingViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\ErrorViewModel.cs" />
+    <Compile Include="ViewModels\EntityViewModels\AppointmentViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\CategoryViewModel.cs" />
+    <Compile Include="ViewModels\EntityViewModels\PositionViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\ProductivityViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\ShiftViewModel.cs" />
     <Compile Include="ViewModels\EntityViewModels\ShortBreakScheduleViewModel.cs" />
@@ -134,6 +138,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Colors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Window\ComboBoxAnimations.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

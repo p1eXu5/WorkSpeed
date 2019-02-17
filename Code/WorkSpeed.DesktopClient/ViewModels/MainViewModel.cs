@@ -51,21 +51,21 @@ namespace WorkSpeed.DesktopClient.ViewModels
             _progress = new Progress< (int code, string message) >( t => ProgressReport( t.code, t.message ) );
 
             _shifts = new ObservableCollection< ShiftViewModel >( _reportService.Shifts.Select( sh => new ShiftViewModel( sh ) ) );
-            Shifts = new ReadOnlyObservableCollection< ShiftViewModel >( _shifts );
+            ShiftVms = new ReadOnlyObservableCollection< ShiftViewModel >( _shifts );
             Observe( _reportService.Shifts, _shifts, sh => sh.Shift );
 
             _shortBreakSchedules = new ObservableCollection< ShortBreakScheduleViewModel >( _reportService.ShortBreakSchedules.Select( sbs => new ShortBreakScheduleViewModel( sbs ) ));
-            ShortBreakSchedules = new ReadOnlyObservableCollection< ShortBreakScheduleViewModel >( _shortBreakSchedules );
+            ShortBreakScheduleVms = new ReadOnlyObservableCollection< ShortBreakScheduleViewModel >( _shortBreakSchedules );
             Observe( _reportService.ShortBreakSchedules, _shortBreakSchedules, sbs => sbs.ShortBreakSchedule  );
 
-            Appointments = _reportService.Appointments;
+            AppointmentVms = _reportService.Appointments.Select( a => new AppointmentViewModel( a ) ).ToArray();
             Ranks = _reportService.Ranks;
-            Positions = _reportService.Positions;
+            PositionVms = _reportService.Positions.Select( p => new PositionViewModel( p ) ).ToArray();
 
             _shiftGrouping = new ObservableCollection< ShiftGroupingViewModel >();
-            ShiftGrouping = new ReadOnlyObservableCollection< ShiftGroupingViewModel >( _shiftGrouping );
+            ShiftGroupingVms = new ReadOnlyObservableCollection< ShiftGroupingViewModel >( _shiftGrouping );
 
-            var view = CollectionViewSource.GetDefaultView( ShiftGrouping );
+            var view = CollectionViewSource.GetDefaultView( ShiftGroupingVms );
             view.SortDescriptions.Add( new SortDescription( "Shift.Id", ListSortDirection.Ascending ) );
         }
 
@@ -105,14 +105,14 @@ namespace WorkSpeed.DesktopClient.ViewModels
             }
         }
 
-        public IEnumerable< Appointment > Appointments { get; }
+        public IEnumerable< AppointmentViewModel > AppointmentVms { get; }
         public IEnumerable< Rank > Ranks { get; }
-        public IEnumerable< Position > Positions { get; }
+        public IEnumerable< PositionViewModel > PositionVms { get; }
 
-        public ReadOnlyObservableCollection< ShiftViewModel > Shifts { get; }
-        public ReadOnlyObservableCollection< ShortBreakScheduleViewModel > ShortBreakSchedules { get; }
+        public ReadOnlyObservableCollection< ShiftViewModel > ShiftVms { get; }
+        public ReadOnlyObservableCollection< ShortBreakScheduleViewModel > ShortBreakScheduleVms { get; }
 
-        public ReadOnlyObservableCollection< ShiftGroupingViewModel > ShiftGrouping { get; }
+        public ReadOnlyObservableCollection< ShiftGroupingViewModel > ShiftGroupingVms { get; }
 
         public ICommand ImportAsyncCommand => new MvvmCommand( Import );
         public ICommand TabItemChangedCommand => new MvvmCommand( TabItemChanged );

@@ -33,13 +33,49 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
 
         public Avatar Avatar => _employee.Avatar;
 
-        public string EmployeeId => _employee.Id;
+        public string EmployeeId => "dfgdf";
 
         public Appointment Appointment
         {
             get => _employee.Appointment;
             set {
                 _employee.Appointment = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Rank Rank
+        {
+            get => _employee.Rank;
+            set {
+                _employee.Rank = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Position Position
+        {
+            get => _employee.Position;
+            set {
+                _employee.Position = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Shift Shift
+        {
+            get => _employee.Shift;
+            set {
+                _employee.Shift = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ShortBreakSchedule ShortBreakSchedule
+        {
+            get => _employee.ShortBreakSchedule;
+            set {
+                _employee.ShortBreakSchedule = value;
                 OnPropertyChanged();
             }
         }
@@ -54,23 +90,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.EntityViewModels
             }
         }
 
-        public Position Position
-        {
-            get => _employee.Position;
-            set {
-                _employee.Position = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Rank Rank
-        {
-            get => _employee.Rank;
-            set {
-                _employee.Rank = value;
-                OnPropertyChanged();
-            }
-        }
 
         public bool? IsSmoker
         {

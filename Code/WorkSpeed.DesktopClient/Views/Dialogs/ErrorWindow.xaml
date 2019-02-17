@@ -43,7 +43,7 @@
         </StackPanel>
 
         <Button DockPanel.Dock="Bottom" 
-                Background="{StaticResource br_Window.Control.Background}"
+                Background="{StaticResource br_Control.Background}"
                 Width="80"
                 Height="26"
                 Content="Принял"

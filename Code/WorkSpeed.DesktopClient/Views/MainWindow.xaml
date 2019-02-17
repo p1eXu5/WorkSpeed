@@ -132,18 +132,18 @@
                 <!-- filters -->
                 <DockPanel VerticalAlignment="Stretch"
                         LastChildFill="True"
-                        Background="{StaticResource br_Window.Control.Background}"
+                        Background="{StaticResource br_Control.Background}"
                         SnapsToDevicePixels="True"
                         >
 
                     <Border Height="20" DockPanel.Dock="Top"
-                        Background="{StaticResource br_Window.Control.BackgroundAlternative}"
+                        Background="{StaticResource br_Control.BackgroundAlternative}"
                         
                         >
                         <TextBlock Text="Фильтры" 
                                 VerticalAlignment="Center"
                                 Margin="10,0"
-                                Foreground="{StaticResource br_Window.Control.ForegroundAlternative}"
+                                Foreground="{StaticResource br_Control.ForegroundAlternative}"
                                 />
                     </Border>
 
@@ -323,7 +323,7 @@
                                     </Grid.Height>
                                     
                                     <ScrollViewer HorizontalScrollBarVisibility="Visible">
-                                    <ListBox ItemsSource="{Binding ShiftGrouping}"
+                                    <ListBox ItemsSource="{Binding ShiftGroupingVms}"
                                              Height="Auto" Width="Auto" 
                                              HorizontalAlignment="Left" VerticalAlignment="Top"
                                              Background="{x:Null}"

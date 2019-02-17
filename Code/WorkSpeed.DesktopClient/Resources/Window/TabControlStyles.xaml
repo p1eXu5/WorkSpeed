@@ -6,7 +6,7 @@
         <ColorAnimationUsingKeyFrames Duration="0:0:.2" Storyboard.TargetName="container"
                                       Storyboard.TargetProperty="(GeometryDrawing.Brush).(SolidColorBrush.Color)"
                                       >
-            <LinearColorKeyFrame Value="{StaticResource col_Window.Control.BackgroundMouseOver}" KeyTime="0:0:0"/>
+            <LinearColorKeyFrame Value="{StaticResource col_Control.BackgroundMouseOver}" KeyTime="0:0:0"/>
         </ColorAnimationUsingKeyFrames>
     </Storyboard>
 
@@ -14,7 +14,7 @@
         <ColorAnimationUsingKeyFrames Duration="0:0:.2" Storyboard.TargetName="container"
                                       Storyboard.TargetProperty="(GeometryDrawing.Brush).(SolidColorBrush.Color)"
                                       >
-            <LinearColorKeyFrame Value="{StaticResource col_Window.Control.Background}" KeyTime="0:0:0"/>
+            <LinearColorKeyFrame Value="{StaticResource col_Control.Background}" KeyTime="0:0:0"/>
         </ColorAnimationUsingKeyFrames>
     </Storyboard>
 
@@ -35,7 +35,7 @@
         <ColorAnimationUsingKeyFrames Duration="0:0:.2" 
                                       Storyboard.TargetProperty="(Control.Foreground).(SolidColorBrush.Color)"
                                       >
-            <LinearColorKeyFrame Value="{StaticResource col_Window.Control.ForegroundAlternative}" KeyTime="0:0:0"/>
+            <LinearColorKeyFrame Value="{StaticResource col_Control.ForegroundAlternative}" KeyTime="0:0:0"/>
         </ColorAnimationUsingKeyFrames>
 
         <ColorAnimationUsingKeyFrames Duration="0:0:.2" Storyboard.TargetName="innerGlow"
@@ -57,8 +57,8 @@
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Background" Value="{StaticResource br_Window.Control.Background}" />
-        <Setter Property="Foreground" Value="{StaticResource br_Window.Control.Foreground}" />
+        <Setter Property="Background" Value="{StaticResource br_Control.Background}" />
+        <Setter Property="Foreground" Value="{StaticResource br_Control.Foreground}" />
         <Setter Property="Control.BorderBrush" Value="{StaticResource br_Window.Border}" />
         <Setter Property="Width" Value="178" />
         <Setter Property="RenderTransform" Value="1,0,0,1,0,0" />

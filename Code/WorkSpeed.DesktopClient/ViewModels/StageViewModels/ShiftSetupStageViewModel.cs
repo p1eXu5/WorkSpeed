@@ -18,7 +18,7 @@
 //        public ShiftSetupStageViewModel ( IFastProductivityViewModel fastProductivityViewModel, int stageNum )
 //            : base( fastProductivityViewModel, stageNum )
 //        {
-//            ShiftGrouping = new ObservableCollection< Shift >( Warehouse.GetShifts() );
+//            ShiftGroupingVms = new ObservableCollection< Shift >( Warehouse.GetShifts() );
 //            BreakList = new ObservableCollection< ShortBreakViewModel >( Warehouse.GetBreakList().Select( (sb) => new ShortBreakViewModel( sb ) ) );
 //            SwitchIsForSmokerCommand = new MvvmCommand( SwitchIsForSmoker );
 
@@ -32,7 +32,7 @@
 
 //        public override string Header { get; } = "Настройка смен";
 
-//        public ObservableCollection< Shift > ShiftGrouping { get; set; }
+//        public ObservableCollection< Shift > ShiftGroupingVms { get; set; }
 //        public ObservableCollection< ShortBreakViewModel > BreakList { get; set; }
 
 //        public ICommand SwitchIsForSmokerCommand { get; }

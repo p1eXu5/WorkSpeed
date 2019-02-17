@@ -15,11 +15,12 @@
              >
     <UserControl.Resources>
         <conv:ImageConverter x:Key="conv_ImageConverter" />
+        <conv:AbbreviationsConverter x:Key="conv_AbbreviationConverter" />
     </UserControl.Resources>
     <Border BorderThickness="1" 
             BorderBrush="{StaticResource br_Window.Border}"              
             >
-        <Grid Background="{StaticResource br_Window.Control.Background}"
+        <Grid Background="{StaticResource br_Control.Background}"
               >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -62,30 +63,47 @@
                         TextElement.FontWeight="Regular"
                         >
 
-                <ComboBox BorderThickness="0" Width="40"
-                          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.Appointments}"
-                          DisplayMemberPath="Name"
+                <ComboBox BorderThickness="0"
+                          Width="65"
+                          VerticalContentAlignment="Center"
+                          HorizontalContentAlignment="Left"
+                          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.AppointmentVms}"
+                          SelectedValue="{Binding Appointment}"
+                          SelectedValuePath="Appointment"
+                          TextSearch.TextPath="Abbreviation"
+                          DisplayMemberPath="InnerName"
+                          Text="гр."
                           />
-                <Grid>
+                <Grid Margin="5,0,3,0">
                     <Path Data="{StaticResource g_Emblem}"
                           Stroke="{StaticResource br_Window.Border}"
                           Fill="Yellow"
                           Panel.ZIndex="-100"
                           >
                         <Path.RenderTransform>
-                            <TranslateTransform X="4" Y="4" />
+                            <TranslateTransform X="3" Y="1" />
                         </Path.RenderTransform>
                     </Path>
-                    <ComboBox BorderThickness="0" 
-                              Margin="5,0" Width="30"
+                    <ComboBox BorderThickness="0"
+                              Width="30"
+                              VerticalContentAlignment="Center"
                               HorizontalContentAlignment="Center"
+                              Margin="5,0" 
                               ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.Ranks}"
+                              SelectedItem="{Binding Rank}"
                               DisplayMemberPath="Number"
+                              Text="15"
                               />
                 </Grid>
-                <ComboBox BorderThickness="0" Width="80"
-                          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.Positions}"
+                <ComboBox BorderThickness="0" 
+                          VerticalContentAlignment="Center"
+                          Width="70"
+                          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.PositionVms}"
+                          SelectedValue="{Binding Position}"
+                          SelectedValuePath="Position"
+                          TextSearch.TextPath="Abbreviation"
                           DisplayMemberPath="Name"
+                          Text="мез.4"
                           />
             </StackPanel>
 
@@ -98,7 +116,9 @@
                                    Text="Смена:" />
                     </Border>
                 </HeaderedContentControl.Header>
-                <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.Shifts}" 
+                <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.ShiftVms}"
+                          SelectedValue="{Binding Shift}"
+                          SelectedValuePath="Shift"
                           DisplayMemberPath="Name"
                           />
             </HeaderedContentControl>
@@ -115,8 +135,11 @@
                                                />
                     </Border>
                 </HeaderedContentControl.Header>
-                <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.ShortBreakSchedules}"
-                          DisplayMemberPath="Name"
+                <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.ShortBreakScheduleVms}"
+                          SelectedValue="{Binding ShortBreakSchedule}"
+                          SelectedValuePath="ShortBreakSchedule"
+                          DisplayMemberPath="Name" 
+
                           />
             </HeaderedContentControl>
         </Grid>
