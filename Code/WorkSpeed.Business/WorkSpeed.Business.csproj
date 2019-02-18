@@ -174,6 +174,7 @@
     <Compile Include="Models\AppointmentGrouping.cs" />
     <Compile Include="Models\PositionGrouping.cs" />
     <Compile Include="Models\ShiftGrouping.cs" />
+    <Compile Include="Models\OperationThresholds.cs" />
     <Compile Include="Period.cs" />
     <Compile Include="ProductivityCalculator\AddTimeOptions.cs" />
     <Compile Include="ProductivityCalculator\IProductivityCalculator.cs" />

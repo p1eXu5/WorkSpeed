@@ -50,6 +50,9 @@ namespace WorkSpeed.Data.DataContexts.ReportService
                                                    ));
         }
 
+        public static IQueryable< Operation > GetOperations ( this WorkSpeedDbContext dbContext )
+            => dbContext.Operations.AsQueryable();
+
         public static IQueryable< Employee > GetInactiveEmployees ( this WorkSpeedDbContext dbContext )
             => dbContext.Employees.Include( e => e.Shift ).Include( e => e.Appointment ).Include( e => e.Position ).Where( e => !e.IsActive ).AsQueryable();
     }
