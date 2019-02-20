@@ -14,8 +14,8 @@ namespace CircleDiagramTest.Models
         double GetLinesPerHour ();
         double GetScansPerHour ();
 
-        IEnumerable< int > GetLines ( IEnumerable< Category > categories );
-        IEnumerable< int > GetScans ( IEnumerable< Category > categories );
+        IEnumerable< (int,Category) > GetLines ( IEnumerable< Category > categories );
+        IEnumerable< (int,Category) > GetScans ( IEnumerable< Category > categories );
 
 
 

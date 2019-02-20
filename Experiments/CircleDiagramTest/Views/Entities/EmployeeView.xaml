@@ -6,9 +6,10 @@
       xmlns:local="clr-namespace:CircleDiagramTest.Views.Entities"
       mc:Ignorable="d" 
       VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+      SnapsToDevicePixels="True"
       >
-    <Border BorderThickness="1,0,0,1" BorderBrush="Black">
-        <TextBlock Text="{}{Binding Name}"
+    <Border BorderThickness="1,0,1,1" BorderBrush="Black">
+        <TextBlock Text="{Binding Name}"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
                    />

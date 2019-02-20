@@ -14,9 +14,10 @@ namespace CircleDiagramTest.ViewModels
         {
             SpeedLabeling = "cкан./ч.";
             Speed = productivity.GetScansPerHour();
-            Aspects = productivity.GetScans( _categories ).Select( Convert.ToDouble ).ToArray();
+            Aspects = productivity.GetScans( _categories )
+                                  .Select( t => (Convert.ToDouble(t.Item1), $"{t.Item2.Name}: {t.Item1}") )
+                                  .ToArray();
+            Annotation = "сканов";
         }
-
-        public IEnumerable< double > Aspects { get; set; }
     }
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WorkSpeed.Business.Contexts.ProductivityCalculator.Builders
+namespace WorkSpeed.Business.Contexts.Productivity.Builders
 {
-    public class OtherProductivityBuilder : IProductivityBuilder
+    public interface IProductivityBuilder
     {
     }
 }

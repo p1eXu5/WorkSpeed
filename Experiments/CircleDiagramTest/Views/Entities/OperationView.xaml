@@ -8,7 +8,7 @@
       Height="44" Width="94"
       Margin="0"
       >
-    <Border BorderThickness="0,1,1,0" 
+    <Border BorderThickness="0,1,1,1" 
             BorderBrush="Black"
             Padding="7,0"
             SnapsToDevicePixels="True"

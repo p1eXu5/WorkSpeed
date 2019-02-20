@@ -10,7 +10,7 @@ using WorkSpeed.Data.Comparers;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
 
-namespace WorkSpeed.Business.ProductivityCalculator
+namespace WorkSpeed.Business.Contexts.Productivity
 {
     public class ProductivityObservableCollection : ObservableCollection< Productivity2 >
     {
@@ -21,7 +21,7 @@ namespace WorkSpeed.Business.ProductivityCalculator
             _actions = new SortedSet< EmployeeActionBase > (new EmployeeActionComparer< EmployeeActionBase >());
         }
 
-        public IProductivityCalculator< EmployeeActionBase > ProductivityCalculator { get; set; }
+        public IProductivityCalculator ProductivityCalculator { get; set; }
 
         /// <summary>
         /// Adds employeeAction into internal collection. After adding
@@ -35,7 +35,7 @@ namespace WorkSpeed.Business.ProductivityCalculator
 
         public void Calculate()
         {
-            ProductivityCalculator.Calculate (_actions, this);
+            ProductivityCalculator.Calculate ( _actions );
             
             _actions.Clear();
         }

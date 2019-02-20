@@ -15,9 +15,13 @@ namespace CircleDiagramTest.Models
             EmployeeProductivities = new List< EmployeeProductivity >();
 
             EmployeeProductivities.Add( new EmployeeProductivity( new Employee { Id = "AR00001", Name = "Employee 1", Rank = 3 } ) );
+
             EmployeeProductivities[ 0 ][Operation.Operations[0]] = new GatheringProductivity();
             EmployeeProductivities[ 0 ][Operation.Operations[1]] = new ReceptionProductivity();
         }
+
+
+
 
         private readonly Dictionary< Operation, IProductivity > _productivities;
 

@@ -8,10 +8,16 @@
       >
 
     <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
         <ColumnDefinition Width="Auto" />
     </Grid.ColumnDefinitions>
 
-    <local:EmployeeView DataContext="{Binding Employee}" />
-    <ListBox Grid.Column="1" ItemsSource="{Binding ProductivitVms}" BorderThickness="0,1,0,0" />
+    <local:EmployeeView DataContext="{Binding EmployeeVm}" />
+    <ListBox Grid.Column="1" ItemsSource="{Binding ProductivityVms}" BorderThickness="0,1,0,0" >
+         <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+    </ListBox>
 </Grid>

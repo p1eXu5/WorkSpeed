@@ -25,15 +25,20 @@ namespace CircleDiagramTest.Models
             throw new NotImplementedException();
         }
 
-        public IEnumerable< int > GetScans ( IEnumerable< Category> castegories )
+        public IEnumerable< (int,Category) > GetScans ( IEnumerable< Category> castegories )
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable< int > GetLines ( IEnumerable< Category> castegories )
+        public IEnumerable< (int,Category) > GetLines ( IEnumerable< Category> castegories )
         {
-            return new List< int > {
-                100, 200, 150, 50, 10, 5
+            return new List< (int,Category) > {
+                (100, new Category{ Name = "Category 1" }), 
+                (200, new Category{ Name = "Category 2" }), 
+                (150, new Category{ Name = "Category 3" }), 
+                (50, new Category{ Name = "Category 4" }), 
+                (10, new Category{ Name = "Category 5" }), 
+                (5, new Category{ Name = "Category 6" }), 
             };
         }
 

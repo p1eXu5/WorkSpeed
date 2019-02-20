@@ -14,7 +14,12 @@ namespace CircleDiagramTest.ViewModels
         {
             SpeedLabeling = "стр./ч.";
             Speed = productivity.GetLinesPerHour();
-            Aspects = productivity.GetLines( _categories ).Select( Convert.ToDouble ).ToArray();
+
+
+            Aspects = productivity.GetLines( _categories )
+                                  .Select( t => (Convert.ToDouble(t.Item1), $"{t.Item2.Name}: {t.Item1}") )
+                                  .ToArray();
+            Annotation = "строк";
         }
 
         

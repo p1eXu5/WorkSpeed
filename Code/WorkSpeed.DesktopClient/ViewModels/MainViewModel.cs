@@ -18,7 +18,6 @@ using WorkSpeed.Data.DataContexts;
 using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.Dialogs;
 using WorkSpeed.DesktopClient.ViewModels.EntityViewModels;
-using WorkSpeed.Productivity;
 
 namespace WorkSpeed.DesktopClient.ViewModels
 {

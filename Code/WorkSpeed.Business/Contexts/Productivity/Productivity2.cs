@@ -11,7 +11,7 @@ using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
 using WorkSpeed.Data.Models.Enums;
 
-namespace WorkSpeed.Business.ProductivityCalculator
+namespace WorkSpeed.Business.Contexts.Productivity
 {
     public class Productivity2
     {

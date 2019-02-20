@@ -65,6 +65,9 @@
     <Compile Include="ViewModels\OperationViewModel.cs" />
     <Compile Include="ViewModels\ReceptionProductivityViewModel.cs" />
     <Compile Include="ViewModels\TimeProductivityViewModel.cs" />
+    <Compile Include="Views\Design.xaml.cs">
+      <DependentUpon>Design.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Entities\EmployeeView.xaml.cs">
       <DependentUpon>EmployeeView.xaml</DependentUpon>
     </Compile>
@@ -102,6 +105,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\ListBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Design.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

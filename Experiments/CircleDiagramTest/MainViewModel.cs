@@ -42,11 +42,11 @@ namespace CircleDiagramTest
                 _operationVms.Add( new OperationViewModel( operation ) );
             }
 
-            //var categories = CategoryGroup.Categories;
+            var categories = CategoryGroup.Categories;
 
             //if ( _employeeProductivityVms.Any() ) { _employeeProductivityVms.Clear(); }
 
-            //_employeeProductivityVms.Add( new EmployeeProductivityViewModel( EmployeeProductivity.EmployeeProductivities[0], operations, categories ) );
+            _employeeProductivityVms.Add( new EmployeeProductivityViewModel( EmployeeProductivity.EmployeeProductivities[0], operations, categories ) );
         }
 
         #endregion

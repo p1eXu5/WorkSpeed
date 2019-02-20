@@ -12,6 +12,7 @@ namespace CircleDiagramTest.ViewModels
     {
         private double _speed;
         private string _speedLabeling;
+        private string _annotation;
 
         private readonly Operation _operation;
 
@@ -21,7 +22,7 @@ namespace CircleDiagramTest.ViewModels
         }
 
         public int OperationId => _operation.Id;
-        public IEnumerable< double > Aspects { get; set; }
+        public IEnumerable< (double val, string ann) > Aspects { get; set; }
 
         public double Speed
         {
@@ -37,6 +38,15 @@ namespace CircleDiagramTest.ViewModels
             get => _speedLabeling;
             protected set {
                 _speedLabeling = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Annotation
+        {
+            get => _annotation;
+            set {
+                _annotation = value;
                 OnPropertyChanged();
             }
         }

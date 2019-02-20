@@ -10,13 +10,12 @@ using Agbm.NpoiExcel;
 using Agbm.NpoiExcel.Attributes;
 using WorkSpeed.Data.Models;
 using WorkSpeed;
+using WorkSpeed.Business.Contexts.Productivity;
 using WorkSpeed.Business.FileModels;
 using WorkSpeed.Business.Interfaces;
-using WorkSpeed.Business.ProductivityCalculator;
 using WorkSpeed.Data;
 using WorkSpeed.Data.BusinessContexts;
 using WorkSpeed.Data.Models.Actions;
-using WorkSpeed.Productivity;
 
 namespace WorkSpeed.Business
 {
