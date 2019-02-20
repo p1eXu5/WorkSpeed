@@ -96,11 +96,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Resources\ButtonStyles.xaml">
+    <Page Include="Resources\ToggleButtonStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\DataTemplates.xaml">
+    <Page Include="Resources\ProductivityDataTemplates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -136,7 +136,7 @@
   <ItemGroup>
     <Compile Include="Models\OperationGroups.cs" />
     <Compile Include="Models\Operation.cs" />
-    <Compile Include="Models\EmployeeProductivity.cs" />
+    <Compile Include="Models\EmployeeProductivityBase.cs" />
     <Compile Include="Models\Employee.cs" />
     <Compile Include="ViewModels\EmployeeProductivityViewModel.cs" />
     <Compile Include="ViewModels\GatheringProductivityViewModel.cs" />

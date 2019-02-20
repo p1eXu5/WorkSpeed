@@ -29,10 +29,10 @@
 
 
     <Color x:Key="col_Control.Background">#cfcfcf</Color>
+    <Color x:Key="col_Control.BackgroundAlternative">#4d4d4d</Color>
     <Color x:Key="col_Control.BackgroundMouseOver">#c0c0c0</Color>
     <Color x:Key="col_Control.Foreground">#404040</Color>
     <Color x:Key="col_Control.ForegroundAlternative">#e0e0e0</Color>
-    <Color x:Key="col_Control.BackgroundAlternative">#4d4d4d</Color>
 
     <Color x:Key="col_Button.Pressed.Background">#4a8fff</Color>
 

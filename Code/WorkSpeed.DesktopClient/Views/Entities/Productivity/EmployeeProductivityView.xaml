@@ -1,0 +1,23 @@
+﻿<Grid x:Class="CircleDiagramTest.Views.Productivity.EmployeeProductivityView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CircleDiagramTest.Views.Entities"
+      mc:Ignorable="d" 
+      >
+
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" SharedSizeGroup="A" />
+        <ColumnDefinition Width="Auto" />
+    </Grid.ColumnDefinitions>
+
+    <local:EmployeeView DataContext="{Binding EmployeeVm}" />
+    <ListBox Grid.Column="1" ItemsSource="{Binding ProductivityVms}" BorderThickness="0,1,0,0" >
+         <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+    </ListBox>
+</Grid>

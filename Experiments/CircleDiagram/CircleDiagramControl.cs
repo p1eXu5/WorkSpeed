@@ -16,6 +16,8 @@ namespace CircleDiagram
     {
         public const double ONE_DEGREE_RAD = 0.01745329251994329576923690768489;
         private const double RADIUS = 50.0;
+        private const double CENTER = 50.0;
+
         private Grid _grid;
         private Queue< SolidColorBrush > _brushes;
 
@@ -28,9 +30,14 @@ namespace CircleDiagram
         public CircleDiagramControl ()
         {
             _brushes = new Queue< SolidColorBrush >( new [] {
-                new SolidColorBrush( new Color(){ R = 0xFF, G = 0x11, B = 0x55, A = 0xFF } ), 
-                new SolidColorBrush( new Color(){ R = 0x11, G = 0xFF, B = 0x55, A = 0xFF } ), 
-                new SolidColorBrush( new Color(){ R = 0x11, G = 0xFF, B = 0xFF, A = 0xFF } ), 
+                new SolidColorBrush( new Color(){ R = 0x26, G = 0x89, B = 0xe5, A = 0xFF } ), // 2689e5
+                new SolidColorBrush( new Color(){ R = 0xe5, G = 0x92, B = 0x26, A = 0xFF } ), // e59226
+                new SolidColorBrush( new Color(){ R = 0x41, G = 0xe5, B = 0x26, A = 0xFF } ), // 41e526
+                new SolidColorBrush( new Color(){ R = 0xda, G = 0x26, B = 0xe5, A = 0xFF } ), // da26e5
+                new SolidColorBrush( new Color(){ R = 0x26, G = 0xe3, B = 0xe5, A = 0xFF } ), // 26e3e5
+                new SolidColorBrush( new Color(){ R = 0xe5, G = 0xde, B = 0x26, A = 0xFF } ), // e5de26
+                new SolidColorBrush( new Color(){ R = 0xe5, G = 0x26, B = 0x7b, A = 0xFF } ), // e5267b
+                new SolidColorBrush( new Color(){ R = 0xad, G = 0xe5, B = 0x26, A = 0xFF } ), // ade526
             });
 
             foreach ( var brush in _brushes ) {
@@ -54,6 +61,10 @@ namespace CircleDiagram
         protected override void OnItemsSourceChanged ( IEnumerable oldValue, IEnumerable newValue )
         {
             var nums = newValue.Cast<(double val,string ann)>().ToArray();
+
+            if ( nums.Length == 0 ) return;
+
+
             var sum = nums.Aggregate( 0.0d, (s, t) => s + t.val );
             var oneDegree = 360 / sum;
             double startDegree = 0;
@@ -77,8 +88,17 @@ namespace CircleDiagram
 
         private Path GetPath ( (double val,string ann)[] arr, int ind, double startDegree, double endDegree )
         {
-            Point startPoint = GetCirclePoint( startDegree );
-            Point endPoint = GetCirclePoint( endDegree );
+            Point startPoint;
+            Point endPoint;
+
+            if ( arr.Length == 1 ) {
+                startPoint = new Point( CENTER, 0 );
+                endPoint = new Point( CENTER - 0.01d, 0 );
+            }
+            else {
+                startPoint = GetCirclePoint( startDegree );
+                endPoint = GetCirclePoint( endDegree );
+            }
 
             var isLargeArc = (endDegree - startDegree) > 180 ? true : false;
 
@@ -128,8 +148,8 @@ namespace CircleDiagram
         protected virtual Point GetCirclePoint ( double degree )
         {
             return new Point( 
-                        x: Math.Sin( degree * ONE_DEGREE_RAD ) * RADIUS,
-                        y: Math.Cos( degree * ONE_DEGREE_RAD ) * RADIUS
+                        x: Math.Sin( degree * ONE_DEGREE_RAD ) * RADIUS + CENTER,
+                        y: CENTER - Math.Cos( degree * ONE_DEGREE_RAD ) * RADIUS
                     );
         }
 

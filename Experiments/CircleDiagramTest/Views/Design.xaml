@@ -9,7 +9,7 @@
         WindowStyle="None"
         AllowsTransparency="True"
         >
-    <Grid TextElement.FontWeight="Bold" >
+    <Grid TextElement.FontWeight="Bold" Background="#cfcfcf" >
         <Viewbox Margin="8">
             <Grid>
                 <Grid.RowDefinitions>
@@ -88,7 +88,7 @@
                     </Path.Data>
                 </Path>
 
-                <Path Grid.Row="0" Grid.RowSpan="3" 
+                <!--<Path Grid.Row="0" Grid.RowSpan="3" 
                       Fill="Green" 
                       Stroke="{x:Null}" 
                       Width="100" Height="100" 
@@ -110,7 +110,7 @@
                             </PathFigureCollection>
                         </PathGeometry>
                     </Path.Data>
-                </Path>
+                </Path>-->
 
             </Grid>
         </Viewbox>

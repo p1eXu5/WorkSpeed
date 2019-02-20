@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkSpeed.Data.Models;
 
-namespace CircleDiagramTest.Models
+namespace WorkSpeed.Business.Models.Productivity
 {
     public class GatheringProductivity : IProductivity
     {
-        public Operation Operation { get; } = Operation.Operations[ 0 ];
+        public Operation Operation { get; }
 
         public double GetLinesPerHour ()
         {

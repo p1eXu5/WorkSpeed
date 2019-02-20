@@ -10,7 +10,7 @@ namespace CircleDiagramTest.ViewModels
 {
     public class EmployeeProductivityViewModel : ViewModel
     {
-        public EmployeeProductivityViewModel ( EmployeeProductivity employeeProductivity, Operation[] operations, List< Category > categories )
+        public EmployeeProductivityViewModel ( EmployeeProductivityBase employeeProductivity, Operation[] operations, List< Category > categories )
         {
             // Concrete productivities plus TimeProductivityViewModel
             ProductivityVms = new List< ProductivityViewModel >( operations.Length + 1 );

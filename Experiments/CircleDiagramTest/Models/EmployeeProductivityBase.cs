@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace CircleDiagramTest.Models
 {
-    public class EmployeeProductivity
+    public class EmployeeProductivityBase
     {
-        public static List< EmployeeProductivity > EmployeeProductivities { get; }
+        public static List< EmployeeProductivityBase > EmployeeProductivities { get; }
 
-        static EmployeeProductivity ()
+        static EmployeeProductivityBase ()
         {
-            EmployeeProductivities = new List< EmployeeProductivity >();
+            EmployeeProductivities = new List< EmployeeProductivityBase >();
 
-            EmployeeProductivities.Add( new EmployeeProductivity( new Employee { Id = "AR00001", Name = "Employee 1", Rank = 3 } ) );
+            EmployeeProductivities.Add( new EmployeeProductivityBase( new Employee { Id = "AR00001", Name = "Employee 1", Rank = 3 } ) );
 
             EmployeeProductivities[ 0 ][Operation.Operations[0]] = new GatheringProductivity();
             EmployeeProductivities[ 0 ][Operation.Operations[1]] = new ReceptionProductivity();
@@ -25,7 +25,7 @@ namespace CircleDiagramTest.Models
 
         private readonly Dictionary< Operation, IProductivity > _productivities;
 
-        public EmployeeProductivity ( Employee employee )
+        public EmployeeProductivityBase ( Employee employee )
         {
             Employee = employee;
             _productivities = new Dictionary< Operation, IProductivity >();

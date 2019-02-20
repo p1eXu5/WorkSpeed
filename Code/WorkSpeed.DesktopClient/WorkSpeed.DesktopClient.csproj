@@ -102,6 +102,21 @@
     <Compile Include="Views\Dialogs\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Entities\EmployeeView.xaml.cs">
+      <DependentUpon>EmployeeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Entities\OperationView.xaml.cs">
+      <DependentUpon>OperationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Entities\Productivity\EmployeeProductivityView.xaml.cs">
+      <DependentUpon>EmployeeProductivityView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Entities\Productivity\ProductivityUserControl.xaml.cs">
+      <DependentUpon>ProductivityUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Entities\Productivity\ProductivityView.xaml.cs">
+      <DependentUpon>ProductivityView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Teeemp.xaml.cs">
       <DependentUpon>Teeemp.xaml</DependentUpon>
     </Compile>
@@ -140,6 +155,18 @@
     <Page Include="Resources\Colors.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\ListBoxStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\ProductivityDataTemplates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\ToggleButtonStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\Window\ComboBoxAnimations.xaml">
       <SubType>Designer</SubType>
@@ -200,6 +227,26 @@
     <Page Include="Views\Dialogs\ErrorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Entities\EmployeeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Entities\OperationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Entities\Productivity\EmployeeProductivityView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Entities\Productivity\ProductivityUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Entities\Productivity\ProductivityView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Teeemp.xaml">
       <SubType>Designer</SubType>

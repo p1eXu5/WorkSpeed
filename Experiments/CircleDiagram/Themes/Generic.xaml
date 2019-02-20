@@ -9,6 +9,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type local:CircleDiagramControl}">
+        <Setter Property="Background" Value="#cfcfcf" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:CircleDiagramControl}">
