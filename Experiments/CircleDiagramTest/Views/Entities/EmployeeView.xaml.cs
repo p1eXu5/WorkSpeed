@@ -18,7 +18,7 @@ namespace CircleDiagramTest.Views.Entities
     /// <summary>
     /// Interaction logic for EmployeeView.xaml
     /// </summary>
-    public partial class EmployeeView : Grid
+    public partial class EmployeeView : Border
     {
         public EmployeeView()
         {
