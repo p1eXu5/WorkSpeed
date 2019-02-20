@@ -108,6 +108,9 @@
     <Compile Include="Views\Entities\EmployeeView.xaml.cs">
       <DependentUpon>EmployeeView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Productivity\EmployeeProductivityView.xaml.cs">
+      <DependentUpon>EmployeeProductivityView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Productivity\OperationHeaderView.xaml.cs">
       <DependentUpon>OperationHeaderView.xaml</DependentUpon>
     </Compile>
@@ -228,11 +231,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Productivity\OperationHeaderView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\Productivity\EmployeeProductivityView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Productivity\OperationHeaderView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
