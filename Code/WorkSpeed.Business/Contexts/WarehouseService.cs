@@ -4,12 +4,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using WorkSpeed.Data.DataContexts;
-using WorkSpeed.Data.Models;
-using WorkSpeed.Data.Models.Actions;
+using WorkSpeed.Business.Contexts.Contracts;
+using WorkSpeed.Data.Context;
 
-namespace WorkSpeed.Data.BusinessContexts
+namespace WorkSpeed.Business.Contexts
 {
     public class WarehouseService : IDisposable, IWarehouseService
     {

@@ -10,8 +10,8 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Moq;
-using WorkSpeed.Data.DataContexts;
 using WorkSpeed.Business.Contexts;
+using WorkSpeed.Data.Context;
 using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Business.Tests.Contexts.UnitTests

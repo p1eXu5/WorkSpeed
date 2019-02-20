@@ -71,24 +71,30 @@
     <Compile Include="Converters\ImageConverter.cs" />
     <Compile Include="Converters\TabControlHeightConverter.cs" />
     <Compile Include="TemplateSelectors\StageDataTemplateSelector.cs" />
-    <Compile Include="ViewModels\EntityViewModels\AbbreviationViewModel.cs" />
-    <Compile Include="ViewModels\EntityViewModels\AppointmentGroupingViewModel.cs" />
+    <Compile Include="ViewModels\Entities\AbbreviationViewModel.cs" />
+    <Compile Include="ViewModels\Grouping\AppointmentGroupingViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\ErrorViewModel.cs" />
-    <Compile Include="ViewModels\EntityViewModels\AppointmentViewModel.cs" />
-    <Compile Include="ViewModels\EntityViewModels\CategoryViewModel.cs" />
-    <Compile Include="ViewModels\EntityViewModels\PositionViewModel.cs" />
-    <Compile Include="ViewModels\EntityViewModels\ProductivityViewModel.cs" />
-    <Compile Include="ViewModels\EntityViewModels\ShiftViewModel.cs" />
-    <Compile Include="ViewModels\EntityViewModels\ShortBreakScheduleViewModel.cs" />
-    <Compile Include="ViewModels\EntityViewModels\ShortBreakViewModel.cs" />
-    <Compile Include="ViewModels\EntityViewModels\PositionGroupingViewModel.cs" />
-    <Compile Include="ViewModels\EntityViewModels\ShiftGroupingViewModel.cs" />
+    <Compile Include="ViewModels\Entities\AppointmentViewModel.cs" />
+    <Compile Include="ViewModels\Productivity\CategorizedProductivityViewModel.cs" />
+    <Compile Include="ViewModels\Entities\CategoryViewModel.cs" />
+    <Compile Include="ViewModels\Productivity\EmployeeProductivityViewModel.cs" />
+    <Compile Include="ViewModels\Productivity\GatheringProductivityViewModel.cs" />
+    <Compile Include="ViewModels\Entities\OperationViewModel.cs" />
+    <Compile Include="ViewModels\Entities\PositionViewModel.cs" />
+    <Compile Include="ViewModels\Productivity\ProductivityViewModel.cs" />
+    <Compile Include="ViewModels\Productivity\ReceptionProductivityViewModel.cs" />
+    <Compile Include="ViewModels\Entities\ShiftViewModel.cs" />
+    <Compile Include="ViewModels\Entities\ShortBreakScheduleViewModel.cs" />
+    <Compile Include="ViewModels\Entities\ShortBreakViewModel.cs" />
+    <Compile Include="ViewModels\Grouping\PositionGroupingViewModel.cs" />
+    <Compile Include="ViewModels\Grouping\ShiftGroupingViewModel.cs" />
+    <Compile Include="ViewModels\Productivity\TimeProductivityViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ActionsImportStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\CategoriesThresholdStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\CheckEmployeesStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\Directions.cs" />
     <Compile Include="ViewModels\StageViewModels\EmployeesImportStageViewModel.cs" />
-    <Compile Include="ViewModels\EntityViewModels\EmployeeViewModel.cs" />
+    <Compile Include="ViewModels\Entities\EmployeeViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ImportStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\IStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\MoveRequestedEventArgs.cs" />
@@ -96,25 +102,16 @@
     <Compile Include="ViewModels\StageViewModels\ProductivityStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ShiftSetupStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\StageViewModel.cs" />
-    <Compile Include="Views\DataTemplates\EmployeeUserControl.xaml.cs">
-      <DependentUpon>EmployeeUserControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Dialogs\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Entities\EmployeeView.xaml.cs">
-      <DependentUpon>EmployeeView.xaml</DependentUpon>
+    <Compile Include="Views\Productivity\OperationHeaderView.xaml.cs">
+      <DependentUpon>OperationHeaderView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Entities\OperationView.xaml.cs">
-      <DependentUpon>OperationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Entities\Productivity\EmployeeProductivityView.xaml.cs">
-      <DependentUpon>EmployeeProductivityView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Entities\Productivity\ProductivityUserControl.xaml.cs">
+    <Compile Include="Views\Productivity\ProductivityUserControl.xaml.cs">
       <DependentUpon>ProductivityUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Entities\Productivity\ProductivityView.xaml.cs">
+    <Compile Include="Views\Productivity\ProductivityView.xaml.cs">
       <DependentUpon>ProductivityView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Teeemp.xaml.cs">
@@ -220,7 +217,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DataTemplates\EmployeeUserControl.xaml">
+    <Page Include="Views\Entities\EmployeeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -228,23 +225,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Entities\EmployeeView.xaml">
+    <Page Include="Views\Productivity\OperationHeaderView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Entities\OperationView.xaml">
+    <Page Include="Views\Productivity\EmployeeProductivityView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Entities\Productivity\EmployeeProductivityView.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Views\Productivity\ProductivityUserControl.xaml">
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Entities\Productivity\ProductivityUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Entities\Productivity\ProductivityView.xaml">
+    <Page Include="Views\Productivity\ProductivityView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -357,6 +350,10 @@
       <Project>{47680bf8-c76a-44b9-bde3-694f1a73ccb1}</Project>
       <Name>Agbm.NpoiExcel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Agbm.Wpf\Code\Agbm.Wpf.CustomControls\Agbm.Wpf.CustomControls.csproj">
+      <Project>{240f5ce1-e550-4702-a577-825244a750cf}</Project>
+      <Name>Agbm.Wpf.CustomControls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Agbm.Wpf\Code\Agbm.Wpf.MvvmBaseLibrary\Agbm.Wpf.MvvmBaseLibrary.csproj">
       <Project>{c92ff512-b9c0-4aaf-9a9b-d0dee139af44}</Project>
       <Name>Agbm.Wpf.MvvmBaseLibrary</Name>
@@ -370,5 +367,6 @@
       <Name>WorkSpeed.Data</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

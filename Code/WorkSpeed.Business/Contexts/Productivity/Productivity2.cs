@@ -167,7 +167,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
         public void AddTime ( EmployeeActionBase employeeAction,  AddTimeOptions option = AddTimeOptions.Duration )
         {
-            switch ( employeeAction.Operation.OperationGroup ) {
+            switch ( employeeAction.Operation.Group ) {
 
                 case OperationGroups.Gathering :
                 case OperationGroups.Packing :

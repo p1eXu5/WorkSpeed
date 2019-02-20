@@ -13,11 +13,10 @@ using Agbm.Wpf.MvvmBaseLibrary;
 using Microsoft.Win32;
 using WorkSpeed.Business.Contexts;
 using WorkSpeed.Business.Contexts.Contracts;
-using WorkSpeed.Data.BusinessContexts;
-using WorkSpeed.Data.DataContexts;
 using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.Dialogs;
-using WorkSpeed.DesktopClient.ViewModels.EntityViewModels;
+using WorkSpeed.DesktopClient.ViewModels.Entities;
+using WorkSpeed.DesktopClient.ViewModels.Grouping;
 
 namespace WorkSpeed.DesktopClient.ViewModels
 {

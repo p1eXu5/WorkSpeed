@@ -14,7 +14,7 @@ namespace WorkSpeed.Data
         /// <returns></returns>
         public static bool IsGatheringOperation ( this EmployeeActionBase employeeAction )
         {
-            var operationGroup = employeeAction?.Operation?.OperationGroup ?? throw new ArgumentNullException();
+            var operationGroup = employeeAction?.Operation?.Group ?? throw new ArgumentNullException();
 
             switch ( operationGroup )
             {
@@ -36,7 +36,7 @@ namespace WorkSpeed.Data
         /// <returns></returns>
         public static bool IsShipmentOperation ( this EmployeeActionBase employeeAction )
         {
-            var operationGroup = employeeAction?.Operation?.OperationGroup ?? throw new ArgumentNullException();
+            var operationGroup = employeeAction?.Operation?.Group ?? throw new ArgumentNullException();
 
             switch ( operationGroup )
             {
@@ -55,7 +55,7 @@ namespace WorkSpeed.Data
         /// <returns></returns>
         public static OperationGroups GetOperationGroup ( this EmployeeActionBase employeeAction )
         {
-            return employeeAction?.Operation?.OperationGroup ?? throw new ArgumentNullException();
+            return employeeAction?.Operation?.Group ?? throw new ArgumentNullException();
         }
 
         /// <summary>

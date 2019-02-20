@@ -171,7 +171,6 @@
     <Compile Include="Contexts\Contracts\IWarehouseService.cs" />
     <Compile Include="Contexts\Contracts\IWorkSpeedBusinessContext.cs" />
     <Compile Include="Contexts\ProductivityService.cs" />
-    <Compile Include="Contexts\RuntimeWorkSpeedBusinessContext.cs" />
     <Compile Include="Contexts\Service.cs" />
     <Compile Include="Contexts\WarehouseService.cs" />
     <Compile Include="Factories\WorkSpeedBusinessContextCreator.cs" />

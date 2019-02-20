@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WorkSpeed.Data.BusinessContexts;
-using WorkSpeed.Data.DataContexts;
+using WorkSpeed.Data.Context;
 
-namespace WorkSpeed.Data.BusinessContexts
+namespace WorkSpeed.Business.Contexts
 {
     public class ProductivityService : IDisposable
     {

@@ -126,43 +126,38 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Comparers\EmployeeActionComparer.cs" />
-    <Compile Include="Comparers\EmployeeComparer.cs" />
-    <Compile Include="Comparers\OperationComparer.cs" />
-    <Compile Include="DataContexts\CategoryCategorySetConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\ActionDetails\DoubleAddressActionDetailConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\ActionDetails\InventoryActionDetailConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\ActionDetails\ReceptionActionDetailConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\Actions\DoubleAddressActionConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\Actions\InventoryActionConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\Actions\OtherActionConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\Actions\ReceptionActionConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\AddressConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\AppointmentConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\AvatarConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\CategoryConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\CategorySetConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\EmployeeConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\OperationConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\PositionConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\ProductConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\Actions\ShipmentActionConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\RankConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\ShiftConfiguration.cs" />
-    <Compile Include="DataContexts\Configurations\ShortBreakScheduleConfiguration.cs" />
-    <Compile Include="DataContexts\ImportService\WorkSpeedDbContextExtensions.cs" />
-    <Compile Include="DataContexts\ReportService\WorkSpeedDbContextExtensions.cs" />
-    <Compile Include="DataContexts\WorkSpeedDbContextExtensions.cs" />
-    <Compile Include="Migrations\20190216142609_InitialCreate.cs" />
-    <Compile Include="Migrations\20190216142609_InitialCreate.designer.cs">
-      <DependentUpon>20190216142609_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\WorkSpeedDbContextModelSnapshot.cs" />
+    <Compile Include="Models\Comparers\EmployeeActionComparer.cs" />
+    <Compile Include="Models\Comparers\EmployeeComparer.cs" />
+    <Compile Include="Models\Comparers\OperationComparer.cs" />
+    <Compile Include="Context\Configurations\CategoryCategorySetConfiguration.cs" />
+    <Compile Include="Context\Configurations\ActionDetails\DoubleAddressActionDetailConfiguration.cs" />
+    <Compile Include="Context\Configurations\ActionDetails\InventoryActionDetailConfiguration.cs" />
+    <Compile Include="Context\Configurations\ActionDetails\ReceptionActionDetailConfiguration.cs" />
+    <Compile Include="Context\Configurations\Actions\DoubleAddressActionConfiguration.cs" />
+    <Compile Include="Context\Configurations\Actions\InventoryActionConfiguration.cs" />
+    <Compile Include="Context\Configurations\Actions\OtherActionConfiguration.cs" />
+    <Compile Include="Context\Configurations\Actions\ReceptionActionConfiguration.cs" />
+    <Compile Include="Context\Configurations\AddressConfiguration.cs" />
+    <Compile Include="Context\Configurations\AppointmentConfiguration.cs" />
+    <Compile Include="Context\Configurations\AvatarConfiguration.cs" />
+    <Compile Include="Context\Configurations\CategoryConfiguration.cs" />
+    <Compile Include="Context\Configurations\CategorySetConfiguration.cs" />
+    <Compile Include="Context\Configurations\EmployeeConfiguration.cs" />
+    <Compile Include="Context\Configurations\OperationConfiguration.cs" />
+    <Compile Include="Context\Configurations\PositionConfiguration.cs" />
+    <Compile Include="Context\Configurations\ProductConfiguration.cs" />
+    <Compile Include="Context\Configurations\Actions\ShipmentActionConfiguration.cs" />
+    <Compile Include="Context\Configurations\RankConfiguration.cs" />
+    <Compile Include="Context\Configurations\ShiftConfiguration.cs" />
+    <Compile Include="Context\Configurations\ShortBreakScheduleConfiguration.cs" />
+    <Compile Include="Context\ImportService\WorkSpeedDbContextExtensions.cs" />
+    <Compile Include="Context\ReportService\WorkSpeedDbContextExtensions.cs" />
+    <Compile Include="Context\WorkSpeedDbContextExtensions.cs" />
     <Compile Include="Models\Actions\EmployeeActionBase.cs" />
     <Compile Include="Models\Avatar.cs" />
     <Compile Include="Models\CategoryCategorySet.cs" />
     <Compile Include="Models\IKeyedEntity.cs" />
-    <Compile Include="DataContexts\WorkSpeedDbContext.cs" />
+    <Compile Include="Context\WorkSpeedDbContext.cs" />
     <Compile Include="ModelExtansions.cs" />
     <Compile Include="Models\ActionDetails\ActionDetailBase.cs" />
     <Compile Include="Models\ActionDetails\DoubleAddressActionDetail.cs" />
@@ -201,15 +196,6 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
     <None Include="packages.config" />
-    <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\12 - Декабрь 2018 - расчёты %28тариф 1%29.xlsx" />
-    <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\Выработка 28.11.2018 8.00 - 29.11.2018 8.00.xls" />
-    <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\Инвентаризация товара 28.11.2018 8.00 - 29.11.2018 8.00.xls" />
-    <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\МГХ от 22.11.2018.xlsx" />
-    <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\Отгрузка товара 28.11.2018 8.00 - 29.11.2018 8.00.xls" />
-    <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\Приём товара 28.11.2018 8.00 - 29.11.2018 8.00.xls" />
-    <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\ПРР товара 28.11.2018 8.00 - 29.11.2018 8.00.xls" />
-    <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\Сотрудники - Декабрь 2018 %28не удалять%29.xlsx" />
-    <None Include="Seed\SeedFiles\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\Сотрудники от 29.11.2018 г.xls" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Agbm.Tools\Code\Agbm.NpoiExcel\Agbm.NpoiExcel.csproj">
@@ -226,7 +212,9 @@
   <ItemGroup>
     <None Include="Resources\default_face.bmp" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

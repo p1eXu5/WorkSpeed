@@ -5,8 +5,6 @@ using Agbm.NpoiExcel.Attributes;
 using Agbm.Wpf.MvvmBaseLibrary;
 using WorkSpeed.Business.Contexts;
 using WorkSpeed.Business.Factories;
-using WorkSpeed.Data.BusinessContexts;
-using WorkSpeed.Data.DataContexts;
 using WorkSpeed.DesktopClient.ViewModels;
 using WorkSpeed.DesktopClient.ViewModels.Dialogs;
 using WorkSpeed.DesktopClient.Views;

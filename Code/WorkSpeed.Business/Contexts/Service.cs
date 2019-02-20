@@ -1,6 +1,5 @@
-﻿using System;
-using WorkSpeed.Business.Contexts.Contracts;
-using WorkSpeed.Data.DataContexts;
+﻿using WorkSpeed.Business.Contexts.Contracts;
+using WorkSpeed.Data.Context;
 
 namespace WorkSpeed.Business.Contexts
 {

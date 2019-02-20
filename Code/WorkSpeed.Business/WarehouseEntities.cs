@@ -4,11 +4,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Business.Contexts.Productivity;
 using WorkSpeed.Business.Interfaces;
 using WorkSpeed.Data;
-using WorkSpeed.Data.BusinessContexts;
-using WorkSpeed.Data.Comparers;
 using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Business

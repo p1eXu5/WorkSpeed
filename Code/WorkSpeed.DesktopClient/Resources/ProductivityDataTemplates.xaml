@@ -1,23 +1,24 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:viewModels="clr-namespace:CircleDiagramTest.ViewModels"
-                    xmlns:vp="clr-namespace:CircleDiagramTest.Views.Productivity"
-                    xmlns:ve="clr-namespace:CircleDiagramTest.Views.Entities">
+                    xmlns:vp="clr-namespace:WorkSpeed.DesktopClient.Views.Productivity"
+                    xmlns:entities="clr-namespace:WorkSpeed.DesktopClient.Views.Entities"
+                    xmlns:vme="clr-namespace:WorkSpeed.DesktopClient.ViewModels.Entities"
+                    xmlns:vmp="clr-namespace:WorkSpeed.DesktopClient.ViewModels.Productivity">
     
-    <DataTemplate DataType="{x:Type viewModels:ProductivityViewModel}">
+    <DataTemplate DataType="{x:Type vmp:ProductivityViewModel}">
         <vp:ProductivityView />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type viewModels:EmployeeProductivityViewModel}">
+    <DataTemplate DataType="{x:Type vmp:EmployeeProductivityViewModel}">
         <vp:EmployeeProductivityView />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type viewModels:OperationViewModel}">
-        <ve:OperationView />
+    <DataTemplate DataType="{x:Type vme:OperationViewModel}">
+        <entities:OperationView />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type viewModels:EmployeeViewModel}">
-        <ve:EmployeeView />
+    <DataTemplate DataType="{x:Type vme:EmployeeViewModel}">
+        <entities:EmployeeView />
     </DataTemplate>
 
 

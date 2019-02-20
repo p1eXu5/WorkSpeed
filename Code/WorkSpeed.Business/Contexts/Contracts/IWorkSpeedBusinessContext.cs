@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
 
-namespace WorkSpeed.Data.BusinessContexts
+namespace WorkSpeed.Business.Contexts.Contracts
 {
     public interface IWorkSpeedBusinessContext
     {

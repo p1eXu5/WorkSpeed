@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Business.FileModels;
-using WorkSpeed.Data.Comparers;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
+using WorkSpeed.Data.Models.Comparers;
 
 namespace WorkSpeed.Business.Contexts.Productivity
 {
