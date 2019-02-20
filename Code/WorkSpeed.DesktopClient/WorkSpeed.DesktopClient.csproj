@@ -105,6 +105,9 @@
     <Compile Include="Views\Dialogs\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Entities\EmployeeView.xaml.cs">
+      <DependentUpon>EmployeeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Productivity\OperationHeaderView.xaml.cs">
       <DependentUpon>OperationHeaderView.xaml</DependentUpon>
     </Compile>
