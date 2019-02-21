@@ -130,7 +130,7 @@
     <Compile Include="Contexts\Productivity\ActionDetails\WithProductActionDetails.cs" />
     <Compile Include="Contexts\Productivity\ActionDetails\WithScansActionDetails.cs" />
     <Compile Include="Contexts\Productivity\BreakRepository.cs" />
-    <Compile Include="Contexts\Productivity\Builders\GatheringProductivityBuilder.cs" />
+    <Compile Include="Contexts\Productivity\Builders\WithProductProductivityBuilder.cs" />
     <Compile Include="Contexts\Productivity\Builders\InventoryProductivityBuilder.cs" />
     <Compile Include="Contexts\Productivity\Builders\IProductivityBuilder.cs" />
     <Compile Include="Contexts\Productivity\Builders\IProductivityDirector.cs" />
