@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
+using WorkSpeed.Business.Contexts.Productivity.Builders;
 using WorkSpeed.Business.Models;
+using WorkSpeed.Business.Models.Productivity;
 using WorkSpeed.Data.Context;
 using WorkSpeed.Data.Context.ReportService;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Business.Contexts
 {
@@ -16,15 +20,23 @@ namespace WorkSpeed.Business.Contexts
     {
         public const string THRESHOLD_FILE = "thresholds.bin";
 
+        private readonly IProductivityDirector _productivityDirector;
+
+        private readonly ObservableCollection< EmployeeProductivityCollection > _employeeProductivities;
+        private readonly ObservableCollection< ShiftGrouping > _shiftGroupings;
         private readonly ObservableCollection< Shift > _shifts;
         private readonly ObservableCollection< ShortBreakSchedule > _shortBreakSchedules;
+
         private readonly IFormatter _formatter = new BinaryFormatter();
         private OperationThresholds _thresholds;
 
+
         #region Ctor
 
-        public ReportService ( WorkSpeedDbContext dbContext ) : base( dbContext )
+        public ReportService ( WorkSpeedDbContext dbContext, IProductivityDirector builder ) : base( dbContext )
         {
+            _productivityDirector = builder ?? throw new ArgumentNullException(nameof(builder), @"IProductivityBuilder cannot be null.");
+
             Appointments = _dbContext.Appointments.ToArray();
             Ranks = _dbContext.Ranks.ToArray();
             Positions = _dbContext.Positions.ToArray();
@@ -38,12 +50,16 @@ namespace WorkSpeed.Business.Contexts
 
         #endregion
 
+
         public Appointment[] Appointments { get; }
         public Rank[] Ranks { get; }
         public Position[] Positions { get; }
 
-        public ReadOnlyObservableCollection< Shift > Shifts { get; set; }
-        public ReadOnlyObservableCollection< ShortBreakSchedule > ShortBreakSchedules { get; set; }
+
+        public ReadOnlyObservableCollection< EmployeeProductivityCollection > EmployeeProductivities { get; }
+        public ReadOnlyObservableCollection< ShiftGrouping > ShiftGroupings { get; }
+        public ReadOnlyObservableCollection< Shift > Shifts { get; }
+        public ReadOnlyObservableCollection< ShortBreakSchedule > ShortBreakSchedules { get; }
 
         public ShiftGrouping[] ShiftGrouping { get; private set; }
 
@@ -51,18 +67,65 @@ namespace WorkSpeed.Business.Contexts
 
         public Task LoadEmployeesAsync ()
         {
-            return Task.Run( () => LoadEmployees() );
+            var tcs = new TaskCompletionSource< bool >();
+
+            Task.Run( () => { 
+                try {
+                    _shiftGroupings.Clear();
+                    foreach ( var grouping in _dbContext.GetShiftGrouping().Select( s => new ShiftGrouping( s.shift, s.appointments ) ) ) {
+                        _shiftGroupings.Add( grouping );
+                    }
+                }
+                catch ( Exception ) {
+
+                    _shiftGroupings.Clear();
+                    tcs.SetResult( false );
+                }
+            });
+
+            return tcs.Task;
         }
 
-        public void LoadEmployees ()
+        public Task GetProductivityAsync ( Period period )
         {
-            try {
-                ShiftGrouping = _dbContext.GetShiftGrouping().Select( s => new ShiftGrouping( s.shift, s.appointments ) ).ToArray();
-            }
-            catch ( Exception ) {
-                ShiftGrouping = new ShiftGrouping[0];
+            var tcs = new TaskCompletionSource< bool >();
+
+            Task.Run( () =>
+                      {
+                          try {
+                              _employeeProductivities.Clear();
+                              foreach ( var productivity in GetProductivity( period ) ) {
+                                  _employeeProductivities.Add( productivity );
+                              }
+                              tcs.SetResult( true );
+                          }
+                          catch ( Exception ) {
+                              _employeeProductivities.Clear();
+                              tcs.SetResult( false );
+                          }
+                      }
+                    );
+
+            return tcs.Task;
+        }
+
+        private IEnumerable<EmployeeProductivityCollection> GetProductivity ( Period period )
+        {
+            var actions = _dbContext.GetEmployeeActions( period.Start, period.End ).ToArray();
+            var productivities = new List< EmployeeProductivityCollection >();
+
+            foreach ( IGrouping< Employee, EmployeeActionBase > grouping in actions ) {
+
+                var employeeProd = new EmployeeProductivityCollection( grouping.Key );
+
+                foreach ( var productivity in _productivityDirector.GetProductivities( grouping, _thresholds ) ) {
+                    employeeProd[ productivity.Operation ] = productivity;
+                }
+
+                yield return employeeProd;
             }
         }
+
 
         public OperationThresholds GetThresholds ()
         {
@@ -74,7 +137,7 @@ namespace WorkSpeed.Business.Contexts
             return _thresholds;
         }
 
-        private void OnThresholdChanged ( object threshold, EventArgs args )
+        protected void OnThresholdChanged ( object threshold, EventArgs args )
         {
             WriteThresholds();
         }
@@ -94,6 +157,9 @@ namespace WorkSpeed.Business.Contexts
             }
         }
 
+        /// <summary>
+        /// Writes thresholds to the file.
+        /// </summary>
         public void WriteThresholds ()
         {
             using ( FileStream file = File.Create( THRESHOLD_FILE ) ) {
@@ -101,6 +167,10 @@ namespace WorkSpeed.Business.Contexts
             }
         }
 
+        /// <summary>
+        /// Invokes if thresholds have not created and have not saved in file.
+        /// </summary>
+        /// <returns></returns>
         private OperationThresholds GetNewThresholds ()
         {
             var operations = _dbContext.GetOperations().ToArray();
@@ -112,6 +182,7 @@ namespace WorkSpeed.Business.Contexts
 
             return thresholds;
         }
+        
         #endregion
     }
 }

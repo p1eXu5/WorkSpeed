@@ -165,10 +165,10 @@ namespace WorkSpeed.DesktopClient.ViewModels
             if ( selected == 1 ) { LoadEmployees( obj ); }
         }
 
-        private void LoadEmployees ( object obj )
+        private async void LoadEmployees ( object obj )
         {
             EmployeesStatusMessage = "Идёт загрузка сотрудников";
-            _reportService.LoadEmployees();
+            await _reportService.LoadEmployeesAsync();
 
             if (_reportService.ShiftGrouping.Any())
             {

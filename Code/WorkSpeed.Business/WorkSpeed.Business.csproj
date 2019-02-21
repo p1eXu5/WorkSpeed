@@ -130,10 +130,12 @@
     <Compile Include="Contexts\Productivity\ActionDetails\WithProductActionDetails.cs" />
     <Compile Include="Contexts\Productivity\ActionDetails\WithScansActionDetails.cs" />
     <Compile Include="Contexts\Productivity\BreakRepository.cs" />
-    <Compile Include="Contexts\Productivity\Builders\GatheringProductivityBuilder.cs" />
+    <Compile Include="Contexts\Productivity\Builders\WithProductProductivityBuilder.cs" />
     <Compile Include="Contexts\Productivity\Builders\InventoryProductivityBuilder.cs" />
     <Compile Include="Contexts\Productivity\Builders\IProductivityBuilder.cs" />
+    <Compile Include="Contexts\Productivity\Builders\IProductivityDirector.cs" />
     <Compile Include="Contexts\Productivity\Builders\OtherProductivityBuilder.cs" />
+    <Compile Include="Contexts\Productivity\Builders\ProductivityDirector.cs" />
     <Compile Include="Contexts\Productivity\Builders\ReceptionProductivityBuilder.cs" />
     <Compile Include="Contexts\Productivity\Builders\ShipmentProductivityBuilder.cs" />
     <Compile Include="Contexts\Productivity\CategoryFilter.cs" />
@@ -173,7 +175,7 @@
     <Compile Include="Contexts\ProductivityService.cs" />
     <Compile Include="Contexts\Service.cs" />
     <Compile Include="Contexts\WarehouseService.cs" />
-    <Compile Include="Factories\WorkSpeedBusinessContextCreator.cs" />
+    <Compile Include="Contexts\WorkSpeedBusinessContextCreator.cs" />
     <Compile Include="CategoryConstraints.cs" />
     <Compile Include="Constraints\BreakConstraints.cs" />
     <Compile Include="Constraints\DefaultCategoryConstraints.cs" />
@@ -181,7 +183,7 @@
     <Compile Include="Constraints\ITimeConstraints.cs" />
     <Compile Include="Constraints\ITimeConstraintFactory.cs" />
     <Compile Include="DayPeriod.cs" />
-    <Compile Include="Factories\TypeRepositoryExtensions.cs" />
+    <Compile Include="Contexts\TypeRepositoryExtensions.cs" />
     <Compile Include="FileModels\Comparers\ActionImportModelComparer.cs" />
     <Compile Include="Constraints\IBreakConstraints.cs" />
     <Compile Include="Constraints\ICategoryConstraints.cs" />
@@ -195,7 +197,7 @@
     <Compile Include="Models\AllActions.cs" />
     <Compile Include="Models\AppointmentGrouping.cs" />
     <Compile Include="Models\PositionGrouping.cs" />
-    <Compile Include="Models\Productivity\EmployeeProductivityBase.cs" />
+    <Compile Include="Models\Productivity\EmployeeProductivityCollection.cs" />
     <Compile Include="Models\Productivity\GatheringProductivity.cs" />
     <Compile Include="Models\Productivity\IProductivity.cs" />
     <Compile Include="Models\Productivity\ReceptionProductivity.cs" />
@@ -251,6 +253,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Contexts\Exceptions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

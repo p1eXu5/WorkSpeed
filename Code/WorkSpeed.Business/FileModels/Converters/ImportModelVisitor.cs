@@ -69,9 +69,9 @@ namespace WorkSpeed.Business.FileModels.Converters
             };
         }
 
-        public AllActions GetDbModel ( ProductivityImportModel productivityImportModel )
+        public EmployeeActionBase GetDbModel ( ProductivityImportModel productivityImportModel )
         {
-            var actions = new AllActions();
+            EmployeeActionBase action = null;
 
             if ( productivityImportModel.ProductId == null ) {
 
@@ -80,27 +80,27 @@ namespace WorkSpeed.Business.FileModels.Converters
                      && productivityImportModel.WeightPerEmployee == null
                      && productivityImportModel.VolumePerEmployee == null ) {
 
-                    actions.OtherAction = GetOtherAction( productivityImportModel );
+                    action = GetOtherAction( productivityImportModel );
                 }
                 else {
-                    actions.ShipmentAction = GetShipmentAction( productivityImportModel );
+                    action = GetShipmentAction( productivityImportModel );
                 }
             }
             else if ( !string.IsNullOrWhiteSpace( productivityImportModel.SenderAddress )
                       && string.IsNullOrWhiteSpace( productivityImportModel.ReceiverAddress ) ) {
 
-                actions.InventoryAction = GetInventoryAction( productivityImportModel );
+                action = GetInventoryAction( productivityImportModel );
             }
             else if ( string.IsNullOrWhiteSpace( productivityImportModel.SenderAddress )
                       && !string.IsNullOrWhiteSpace( productivityImportModel.ReceiverAddress ) ) {
 
-                actions.ReceptionAction = GetReceptionAction( productivityImportModel );
+                action = GetReceptionAction( productivityImportModel );
             }
             else {
-                actions.DoubleAddressAction = GetDoubleAddressAction( productivityImportModel );
+                action = GetDoubleAddressAction( productivityImportModel );
             }
 
-            return actions;
+            return action;
         }
 
 

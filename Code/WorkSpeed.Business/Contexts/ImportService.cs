@@ -107,7 +107,7 @@ namespace WorkSpeed.Business.Contexts
 
             if ( typeMap.type == typeof( ProductivityImportModel ) ) {
                 _progress?.Report( (10, @"Чтение из файла данных о действиях сотрудников") );
-                return ExcelImporter.GetDataFromTable( table, typeMap.propertyMap, new ImportModelConverter< ProductivityImportModel, AllActions >() );
+                return ExcelImporter.GetDataFromTable( table, typeMap.propertyMap, new ImportModelConverter< ProductivityImportModel, EmployeeActionBase >() );
             }
 
 
@@ -197,7 +197,7 @@ namespace WorkSpeed.Business.Contexts
         
 
         [ SuppressMessage( "ReSharper", "PossibleMultipleEnumeration" ) ]
-        private void StoreData ( IEnumerable< AllActions > data )
+        private void StoreData ( IEnumerable< EmployeeActionBase > data )
         {
             var doubleAddressActions = new List< DoubleAddressAction >();
             var receptionActions = new List< ReceptionAction >();
@@ -207,24 +207,22 @@ namespace WorkSpeed.Business.Contexts
 
             foreach ( var action in data ) {
 
-                if ( action.DoubleAddressAction != null ) {
-                    doubleAddressActions.Add( action.DoubleAddressAction );
-                    continue;
-                }
-                if ( action.ReceptionAction != null ) {
-                    receptionActions.Add( action.ReceptionAction );
-                    continue;
-                }
-                if ( action.InventoryAction != null ) {
-                    inventoryActions.Add( action.InventoryAction );
-                    continue;
-                }
-                if ( action.ShipmentAction != null ) {
-                    shipmentActions.Add( action.ShipmentAction );
-                    continue;
-                }
-                if ( action.OtherAction != null ) {
-                    otherActions.Add( action.OtherAction );
+                switch ( action ) {
+                    case DoubleAddressAction doubleAddressAction :
+                        doubleAddressActions.Add( doubleAddressAction );
+                        continue;
+                    case ReceptionAction receptionAction :
+                        receptionActions.Add( receptionAction );
+                        continue;
+                    case InventoryAction inventoryAction :
+                        inventoryActions.Add( inventoryAction );
+                        continue;
+                    case ShipmentAction shipmentAction :
+                        shipmentActions.Add( shipmentAction );
+                        continue;
+                    case OtherAction otherAction :
+                        otherActions.Add( otherAction );
+                        break;
                 }
             }
 
