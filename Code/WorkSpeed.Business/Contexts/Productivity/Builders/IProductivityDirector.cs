@@ -9,8 +9,8 @@ using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Business.Contexts.Productivity.Builders
 {
-    public interface IProductivityBuilder
+    public interface IProductivityDirector
     {
-        
+        IEnumerable< IProductivity > GetProductivities ( IEnumerable< EmployeeActionBase > actions, OperationThresholds thresholds );
     }
 }

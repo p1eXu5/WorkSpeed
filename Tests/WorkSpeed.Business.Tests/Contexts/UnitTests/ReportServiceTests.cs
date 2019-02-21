@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Moq;
 using WorkSpeed.Business.Contexts;
+using WorkSpeed.Business.Contexts.Productivity.Builders;
 using WorkSpeed.Data.Context;
 using WorkSpeed.Data.Models;
 
@@ -40,7 +41,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         {
             var service = GetReportService();
 
-            service.LoadEmployees();
+            service.LoadEmployeesAsync().Wait();
 
             Assert.That( service.ShiftGrouping, Is.Not.Empty );
         }
@@ -50,7 +51,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         {
             var service = GetReportService( fillEmployees: false );
 
-            service.LoadEmployees();
+            service.LoadEmployeesAsync().Wait();
 
             Assert.That( service.ShiftGrouping, Is.Empty );
         }
@@ -130,7 +131,9 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
                         dbContext.SaveChanges();
                     }
                 };
-            var reportService = new ReportService( new WorkSpeedDbContext(options) );
+            var stub = new Mock< IProductivityDirector >();
+
+            var reportService = new ReportService( new WorkSpeedDbContext(options), stub.Object );
 
             return reportService;
         }

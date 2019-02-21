@@ -2,7 +2,7 @@
 using Agbm.NpoiExcel.Attributes;
 using WorkSpeed.Business.FileModels;
 
-namespace WorkSpeed.Business.Factories
+namespace WorkSpeed.Business.Contexts
 {
     public static class TypeRepositoryExtensions
     {

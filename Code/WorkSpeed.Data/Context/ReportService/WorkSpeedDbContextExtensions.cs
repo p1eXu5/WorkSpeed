@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Data.Context.ReportService
 {
@@ -55,5 +56,49 @@ namespace WorkSpeed.Data.Context.ReportService
 
         public static IQueryable< Employee > GetInactiveEmployees ( this WorkSpeedDbContext dbContext )
             => dbContext.Employees.Include( e => e.Shift ).Include( e => e.Appointment ).Include( e => e.Position ).Where( e => !e.IsActive ).AsQueryable();
+
+        public static IEnumerable< IGrouping< Employee, EmployeeActionBase >> GetEmployeeActions ( this WorkSpeedDbContext dbContext, DateTime start, DateTime end )
+        {
+            var doubleAddressActions = dbContext.DoubleAddressActions
+                                                .Include( a => a.DoubleAddressDetails )
+                                                .Include( a => a.Employee )
+                                                .Include( a => a.Operation )
+                                                .Where( a => a.StartTime >= start && a.StartTime < end )
+                                                .AsQueryable();
+
+            var receptionActions = dbContext.ReceptionActions
+                                            .Include( a => a.ReceptionActionDetails )
+                                            .Include( a => a.Employee )
+                                            .Include( a => a.Operation )
+                                            .Where( a => a.StartTime >= start && a.StartTime < end )
+                                            .AsQueryable();
+
+            var inventoryActions = dbContext.InventoryActions
+                                            .Include( a => a.InventoryActionDetails )
+                                            .Include( a => a.Employee )
+                                            .Include( a => a.Operation )
+                                            .Where( a => a.StartTime >= start && a.StartTime < end )
+                                            .AsQueryable();
+
+            var shipmentActions = dbContext.ShipmentActions
+                                           .Include( a => a.Employee )
+                                           .Include( a => a.Operation )
+                                           .Where( a => a.StartTime >= start && a.StartTime < end )
+                                           .AsQueryable();
+
+            var otherActions = dbContext.OtherActions
+                                        .Include( a => a.Employee )
+                                        .Include( a => a.Operation )
+                                        .Where( a => a.StartTime >= start && a.StartTime < end )
+                                        .AsQueryable();
+
+            var set = new HashSet< EmployeeActionBase >();
+            set.UnionWith( doubleAddressActions );
+            set.UnionWith( receptionActions );
+            set.UnionWith( shipmentActions );
+            set.UnionWith( otherActions );
+
+            return set.OrderBy( s => s.StartTime ).GroupBy( s => s.Employee );
+        }
     }
 }

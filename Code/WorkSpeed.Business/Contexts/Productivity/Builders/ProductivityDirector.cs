@@ -9,8 +9,11 @@ using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Business.Contexts.Productivity.Builders
 {
-    public interface IProductivityBuilder
+    public class ProductivityDirector : IProductivityDirector
     {
-        
+        public IEnumerable< IProductivity > GetProductivities ( IEnumerable< EmployeeActionBase > actions, OperationThresholds thresholds )
+        {
+            throw new NotImplementedException();
+        }
     }
 }

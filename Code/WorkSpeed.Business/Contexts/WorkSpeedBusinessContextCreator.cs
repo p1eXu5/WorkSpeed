@@ -2,9 +2,10 @@
 using Agbm.NpoiExcel;
 using Microsoft.EntityFrameworkCore;
 using WorkSpeed.Business.Contexts;
+using WorkSpeed.Business.Contexts.Productivity.Builders;
 using WorkSpeed.Data.Context;
 
-namespace WorkSpeed.Business.Factories
+namespace WorkSpeed.Business.Contexts
 {
     public static class WorkSpeedBusinessContextCreator
     {
@@ -16,7 +17,9 @@ namespace WorkSpeed.Business.Factories
             context.Database.Migrate();
 
             var importService = new ImportService( context, typeRepo );
-            var reportService = new ReportService( new WorkSpeedDbContext() );
+
+            var builder = new ProductivityDirector();
+            var reportService = new ReportService( new WorkSpeedDbContext(), builder );
 
             return (importService, reportService);
         }

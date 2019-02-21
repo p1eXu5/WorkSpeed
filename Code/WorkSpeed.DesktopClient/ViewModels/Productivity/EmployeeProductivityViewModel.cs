@@ -13,7 +13,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.Productivity
 {
     public class EmployeeProductivityViewModel : ViewModel
     {
-        public EmployeeProductivityViewModel ( EmployeeProductivityBase employeeProductivity, Operation[] operations, List< Category > categories )
+        public EmployeeProductivityViewModel ( EmployeeProductivityCollection employeeProductivity, Operation[] operations, List< Category > categories )
         {
             // Concrete productivities plus TimeProductivityViewModel
             ProductivityVms = new List< ProductivityViewModel >( operations.Length + 1 );

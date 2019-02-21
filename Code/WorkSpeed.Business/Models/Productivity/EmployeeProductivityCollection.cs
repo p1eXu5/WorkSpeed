@@ -7,11 +7,11 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Business.Models.Productivity
 {
-    public class EmployeeProductivityBase
+    public class EmployeeProductivityCollection
     {
         private readonly Dictionary< Operation, IProductivity > _productivities;
 
-        public EmployeeProductivityBase ( Employee employee )
+        public EmployeeProductivityCollection ( Employee employee )
         {
             Employee = employee;
             _productivities = new Dictionary< Operation, IProductivity >();
