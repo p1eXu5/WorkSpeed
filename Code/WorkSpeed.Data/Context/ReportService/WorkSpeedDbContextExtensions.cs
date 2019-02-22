@@ -98,7 +98,7 @@ namespace WorkSpeed.Data.Context.ReportService
             set.UnionWith( shipmentActions );
             set.UnionWith( otherActions );
 
-            return set.OrderBy( s => s.StartTime ).GroupBy( s => s.Employee );
+            return set.OrderByDescending( s => s.StartTime ).GroupBy( s => s.Employee );
         }
     }
 }
