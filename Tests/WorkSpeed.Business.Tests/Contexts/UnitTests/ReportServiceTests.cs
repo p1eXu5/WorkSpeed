@@ -131,7 +131,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
                         dbContext.SaveChanges();
                     }
                 };
-            var stub = new Mock< IProductivityDirector >();
+            var stub = new Mock< IProductivityBuilder >();
 
             var reportService = new ReportService( new WorkSpeedDbContext(options), stub.Object );
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Models.Actions;
 
-namespace WorkSpeed.Business.Contexts.Productivity
+namespace WorkSpeed.Business.Contexts.Productivity.Builders
 {
     public interface IProductivityCalculator
     {

@@ -9,28 +9,17 @@ namespace WorkSpeed.Business.Models.Productivity
 {
     public class EmployeeProductivityCollection
     {
-        private readonly Dictionary< Operation, IProductivity > _productivities;
 
         public EmployeeProductivityCollection ( Employee employee )
         {
             Employee = employee;
-            _productivities = new Dictionary< Operation, IProductivity >();
         }
 
         public Employee Employee { get; set; }
 
-        public IProductivity this[ Operation operation ]
-        {
-            get => _productivities[ operation ];
-            set => _productivities[ operation ] = value;
-        }
+        public IProductivity this[ Operation operation ] => Productivities[ operation ];
 
-        public void AddRange ( IEnumerable< IProductivity > productivities )
-        {
-            foreach ( var productivity in productivities ) {
+        public IReadOnlyDictionary< Operation, IProductivity > Productivities { get; set; }
 
-                _productivities[ productivity.Operation ] = productivity;
-            }
-        }
     }
 }

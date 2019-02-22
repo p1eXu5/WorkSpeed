@@ -18,7 +18,7 @@ namespace WorkSpeed.Business.Contexts
 
             var importService = new ImportService( context, typeRepo );
 
-            var builder = new ProductivityDirector();
+            var builder = new ProductivityBuilder();
             var reportService = new ReportService( new WorkSpeedDbContext(), builder );
 
             return (importService, reportService);

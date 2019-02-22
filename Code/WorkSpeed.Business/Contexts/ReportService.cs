@@ -20,7 +20,7 @@ namespace WorkSpeed.Business.Contexts
     {
         public const string THRESHOLD_FILE = "thresholds.bin";
 
-        private readonly IProductivityDirector _productivityDirector;
+        private readonly IProductivityBuilder _productivityBuilder;
 
         private readonly ObservableCollection< EmployeeProductivityCollection > _employeeProductivities;
         private readonly ObservableCollection< ShiftGrouping > _shiftGroupings;
@@ -33,9 +33,9 @@ namespace WorkSpeed.Business.Contexts
 
         #region Ctor
 
-        public ReportService ( WorkSpeedDbContext dbContext, IProductivityDirector builder ) : base( dbContext )
+        public ReportService ( WorkSpeedDbContext dbContext, IProductivityBuilder builder ) : base( dbContext )
         {
-            _productivityDirector = builder ?? throw new ArgumentNullException(nameof(builder), @"IProductivityBuilder cannot be null.");
+            _productivityBuilder = builder ?? throw new ArgumentNullException(nameof(builder), @"IProductivityBuilder cannot be null.");
 
             Appointments = _dbContext.Appointments.ToArray();
             Ranks = _dbContext.Ranks.ToArray();
@@ -112,20 +112,44 @@ namespace WorkSpeed.Business.Contexts
         private IEnumerable<EmployeeProductivityCollection> GetProductivity ( Period period )
         {
             var actions = _dbContext.GetEmployeeActions( period.Start, period.End ).ToArray();
-            var productivities = new List< EmployeeProductivityCollection >();
+
+            _productivityBuilder.Thresholds = _thresholds;
 
             foreach ( IGrouping< Employee, EmployeeActionBase > grouping in actions ) {
 
-                var employeeProd = new EmployeeProductivityCollection( grouping.Key );
+                var employeeProductivities = new EmployeeProductivityCollection( grouping.Key );
+                var breaks = grouping.Key.ShortBreakSchedule;
+                var shift = grouping.Key.Shift;
 
-                foreach ( var productivity in _productivityDirector.GetProductivities( grouping, _thresholds ) ) {
-                    employeeProd[ productivity.Operation ] = productivity;
-                }
-
-                yield return employeeProd;
+                employeeProductivities.Productivities = GetProductivities( grouping, breaks, shift );
+                
+                yield return employeeProductivities;
             }
         }
 
+
+        private IReadOnlyDictionary< Operation, IProductivity > GetProductivities ( IEnumerable< EmployeeActionBase > actions, ShortBreakSchedule breaks, Shift shift )
+        {
+            EmployeeActionBase nextAction = null;
+
+            foreach ( var action in actions ) {
+
+                _productivityBuilder.CheckDuration( action );
+
+                if ( nextAction == null ) {
+                    nextAction = action;
+                }
+                else {
+                    _productivityBuilder.CheckPause( action, nextAction );
+                    nextAction = action;
+                }
+            }
+
+            _productivityBuilder.SubstractBreaks( breaks );
+            _productivityBuilder.SubstractLunch( shift );
+
+            return _productivityBuilder.Productivities;
+        }
 
         public OperationThresholds GetThresholds ()
         {

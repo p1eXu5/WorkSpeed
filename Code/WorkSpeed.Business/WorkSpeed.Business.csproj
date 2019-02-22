@@ -133,9 +133,8 @@
     <Compile Include="Contexts\Productivity\Builders\WithProductProductivityBuilder.cs" />
     <Compile Include="Contexts\Productivity\Builders\InventoryProductivityBuilder.cs" />
     <Compile Include="Contexts\Productivity\Builders\IProductivityBuilder.cs" />
-    <Compile Include="Contexts\Productivity\Builders\IProductivityDirector.cs" />
     <Compile Include="Contexts\Productivity\Builders\OtherProductivityBuilder.cs" />
-    <Compile Include="Contexts\Productivity\Builders\ProductivityDirector.cs" />
+    <Compile Include="Contexts\Productivity\Builders\ProductivityBuilder.cs" />
     <Compile Include="Contexts\Productivity\Builders\ReceptionProductivityBuilder.cs" />
     <Compile Include="Contexts\Productivity\Builders\ShipmentProductivityBuilder.cs" />
     <Compile Include="Contexts\Productivity\CategoryFilter.cs" />
@@ -205,7 +204,7 @@
     <Compile Include="Models\OperationThresholds.cs" />
     <Compile Include="Period.cs" />
     <Compile Include="Contexts\Productivity\AddTimeOptions.cs" />
-    <Compile Include="Contexts\Productivity\IProductivityCalculator.cs" />
+    <Compile Include="Contexts\Productivity\Builders\IProductivityCalculator.cs" />
     <Compile Include="Contexts\Productivity\Productivity2.cs" />
     <Compile Include="Models\ActionModels\ProductMgh.cs" />
     <Compile Include="FileModels\ActionImportModel.cs" />

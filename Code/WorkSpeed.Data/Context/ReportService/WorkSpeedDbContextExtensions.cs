@@ -95,6 +95,7 @@ namespace WorkSpeed.Data.Context.ReportService
             var set = new HashSet< EmployeeActionBase >();
             set.UnionWith( doubleAddressActions );
             set.UnionWith( receptionActions );
+            set.UnionWith( inventoryActions );
             set.UnionWith( shipmentActions );
             set.UnionWith( otherActions );
 
