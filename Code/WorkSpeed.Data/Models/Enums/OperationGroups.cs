@@ -7,6 +7,7 @@ namespace WorkSpeed.Data.Models.Enums
     public enum OperationGroups
     {
         Gathering = 1,
+        BuyerGathering,
         Packing,
         Placing,
         Defragmentation,
