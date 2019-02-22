@@ -124,6 +124,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context\ReportService\UnitTests\WorkSpeedDbContextExtensionsTests.cs" />
     <Compile Include="FunctionalTests\WorkSpeedDbContextFunctionalTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
