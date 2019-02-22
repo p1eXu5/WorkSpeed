@@ -205,7 +205,7 @@ namespace WorkSpeed.Business.Contexts
             var shipmentActions = new List< ShipmentAction >();
             var otherActions = new List< OtherAction >();
 
-            foreach ( var action in data ) {
+            foreach ( var action in data.Where( d => d.Duration > TimeSpan.Zero ) ) {
 
                 switch ( action ) {
                     case DoubleAddressAction doubleAddressAction :
