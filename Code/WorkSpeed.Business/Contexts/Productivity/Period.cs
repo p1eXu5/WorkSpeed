@@ -28,6 +28,25 @@ namespace WorkSpeed.Business.Contexts.Productivity
             return (other.Start >= Start && other.End <= End);
         }
 
+        /// <summary>
+        /// Returns true if duration of period greater than interval.
+        /// </summary>
+        /// <param name="interval"></param>
+        /// <returns></returns>
+        public bool Contains ( TimeSpan interval )
+        {
+            return Duration >= interval;
+        }
+
+        public Period CutEnd ( TimeSpan interval )
+        {
+            if ( Contains( interval ) ) {
+                return new Period( Start, End.Subtract( interval ) );
+            }
+
+            return Period.Zero;
+        }
+
         public bool IsIntersect ( Period other )
         {
             throw new NotImplementedException();
@@ -79,7 +98,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
         public override int GetHashCode ()
         {
-            return Start.GetHashCode() + 31 * End.GetHashCode();
+            return Start.DayOfYear.GetHashCode() * 1_000_000 + ( (int)Math.Floor(End.TimeOfDay.TotalMilliseconds ) / 100);
         }
 
         public static bool operator == ( Period periodA, Period periodB )

@@ -31,7 +31,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             builder.CheckDuration( action );
 
             // Assert:
-            var res = builder.Productivities[ operation ].GetTime();
+            var res = builder.GetResult().Item1[ operation ].GetTime();
             Assert.That( res, Is.Not.EqualTo( Period.Zero ) );
         }
 

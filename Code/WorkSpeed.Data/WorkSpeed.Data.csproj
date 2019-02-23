@@ -158,6 +158,7 @@
     <Compile Include="Models\CategoryCategorySet.cs" />
     <Compile Include="Models\Extensions\ActionExtensions.cs" />
     <Compile Include="Models\Extensions\ActionDetailExtensions.cs" />
+    <Compile Include="Models\Extensions\ModelExtensions.cs" />
     <Compile Include="Models\IKeyedEntity.cs" />
     <Compile Include="Context\WorkSpeedDbContext.cs" />
     <Compile Include="ModelExtansions.cs" />

@@ -8,7 +8,7 @@ using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Business.Contexts.Productivity
 {
-    public interface IProductivity
+    public interface IProductivity : IEnumerable< Period >
     {
         void Add ( EmployeeActionBase action, Period period );
         Period this[ EmployeeActionBase action ] { get; set; }

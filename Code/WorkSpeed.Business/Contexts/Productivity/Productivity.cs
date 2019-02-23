@@ -9,22 +9,22 @@ namespace WorkSpeed.Business.Contexts.Productivity
 {
     public class Productivity : IProductivity
     {
-        private readonly Dictionary< string, Period > _actions;
+        private readonly Dictionary< EmployeeActionBase, Period > _actions;
 
         public Productivity ()
         {
-            _actions = new Dictionary< string, Period >();
+            _actions = new Dictionary< EmployeeActionBase, Period >();
         }
 
         public void Add ( EmployeeActionBase action, Period period )
         {
-            _actions[ action.Id ] = period;
+            _actions[ action ] = period;
         }
 
         public Period this [ EmployeeActionBase action ]
         {
-            get => _actions[ action.Id ];
-            set => _actions[ action.Id ] = value;
+            get => _actions[ action ];
+            set => _actions[ action ] = value;
         }
 
         public TimeSpan  GetTime ()

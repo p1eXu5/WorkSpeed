@@ -145,6 +145,7 @@
     <Compile Include="Contexts\Productivity\ICategoryFilter.cs" />
     <Compile Include="Contexts\Productivity\IFactoryEmployeeAction.cs" />
     <Compile Include="Contexts\Productivity\IPauseBetweenActions.cs" />
+    <Compile Include="Contexts\Productivity\ModelExtensions.cs" />
     <Compile Include="Contexts\Productivity\PauseBetweenActions.cs" />
     <Compile Include="Contexts\Productivity\Period.cs" />
     <Compile Include="Contexts\Productivity\Productivity.cs" />

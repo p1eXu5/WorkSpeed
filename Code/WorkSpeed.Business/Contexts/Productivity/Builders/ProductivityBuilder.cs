@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Business.Models;
@@ -114,10 +115,70 @@ namespace WorkSpeed.Business.Contexts.Productivity.Builders
             return (newPeriod, currentAction.Item2);
         }
 
+        /// <summary>
+        /// Substracts breaks from downtime.
+        /// </summary>
+        /// <param name="breaks"></param>
         public void SubstractBreaks ( ShortBreakSchedule breaks )
         {
-            throw new NotImplementedException();
+            var downtimePeriods = _downtimePeriods.ToArray();
+
+            // each employee must finish current action before leaving for a break
+            if ( downtimePeriods.Length == 0 ) { return; }
+
+            Queue< Period > breakQueue = breaks.GetBreaks( downtimePeriods.First().Start );
+            Period brk;
+            ChangeBreak();
+
+            bool debt = false;
+
+            foreach ( var downtimePeriod in _downtimePeriods.ToArray() ) {
+
+                if ( downtimePeriod.Contains( brk ) ) {
+
+                    _downtimePeriods.Remove( downtimePeriod );
+                    _downtimePeriods.Add( downtimePeriod - brk );
+
+                    if ( debt ) {
+                        // it's mean employee lost the break
+                        debt = false;
+                    }
+                    continue;
+                }
+                
+                if ( debt ) {
+                    if ( downtimePeriod.Contains( breaks.Duration ) ) {
+
+                        _downtimePeriods.Remove( downtimePeriod );
+                        _downtimePeriods.Add( downtimePeriod.CutEnd( breaks.Duration ) );
+                        debt = false;
+                    }
+                }
+
+                if ( downtimePeriod < brk ) {
+
+                    // not large and not intersects
+                    continue;
+                }
+
+                debt = CheckActions();
+                ChangeBreak();
+            }
+
+            bool CheckActions()
+            {
+                return _productivitys.Values.FirstOrDefault( p => p.FirstOrDefault( per => per.Contains( brk )  ) != default( Period ) ) != null;
+            }
+
+            void ChangeBreak ()
+            {
+                brk = breakQueue.Dequeue();
+                breakQueue.Enqueue( brk );
+            }
         }
+
+
+
 
         public void SubstractLunch ( Shift shift )
         {
