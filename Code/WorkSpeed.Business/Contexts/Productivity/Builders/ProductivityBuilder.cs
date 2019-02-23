@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using WorkSpeed.Business.Models;
-using WorkSpeed.Business.Models.Productivity;
 using WorkSpeed.Data;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
@@ -16,8 +12,15 @@ namespace WorkSpeed.Business.Contexts.Productivity.Builders
 {
     public class ProductivityBuilder : IProductivityBuilder
     {
+        private static readonly TimeSpan _shiftMarker;
+
         private readonly Dictionary< Operation, IProductivity > _productivitys;
         private readonly HashSet< Period > _downtimePeriods;
+
+        static ProductivityBuilder ()
+        {
+            _shiftMarker = TimeSpan.FromHours( 5 );
+        }
 
         public ProductivityBuilder ()
         {
@@ -178,11 +181,37 @@ namespace WorkSpeed.Business.Contexts.Productivity.Builders
         }
 
 
-
-
         public void SubstractLunch ( Shift shift )
         {
-            throw new NotImplementedException();
+            foreach ( var periods in GetShiftPeriods() ) {
+
+                var period = periods.FirstOrDefault( p => p.Contains( shift.Lunch ) );
+                if ( period != default( Period ) ) { continue; }
+
+                _downtimePeriods.Remove( period );
+                _downtimePeriods.Add( period.CutEnd( shift.Lunch ) );
+            }
+        }
+
+        private IEnumerable< IEnumerable< Period >> GetShiftPeriods ()
+        {
+            Period period;
+            var count = 0;
+
+            do {
+                period = _downtimePeriods.Skip( count ).FirstOrDefault( p => p.Duration > _shiftMarker );
+
+                if ( period == default( Period ) ) {
+
+                    yield return _downtimePeriods.Skip( count );
+                }
+                else {
+                    var res = _downtimePeriods.Skip( count ).Where( p => p < period ).ToArray();
+                    count = res.Length;
+                    yield return res;
+                }
+
+            } while ( period != default( Period ) );
         }
     }
 }
