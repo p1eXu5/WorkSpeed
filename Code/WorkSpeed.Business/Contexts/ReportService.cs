@@ -95,8 +95,8 @@ namespace WorkSpeed.Business.Contexts
                       {
                           try {
                               _employeeProductivities.Clear();
-                              foreach ( var productivity in GetProductivity( period ) ) {
-                                  _employeeProductivities.Add( productivity );
+                              foreach ( var collection in GetProductivityCollection( period ) ) {
+                                  _employeeProductivities.Add( collection );
                               }
                               tcs.SetResult( true );
                           }
@@ -110,47 +110,43 @@ namespace WorkSpeed.Business.Contexts
             return tcs.Task;
         }
 
-        private IEnumerable<EmployeeProductivityCollection> GetProductivity ( Period period )
+        private IEnumerable< EmployeeProductivityCollection > GetProductivityCollection ( Period period )
         {
             var actions = _dbContext.GetEmployeeActions( period.Start, period.End ).ToArray();
+            if ( actions.Length == 0 ) yield break;
 
+            _productivityBuilder.BuildNew();
             _productivityBuilder.Thresholds = _thresholds;
 
             foreach ( IGrouping< Employee, EmployeeActionBase > grouping in actions ) {
 
-                var employeeProductivities = new EmployeeProductivityCollection( grouping.Key );
                 var breaks = grouping.Key.ShortBreakSchedule;
                 var shift = grouping.Key.Shift;
 
-                employeeProductivities.Productivities = GetProductivities( grouping, breaks, shift );
-                
-                yield return employeeProductivities;
+                yield return new EmployeeProductivityCollection( grouping.Key, GetProductivities( grouping, breaks, shift ) );
             }
         }
 
 
-        private IReadOnlyDictionary< Operation, IProductivity > GetProductivities ( IEnumerable< EmployeeActionBase > actions, ShortBreakSchedule breaks, Shift shift )
+        private (IReadOnlyDictionary< Operation, IProductivity >,HashSet< Period >) GetProductivities ( IEnumerable< EmployeeActionBase > actions, ShortBreakSchedule breaks, Shift shift )
         {
-            EmployeeActionBase nextAction = null;
+            var actionArr = actions.ToArray();
+            if ( actionArr.Length == 0 ) { return (new Dictionary< Operation, IProductivity >(0), new HashSet< Period >()); }
+
             _productivityBuilder.BuildNew();
+            var current = _productivityBuilder.CheckDuration( actionArr[ 0 ] );
+            var next = current;
 
-            foreach ( var action in actions ) {
+            for ( int i = 1; i < actionArr.Length; ++i ) {
 
-                _productivityBuilder.CheckDuration( action );
-
-                if ( nextAction == null ) {
-                    nextAction = action;
-                }
-                else {
-                    _productivityBuilder.CheckPause( action, nextAction );
-                    nextAction = action;
-                }
+                current = _productivityBuilder.CheckDuration( actionArr[ i ] );
+                next =  _productivityBuilder.CheckPause( current, next );
             }
 
             _productivityBuilder.SubstractBreaks( breaks );
             _productivityBuilder.SubstractLunch( shift );
 
-            return _productivityBuilder.Productivities;
+            return _productivityBuilder.GetResult();
         }
 
         public OperationThresholds GetThresholds ()

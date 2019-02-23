@@ -11,7 +11,7 @@ namespace WorkSpeed.Business.Models.Productivity
     public class EmployeeProductivityCollection
     {
 
-        public EmployeeProductivityCollection ( Employee employee )
+        public EmployeeProductivityCollection ( Employee employee, (IReadOnlyDictionary< Operation, IProductivity >, HashSet< Period > ) productivities )
         {
             Employee = employee;
         }

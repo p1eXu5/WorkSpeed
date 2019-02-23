@@ -12,13 +12,16 @@ namespace WorkSpeed.Business.Contexts.Productivity.Builders
 {
     public interface IProductivityBuilder
     {
-        IReadOnlyDictionary< Operation, IProductivity > Productivities { get; }
+        (IReadOnlyDictionary< Operation, IProductivity >, HashSet< Period >) GetResult ();
 
         OperationThresholds Thresholds { set; }
 
         void BuildNew ();
-        void CheckDuration ( EmployeeActionBase action );
-        void CheckPause ( EmployeeActionBase currentAction, EmployeeActionBase nextAction );
+
+        (Period, EmployeeActionBase) CheckDuration ( EmployeeActionBase action );
+
+        (Period, EmployeeActionBase) CheckPause ( (Period, EmployeeActionBase) currentAction, (Period, EmployeeActionBase) nextAction );
+
         void SubstractBreaks ( ShortBreakSchedule breaks );
         void SubstractLunch ( Shift shift );
     }

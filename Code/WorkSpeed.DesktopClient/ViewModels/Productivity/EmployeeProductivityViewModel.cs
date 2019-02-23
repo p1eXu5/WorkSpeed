@@ -24,10 +24,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.Productivity
 
                 switch ( operation.Group ) {
                     case OperationGroups.Gathering:
-                        ProductivityVms.Add( new GatheringProductivityViewModel( employeeProductivity[ operation ], categories ) );
+                        ProductivityVms.Add( new GatheringProductivityViewModel( operation, employeeProductivity[ operation ], categories ) );
                         break;
                     case OperationGroups.Reception:
-                        ProductivityVms.Add( new ReceptionProductivityViewModel( employeeProductivity[ operation ], categories ) );
+                        ProductivityVms.Add( new ReceptionProductivityViewModel( operation, employeeProductivity[ operation ], categories ) );
                         break;
                 }
             }

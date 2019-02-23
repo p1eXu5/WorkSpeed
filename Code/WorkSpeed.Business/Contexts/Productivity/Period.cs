@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WorkSpeed.Business.Contexts.Productivity
 {
-    public struct Period
+    public struct Period : IEqualityComparer< Period >
     {
         public Period ( DateTime start, DateTime end )
         {
@@ -22,6 +22,16 @@ namespace WorkSpeed.Business.Contexts.Productivity
         public static Period Zero => new Period(new DateTime(0), new DateTime(0));
 
         public TimeSpan Duration => End - Start;
+
+        public bool Contains ( Period other )
+        {
+            return (other.Start >= Start && other.End <= End);
+        }
+
+        public bool IsIntersect ( Period other )
+        {
+            throw new NotImplementedException();
+        }
 
         public DayPeriod GetDayPeriod ()
         {
@@ -49,10 +59,12 @@ namespace WorkSpeed.Business.Contexts.Productivity
             return days.ToArray();
         }
 
-        public bool Contains ( Period other )
+        public bool IsTheSameDate ( Period other )
         {
-            return (other.Start >= Start && other.End <= End);
+            return Start.Date == other.Start.Date;
         }
+
+
 
         public override bool Equals ( object obj )
         {
@@ -90,6 +102,54 @@ namespace WorkSpeed.Business.Contexts.Productivity
         {
             return (periodA.Start > periodB.End
                     && periodA.End > periodB.End);
+        }
+
+        public static Period operator - ( Period periodA, Period periodB )
+        {
+            DateTime newBorder;
+
+            if ( periodB.Start >= periodA.End || periodB.End <= periodA.Start ) return periodA;
+            if ( periodB.Start <= periodA.Start && periodB.End >= periodA.End ) return Period.Zero;
+
+            if ( periodB.Start >= periodA.Start && periodB.Start < periodA.End ) {
+
+                if ( periodB.End <= periodA.End ) {
+
+                    newBorder = periodA.End.Subtract( periodB.Duration );
+                    return new Period( periodA.Start, newBorder );
+                }
+
+                if ( periodB.End > periodA.End ) {
+
+                    return new Period( periodA.Start, periodB.Start );
+                }
+            }
+
+            if ( periodB.End > periodA.Start && periodB.End <= periodA.End ) {
+
+                if ( periodB.Start < periodA.Start ) {
+
+                    return new Period( periodB.End, periodA.End );
+                }
+
+                if ( periodB.Start >= periodA.Start ) {
+
+                    newBorder = periodA.End.Subtract( periodB.Duration );
+                    return new Period( periodA.Start, newBorder );
+                }
+            }
+
+            return periodA;
+        }
+
+        public bool Equals ( Period x, Period y )
+        {
+            return x.Equals( y );
+        }
+
+        public int GetHashCode ( Period obj )
+        {
+            return obj.GetHashCode();
         }
     }
 }

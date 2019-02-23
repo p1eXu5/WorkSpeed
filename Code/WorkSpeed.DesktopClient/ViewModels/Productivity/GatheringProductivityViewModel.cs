@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkSpeed.Business.Contexts.Productivity;
 using WorkSpeed.Business.Models.Productivity;
 using WorkSpeed.Data.Models;
 
@@ -10,8 +11,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.Productivity
 {
     public class GatheringProductivityViewModel : CategorizedProductivityViewModel
     {
-        public GatheringProductivityViewModel ( IProductivity productivity, IEnumerable< Category > categories ) 
-            : base( productivity.Operation, categories )
+        public GatheringProductivityViewModel ( Operation operation, IProductivity productivity, IEnumerable< Category > categories ) 
+            : base( operation, categories )
         {
             SpeedLabeling = "стр./ч.";
             Speed = productivity.GetLinesPerHour();

@@ -10,7 +10,9 @@ namespace WorkSpeed.Business.Contexts.Productivity
 {
     public interface IProductivity
     {
-        void Add ( Period period, EmployeeActionBase action );
+        void Add ( EmployeeActionBase action, Period period );
+        Period this[ EmployeeActionBase action ] { get; set; }
+
 
         TimeSpan GetTime ();
 

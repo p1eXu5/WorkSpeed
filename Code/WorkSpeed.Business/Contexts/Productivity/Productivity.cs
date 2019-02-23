@@ -9,21 +9,27 @@ namespace WorkSpeed.Business.Contexts.Productivity
 {
     public class Productivity : IProductivity
     {
-        private readonly Dictionary< Period, EmployeeActionBase > _actions;
+        private readonly Dictionary< string, Period > _actions;
 
         public Productivity ()
         {
-            _actions = new Dictionary< Period, EmployeeActionBase >();
+            _actions = new Dictionary< string, Period >();
         }
 
-        public void Add ( Period period, EmployeeActionBase action )
+        public void Add ( EmployeeActionBase action, Period period )
         {
-            _actions[ period ] = action;
+            _actions[ action.Id ] = period;
+        }
+
+        public Period this [ EmployeeActionBase action ]
+        {
+            get => _actions[ action.Id ];
+            set => _actions[ action.Id ] = value;
         }
 
         public TimeSpan  GetTime ()
         {
-            return _actions.Keys.Aggregate( TimeSpan.Zero, (acc, next) => acc + next.Duration );
+            return _actions.Values.Aggregate( TimeSpan.Zero, (acc, next) => acc + next.Duration );
         }
 
 
