@@ -156,6 +156,8 @@
     <Compile Include="Models\Actions\EmployeeActionBase.cs" />
     <Compile Include="Models\Avatar.cs" />
     <Compile Include="Models\CategoryCategorySet.cs" />
+    <Compile Include="Models\Extensions\ActionExtensions.cs" />
+    <Compile Include="Models\Extensions\ActionDetailExtensions.cs" />
     <Compile Include="Models\IKeyedEntity.cs" />
     <Compile Include="Context\WorkSpeedDbContext.cs" />
     <Compile Include="ModelExtansions.cs" />

@@ -161,6 +161,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contexts\Productivity\UnitTests\ProductivityBuilderTests.cs" />
+    <Compile Include="Contexts\Productivity\UnitTests\ProductivityTests.cs" />
     <Compile Include="Contexts\UnitTests\ImportServiceTests.cs" />
     <Compile Include="Contexts\UnitTests\ReportServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

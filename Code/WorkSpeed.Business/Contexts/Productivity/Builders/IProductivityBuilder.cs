@@ -16,6 +16,7 @@ namespace WorkSpeed.Business.Contexts.Productivity.Builders
 
         OperationThresholds Thresholds { set; }
 
+        void BuildNew ();
         void CheckDuration ( EmployeeActionBase action );
         void CheckPause ( EmployeeActionBase currentAction, EmployeeActionBase nextAction );
         void SubstractBreaks ( ShortBreakSchedule breaks );

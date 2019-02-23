@@ -7,7 +7,7 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Business.Models.Productivity
 {
-    public class GatheringProductivity : IProductivity
+    public class GatheringProductivity
     {
         public Operation Operation { get; }
 

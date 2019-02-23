@@ -72,16 +72,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
             var productivity = new Productivity {
 
-                Employee = employee,
-                TotalTime = actionRepository.GetTotalTime(),
-                OffTime = actionRepository.GetOffTime(),
-                OperationTimes = actionRepository.GetOperationTimes(),
-                Lines = actionRepository.GetLines(),
-                Quantities = actionRepository.GetQuantities(),
-                Scans = actionRepository.GetScans(),
-                Weight = actionRepository.GetWeights(),
-                Volume = actionRepository.GetVolumes(),
-                Pauses = actionRepository.GetPauses()
+
             };
 
             return productivity;

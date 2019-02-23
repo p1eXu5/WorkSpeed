@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace WorkSpeed.Business.Contexts.Productivity.Builders
 {
-    public class OtherProductivityBuilder : IProductivityBuilder
-    { 
-    }
+    public class OtherProductivityBuilder
+    { }
 }

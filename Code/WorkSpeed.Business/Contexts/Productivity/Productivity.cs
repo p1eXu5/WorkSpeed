@@ -2,94 +2,69 @@
 using System.Collections.Generic;
 using System.Linq;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Actions;
 using WorkSpeed.Data.Models.Enums;
 
 namespace WorkSpeed.Business.Contexts.Productivity
 {
-    public struct Productivity
+    public class Productivity : IProductivity
     {
-        public Employee Employee { get; set; }
+        private readonly Dictionary< Period, EmployeeActionBase > _actions;
 
-        public TimeSpan TotalTime { get; set; }
-        public TimeSpan OffTime { get; set; }
-
-        public Dictionary< OperationGroups, TimeSpan > OperationTimes { get; set; }
-
-        public Dictionary< OperationGroups, Dictionary< Category, int >> Lines { get; set; }
-        public Dictionary< OperationGroups, Dictionary<Category, int>> Quantities { get; set; }
-        public Dictionary< OperationGroups, Dictionary<Category, int>> Scans { get; set; }
-        public Dictionary< OperationGroups, Dictionary<Category, double>> Weight { get; set; }
-        public Dictionary< OperationGroups, Dictionary<Category, double>> Volume { get; set; }
-        public Dictionary<TimeSpan, int> Pauses { get; set; }
-
-        public double GetSpeedLinesPerHour ( OperationGroups operation )
+        public Productivity ()
         {
-            if ( !Lines.ContainsKey( operation ) ) return 0.0;
-
-            return Lines[ operation ].Values.Sum() / OperationTimes[ operation ].TotalHours;
+            _actions = new Dictionary< Period, EmployeeActionBase >();
         }
 
-        public int GetTotalLines ( OperationGroups operation )
+        public void Add ( Period period, EmployeeActionBase action )
         {
-            if ( !Lines.ContainsKey( operation ) ) return 0;
-
-            return Lines[ operation ].Values.Sum();
+            _actions[ period ] = action;
         }
 
-        public double GetSpeedQuantityPerHour ( OperationGroups operation )
+        public TimeSpan  GetTime ()
         {
-            if ( !Quantities.ContainsKey( operation ) ) return 0.0;
-
-            return Quantities[ operation ].Values.Sum() / OperationTimes[ operation ].TotalHours;
+            return _actions.Keys.Aggregate( TimeSpan.Zero, (acc, next) => acc + next.Duration );
         }
 
-        public int GetTotalQuantity ( OperationGroups operation )
-        {
-            if ( !Quantities.ContainsKey( operation ) ) return 0;
 
-            return Quantities[ operation ].Values.Sum();
+        public double GetLinesPerHour ()
+        {
+            throw new NotImplementedException();
         }
 
-        public double GetSpeedScansPerHour ( OperationGroups operation )
+        public double GetScansPerHour ()
         {
-            if ( !Scans.ContainsKey( operation ) ) return 0.0;
-
-            return Scans[ operation ].Values.Sum() / OperationTimes[ operation ].TotalHours;
+            throw new NotImplementedException();
         }
 
-        public int GetTotalScans ( OperationGroups operation )
+        public IEnumerable< (int, Category) > GetLines ( IEnumerable< Category > categories )
         {
-            if ( !Scans.ContainsKey( operation ) ) return 0;
-
-            return Scans[ operation ].Values.Sum();
+            throw new NotImplementedException();
         }
 
-        public double GetSpeedWeightPerHour ( OperationGroups operation )
+        public IEnumerable< (int, Category) > GetScans ( IEnumerable< Category > categories )
         {
-            if ( !Weight.ContainsKey( operation ) ) return 0.0;
-
-            return Weight[ operation ].Values.Sum() / OperationTimes[ operation ].TotalHours;
+            throw new NotImplementedException();
         }
 
-        public double GetTotalWeight ( OperationGroups operation )
+        public IEnumerable< int > GetQuantity ()
         {
-            if ( !Weight.ContainsKey( operation ) ) return 0.0;
-
-            return Weight[ operation ].Values.Sum();
+            throw new NotImplementedException();
         }
 
-        public double GetSpeedVolumePerHour ( OperationGroups operation )
+        public IEnumerable< double > GetVolumes ()
         {
-            if ( !Volume.ContainsKey( operation ) ) return 0.0;
-
-            return Volume[ operation ].Values.Sum() / OperationTimes[ operation ].TotalHours;
+            throw new NotImplementedException();
         }
 
-        public double GetTotalVolume ( OperationGroups operation )
+        public IEnumerable< double > GetWeigths ()
         {
-            if ( !Volume.ContainsKey( operation ) ) return 0.0;
+            throw new NotImplementedException();
+        }
 
-            return Volume[ operation ].Values.Sum();
+        public TimeSpan GetTotalTime ()
+        {
+            throw new NotImplementedException();
         }
     }
 }

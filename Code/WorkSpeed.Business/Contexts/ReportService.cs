@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
+using WorkSpeed.Business.Contexts.Productivity;
 using WorkSpeed.Business.Contexts.Productivity.Builders;
 using WorkSpeed.Business.Models;
 using WorkSpeed.Business.Models.Productivity;
@@ -131,6 +132,7 @@ namespace WorkSpeed.Business.Contexts
         private IReadOnlyDictionary< Operation, IProductivity > GetProductivities ( IEnumerable< EmployeeActionBase > actions, ShortBreakSchedule breaks, Shift shift )
         {
             EmployeeActionBase nextAction = null;
+            _productivityBuilder.BuildNew();
 
             foreach ( var action in actions ) {
 
