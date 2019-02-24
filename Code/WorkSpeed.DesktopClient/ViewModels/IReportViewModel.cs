@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WorkSpeed.Data.Models.Extensions
+namespace WorkSpeed.DesktopClient.ViewModels
 {
-    public static class ModelExtensions
+    public interface IReportViewModel
     {
+        void OnSelectedAsync ();
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
+using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Business.Contexts.Productivity;
 using WorkSpeed.Business.Contexts.Productivity.Builders;
 using WorkSpeed.Business.Models;
@@ -17,7 +18,7 @@ using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Business.Contexts
 {
-    public class ReportService : Service
+    public class ReportService : Service, IReportService
     {
         public const string THRESHOLD_FILE = "thresholds.bin";
 
@@ -38,31 +39,29 @@ namespace WorkSpeed.Business.Contexts
         {
             _productivityBuilder = builder ?? throw new ArgumentNullException(nameof(builder), @"IProductivityBuilder cannot be null.");
 
-            Appointments = _dbContext.Appointments.ToArray();
-            Ranks = _dbContext.Ranks.ToArray();
-            Positions = _dbContext.Positions.ToArray();
+            AppointmentCollection = _dbContext.Appointments.ToArray();
+            RankCollection = _dbContext.Ranks.ToArray();
+            PositionCollection = _dbContext.Positions.ToArray();
 
             _shifts = new ObservableCollection< Shift >( _dbContext.Shifts );
-            Shifts = new ReadOnlyObservableCollection< Shift >( _shifts );
+            ShiftCollection = new ReadOnlyObservableCollection< Shift >( _shifts );
 
             _shortBreakSchedules = new ObservableCollection< ShortBreakSchedule >( _dbContext.ShortBreakSchedules );
-            ShortBreakSchedules = new ReadOnlyObservableCollection< ShortBreakSchedule >( _shortBreakSchedules );
+            ShortBreakCollection = new ReadOnlyObservableCollection< ShortBreakSchedule >( _shortBreakSchedules );
         }
 
         #endregion
 
 
-        public Appointment[] Appointments { get; }
-        public Rank[] Ranks { get; }
-        public Position[] Positions { get; }
+        public IEnumerable< Appointment > AppointmentCollection { get; }
+        public IEnumerable< Rank > RankCollection { get; }
+        public IEnumerable< Position > PositionCollection { get; }
 
 
-        public ReadOnlyObservableCollection< EmployeeProductivityCollection > EmployeeProductivities { get; }
-        public ReadOnlyObservableCollection< ShiftGrouping > ShiftGroupings { get; }
-        public ReadOnlyObservableCollection< Shift > Shifts { get; }
-        public ReadOnlyObservableCollection< ShortBreakSchedule > ShortBreakSchedules { get; }
+        public ReadOnlyObservableCollection< Shift > ShiftCollection { get; }
+        public ReadOnlyObservableCollection< ShortBreakSchedule > ShortBreakCollection { get; }
 
-        public ShiftGrouping[] ShiftGrouping { get; private set; }
+        public IEnumerable< ShiftGrouping > ShiftGroupingCollection { get; private set; }
 
         #region Methods
 
@@ -109,6 +108,7 @@ namespace WorkSpeed.Business.Contexts
 
             return tcs.Task;
         }
+
 
         private IEnumerable< EmployeeProductivityCollection > GetProductivityCollection ( Period period )
         {

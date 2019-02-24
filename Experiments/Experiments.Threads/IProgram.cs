@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WorkSpeed.Data.Models.Extensions
+namespace Experiments.Threads
 {
-    public static class ModelExtensions
+    public interface IProgram
     {
+        void Run ();
     }
 }

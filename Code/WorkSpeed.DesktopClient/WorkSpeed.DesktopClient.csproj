@@ -71,10 +71,14 @@
     <Compile Include="Converters\ImageConverter.cs" />
     <Compile Include="Converters\TabControlHeightConverter.cs" />
     <Compile Include="TemplateSelectors\StageDataTemplateSelector.cs" />
+    <Compile Include="ViewModels\EmployeeReportViewModel.cs" />
     <Compile Include="ViewModels\Entities\AbbreviationViewModel.cs" />
+    <Compile Include="ViewModels\Entities\RankViewModel.cs" />
     <Compile Include="ViewModels\Grouping\AppointmentGroupingViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\ErrorViewModel.cs" />
     <Compile Include="ViewModels\Entities\AppointmentViewModel.cs" />
+    <Compile Include="ViewModels\IReportViewModel.cs" />
+    <Compile Include="ViewModels\ProductivityReportViewModel.cs" />
     <Compile Include="ViewModels\Productivity\CategorizedProductivityViewModel.cs" />
     <Compile Include="ViewModels\Entities\CategoryViewModel.cs" />
     <Compile Include="ViewModels\Productivity\EmployeeProductivityViewModel.cs" />
@@ -89,6 +93,7 @@
     <Compile Include="ViewModels\Grouping\PositionGroupingViewModel.cs" />
     <Compile Include="ViewModels\Grouping\ShiftGroupingViewModel.cs" />
     <Compile Include="ViewModels\Productivity\TimeProductivityViewModel.cs" />
+    <Compile Include="ViewModels\ReportViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ActionsImportStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\CategoriesThresholdStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\CheckEmployeesStageViewModel.cs" />
@@ -123,6 +128,9 @@
     <Compile Include="Views\Teeemp.xaml.cs">
       <DependentUpon>Teeemp.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UserControls\EmployeeReportUserControl.xaml.cs">
+      <DependentUpon>EmployeeReportUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControls\EmployeeTable.xaml.cs">
       <DependentUpon>EmployeeTable.xaml</DependentUpon>
     </Compile>
@@ -134,6 +142,9 @@
     </Compile>
     <Compile Include="Views\UserControls\CategoriesThreshold.xaml.cs">
       <DependentUpon>CategoriesThreshold.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\ProductivityReportViewModel.xaml.cs">
+      <DependentUpon>ProductivityReportViewModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\ProductivityTable.xaml.cs">
       <DependentUpon>ProductivityTable.xaml</DependentUpon>
@@ -251,6 +262,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\UserControls\EmployeeReportUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserControls\EmployeeTable.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -277,6 +292,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\CategoriesThreshold.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\ProductivityReportViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

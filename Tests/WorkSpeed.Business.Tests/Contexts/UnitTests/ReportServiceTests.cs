@@ -43,7 +43,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
 
             service.LoadEmployeesAsync().Wait();
 
-            Assert.That( service.ShiftGrouping, Is.Not.Empty );
+            Assert.That( service.ShiftGroupingCollection, Is.Not.Empty );
         }
 
         [ Test ]
@@ -53,7 +53,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
 
             service.LoadEmployeesAsync().Wait();
 
-            Assert.That( service.ShiftGrouping, Is.Empty );
+            Assert.That( service.ShiftGroupingCollection, Is.Empty );
         }
 
 

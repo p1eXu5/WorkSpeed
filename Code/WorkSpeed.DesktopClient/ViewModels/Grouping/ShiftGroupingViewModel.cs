@@ -15,7 +15,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
 
         public ShiftGroupingViewModel ( ShiftGrouping shiftGrouping )
         {
-            Shift = shiftGrouping.Shift ?? throw new ArgumentNullException(nameof(shiftGrouping), @"ShiftGroupingVms cannot be null."); ;
+            Shift = shiftGrouping.Shift ?? throw new ArgumentNullException(nameof(shiftGrouping), @"ShiftGroupingVmCollection cannot be null."); ;
             _appointments = new ObservableCollection< AppointmentGroupingViewModel >( shiftGrouping.Appointments.Select( a => new AppointmentGroupingViewModel( a ) ) );
             Appointments = new ReadOnlyObservableCollection< AppointmentGroupingViewModel >( _appointments );
 

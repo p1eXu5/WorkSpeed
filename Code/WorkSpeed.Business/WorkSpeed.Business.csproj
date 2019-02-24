@@ -125,6 +125,7 @@
     <Compile Include="Contexts\Comparers\ComparerFactory.cs" />
     <Compile Include="Contexts\Comparers\EntityEqualityComparer.cs" />
     <Compile Include="Contexts\Comparers\ShipmentActionComparer.cs" />
+    <Compile Include="Contexts\Contracts\IReportService.cs" />
     <Compile Include="Contexts\Productivity\ActionDetails\ShipmentActionDetails.cs" />
     <Compile Include="Contexts\Productivity\ActionDetails\TimeActionDetails.cs" />
     <Compile Include="Contexts\Productivity\ActionDetails\WithProductActionDetails.cs" />

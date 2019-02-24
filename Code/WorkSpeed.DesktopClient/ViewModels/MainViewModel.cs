@@ -24,47 +24,46 @@ namespace WorkSpeed.DesktopClient.ViewModels
     {
         private readonly IImportService _importService;
         private readonly IDialogRepository _dialogRepository;
-        private readonly ReportService _reportService;
 
-        private readonly ObservableCollection< ShiftViewModel > _shifts;
-        private readonly ObservableCollection< ShortBreakScheduleViewModel > _shortBreakSchedules;
-
-        private readonly ObservableCollection< ShiftGroupingViewModel > _shiftGrouping;
-
-        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private IProgress< (int, string) > _progress;
-
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        
         private bool _isImporting;
         private int? _importPercentage;
         private string _importStatusMessage;
-        private string _employeesStatusMessage;
-
+        
         private int _selectedTab;
+
 
         public MainViewModel ( IImportService importService, ReportService reportService, IDialogRepository dialogRepository )
         {
             _importService = importService ?? throw new ArgumentNullException(nameof(importService), @"IImportService cannot be null.");
-            _reportService = reportService ?? throw new ArgumentNullException(nameof(reportService), @"ReportService cannot be null.");
-            _dialogRepository = dialogRepository;
-            _progress = new Progress< (int code, string message) >( t => ProgressReport( t.code, t.message ) );
+            _dialogRepository = dialogRepository ?? throw new ArgumentNullException(nameof(dialogRepository), @"IDialogRepository cannot be null.");
 
-            _shifts = new ObservableCollection< ShiftViewModel >( _reportService.Shifts.Select( sh => new ShiftViewModel( sh ) ) );
-            ShiftVms = new ReadOnlyObservableCollection< ShiftViewModel >( _shifts );
-            Observe( _reportService.Shifts, _shifts, sh => sh.Shift );
+           _progress = new Progress< (int code, string message) >( t => ProgressReport( t.code, t.message ) );
 
-            _shortBreakSchedules = new ObservableCollection< ShortBreakScheduleViewModel >( _reportService.ShortBreakSchedules.Select( sbs => new ShortBreakScheduleViewModel( sbs ) ));
-            ShortBreakScheduleVms = new ReadOnlyObservableCollection< ShortBreakScheduleViewModel >( _shortBreakSchedules );
-            Observe( _reportService.ShortBreakSchedules, _shortBreakSchedules, sbs => sbs.ShortBreakSchedule  );
+            EmployeeReportViewModel = new EmployeeReportViewModel( reportService, dialogRepository );
+            ProductivityReportViewModel = new ProductivityReportViewModel( reportService, dialogRepository );
 
-            AppointmentVms = _reportService.Appointments.Select( a => new AppointmentViewModel( a ) ).ToArray();
-            Ranks = _reportService.Ranks;
-            PositionVms = _reportService.Positions.Select( p => new PositionViewModel( p ) ).ToArray();
+            _selectedTab = (int)Tabs.EmployeeEditor;
+        }
 
-            _shiftGrouping = new ObservableCollection< ShiftGroupingViewModel >();
-            ShiftGroupingVms = new ReadOnlyObservableCollection< ShiftGroupingViewModel >( _shiftGrouping );
 
-            var view = CollectionViewSource.GetDefaultView( ShiftGroupingVms );
-            view.SortDescriptions.Add( new SortDescription( "Shift.Id", ListSortDirection.Ascending ) );
+        public IReportViewModel EmployeeReportViewModel { get; }
+        public IReportViewModel ProductivityReportViewModel { get; }
+
+
+        public ICommand ImportAsyncCommand => new MvvmCommand( Import );
+        public ICommand TabItemChangedCommand => new MvvmCommand( TabItemChanged );
+
+
+        public string ImportStatusMessage
+        {
+            get => _importStatusMessage;
+            set {
+                _importStatusMessage = value;
+                OnPropertyChanged();
+            }
         }
 
         public bool IsImporting
@@ -85,35 +84,6 @@ namespace WorkSpeed.DesktopClient.ViewModels
             }
         }
 
-        public string ImportStatusMessage
-        {
-            get => _importStatusMessage;
-            set {
-                _importStatusMessage = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string EmployeesStatusMessage
-        {
-            get => _employeesStatusMessage;
-            set {
-                _employeesStatusMessage = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public IEnumerable< AppointmentViewModel > AppointmentVms { get; }
-        public IEnumerable< Rank > Ranks { get; }
-        public IEnumerable< PositionViewModel > PositionVms { get; }
-
-        public ReadOnlyObservableCollection< ShiftViewModel > ShiftVms { get; }
-        public ReadOnlyObservableCollection< ShortBreakScheduleViewModel > ShortBreakScheduleVms { get; }
-
-        public ReadOnlyObservableCollection< ShiftGroupingViewModel > ShiftGroupingVms { get; }
-
-        public ICommand ImportAsyncCommand => new MvvmCommand( Import );
-        public ICommand TabItemChangedCommand => new MvvmCommand( TabItemChanged );
 
         private async void Import ( object obj )
         {
@@ -161,31 +131,16 @@ namespace WorkSpeed.DesktopClient.ViewModels
             if ( selected == _selectedTab ) return;
 
             _selectedTab = selected;
-            
-            if ( selected == 1 ) { LoadEmployees( obj ); }
+
+            if ( selected == 1 ) {
+                EmployeeReportViewModel.OnSelectedAsync();
+            }
         }
 
-        private async void LoadEmployees ( object obj )
+        private enum Tabs
         {
-            EmployeesStatusMessage = "Идёт загрузка сотрудников";
-            await _reportService.LoadEmployeesAsync();
-
-            if (_reportService.ShiftGrouping.Any())
-            {
-
-                EmployeesStatusMessage = "";
-
-                if (_shiftGrouping.Any()) { _shiftGrouping.Clear(); }
-
-                foreach (var shiftGrouping in _reportService.ShiftGrouping)
-                {
-                    _shiftGrouping.Add(new ShiftGroupingViewModel(shiftGrouping));
-                }
-            }
-            else
-            {
-                EmployeesStatusMessage = "Сотрудники отсутствуют. Чтобы добавить сотрудников, имортируйте их.";
-            }
+            EmployeeEditor = 0,
+            ProductivityReport,
         }
     }
 }

@@ -8,6 +8,7 @@
         xmlns:views="clr-namespace:WorkSpeed.DesktopClient.Views"
         xmlns:behavior="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:con="clr-namespace:WorkSpeed.DesktopClient.Converters"
+        xmlns:uc="clr-namespace:WorkSpeed.DesktopClient.Views.UserControls"
         mc:Ignorable="d"
 
         d:DataContext="{d:DesignInstance local:MainViewModel}"
@@ -269,11 +270,6 @@
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                     IsHitTestVisible="True"
                                     >
-
-                            <TabControl.Resources>
-                                <!--<con:TabControlHeightConverter x:Key="con_TabControlConverter" />-->
-                                <con:TabControlHeightConverter x:Key="con_TabControlConverter" />
-                            </TabControl.Resources>
                             <behavior:Interaction.Triggers>
                                 <behavior:EventTrigger EventName="SelectionChanged" SourceObject="{Binding ElementName=m_TabControl}" >
                                     <behavior:InvokeCommandAction Command="{Binding TabItemChangedCommand}"
@@ -281,7 +277,8 @@
                                                                   />
                                 </behavior:EventTrigger>
                             </behavior:Interaction.Triggers>
-
+                            
+                            <!-- ProductivityReport -->
                             <TabItem RenderTransform="1,0,0,1,2,0"
                                     >
                                 <TabItem.Header>
@@ -296,8 +293,11 @@
                                         </Border>
                                     </StackPanel>
                                 </TabItem.Header>
+
+                                <uc:ProductivityReportViewModel DataContext="{Binding ProductivityReportViewModel}" />
                             </TabItem>
 
+                            <!-- EmployeeEditor -->
                             <TabItem RenderTransform="1,0,0,1,1,0"
                                     >
                                 <TabItem.Header>
@@ -313,65 +313,7 @@
                                     </StackPanel>
                                 </TabItem.Header>
 
-                                <Grid Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType=TabControl}}"
-                                      >
-                                    <Grid.Height>
-                                        <MultiBinding Converter="{StaticResource con_TabControlConverter}">
-                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=TabItem}" Path="ActualHeight" />
-                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=TabControl}" Path="ActualHeight" />
-                                        </MultiBinding>
-                                    </Grid.Height>
-                                    
-                                    <ScrollViewer HorizontalScrollBarVisibility="Visible">
-                                    <ListBox ItemsSource="{Binding ShiftGroupingVms}"
-                                             Height="Auto" Width="Auto" 
-                                             HorizontalAlignment="Left" VerticalAlignment="Top"
-                                             Background="{x:Null}"
-                                             BorderThickness="0" BorderBrush="{x:Null}"
-                                             VerticalContentAlignment="Top"
-                                             >
-                                        <ListBox.Template>
-                                            <ControlTemplate TargetType="ItemsControl">
-                                                <Border>
-                                                    <ItemsPresenter />
-                                                </Border>
-                                            </ControlTemplate>
-                                        </ListBox.Template>
-                                        <ListBox.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <VirtualizingStackPanel Orientation="Horizontal"
-                                                        VerticalAlignment="Top"
-                                                        HorizontalAlignment="Left"
-                                                        />
-                                            </ItemsPanelTemplate>
-                                        </ListBox.ItemsPanel>
-
-                                        <ListBox.ItemContainerStyle>
-                                            <Style TargetType="ListBoxItem">
-                                                <Setter Property="IsHitTestVisible" Value="True" />
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate TargetType="ListBoxItem">
-                                                        <Grid>
-                                                                <ContentPresenter Content="{TemplateBinding Content}" 
-                                                                                VerticalAlignment="Top"
-                                                                                />
-                                                        </Grid>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Style>
-                                        </ListBox.ItemContainerStyle>
-                                        <!--<GroupBox Height="100" Width="200" />
-                                        <GroupBox Height="100" Width="200" />
-                                        <GroupBox Height="100" Width="200" />-->
-                                    </ListBox>
-</ScrollViewer>
-                                    <TextBlock Text="{Binding EmployeesStatusMessage}" 
-                                               VerticalAlignment="Center" HorizontalAlignment="Center"
-                                               Foreground="{StaticResource br_Window.Foreground}"
-                                               />
-                                </Grid>
+                                <uc:EmployeeReportUserControl DataContext="{Binding EmployeeReportViewModel}" />
                             </TabItem>
 
                             <TabItem >

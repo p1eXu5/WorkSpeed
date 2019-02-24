@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using WorkSpeed.Data.Models;
@@ -71,6 +72,16 @@ namespace WorkSpeed.Business.Contexts.Productivity
         public TimeSpan GetTotalTime ()
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerator< Period > GetEnumerator ()
+        {
+            return _actions.Values.ToList().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator ()
+        {
+            return GetEnumerator();
         }
     }
 }
