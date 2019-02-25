@@ -8,7 +8,7 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Business.Models.Productivity
 {
-    public class EmployeeProductivityCollection
+    public class EmployeeProductivityCollection : IEmployeeProductivityCollection
     {
 
         public EmployeeProductivityCollection ( Employee employee, (IReadOnlyDictionary< Operation, IProductivity >, HashSet< Period > ) productivities )
@@ -18,9 +18,18 @@ namespace WorkSpeed.Business.Models.Productivity
 
         public Employee Employee { get; set; }
 
+        public IEnumerable< (double count, Operation operation) > GetTimes ( IEnumerable< Operation > operations )
+        {
+            throw new NotImplementedException();
+        }
+
         public IProductivity this[ Operation operation ] => Productivities[ operation ];
 
         public IReadOnlyDictionary< Operation, IProductivity > Productivities { get; set; }
 
+        public double GetTotalHours ()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

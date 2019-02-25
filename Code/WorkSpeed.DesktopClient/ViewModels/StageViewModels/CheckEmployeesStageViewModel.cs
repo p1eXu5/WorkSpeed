@@ -14,7 +14,7 @@
 //        //    : base( fastProductivityViewModel, stageNum )
 //        //{
 //        //    _employees = new ObservableCollection< EmployeeViewModel >( Warehouse.GetEmployees().Select( e => new EmployeeViewModel( e ) ) );
-//        //    Employees = new ReadOnlyObservableCollection< EmployeeViewModel >( _employees );
+//        //    EmployeeVmCollection = new ReadOnlyObservableCollection< EmployeeViewModel >( _employees );
 
 //        //    PositionVms = new List< Position >( Warehouse.GetPositions() );
 //        //    RankCollection = new List< Rank >( Warehouse.GetRanks() );
@@ -24,7 +24,7 @@
 
 //        //public override string Header { get; } = "Проверка сотрудников.";
 
-//        //public ReadOnlyObservableCollection< EmployeeViewModel > Employees { get; }
+//        //public ReadOnlyObservableCollection< EmployeeViewModel > EmployeeVmCollection { get; }
 
 //        //public IEnumerable< Appointment > AppointmentVms => Warehouse.GetAppointments();
 //        //public List< Position > PositionVms { get; set; }

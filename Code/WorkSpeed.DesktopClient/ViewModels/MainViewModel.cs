@@ -17,6 +17,7 @@ using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.Dialogs;
 using WorkSpeed.DesktopClient.ViewModels.Entities;
 using WorkSpeed.DesktopClient.ViewModels.Grouping;
+using WorkSpeed.DesktopClient.ViewModels.ReportService;
 
 namespace WorkSpeed.DesktopClient.ViewModels
 {
@@ -35,7 +36,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
         private int _selectedTab;
 
 
-        public MainViewModel ( IImportService importService, ReportService reportService, IDialogRepository dialogRepository )
+        public MainViewModel ( IImportService importService, IReportService reportService, IDialogRepository dialogRepository )
         {
             _importService = importService ?? throw new ArgumentNullException(nameof(importService), @"IImportService cannot be null.");
             _dialogRepository = dialogRepository ?? throw new ArgumentNullException(nameof(dialogRepository), @"IDialogRepository cannot be null.");

@@ -17,6 +17,8 @@
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Window/TabControlStyles.xaml" />
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Window/HeaderContentControlStyles.xaml" />
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Window/DataTemplates.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Window/EmployeeReportDataTemplates.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Window/ProductivityDataTemplates.xaml" />
              </ResourceDictionary.MergedDictionaries>
          </ResourceDictionary>
     </Application.Resources>

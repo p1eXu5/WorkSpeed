@@ -10,26 +10,42 @@ using Agbm.Wpf.MvvmBaseLibrary;
 using WorkSpeed.Business.Models;
 using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.Entities;
+using WorkSpeed.DesktopClient.ViewModels.ReportService;
 
 namespace WorkSpeed.DesktopClient.ViewModels.Grouping
 {
-    public class AppointmentGroupingViewModel : ViewModel
+    public class AppointmentGroupingViewModel : FilteredViewModel
     {
         private readonly ObservableCollection< PositionGroupingViewModel > _positions;
 
-        public AppointmentGroupingViewModel ( AppointmentGrouping appointmentGrouping )
+        public AppointmentGroupingViewModel ( AppointmentGrouping appointmentGrouping, Predicate< object > predicate )
         {
             Appointment = appointmentGrouping.Appointment ?? throw new ArgumentNullException( nameof( appointmentGrouping ), @"AppointmentGrouping cannot be null." );
-            _positions = new ObservableCollection< PositionGroupingViewModel >( appointmentGrouping.PositionGrouping.Select( p => new PositionGroupingViewModel( p ) ) );
+
+            _positions = new ObservableCollection< PositionGroupingViewModel >( 
+                appointmentGrouping.PositionGrouping
+                                    .Select( p => new PositionGroupingViewModel( p, predicate ) ) 
+            );
             Positions = new ReadOnlyObservableCollection< PositionGroupingViewModel >( _positions );
 
-            var view = CollectionViewSource.GetDefaultView( Positions );
-            view.SortDescriptions.Add( new SortDescription( "Position.Id", ListSortDirection.Ascending ) );
+            View = CollectionViewSource.GetDefaultView( Positions );
+            View.SortDescriptions.Add( new SortDescription( "Position.Id", ListSortDirection.Ascending ) );
+
+            View.Filter = Predicate;
         }
 
         public Appointment Appointment { get;}
         public ReadOnlyObservableCollection< PositionGroupingViewModel > Positions { get; }
 
         public string Name => Appointment.InnerName;
+
+        protected override void OnRefresh ()
+        {
+            foreach ( var position in _positions ) {
+                position.Refresh();
+            }
+
+            base.OnRefresh();
+        }
     }
 }

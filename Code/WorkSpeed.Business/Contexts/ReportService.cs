@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Business.Contexts.Productivity;
 using WorkSpeed.Business.Contexts.Productivity.Builders;
@@ -24,10 +25,15 @@ namespace WorkSpeed.Business.Contexts
 
         private readonly IProductivityBuilder _productivityBuilder;
 
-        private readonly ObservableCollection< EmployeeProductivityCollection > _employeeProductivities;
-        private readonly ObservableCollection< ShiftGrouping > _shiftGroupings;
-        private readonly ObservableCollection< Shift > _shifts;
-        private readonly ObservableCollection< ShortBreakSchedule > _shortBreakSchedules;
+        private ObservableCollection< ShiftGrouping > _shiftGroupingCollection;
+        private ObservableCollection< EmployeeProductivityCollection > _employeeProductivityCollections;
+
+        private ObservableCollection< Appointment > _appointmentCollection;
+        private ObservableCollection< Rank > _rankCollection;
+        private ObservableCollection< Position > _positionCollection;
+        private ObservableCollection< Shift > _shiftCollection;
+        private ObservableCollection< ShortBreakSchedule > _shortBreakCollection;
+        private ObservableCollection< Operation > _operationCollection;
 
         private readonly IFormatter _formatter = new BinaryFormatter();
         private OperationThresholds _thresholds;
@@ -38,47 +44,147 @@ namespace WorkSpeed.Business.Contexts
         public ReportService ( WorkSpeedDbContext dbContext, IProductivityBuilder builder ) : base( dbContext )
         {
             _productivityBuilder = builder ?? throw new ArgumentNullException(nameof(builder), @"IProductivityBuilder cannot be null.");
+            
+            CreateCollections();
+            SetupPeriod();
+            ReloadAllCollections();
+        }
 
-            AppointmentCollection = _dbContext.Appointments.ToArray();
-            RankCollection = _dbContext.Ranks.ToArray();
-            PositionCollection = _dbContext.Positions.ToArray();
+        public void SetPeriodAsync ()
+        {
+            throw new NotImplementedException();
+        }
 
-            _shifts = new ObservableCollection< Shift >( _dbContext.Shifts );
-            ShiftCollection = new ReadOnlyObservableCollection< Shift >( _shifts );
+        private void CreateCollections ()
+        {
+            _employeeProductivityCollections = new ObservableCollection< EmployeeProductivityCollection >();
+            EmployeeProductivityCollections = new ReadOnlyObservableCollection< EmployeeProductivityCollection >( _employeeProductivityCollections );
 
-            _shortBreakSchedules = new ObservableCollection< ShortBreakSchedule >( _dbContext.ShortBreakSchedules );
-            ShortBreakCollection = new ReadOnlyObservableCollection< ShortBreakSchedule >( _shortBreakSchedules );
+            _shiftGroupingCollection = new ObservableCollection< ShiftGrouping >();
+            ShiftGroupingCollection = new ReadOnlyObservableCollection< ShiftGrouping >( _shiftGroupingCollection );
+
+            _appointmentCollection = new ObservableCollection< Appointment >();
+            AppointmentCollection = new ReadOnlyObservableCollection< Appointment >( _appointmentCollection );
+
+            _rankCollection = new ObservableCollection< Rank >();
+            RankCollection = new ReadOnlyObservableCollection< Rank >( _rankCollection );
+
+            _positionCollection = new ObservableCollection< Position >();
+            PositionCollection = new ReadOnlyObservableCollection< Position >( _positionCollection );
+
+            _shiftCollection = new ObservableCollection< Shift >();
+            ShiftCollection = new ReadOnlyObservableCollection< Shift >( _shiftCollection );
+
+            _shortBreakCollection = new ObservableCollection< ShortBreakSchedule >();
+            ShortBreakCollection = new ReadOnlyObservableCollection< ShortBreakSchedule >( _shortBreakCollection );
+
+            _operationCollection = new ObservableCollection< Operation >();
+            OperationCollection = new ReadOnlyObservableCollection< Operation >( _operationCollection );
+        }
+
+        private void SetupPeriod ()
+        {
+            var now = DateTime.Now;
+            var start = now.Date.Subtract( TimeSpan.FromDays( now.Day - 1 ) );
+            Period = new Period( start, now );
         }
 
         #endregion
 
 
-        public IEnumerable< Appointment > AppointmentCollection { get; }
-        public IEnumerable< Rank > RankCollection { get; }
-        public IEnumerable< Position > PositionCollection { get; }
+        public Period Period { get; set; }
 
+        public ReadOnlyObservableCollection< EmployeeProductivityCollection > EmployeeProductivityCollections { get; set; }
+        public ReadOnlyObservableCollection< ShiftGrouping > ShiftGroupingCollection { get; set; }
 
-        public ReadOnlyObservableCollection< Shift > ShiftCollection { get; }
-        public ReadOnlyObservableCollection< ShortBreakSchedule > ShortBreakCollection { get; }
+        public ReadOnlyObservableCollection< Appointment > AppointmentCollection { get; set; }
+        public ReadOnlyObservableCollection< Rank > RankCollection { get; set; }
+        public ReadOnlyObservableCollection< Position > PositionCollection { get; set; }
+        public ReadOnlyObservableCollection< Shift > ShiftCollection { get; set; }
+        public ReadOnlyObservableCollection< ShortBreakSchedule > ShortBreakCollection { get; set; }
+        public ReadOnlyObservableCollection< Operation > OperationCollection { get; set; }
 
-        public IEnumerable< ShiftGrouping > ShiftGroupingCollection { get; private set; }
 
         #region Methods
 
-        public Task LoadEmployeesAsync ()
+        public async void ReloadEntities< T > ()
+        {
+            if ( typeof( T ).IsAssignableFrom( typeof( Appointment ) ) ) {
+                ReloadCollection( _appointmentCollection, DbContext.GetAppointments() );
+                return;
+            }
+
+            if ( typeof( T ).IsAssignableFrom( typeof( Rank ) ) ) {
+                ReloadCollection( _rankCollection, DbContext.GetRanks() );
+                return;
+            }
+
+            if ( typeof( T ).IsAssignableFrom( typeof( Position ) ) ) {
+                ReloadCollection( _positionCollection, DbContext.GetPositions() );
+                return;
+            }
+
+            if ( typeof( T ).IsAssignableFrom( typeof( Shift ) ) ) {
+                ReloadCollection( _shiftCollection, DbContext.GetShifts() );
+                return;
+            }
+
+            if ( typeof( T ).IsAssignableFrom( typeof( ShortBreakSchedule ) ) ) {
+                ReloadCollection( _shortBreakCollection, DbContext.GetShortBreakSchedules() );
+                return;
+            }
+
+            if ( typeof( T ).IsAssignableFrom( typeof( Operation ) ) ) {
+                ReloadCollection( _operationCollection, DbContext.GetOperations() );
+                return;
+            }
+
+            if ( typeof( T ).IsAssignableFrom( typeof( ShiftGrouping ) ) ) {
+                await LoadShiftGroupingAsync();
+                return;
+            }
+
+            if ( typeof( T ).IsAssignableFrom( typeof( EmployeeProductivityCollection ) ) ) {
+                await LoadEmployeeProductivitiesAsync();
+                return;
+            }
+        }
+
+        public void ReloadAllCollections ()
+        {
+            ReloadEntities< Appointment >();
+            ReloadEntities< Rank >();
+            ReloadEntities< Position >();
+            ReloadEntities< Shift >();
+            ReloadEntities< ShortBreakSchedule >();
+            ReloadEntities< Operation >();
+        }
+
+        private void ReloadCollection< T > ( ICollection< T > coll, IEnumerable< T > entities )
+        {
+            if ( coll.Count > 0 ) {
+                    coll.Clear();
+            }
+
+            foreach ( var entity in entities ) {
+                coll.Add( entity );
+            }
+        }
+
+        public Task LoadShiftGroupingAsync ()
         {
             var tcs = new TaskCompletionSource< bool >();
 
             Task.Run( () => { 
                 try {
-                    _shiftGroupings.Clear();
+                    if ( _shiftGroupingCollection.Any() ) { _shiftGroupingCollection.Clear(); }
                     foreach ( var grouping in _dbContext.GetShiftGrouping().Select( s => new ShiftGrouping( s.shift, s.appointments ) ) ) {
-                        _shiftGroupings.Add( grouping );
+                        _shiftGroupingCollection.Add( grouping );
                     }
                 }
                 catch ( Exception ) {
 
-                    _shiftGroupings.Clear();
+                    if ( _shiftGroupingCollection.Any() ) { _shiftGroupingCollection.Clear(); }
                     tcs.SetResult( false );
                 }
             });
@@ -86,21 +192,21 @@ namespace WorkSpeed.Business.Contexts
             return tcs.Task;
         }
 
-        public Task GetProductivityAsync ( Period period )
+        public Task LoadEmployeeProductivitiesAsync ()
         {
             var tcs = new TaskCompletionSource< bool >();
 
             Task.Run( () =>
                       {
                           try {
-                              _employeeProductivities.Clear();
-                              foreach ( var collection in GetProductivityCollection( period ) ) {
-                                  _employeeProductivities.Add( collection );
+                              _employeeProductivityCollections.Clear();
+                              foreach ( var collection in GetProductivityCollection( Period ) ) {
+                                  _employeeProductivityCollections.Add( collection );
                               }
                               tcs.SetResult( true );
                           }
                           catch ( Exception ) {
-                              _employeeProductivities.Clear();
+                              _employeeProductivityCollections.Clear();
                               tcs.SetResult( false );
                           }
                       }

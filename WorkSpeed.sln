@@ -84,6 +84,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Выработка 28.11.20
 		Documents\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\Сотрудники от 29.11.2018 г.xls = Documents\Выработка 28.11.2018 8.00 - 29.11.2018 8.00\Сотрудники от 29.11.2018 г.xls
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.Wpf", "Experiments\Experiments.Wpf\Experiments.Wpf.csproj", "{A3A2456F-A497-435F-8C63-EBEBEA5B9AB1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -162,6 +164,10 @@ Global
 		{240F5CE1-E550-4702-A577-825244A750CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{240F5CE1-E550-4702-A577-825244A750CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{240F5CE1-E550-4702-A577-825244A750CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3A2456F-A497-435F-8C63-EBEBEA5B9AB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3A2456F-A497-435F-8C63-EBEBEA5B9AB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3A2456F-A497-435F-8C63-EBEBEA5B9AB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3A2456F-A497-435F-8C63-EBEBEA5B9AB1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -189,6 +195,7 @@ Global
 		{7C3B5A1B-CF3C-4533-A3D3-3BDE62D9B294} = {02ADBBD2-843C-457E-B553-A71CFDBFEF80}
 		{240F5CE1-E550-4702-A577-825244A750CF} = {E860DD2B-0D29-46FF-9E9E-DBEEB8E9A498}
 		{15DFB5A8-320F-48AD-995C-68DFE155AAE9} = {12EEFD5A-880A-4FBE-AFFE-F2102BF2617A}
+		{A3A2456F-A497-435F-8C63-EBEBEA5B9AB1} = {02ADBBD2-843C-457E-B553-A71CFDBFEF80}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {74CCEA37-7ECF-4A64-9DA7-75E503ED2A97}

@@ -201,6 +201,7 @@
     <Compile Include="Models\Productivity\EmployeeProductivityCollection.cs" />
     <Compile Include="Models\Productivity\GatheringProductivity.cs" />
     <Compile Include="Contexts\Productivity\IProductivity.cs" />
+    <Compile Include="Models\Productivity\IEmployeeProductivityCollection.cs" />
     <Compile Include="Models\Productivity\ReceptionProductivity.cs" />
     <Compile Include="Models\ShiftGrouping.cs" />
     <Compile Include="Models\OperationThresholds.cs" />

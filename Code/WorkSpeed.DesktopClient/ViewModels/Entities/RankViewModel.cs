@@ -16,6 +16,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.Entities
             _rank = rank ?? throw new ArgumentNullException(nameof(rank), @"Rank cannot be null.");
         }
 
+        public Rank Rank => _rank;
         public int Number => _rank.Number;
     }
 }

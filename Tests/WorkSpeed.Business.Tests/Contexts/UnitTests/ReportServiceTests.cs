@@ -41,7 +41,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         {
             var service = GetReportService();
 
-            service.LoadEmployeesAsync().Wait();
+            service.LoadShiftGroupingAsync().Wait();
 
             Assert.That( service.ShiftGroupingCollection, Is.Not.Empty );
         }
@@ -51,7 +51,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         {
             var service = GetReportService( fillEmployees: false );
 
-            service.LoadEmployeesAsync().Wait();
+            service.LoadShiftGroupingAsync().Wait();
 
             Assert.That( service.ShiftGroupingCollection, Is.Empty );
         }

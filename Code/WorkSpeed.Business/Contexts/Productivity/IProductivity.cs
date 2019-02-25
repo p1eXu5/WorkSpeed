@@ -18,17 +18,16 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
         double GetLinesPerHour ();
         double GetScansPerHour ();
+        double GetTotalVolume ();
+        (double client, double nonClient) GetCargoQuantity();
+        IEnumerable< (int count,Category category) > GetLines ( IEnumerable< Category > categories );
+        IEnumerable< (int count,Category category) > GetScans ( IEnumerable< Category > categories );
+        IEnumerable< (int count,Category category) > GetQuantity ( IEnumerable< Category > categories );
+        IEnumerable< (double count,Category category) > GetVolumes ( IEnumerable< Category > categories );
 
-        IEnumerable< (int,Category) > GetLines ( IEnumerable< Category > categories );
-        IEnumerable< (int,Category) > GetScans ( IEnumerable< Category > categories );
-
-
-
-        IEnumerable< int > GetQuantity ();
-        IEnumerable< double > GetVolumes ();
         IEnumerable< double > GetWeigths ();
 
-        TimeSpan GetTotalTime ();
+        double GetTotalHours ();
 
     }
 }

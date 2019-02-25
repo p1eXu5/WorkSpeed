@@ -21,5 +21,14 @@ namespace WorkSpeed.Data.Context
         {
             dbContext.Set< TEntity >().UpdateRange( entities );
         }
+
+        public static IQueryable< Appointment > GetAppointments ( this WorkSpeedDbContext dbContext )
+            => dbContext.Appointments.AsQueryable();
+
+        public static IQueryable< Rank > GetRanks ( this WorkSpeedDbContext dbContext )
+            => dbContext.Ranks.AsQueryable();
+
+        public static IQueryable< Position > GetPositions ( this WorkSpeedDbContext dbContext )
+            => dbContext.Positions.AsQueryable();
     }
 }

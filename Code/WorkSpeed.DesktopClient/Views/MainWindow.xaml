@@ -136,7 +136,7 @@
                         Background="{StaticResource br_Control.Background}"
                         SnapsToDevicePixels="True"
                         >
-
+                    <!-- filters header -->
                     <Border Height="20" DockPanel.Dock="Top"
                         Background="{StaticResource br_Control.BackgroundAlternative}"
                         
@@ -148,7 +148,9 @@
                                 />
                     </Border>
 
-                    <Border BorderThickness="0,0,1,0" BorderBrush="{StaticResource br_Window.Border}" />
+                    <Border BorderThickness="0,0,1,0" BorderBrush="{StaticResource br_Window.Border}" >
+                        <ListBox ItemsSource="{Binding FiltersVmCollection}"></ListBox>
+                    </Border>
 
                 </DockPanel>
 

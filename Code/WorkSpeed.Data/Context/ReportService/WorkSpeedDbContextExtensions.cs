@@ -101,5 +101,11 @@ namespace WorkSpeed.Data.Context.ReportService
 
             return set.OrderByDescending( s => s.StartTime ).GroupBy( s => s.Employee );
         }
+
+        public static IQueryable< Shift > GetShifts ( this WorkSpeedDbContext dbContext )
+            => dbContext.Shifts.AsQueryable();
+
+        public static IQueryable< ShortBreakSchedule > GetShortBreakSchedules ( this WorkSpeedDbContext dbContext )
+            => dbContext.ShortBreakSchedules.AsQueryable();
     }
 }

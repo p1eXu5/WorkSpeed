@@ -17,14 +17,8 @@ namespace WorkSpeed.Data.Context.ImportService
         public static IQueryable< Employee > GetEmployees ( this WorkSpeedDbContext dbContext )
             => dbContext.Employees.AsQueryable();
 
-        public static IQueryable< Appointment > GetAppointments ( this WorkSpeedDbContext dbContext )
-            => dbContext.Appointments.AsQueryable();
 
-        public static IQueryable< Rank > GetRanks ( this WorkSpeedDbContext dbContext )
-            => dbContext.Ranks.AsQueryable();
-
-        public static IQueryable< Position > GetPositions ( this WorkSpeedDbContext dbContext )
-            => dbContext.Positions.AsQueryable();
+        
 
         public static async Task< Shift > GetDefaultShiftAsync ( this WorkSpeedDbContext dbContext )
             => await dbContext.Shifts.FirstAsync( s => s.Id == 1 );

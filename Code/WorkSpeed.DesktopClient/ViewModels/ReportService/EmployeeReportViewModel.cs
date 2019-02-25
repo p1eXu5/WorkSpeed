@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -14,12 +15,12 @@ using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.Entities;
 using WorkSpeed.DesktopClient.ViewModels.Grouping;
 
-namespace WorkSpeed.DesktopClient.ViewModels
+namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
     public class EmployeeReportViewModel : ReportViewModel
     {
         private readonly ObservableCollection< ShiftGroupingViewModel > _shiftGroupingVmCollection;
-
+        
 
         public EmployeeReportViewModel ( IReportService reportService, IDialogRepository dialogRepository )
             : base( reportService, dialogRepository )
@@ -27,31 +28,41 @@ namespace WorkSpeed.DesktopClient.ViewModels
             _shiftGroupingVmCollection = new ObservableCollection< ShiftGroupingViewModel >();
             ShiftGroupingVmCollection = new ReadOnlyObservableCollection< ShiftGroupingViewModel >( _shiftGroupingVmCollection );
 
-            var view = CollectionViewSource.GetDefaultView( ShiftGroupingVmCollection );
-            view.SortDescriptions.Add( new SortDescription( "Shift.Id", ListSortDirection.Ascending ) );
+            SetupView( ShiftGroupingVmCollection );
         }
-        
 
+        
         public ReadOnlyObservableCollection< ShiftGroupingViewModel > ShiftGroupingVmCollection { get; }
 
+
+        #region Methods
+
+
+        public override async void OnSelectedAsync ()
+        {
+            await LoadEmployeesAsync( null );
+        }
+
+
+        
 
         private async Task LoadEmployeesAsync ( object obj )
         {
             ReportMessage = "Идёт загрузка сотрудников";
-            await _reportService.LoadEmployeesAsync();
+            await _reportService.LoadShiftGroupingAsync();
 
             if (_reportService.ShiftGroupingCollection.Any())
             {
-
                 ReportMessage = "";
 
                 if ( _shiftGroupingVmCollection.Any() ) {
                     _shiftGroupingVmCollection.Clear();
                 }
 
-                foreach ( var shiftGrouping in _reportService.ShiftGroupingCollection )
-                {
-                    _shiftGroupingVmCollection.Add( new ShiftGroupingViewModel( shiftGrouping ) );
+                foreach ( var shiftGrouping in _reportService.ShiftGroupingCollection ) {
+
+                    var vm = new ShiftGroupingViewModel( shiftGrouping, EmployeePredicate );
+                    _shiftGroupingVmCollection.Add( vm );
                 }
             }
             else
@@ -60,9 +71,17 @@ namespace WorkSpeed.DesktopClient.ViewModels
             }
         }
 
-        public override async void OnSelectedAsync ()
+        protected override void OnRefresh ()
         {
-            await LoadEmployeesAsync( null );
+            foreach ( var shiftGroupingViewModel in ShiftGroupingVmCollection ) {
+                shiftGroupingViewModel.Refresh();
+            }
+
+            base.OnRefresh();
         }
+
+
+        #endregion
+
     }
 }
