@@ -29,5 +29,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
 
         public Position Position { get; }
         public ReadOnlyObservableCollection< EmployeeViewModel > EmployeeVmCollection { get; }
+
+        protected internal override void Refresh ()
+        {
+            base.Refresh();
+        }
     }
 }

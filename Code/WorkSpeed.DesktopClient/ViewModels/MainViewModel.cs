@@ -52,11 +52,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
            _progress = new Progress< (int code, string message) >( t => ProgressReport( t.code, t.message ) );
 
             EmployeeReportVm = new EmployeeReportViewModel( reportService, dialogRepository );
-            ProductivityReportVm = new ProductivityReportViewModel( reportService, dialogRepository );
-
-            SelectedIndex = (int)Tabs.EmployeeEditor;
-            EmployeeReportVm.OnSelectedAsync();
-            FilterVmCollection = EmployeeReportVm.FilterVmCollection;
+            ProductivityReportVm = new ProductivityReportViewModel( reportService, dialogRepository );   
         }
 
         #endregion
@@ -70,6 +66,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
             set {
                 _selectedIndex = value;
                 OnPropertyChanged();
+                TabItemChangedAsync( value );
             }
         }
 
@@ -108,8 +105,8 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
         #region Commands
 
+        public ICommand LoadedCommand => new MvvmCommand( OnWindowLoaded );
         public ICommand ImportAsyncCommand => new MvvmCommand( Import );
-        public ICommand TabItemChangedCommand => new MvvmCommand( TabItemChanged );
 
         public string ImportStatusMessage
         {
@@ -124,6 +121,11 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
 
         #region Methods
+
+        private void OnWindowLoaded ( object o )
+        {
+            SelectedIndex = (int)Tabs.EmployeeEditor;
+        }
 
         private async void Import ( object obj )
         {
@@ -143,7 +145,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
                 ImportStatusMessage = "Обновление данных.";
                 await EmployeeReportVm.OnSelectedAsync();
-                await ProductivityReportVm.OnSelectedAsync();
+                //await ProductivityReportVm.OnSelectedAsync();
 
                 IsImporting = false;
             }
@@ -169,27 +171,20 @@ namespace WorkSpeed.DesktopClient.ViewModels
             view?.ShowDialog();
         }
 
-        private void TabItemChanged ( object obj )
+        private async void TabItemChangedAsync ( int tabIndex )
         {
-            int selected = (int)obj;
-            if ( selected == _selectedIndex ) return;
-
-            _selectedIndex = selected;
-
-            if ( selected == (int)Tabs.EmployeeEditor ) {
-                EmployeeReportVm.OnSelectedAsync();
-                FilterVmCollection = EmployeeReportVm.FilterVmCollection;
-            }
-            else if ( selected == ( int )Tabs.ProductivityReport ) {
-                ProductivityReportVm.OnSelectedAsync();
-                FilterVmCollection = ProductivityReportVm.FilterVmCollection;
+            switch ( tabIndex ) {
+                case (int)Tabs.EmployeeEditor :
+                    FilterVmCollection = EmployeeReportVm.FilterVmCollection;
+                    await EmployeeReportVm.OnSelectedAsync();
+                    break;
             }
         }
 
         #endregion
 
 
-        private enum Tabs
+        protected enum Tabs
         {
             ProductivityReport = 0,
             EmployeeEditor = 1,

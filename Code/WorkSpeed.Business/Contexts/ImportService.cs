@@ -165,11 +165,11 @@ namespace WorkSpeed.Business.Contexts
 
                 employee.Appointment = employee.Appointment?.Abbreviations == null 
                                            ? defaultAppointment 
-                                           : dbAppointments.FirstOrDefault( a => Check.CheckAbbreviation( a.Abbreviations, employee.Appointment.Abbreviations ) );
+                                           : dbAppointments.FirstOrDefault( a => Check.CheckAbbreviation( a.Abbreviations, employee.Appointment.Abbreviations ) ) ?? defaultAppointment;
 
                 employee.Position = employee.Position?.Abbreviations == null 
                                         ? defaultPosition 
-                                        : dbPositions.FirstOrDefault( p => Check.CheckAbbreviation( p.Abbreviations, employee.Position?.Abbreviations ) );
+                                        : dbPositions.FirstOrDefault( p => Check.CheckAbbreviation( p.Abbreviations, employee.Position?.Abbreviations ) ) ?? defaultPosition;
 
                 employee.Shift = defaultShift;
                 employee.ShortBreakSchedule = defaultShortBreakSchedule;

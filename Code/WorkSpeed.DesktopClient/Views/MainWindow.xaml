@@ -60,11 +60,11 @@
                       />
     </WindowChrome.WindowChrome>
 
-    <!--<behavior:Interaction.Triggers>
+    <behavior:Interaction.Triggers>
         <behavior:EventTrigger EventName="Loaded" SourceObject="{Binding ElementName=m_Window}">
             <behavior:InvokeCommandAction Command="{Binding LoadedCommand}" />
         </behavior:EventTrigger>
-    </behavior:Interaction.Triggers>-->
+    </behavior:Interaction.Triggers>
 
     <DockPanel LastChildFill="True">
 
@@ -125,7 +125,7 @@
         <Grid>
             <Grid x:Name="content">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" MinWidth="250" />
+                    <ColumnDefinition Width="*" MinWidth="250" MaxWidth="325" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="5*" MinWidth="1000"/>
                 </Grid.ColumnDefinitions>
@@ -277,13 +277,13 @@
                                     IsHitTestVisible="True"
                                     SelectedIndex="{Binding SelectedIndex}"
                                     >
-                            <behavior:Interaction.Triggers>
+                            <!--<behavior:Interaction.Triggers>
                                 <behavior:EventTrigger EventName="SelectionChanged" SourceObject="{Binding ElementName=m_TabControl}" >
                                     <behavior:InvokeCommandAction Command="{Binding TabItemChangedCommand}"
                                                                   CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=TabControl}, Path=SelectedIndex}"
                                                                   />
                                 </behavior:EventTrigger>
-                            </behavior:Interaction.Triggers>
+                            </behavior:Interaction.Triggers>-->
                             
                             <!-- ProductivityReport #0 -->
                             <TabItem RenderTransform="1,0,0,1,2,0"

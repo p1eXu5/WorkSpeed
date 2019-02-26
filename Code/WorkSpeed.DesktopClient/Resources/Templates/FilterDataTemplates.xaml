@@ -12,7 +12,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type rs:FilterViewModel}">
-        <templates:FilterSectionView />
+        <templates:FilterSectionView MinWidth="325" />
     </DataTemplate>
 
 </ResourceDictionary>

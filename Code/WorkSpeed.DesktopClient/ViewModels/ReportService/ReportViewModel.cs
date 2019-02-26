@@ -110,12 +110,12 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                 new FilterViewModel( "Курит", true ),
             });
 
-            ((INotifyCollectionChanged)coll[ IS_ACTIVE ].Entities).CollectionChanged += OnPredicateChange;
-            ((INotifyCollectionChanged)coll[ POSITION ].Entities).CollectionChanged += OnPredicateChange;
-            ((INotifyCollectionChanged)coll[ APPOINTMENT ].Entities).CollectionChanged += OnPredicateChange;
-            ((INotifyCollectionChanged)coll[ SHIFT ].Entities).CollectionChanged += OnPredicateChange;
-            ((INotifyCollectionChanged)coll[ RANK ].Entities).CollectionChanged += OnPredicateChange;
-            ((INotifyCollectionChanged)coll[ IS_SMOKER ].Entities).CollectionChanged += OnPredicateChange;
+            coll[ IS_ACTIVE ].FilterChanged += OnPredicateChange;
+            coll[ POSITION ].FilterChanged += OnPredicateChange;
+            coll[ APPOINTMENT ].FilterChanged += OnPredicateChange;
+            coll[ SHIFT ].FilterChanged += OnPredicateChange;
+            coll[ RANK ].FilterChanged += OnPredicateChange;
+            coll[ IS_SMOKER ].FilterChanged += OnPredicateChange;
 
             return coll;
         }
@@ -130,12 +130,14 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         {
             if (!(o is EmployeeViewModel employee)) return false;
 
-            return _filterVmCollection[IS_ACTIVE].Entities.Any(obj => (obj is bool) == employee.IsActive)
-                   && _filterVmCollection[POSITION].Entities.Any(obj => (obj as PositionViewModel).Position == employee.Position)
-                   && _filterVmCollection[APPOINTMENT].Entities.Any(obj => (obj as AppointmentViewModel).Appointment == employee.Appointment)
-                   && _filterVmCollection[SHIFT].Entities.Any(obj => (obj as ShiftViewModel).Shift == employee.Shift)
-                   && _filterVmCollection[RANK].Entities.Any(obj => (obj as RankViewModel).Number == employee.Rank.Number)
-                   && _filterVmCollection[IS_SMOKER].Entities.Any(obj => (obj is bool) == employee.IsSmoker);
+            var res = _filterVmCollection[ IS_ACTIVE ].Entities.Any( obj => (bool)(obj).Equals( employee.IsActive ) );
+
+            return res;
+            //&& _filterVmCollection[POSITION].Entities.Any(obj => (obj as PositionViewModel).Position == employee.Position)
+            //&& _filterVmCollection[APPOINTMENT].Entities.Any(obj => (obj as AppointmentViewModel).Appointment == employee.Appointment)
+            //&& _filterVmCollection[SHIFT].Entities.Any(obj => (obj as ShiftViewModel).Shift == employee.Shift)
+            //&& _filterVmCollection[RANK].Entities.Any(obj => (obj as RankViewModel).Number == employee.Rank.Number)
+            //&& _filterVmCollection[IS_SMOKER].Entities.Any(obj => (obj is bool) == employee.IsSmoker);
         }
 
         #endregion

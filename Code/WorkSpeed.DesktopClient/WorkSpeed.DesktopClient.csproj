@@ -139,6 +139,9 @@
     <Compile Include="Views\Templates\FilterSectionView.xaml.cs">
       <DependentUpon>FilterSectionView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Templates\ShiftGroupingView.xaml.cs">
+      <DependentUpon>ShiftGroupingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControls\EmployeeReportUserControl.xaml.cs">
       <DependentUpon>EmployeeReportUserControl.xaml</DependentUpon>
     </Compile>
@@ -282,6 +285,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Templates\FilterSectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Templates\ShiftGroupingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

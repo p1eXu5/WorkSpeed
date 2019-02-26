@@ -25,6 +25,7 @@ namespace WorkSpeed.DesktopClient
 
 
             var (importService, reportService) = WorkSpeedBusinessContextCreator.Create();
+            reportService.ReloadAllCollections();
             var mvm = new MainViewModel( importService, reportService, dialogRepository );
 
             mainWindow.DataContext = mvm;

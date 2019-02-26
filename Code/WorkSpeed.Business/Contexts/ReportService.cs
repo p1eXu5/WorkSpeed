@@ -40,6 +40,8 @@ namespace WorkSpeed.Business.Contexts
         private readonly IFormatter _formatter = new BinaryFormatter();
         private OperationThresholds _thresholds;
 
+        private readonly object _lock = new object();
+
         #endregion
 
 
@@ -51,10 +53,8 @@ namespace WorkSpeed.Business.Contexts
             
             CreateCollections();
             SetupPeriod();
-            ReloadAllCollections();
-        }
 
-        private void CreateCollections ()
+            void CreateCollections ()
         {
             _employeeProductivityCollections = new ObservableCollection< EmployeeProductivity >();
             EmployeeProductivityCollections = new ReadOnlyObservableCollection< EmployeeProductivity >( _employeeProductivityCollections );
@@ -84,11 +84,12 @@ namespace WorkSpeed.Business.Contexts
             CategoryCollection = new ReadOnlyObservableCollection< Category >( _categoryCollection );
         }
 
-        private void SetupPeriod ()
+            void SetupPeriod ()
         {
             var now = DateTime.Now;
             var start = now.Date.Subtract( TimeSpan.FromDays( now.Day - 1 ) );
             Period = new Period( start, now );
+        }
         }
 
         #endregion
@@ -176,8 +177,6 @@ namespace WorkSpeed.Business.Contexts
             ReloadEntities< ShortBreakSchedule >();
             ReloadEntities< Operation >();
             ReloadEntities< Category >();
-            ReloadEntities< ShiftGrouping >();
-            ReloadEntities< EmployeeProductivity >();
         }
 
         public void SetPeriodAsync ( Period period )
@@ -201,10 +200,8 @@ namespace WorkSpeed.Business.Contexts
 
             Task.Run( () => { 
                 try {
-                    if ( _shiftGroupingCollection.Any() ) { _shiftGroupingCollection.Clear(); }
-                    foreach ( var grouping in _dbContext.GetShiftGrouping().Select( s => new ShiftGrouping( s.shift, s.appointments ) ) ) {
-                        _shiftGroupingCollection.Add( grouping );
-                    }
+                    LoadShiftGrouping();
+                    tcs.SetResult( true );
                 }
                 catch ( Exception ) {
 
@@ -214,6 +211,19 @@ namespace WorkSpeed.Business.Contexts
             });
 
             return tcs.Task;
+        }
+
+        private void LoadShiftGrouping ()
+        {
+            lock ( _lock ) {
+                if ( _shiftGroupingCollection.Any() ) {
+                    _shiftGroupingCollection.Clear();
+                }
+
+                foreach ( var grouping in _dbContext.GetShiftGrouping().Select( s => new ShiftGrouping( s.shift, s.appointments ) ) ) {
+                    _shiftGroupingCollection.Add( grouping );
+                }
+            }
         }
 
         public Task LoadEmployeeProductivitiesAsync ()

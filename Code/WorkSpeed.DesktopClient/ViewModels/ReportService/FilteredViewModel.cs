@@ -43,7 +43,14 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         protected internal virtual void Refresh ()
         {
-            ViewList.ForEach( v => v.Refresh() );
+            foreach ( var view in ViewList ) {
+                try {
+                    view.Refresh();
+                }
+                catch ( Exception ex ) {
+                    ;
+                }
+            }
         }
     }
 }

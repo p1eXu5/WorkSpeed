@@ -10,10 +10,12 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
-    public class FilterViewModel : ViewModel, IEntityObservableCollection< object >
+    public class FilterViewModel : ViewModel
     {
         private static readonly Func< object, string> TRUE_CAPTION;
-        private readonly ObservableCollection< object > _entities;
+        private readonly List< object > _entities;
+        private readonly object _default;
+        private readonly object _locker = new object();
 
         #region Ctor
 
@@ -25,17 +27,20 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         private FilterViewModel ( string header )
         {
             Header = header;
-
-            _entities = new ObservableCollection< object >();
-            Entities = new ReadOnlyObservableCollection< object >( _entities );
+            _entities = new List< object >();
         }
 
         public FilterViewModel ( string header, bool isCheckedValue )
             : this( header )
         {
+            _default = !isCheckedValue;
+            _entities.Add( _default );
+
             var boolItem = new FilterItemViewModel( isCheckedValue, TRUE_CAPTION );
             boolItem.PropertyChanged += OnFilterItemPropertyChanged;
             FilterItemVmCollection = new ObservableCollection< FilterItemViewModel >( new [] { boolItem });
+
+            boolItem.IsChecked = true;
         }
 
         public FilterViewModel ( string header, IEnumerable< object > entities, Func< object, string> captionFunc )
@@ -57,11 +62,14 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         #endregion
 
 
+        public event EventHandler< EventArgs > FilterChanged;
+
+
         #region Properties
 
         public string Header { get; }
 
-        public ReadOnlyObservableCollection< object > Entities { get; set; }
+        public IEnumerable< object > Entities => _entities;
         public ObservableCollection< FilterItemViewModel > FilterItemVmCollection  { get; private set; }
 
         #endregion
@@ -73,12 +81,25 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         {
             if ( !args.PropertyName.Equals( nameof( FilterItemViewModel.IsChecked ) ) ) {  return; }
 
-            if ( (( FilterItemViewModel )sender).IsChecked) {
-                _entities.Add( (( FilterItemViewModel )sender).Entity );
+            lock ( _locker ) {
+
+                if ( (( FilterItemViewModel )sender).IsChecked ) {
+                    if (_default != null) { _entities.Remove( _default ); }
+                    _entities.Add( (( FilterItemViewModel )sender).Entity );
+                }
+                else {
+                    if (_default != null) { _entities.Add( _default ); }
+                    _entities.Remove( (( FilterItemViewModel )sender).Entity );
+                }
+
+                OnFilterChanged();
             }
-            else {
-                _entities.Remove( (( FilterItemViewModel )sender).Entity );
-            }
+
+        }
+
+        private void OnFilterChanged ()
+        {
+            FilterChanged?.Invoke( this, EventArgs.Empty );
         }
 
         #endregion

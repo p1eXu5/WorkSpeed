@@ -71,6 +71,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
                     var vm = new ShiftGroupingViewModel( shiftGrouping, EmployeePredicate );
                     _shiftGroupingVmCollection.Add( vm );
+                    Refresh();
                 }
             }
             else
@@ -81,7 +82,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         protected internal override void Refresh ()
         {
-            foreach ( var shiftGroupingViewModel in ShiftGroupingVmCollection ) {
+            foreach (var shiftGroupingViewModel in ShiftGroupingVmCollection)
+            {
                 shiftGroupingViewModel.Refresh();
             }
 

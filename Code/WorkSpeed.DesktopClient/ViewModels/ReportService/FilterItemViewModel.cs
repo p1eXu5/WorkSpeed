@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+using System.Windows;
 using Agbm.Wpf.MvvmBaseLibrary;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService
@@ -21,8 +23,13 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             get => _isChecked;
             set {
                 _isChecked = value;
-                OnPropertyChanged();
+                ChangePropertyAsync();
             }
+        }
+
+        private void ChangePropertyAsync ()
+        {
+            Application.Current.Dispatcher.BeginInvoke((Action)( () => OnPropertyChanged(nameof(IsChecked)) ));
         }
     }
 }

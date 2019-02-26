@@ -19,7 +19,6 @@ namespace WorkSpeed.Data.Context.ReportService
             var employees = dbContext.Employees.Include( e => e.Avatar ).AsQueryable();
 
             var query = (from e in employees
-                         where e.IsActive
                          group e by e.Shift
                          into s
                          select new

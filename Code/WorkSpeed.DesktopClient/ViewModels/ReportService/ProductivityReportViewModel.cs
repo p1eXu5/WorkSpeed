@@ -111,7 +111,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             var filter = new FilterViewModel( "Операции", _reportService.OperationCollection, p => (( Operation )p).Name );
             _filterVmCollection.Add( filter );
 
-            ((INotifyCollectionChanged)_filterVmCollection[ OPERATION ].Entities).CollectionChanged += OnPredicateChange;
+            _filterVmCollection[ OPERATION ].FilterChanged += OnPredicateChange;
         }
  
         private bool EmployeeProductivityPredicate ( object o )

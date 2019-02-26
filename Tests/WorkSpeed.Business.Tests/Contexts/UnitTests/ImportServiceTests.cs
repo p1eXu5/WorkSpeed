@@ -7,11 +7,10 @@ using Agbm.NpoiExcel;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using WorkSpeed.Business.Contexts;
-using WorkSpeed.Data.Models;
 using NUnit.Framework;
-using WorkSpeed.Business.Models;
+using WorkSpeed.Business.Contexts;
 using WorkSpeed.Data.Context;
+using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.ActionDetails;
 using WorkSpeed.Data.Models.Actions;
 
@@ -34,7 +33,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         {
             // Arrange:
             // Action:
-            var service = GetImportService();
+            var service = GetFakeImportService();
 
             // Assert:
             var dbProducts = service.DbContext.Products.ToArray();
@@ -45,11 +44,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_ValidProduct_CanAddProduct ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Products = new[] { new Product { Id = 01223456, Name = "Test Product " } };
 
             // Action:
-            service.ImportFromXlsx( PRODUCTS, null );
+            service.ImportFromXlsx( PRODUCTS );
 
             // Assert:
             var dbProducts = service.DbContext.Products.ToArray();
@@ -60,14 +59,14 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_TwoIdenticalProduct_AddsOneProduct ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Products = new[] {
                 new Product { Id = 01223456, Name = "Test Product" },
-                new Product { Id = 01223456, Name = "Test Product" },
+                new Product { Id = 01223456, Name = "Test Product" }
             };
 
             // Action:
-            service.ImportFromXlsx( PRODUCTS, null );
+            service.ImportFromXlsx( PRODUCTS );
 
             // Assert:
             var dbProducts = service.DbContext.Products.ToArray();
@@ -78,14 +77,14 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_TwoProductWithSameId_SecondWithMeasure_AddsProductWithMeasure ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Products = new[] {
                 new Product { Id = 01223456, Name = "Test Product" },
-                new Product { Id = 01223456, Name = "Test Product", ItemWeight = 1.5f },
+                new Product { Id = 01223456, Name = "Test Product", ItemWeight = 1.5f }
             };
 
             // Action:
-            service.ImportFromXlsx( PRODUCTS, null );
+            service.ImportFromXlsx( PRODUCTS );
 
             // Assert:
             var dbProducts = service.DbContext.Products.ToArray()[0];
@@ -96,14 +95,14 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_TwoProductWithSameId_FirstWithMeasure_AddsProductWithMeasure ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Products = new[] {
                 new Product { Id = 01223456, Name = "Test Product", ItemWeight = 1.5f },
-                new Product { Id = 01223456, Name = "Test Product" },
+                new Product { Id = 01223456, Name = "Test Product" }
             };
 
             // Action:
-            service.ImportFromXlsx( PRODUCTS, null );
+            service.ImportFromXlsx( PRODUCTS );
 
             // Assert:
             var dbProducts = service.DbContext.Products.ToArray()[0];
@@ -114,12 +113,12 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_ProductExistInDb_DoesNotAddProduct ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Products = new[] { new Product { Id = 01223456, Name = "Test Product" } };
 
             // Action:
-            service.ImportFromXlsx( PRODUCTS, null );
-            service.ImportFromXlsx( PRODUCTS, null );
+            service.ImportFromXlsx( PRODUCTS );
+            service.ImportFromXlsx( PRODUCTS );
 
             // Assert:
             var dbProducts = service.DbContext.Products.ToArray();
@@ -130,7 +129,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_ProductHasWrongId_DoesNotAddProduct ( int id )
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Products = new[] { new Product { Id = id, Name = "Test Product" } };
 
             // Action:
@@ -145,10 +144,10 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_ProductsWithSameId_AddsFirstProduct ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Products = new[] {
                 new Product { Id = 01223456, Name = "Test Product" },
-                new Product { Id = 01223456, Name = "Test Product2" },
+                new Product { Id = 01223456, Name = "Test Product2" }
             };
 
             // Action:
@@ -164,7 +163,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_ProductExistInDb_AddingProductHasDifferentName_DoesNotChangeDbProductName ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             var originName = "TestProduct";
             service.Products = new[] { new Product { Id = 01223456, Name = originName } };
             service.ImportFromXlsx( PRODUCTS, null );
@@ -182,7 +181,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_ProductExistInDb_AddingProductHasDifferentItemLength_UpdateDbProductItemLength ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             var originName = "TestProduct";
             service.Products = new[] { new Product { Id = 01223456, Name = originName } };
             service.ImportFromXlsx( PRODUCTS, null );
@@ -200,7 +199,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_ProductExistInDb_AddingProductHasDifferentItemWidth_UpdateDbProductItemWidth ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             var originName = "TestProduct";
             service.Products = new[] { new Product { Id = 01223456, Name = originName } };
             service.ImportFromXlsx( PRODUCTS, null );
@@ -218,7 +217,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_ProductExistInDb_AddingProductHasDifferentItemHeight_UpdateDbProductItemHeight ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             var originName = "TestProduct";
             service.Products = new[] { new Product { Id = 01223456, Name = originName } };
             service.ImportFromXlsx( PRODUCTS, null );
@@ -236,7 +235,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_ProductExistInDb_AddingProductHasDifferentItemWeight_UpdateDbProductItemWeight ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             var originName = "TestProduct";
             service.Products = new[] { new Product { Id = 01223456, Name = originName } };
             service.ImportFromXlsx( PRODUCTS, null );
@@ -260,7 +259,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         {
             // Arrange:
             // Action:
-            var service = GetImportService();
+            var service = GetFakeImportService();
 
             // Assert:
             var dbEmployees = service.DbContext.Employees.ToArray();
@@ -271,7 +270,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_ValidEmployee_CanAddEmployee ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Employees = new[] { new Employee { Id = "AR23456", Name = "Test Employee" } };
 
             // Action:
@@ -286,10 +285,10 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_TwoIdenticalId_AddsOneEmployee ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Employees = new[] {
                 new Employee { Id = "AR23456", Name = "Test Employee" },
-                new Employee { Id = "AR23456", Name = "Test Employee" },
+                new Employee { Id = "AR23456", Name = "Test Employee" }
             };
 
             // Action:
@@ -304,10 +303,10 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_TwoIdenticalId_FirstWithAppointment_AddsEmployeeWithAppointment ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Employees = new[] {
                 new Employee { Id = "AR23456", Name = "Test Employee", Appointment = new Appointment { Abbreviations = "кл."} },
-                new Employee { Id = "AR23456", Name = "Test Employee", },
+                new Employee { Id = "AR23456", Name = "Test Employee" }
             };
 
             // Action:
@@ -322,10 +321,10 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_TwoIdenticalId_SecondWithAppointment_AddsEmployeeWithAppointment ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Employees = new[] {
-                new Employee { Id = "AR23456", Name = "Test Employee", },
-                new Employee { Id = "AR23456", Name = "Test Employee", Appointment = new Appointment { Abbreviations = "кл."} },
+                new Employee { Id = "AR23456", Name = "Test Employee" },
+                new Employee { Id = "AR23456", Name = "Test Employee", Appointment = new Appointment { Abbreviations = "кл."} }
             };
 
             // Action:
@@ -340,7 +339,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_ExistInDb_DoesNotAddEmployee ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Employees = new[] { new Employee { Id = "AR23456", Name = "Test Employee" } };
 
             // Action:
@@ -356,7 +355,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_IdFistNot2Letters_DoesNotAddEmployee ( string id )
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Employees = new[] { new Employee { Id = id, Name = "Test Product" } };
 
             // Action:
@@ -371,7 +370,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_IdLengthNot7_DoesNotAddEmployee ( string id )
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Employees = new[] { new Employee { Id = id, Name = "Test Product" } };
 
             // Action:
@@ -386,7 +385,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_IdLastFiveNotDigits_DoesNotAddEmployee ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Employees = new[] { new Employee { Id = "AR-1234", Name = "Test Employee" } };
 
             // Action:
@@ -401,7 +400,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_HasNameLengthLess1_DoesNotAddEmployee ()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Employees = new[] { new Employee { Id = "AR12345", Name = "" } };
 
             // Action:
@@ -416,10 +415,10 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_EmployeesWithSameId_AddsFirstEmployees()
         {
             // Arrange:
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Employees = new[] {
                 new Employee { Id = "AR23456", Name = "Test Employee" },
-                new Employee { Id = "AR23456", Name = "Test Employee2" },
+                new Employee { Id = "AR23456", Name = "Test Employee2" }
             };
 
             // Action:
@@ -431,11 +430,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         }
 
         [ Test, Category( "Employee" ) ]
-        public void ImportFromXlsx_EmployeeHasUnknownRank_AddsWithNullRank ()
+        public void ImportFromXlsx_EmployeeHasUnknownRank_AddsWithDefaultRank ()
         {
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Employees = new[] {
-                new Employee { Id = "AR23456", Name = "Test Employee", Rank = new Rank { Number = 827 } },
+                new Employee { Id = "AR23456", Name = "Test Employee", Rank = new Rank { Number = 827 } }
             };
 
             // Action:
@@ -443,15 +442,15 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
 
             // Assert:
             var dbEmployees = service.DbContext.Employees.ToArray();
-            Assert.That( dbEmployees[0].Rank, Is.Null );
+            Assert.That( dbEmployees[0].Rank.Number, Is.EqualTo( 1 ) );
         }
 
         [ Test, Category( "Employee" ) ]
         public void ImportFromXlsx_EmployeeHasKnownRank_AddsWithRank ()
         {
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Employees = new[] {
-                new Employee { Id = "AR23456", Name = "Test Employee", Rank = new Rank { Number = 3 } },
+                new Employee { Id = "AR23456", Name = "Test Employee", Rank = new Rank { Number = 3 } }
             };
 
             // Action:
@@ -465,9 +464,9 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         [ Test, Category( "Employee" ) ]
         public void ImportFromXlsx_EmployeeWithRank_DbEmployeeWithNullRank_UpdatesDbEmployeeRank ()
         {
-            var service = GetImportService();
+            var service = GetFakeImportService();
 
-            service.Employees = new[] { new Employee { Id = "AR23456", Name = "Test Employee" }, };
+            service.Employees = new[] { new Employee { Id = "AR23456", Name = "Test Employee" } };
             service.ImportFromXlsx( EMPLOYEES, null );
 
             service.Employees[0] = new Employee{ Id = "AR23456", Name = "Test Employee", Rank = new Rank { Number = 3} };
@@ -481,11 +480,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         }
 
         [ Test, Category( "Employee" ) ]
-        public void ImportFromXlsx_EmployeeHasUnknownAppointment_AddsWithNullAppointment ()
+        public void ImportFromXlsx_EmployeeHasUnknownAppointment_AddsWithDefaultAppointment ()
         {
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Employees = new[] {
-                new Employee { Id = "AR23456", Name = "Test Employee", Appointment = new Appointment { Abbreviations = "клк" } },
+                new Employee { Id = "AR23456", Name = "Test Employee", Appointment = new Appointment { Abbreviations = "клк" } }
             };
 
             // Action:
@@ -493,15 +492,15 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
 
             // Assert:
             var dbEmployees = service.DbContext.Employees.ToArray();
-            Assert.That( dbEmployees[0].Appointment, Is.Null );
+            Assert.That( dbEmployees[0].Appointment.Id, Is.EqualTo( 1 ) );
         }
 
         [ Test, Category( "Employee" ) ]
         public void ImportFromXlsx_EmployeeHasKnownAppointment_AddsWithAppointment ()
         {
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Employees = new[] {
-                new Employee { Id = "AR23456", Name = "Test Employee", Appointment = new Appointment { Abbreviations = "кл" } },
+                new Employee { Id = "AR23456", Name = "Test Employee", Appointment = new Appointment { Abbreviations = "кл" } }
             };
 
             // Action:
@@ -515,9 +514,9 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         [ Test, Category( "Employee" ) ]
         public void ImportFromXlsx_EmployeeWithAppointment_DbEmployeeWithNullAppointment_UpdatesDbEmployeeAppointment ()
         {
-            var service = GetImportService();
+            var service = GetFakeImportService();
 
-            service.Employees = new[] { new Employee { Id = "AR23456", Name = "Test Employee" }, };
+            service.Employees = new[] { new Employee { Id = "AR23456", Name = "Test Employee" } };
             service.ImportFromXlsx( EMPLOYEES, null );
 
             service.Employees[0] = new Employee{ Id = "AR23456", Name = "Test Employee", Appointment = new Appointment { Abbreviations = "кл" } };
@@ -531,11 +530,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         }
 
         [ Test, Category( "Employee" ) ]
-        public void ImportFromXlsx_EmployeeHasUnknownPosition_AddsWithNullPosition ()
+        public void ImportFromXlsx_EmployeeHasUnknownPosition_AddsWithDefaultPosition ()
         {
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Employees = new[] {
-                new Employee { Id = "AR23456", Name = "Test Employee", Position = new Position { Abbreviations = "крупнъяг" } },
+                new Employee { Id = "AR23456", Name = "Test Employee", Position = new Position { Abbreviations = "крупнъяг" } }
             };
 
             // Action:
@@ -543,15 +542,15 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
 
             // Assert:
             var dbEmployees = service.DbContext.Employees.ToArray();
-            Assert.That( dbEmployees[0].Position, Is.Null );
+            Assert.That( dbEmployees[0].Position.Id, Is.EqualTo( 1 ) );
         }
 
         [ Test, Category( "Employee" ) ]
         public void ImportFromXlsx_EmployeeHasKnownPosition_AddsWithPosition ()
         {
-            var service = GetImportService();
+            var service = GetFakeImportService();
             service.Employees = new[] {
-                new Employee { Id = "AR23456", Name = "Test Employee", Position = new Position { Abbreviations = "мез3" } },
+                new Employee { Id = "AR23456", Name = "Test Employee", Position = new Position { Abbreviations = "мез3" } }
             };
 
             // Action:
@@ -565,9 +564,9 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         [ Test, Category( "Employee" ) ]
         public void ImportFromXlsx_EmployeeWithPosition_DbEmployeeWithNullPosition_UpdatesDbEmployeePosition ()
         {
-            var service = GetImportService();
+            var service = GetFakeImportService();
 
-            service.Employees = new[] { new Employee { Id = "AR23456", Name = "Test Employee" }, };
+            service.Employees = new[] { new Employee { Id = "AR23456", Name = "Test Employee" } };
             service.ImportFromXlsx( EMPLOYEES, null );
 
             service.Employees[0] = new Employee{ Id = "AR23456", Name = "Test Employee", Position = new Position { Abbreviations = "мез3" } };
@@ -590,7 +589,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         {
             // Arrange:
             // Action:
-            var service = GetImportService();
+            var service = GetFakeImportService();
 
             // Assert:
             var dbEmployees = service.DbContext.DoubleAddressActions.ToArray();
@@ -601,9 +600,9 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_ValidDoubleAddressAction_CanAddDoubleAddressAction ()
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { DoubleAddressAction = GetDoubleAddressAction() }
+            var service = GetFakeImportService();
+            service.Actions = new[] {
+                GetDoubleAddressAction()
             };
 
             // Action:
@@ -618,11 +617,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_IdLengthLess10_DoesNotAddDoubleAddressAction ( string id )
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { DoubleAddressAction = GetDoubleAddressAction() }
+            var service = GetFakeImportService();
+            service.Actions = new[] {
+                GetDoubleAddressAction()
             };
-            service.AllActions[0].DoubleAddressAction.Id = id;
+            service.Actions[0].Id = id;
 
             // Action:
             service.ImportFromXlsx( ACTIONS, null );
@@ -636,11 +635,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_IdContainsLetterInSuffix_DoesNotAddDoubleAddressAction ( string id )
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { DoubleAddressAction = GetDoubleAddressAction() }
+            var service = GetFakeImportService();
+            service.Actions = new[] {
+                GetDoubleAddressAction()
             };
-            service.AllActions[0].DoubleAddressAction.Id = id;
+            service.Actions[0].Id = id;
 
             // Action:
             service.ImportFromXlsx( ACTIONS, null );
@@ -654,11 +653,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_IdFirstTwoNotLetters_DoesNotAddDoubleAddressAction ( string id )
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { DoubleAddressAction = GetDoubleAddressAction() }
+            var service = GetFakeImportService();
+            service.Actions = new[] {
+                GetDoubleAddressAction()
             };
-            service.AllActions[0].DoubleAddressAction.Id = id;
+            service.Actions[0].Id = id;
 
             // Action:
             service.ImportFromXlsx( ACTIONS, null );
@@ -672,11 +671,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_IdThirdNotDigit_DoesNotAddDoubleAddressAction ( string id )
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { DoubleAddressAction = GetDoubleAddressAction() }
+            var service = GetFakeImportService();
+            service.Actions = new[] {
+                GetDoubleAddressAction()
             };
-            service.AllActions[0].DoubleAddressAction.Id = id;
+            service.Actions[0].Id = id;
 
             // Action:
             service.ImportFromXlsx( ACTIONS, null );
@@ -691,11 +690,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_IdFourthNotDash_DoesNotAddDoubleAddressAction ( string id )
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { DoubleAddressAction = GetDoubleAddressAction() }
+            var service = GetFakeImportService();
+            service.Actions = new[] {
+                GetDoubleAddressAction()
             };
-            service.AllActions[0].DoubleAddressAction.Id = id;
+            service.Actions[0].Id = id;
 
             // Action:
             service.ImportFromXlsx( ACTIONS, null );
@@ -709,11 +708,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_StartTimeLess1998_01_01_DoesNotAddDoubleAddressAction ( string date )
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { DoubleAddressAction = GetDoubleAddressAction() }
+            var service = GetFakeImportService();
+            service.Actions = new[] {
+                GetDoubleAddressAction()
             };
-            service.AllActions[0].DoubleAddressAction.StartTime = DateTime.Parse( date );
+            service.Actions[0].StartTime = DateTime.Parse( date );
 
             // Action:
             service.ImportFromXlsx( ACTIONS, null );
@@ -727,11 +726,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_StartTimeIsFuture_DoesNotAddDoubleAddressAction ( string date )
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { DoubleAddressAction = GetDoubleAddressAction() }
+            var service = GetFakeImportService();
+            service.Actions = new[] {
+                GetDoubleAddressAction()
             };
-            service.AllActions[0].DoubleAddressAction.StartTime = DateTime.Parse( date );
+            service.Actions[0].StartTime = DateTime.Parse( date );
 
             // Action:
             service.ImportFromXlsx( ACTIONS, null );
@@ -745,11 +744,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_DurationIsZero_DoesNotAddDoubleAddressAction ()
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { DoubleAddressAction = GetDoubleAddressAction() }
+            var service = GetFakeImportService();
+            service.Actions = new[] {
+                GetDoubleAddressAction()
             };
-            service.AllActions[0].DoubleAddressAction.Duration = TimeSpan.Zero;
+            service.Actions[0].Duration = TimeSpan.Zero;
 
             // Action:
             service.ImportFromXlsx( ACTIONS, null );
@@ -763,11 +762,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_WrongEmployeeId_DoesNotAddDoubleAddressAction ()
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { DoubleAddressAction = GetDoubleAddressAction() }
+            var service = GetFakeImportService();
+            service.Actions = new[] {
+                GetDoubleAddressAction()
             };
-            service.AllActions[0].DoubleAddressAction.Employee.Id = "AR-1234";
+            service.Actions[0].Employee.Id = "AR-1234";
 
             // Action:
             service.ImportFromXlsx( ACTIONS, null );
@@ -781,11 +780,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_OperationDoesNotExist_DoesNotAddDoubleAddressAction ()
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { DoubleAddressAction = GetDoubleAddressAction() }
+            var service = GetFakeImportService();
+            service.Actions = new[] {
+                GetDoubleAddressAction()
             };
-            service.AllActions[0].DoubleAddressAction.Operation.Name = "";
+            service.Actions[0].Operation.Name = "";
 
             // Action:
             service.ImportFromXlsx( ACTIONS, null );
@@ -799,10 +798,10 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_ProductDoesNotExist_AddsProduct ()
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { DoubleAddressAction = GetDoubleAddressAction() },
-                new AllActions { DoubleAddressAction = GetDoubleAddressAction() }
+            var service = GetFakeImportService();
+            service.Actions = new[] {
+                GetDoubleAddressAction(),
+                GetDoubleAddressAction()
             };
 
             // Action:
@@ -818,10 +817,10 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_DoubleAddressActionExistInDb_DoesNotAddDoubleAddressAction ()
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] { new AllActions {
-                DoubleAddressAction = GetDoubleAddressAction(),
-            } };
+            var service = GetFakeImportService();
+            service.Actions = new[] { 
+                GetDoubleAddressAction()
+            };
             service.ImportFromXlsx( ACTIONS, null );
 
             // Action:
@@ -836,12 +835,12 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_DifferentEmployees_DoesNotAddDoubleAddressAction ()
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] { 
-                new AllActions { DoubleAddressAction = GetDoubleAddressAction(), },
-                new AllActions { DoubleAddressAction = GetDoubleAddressAction(), },
+            var service = GetFakeImportService();
+            service.Actions = new[] { 
+                GetDoubleAddressAction(),
+                GetDoubleAddressAction()
             };
-            service.AllActions[1].DoubleAddressAction.Employee = new Employee { Id = "ZZ12345", Name = "Other Employee" };
+            service.Actions[1].Employee = new Employee { Id = "ZZ12345", Name = "Other Employee" };
 
             // Action:
             service.ImportFromXlsx( ACTIONS, null );
@@ -855,12 +854,12 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_DifferentOperations_DoesNotAddDoubleAddressAction ()
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] { 
-                new AllActions { DoubleAddressAction = GetDoubleAddressAction(), },
-                new AllActions { DoubleAddressAction = GetDoubleAddressAction(), },
+            var service = GetFakeImportService();
+            service.Actions = new[] { 
+                GetDoubleAddressAction(),
+                GetDoubleAddressAction()
             };
-            service.AllActions[1].DoubleAddressAction.Operation = new Operation { Name = "Упаковка товара в места" };
+            service.Actions[1].Operation = new Operation { Name = "Упаковка товара в места" };
 
             // Action:
             service.ImportFromXlsx( ACTIONS, null );
@@ -877,9 +876,9 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_ValidReceptionAction_CanAddReceptionAction()
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { ReceptionAction = GetReceptionAction() }
+            var service = GetFakeImportService();
+            service.Actions = new[] {
+                GetReceptionAction()
             };
 
             // Action:
@@ -895,9 +894,9 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_ValidInventoryAction_CanAddInventoryAction()
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { InventoryAction = GetInventoryAction() }
+            var service = GetFakeImportService();
+            service.Actions = new[] {
+                GetInventoryAction()
             };
 
             // Action:
@@ -913,12 +912,12 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_ValidShipmentAction_CanAddShipmentAction()
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { ShipmentAction = GetShipmentAction() },
-                new AllActions { ShipmentAction = GetShipmentAction() },
+            var service = GetFakeImportService();
+            service.Actions = new EmployeeActionBase[] {
+                GetShipmentAction(),
+                GetShipmentAction()
             };
-            service.AllActions[1].ShipmentAction.Employee = new Employee { Id = "ZZ12345", Name = "OtherEmployee" };
+            service.Actions[1].Employee = new Employee { Id = "ZZ12345", Name = "OtherEmployee" };
 
             // Action:
             service.ImportFromXlsx(ACTIONS, null);
@@ -933,9 +932,9 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         public void ImportFromXlsx_ValidOtherAction_CanAddOtherAction()
         {
             // Arrange:
-            var service = GetImportService();
-            service.AllActions = new[] {
-                new AllActions { OtherAction = GetOtherAction() }
+            var service = GetFakeImportService();
+            service.Actions = new EmployeeActionBase[] {
+                GetOtherAction()
             };
 
             // Action:
@@ -952,11 +951,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
 
         private const string PRODUCTS = "Products";
         private const string EMPLOYEES = "Employees";
-        private const string ACTIONS = "AllActions";
+        private const string ACTIONS = "Actions";
 
         private DbConnection _connection;
 
-        private ImportServiceFake GetImportService ()
+        private FakeImportService GetFakeImportService ()
         {
             _connection = new SqliteConnection( "DataSource=:memory:" );
             _connection.Open();
@@ -967,7 +966,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
 
             var stubITypeRepository = new Mock< ITypeRepository >();
 
-            var importServise = new ImportServiceFake( dbContext, stubITypeRepository.Object );
+            var importServise = new FakeImportService( dbContext, stubITypeRepository.Object );
             return importServise;
         }
 
@@ -981,11 +980,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
                         Employee = new Employee { Id = "AR12345", Name = "Anton" },
                         Operation = new Operation { Name = "Подбор товара" },
                         DoubleAddressDetails = new List< DoubleAddressActionDetail >{ new DoubleAddressActionDetail {
-                            Product = new Product { Id = 0006634, Name = "Test Product", },
+                            Product = new Product { Id = 0006634, Name = "Test Product" },
                             ProductQuantity = 1,
                             SenderAddress = new Address { Letter = "К", Row = 1, Section = 1, Shelf = 1, Box = 1 },
                             ReceiverAddress = new Address { Letter = "У", Row = 1, Section = 1, Shelf = 1, Box = 1 }
-                        },
+                        }
                     }
             };
         }
@@ -1001,11 +1000,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
                         Operation = new Operation { Name = "Сканирование товара" },
 
                         ReceptionActionDetails = new List< ReceptionActionDetail >{ new ReceptionActionDetail {
-                            Product = new Product { Id = 0006634, Name = "Test Product", },
+                            Product = new Product { Id = 0006634, Name = "Test Product" },
                             ProductQuantity = 1,
                             ScanQuantity    = 3,
-                            Address = new Address { Letter = "К", Row = 1, Section = 1, Shelf = 1, Box = 1 },
-                        },
+                            Address = new Address { Letter = "К", Row = 1, Section = 1, Shelf = 1, Box = 1 }
+                        }
                     }
             };
         }
@@ -1021,11 +1020,11 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
                         Operation = new Operation { Name = "Инвентаризация" },
 
                         InventoryActionDetails = new List< InventoryActionDetail >{ new InventoryActionDetail {
-                            Product = new Product { Id = 0006634, Name = "Test Product", },
+                            Product = new Product { Id = 0006634, Name = "Test Product" },
                             ProductQuantity = 1,
                             AccountingQuantity = 1,
-                            Address = new Address { Letter = "К", Row = 1, Section = 1, Shelf = 1, Box = 1 },
-                        },
+                            Address = new Address { Letter = "К", Row = 1, Section = 1, Shelf = 1, Box = 1 }
+                        }
                     }
             };
         }
@@ -1043,7 +1042,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
                         Weight = 1.0f,
                         Volume = 1.0f,
                         ClientCargoQuantity = 1.0f,
-                        CommonCargoQuantity = 1.0f,
+                        CommonCargoQuantity = 1.0f
             };
         }
 
@@ -1055,20 +1054,20 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
                         Duration = TimeSpan.FromSeconds( 34 ),
                         DocumentName = "",
                         Employee = new Employee { Id = "AR12345", Name = "Anton" },
-                        Operation = new Operation { Name = "Прочие операции" },
+                        Operation = new Operation { Name = "Прочие операции" }
             };
         }
 
         /// <summary>
         /// Fake ImportService
         /// </summary>
-        private class ImportServiceFake : ImportService
+        private class FakeImportService : ImportService
         {
-            public ImportServiceFake ( WorkSpeedDbContext dbContext, ITypeRepository typeRepository ) : base( dbContext, typeRepository ) { }
+            public FakeImportService ( WorkSpeedDbContext dbContext, ITypeRepository typeRepository ) : base( dbContext, typeRepository ) { }
 
             public Product[] Products { get; set; }
             public Employee[] Employees { get; set; }
-            public AllActions[] AllActions { get; set; }
+            public EmployeeActionBase[] Actions { get; set; }
 
             protected override IEnumerable< IEntity > GetDataFromFile ( string fileName )
             {
@@ -1078,7 +1077,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
                     case EMPLOYEES:
                         return Employees;
                     case ACTIONS:
-                        return AllActions;
+                        return Actions;
                     default:
                         return new IEntity[0];
                 }
