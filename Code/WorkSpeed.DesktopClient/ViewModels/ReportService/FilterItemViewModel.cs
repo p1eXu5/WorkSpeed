@@ -3,17 +3,17 @@ using Agbm.Wpf.MvvmBaseLibrary;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
-    public class FilterItemViewModel< T > : ViewModel
+    public class FilterItemViewModel : ViewModel
     {
         private bool _isChecked;
 
-        public FilterItemViewModel ( T entity, Func< T,string > caption )
+        public FilterItemViewModel ( object entity, Func< object,string > caption )
         {
             Entity = entity;
             Caption = caption.Invoke( entity );
         }
 
-        public T Entity { get; }
+        public object Entity { get; }
         public string Caption { get; }
 
         public bool IsChecked

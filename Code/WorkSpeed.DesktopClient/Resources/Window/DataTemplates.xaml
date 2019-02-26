@@ -1,21 +1,16 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:reportService="clr-namespace:WorkSpeed.DesktopClient.ViewModels.ReportService">
-    
-    <DataTemplate DataType="{x:Type reportService:FilterItemViewModel}">
+                    xmlns:rs="clr-namespace:WorkSpeed.DesktopClient.ViewModels.ReportService">
+
+    <DataTemplate DataType="{x:Type rs:FilterItemViewModel}">
         <CheckBox Height="22" 
-                  Content="{Binding Name}"
+                  Content="{Binding Caption}"
                   IsChecked="{Binding IsChecked}"
-                  Command="{Binding FilterCommand}"
                   />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type reportService:FilterElementViewModel}">
-        <ListBox ItemsSource="{Binding FilterItemVm}" />
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type reportService:EntityFilterViewModel}">
-        <ListBox ItemsSource="{Binding FilterElementVmCollection}" />
+    <DataTemplate DataType="{x:Type rs:EntityFilterViewModel}">
+        <ListBox ItemsSource="{Binding FilterItemVmCollection}" />
     </DataTemplate>
 
 </ResourceDictionary>

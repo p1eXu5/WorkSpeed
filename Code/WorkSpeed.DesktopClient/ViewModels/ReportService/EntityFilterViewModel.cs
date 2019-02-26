@@ -10,51 +10,58 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
-    public class EntityFilterViewModel< T > : ViewModel, IEntityObservableCollection< T >
+    public class EntityFilterViewModel : ViewModel, IEntityObservableCollection< object >
     {
-        private static readonly Func< T, string> TRUE_CAPTION;
-        private readonly ObservableCollection< T > _entities;
+        private static readonly Func< object, string> TRUE_CAPTION;
+        private readonly ObservableCollection< object > _entities;
 
         static EntityFilterViewModel ()
         {
             TRUE_CAPTION = b => "Да";
         }
 
-        public EntityFilterViewModel ( string header, IEnumerable< T > entities, Func< T, string> caption )
+        private EntityFilterViewModel ()
         {
-            if ( typeof( T ).IsAssignableFrom( typeof( bool ) ) ) {
+            _entities = new ObservableCollection< object >();
+            Entities = new ReadOnlyObservableCollection< object >( _entities );
+        }
 
-                var boolItem = new FilterItemViewModel< T >( entities.First(), TRUE_CAPTION );
-                boolItem.PropertyChanged += OnFilterItemPropertyChanged;
-                FilterItemVmCollection = new ObservableCollection< FilterItemViewModel< T > >( new [] { boolItem });
-            }
-            else {
-                FilterItemVmCollection = new ObservableCollection< FilterItemViewModel< T > >( entities.Select(
+        public EntityFilterViewModel ( string header, bool isCheckedValue )
+            : this()
+        {
+            var boolItem = new FilterItemViewModel( isCheckedValue, TRUE_CAPTION );
+            boolItem.PropertyChanged += OnFilterItemPropertyChanged;
+            FilterItemVmCollection = new ObservableCollection< FilterItemViewModel >( new [] { boolItem });
+        }
+
+        public EntityFilterViewModel ( string header, IEnumerable< object > entities, Func< object, string> captionFunc )
+            : this()
+        {
+            if (entities == null) throw new ArgumentNullException(nameof(entities), @"entities cannot be null.");
+            if (captionFunc == null) throw new ArgumentNullException(nameof(captionFunc), @"captionFunc cannot be null.");
+
+            FilterItemVmCollection = new ObservableCollection< FilterItemViewModel >( 
+                entities.Select(
                     e => {
-                        var item = new FilterItemViewModel< T >( e, caption );
+                        var item = new FilterItemViewModel( e, captionFunc );
                         item.PropertyChanged += OnFilterItemPropertyChanged;
                         return item;
                     } ) 
-                );
-            }
-
-            _entities = new ObservableCollection< T >();
-            Entities = new ReadOnlyObservableCollection< T >( _entities );
+            );
         }
 
-        public ReadOnlyObservableCollection< T > Entities { get; set; }
-
-        public ObservableCollection< FilterItemViewModel< T > > FilterItemVmCollection  { get; private set; }
+        public ReadOnlyObservableCollection< object > Entities { get; set; }
+        public ObservableCollection< FilterItemViewModel > FilterItemVmCollection  { get; private set; }
 
         private void OnFilterItemPropertyChanged ( object sender, PropertyChangedEventArgs args )
         {
-            if ( !args.PropertyName.Equals( nameof( FilterItemViewModel<T>.IsChecked ) ) ) {  return; }
+            if ( !args.PropertyName.Equals( nameof( FilterItemViewModel.IsChecked ) ) ) {  return; }
 
-            if ( (( FilterItemViewModel< T > )sender).IsChecked) {
-                _entities.Add( (( FilterItemViewModel< T > )sender).Entity );
+            if ( (( FilterItemViewModel )sender).IsChecked) {
+                _entities.Add( (( FilterItemViewModel )sender).Entity );
             }
             else {
-                _entities.Remove( (( FilterItemViewModel< T > )sender).Entity );
+                _entities.Remove( (( FilterItemViewModel )sender).Entity );
             }
         }
     }

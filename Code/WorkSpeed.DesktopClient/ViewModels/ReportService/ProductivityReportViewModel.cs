@@ -107,7 +107,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         private void ExtendFilters ()
         {
-            var filter = new EntityFilterViewModel< object >( "Операции", _reportService.OperationCollection, p => (( Operation )p).Name );
+            var filter = new EntityFilterViewModel( "Операции", _reportService.OperationCollection, p => (( Operation )p).Name );
             _filterVmCollection.Add( filter );
 
             ((INotifyCollectionChanged)_filterVmCollection[ OPERATION ].Entities).CollectionChanged += OnPredicateChange;

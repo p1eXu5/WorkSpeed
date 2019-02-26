@@ -31,7 +31,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         protected const int COUNT = 5;
 
 
-        protected readonly ObservableCollection< EntityFilterViewModel< object > > _filterVmCollection;
+        protected readonly ObservableCollection< EntityFilterViewModel > _filterVmCollection;
 
         protected readonly IReportService _reportService;
         protected readonly IDialogRepository _dialogRepository;
@@ -51,7 +51,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
             CreateCommonCollections();
             _filterVmCollection = GetFilterCollection();
-            FilterVmCollection = new ReadOnlyObservableCollection< EntityFilterViewModel< object > >( _filterVmCollection );
+            FilterVmCollection = new ReadOnlyObservableCollection< EntityFilterViewModel >( _filterVmCollection );
         }
 
 
@@ -86,7 +86,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         public ReadOnlyObservableCollection< ShiftViewModel > ShiftVmCollection { get; private set; }
         public ReadOnlyObservableCollection< ShortBreakScheduleViewModel > ShortBreakVmCollection { get; private set; }
 
-        public ReadOnlyObservableCollection< EntityFilterViewModel< object > > FilterVmCollection { get; }
+        public ReadOnlyObservableCollection< EntityFilterViewModel > FilterVmCollection { get; }
 
         public string ReportMessage
         {
@@ -101,15 +101,15 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         
 
-        protected ObservableCollection< EntityFilterViewModel< object > > GetFilterCollection ()
+        protected ObservableCollection< EntityFilterViewModel > GetFilterCollection ()
         {
-            var coll = new ObservableCollection< EntityFilterViewModel< object > >( new[] {
-                new EntityFilterViewModel< object >( "Работает", new[] { ( object )true, ( object )false }, b => "да" ),
-                new EntityFilterViewModel< object >( "Зоны ответственности", PositionVmCollection, p => (( PositionViewModel )p).Name ),
-                new EntityFilterViewModel< object >( "Должности", AppointmentVmCollection, a => (( AppointmentViewModel )a).InnerName ),
-                new EntityFilterViewModel< object >( "Смены", ShiftVmCollection, s => (( ShiftViewModel )s).Name ),
-                new EntityFilterViewModel< object >( "Ранги", RankVmCollection, r => (( RankViewModel )r).Number.ToString( CultureInfo.InvariantCulture ) ),
-                new EntityFilterViewModel< object >( "Работает", new[] { ( object )true, ( object )false }, b => "да" ),
+            var coll = new ObservableCollection< EntityFilterViewModel>( new[] {
+                new EntityFilterViewModel( "Работает", true ),
+                new EntityFilterViewModel( "Зоны ответственности", PositionVmCollection, p => (( PositionViewModel )p).Name ),
+                new EntityFilterViewModel( "Должности", AppointmentVmCollection, a => (( AppointmentViewModel )a).InnerName ),
+                new EntityFilterViewModel( "Смены", ShiftVmCollection, s => (( ShiftViewModel )s).Name ),
+                new EntityFilterViewModel( "Ранги", RankVmCollection, r => (( RankViewModel )r).Number.ToString( CultureInfo.InvariantCulture ) ),
+                new EntityFilterViewModel( "Работает", true ),
             });
 
             ((INotifyCollectionChanged)coll[ IS_ACTIVE ].Entities).CollectionChanged += OnPredicateChange;

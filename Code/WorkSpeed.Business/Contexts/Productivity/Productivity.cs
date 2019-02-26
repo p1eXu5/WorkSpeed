@@ -33,7 +33,6 @@ namespace WorkSpeed.Business.Contexts.Productivity
             return _actions.Values.Aggregate( TimeSpan.Zero, (acc, next) => acc + next.Duration );
         }
 
-
         public double GetLinesPerHour ()
         {
             throw new NotImplementedException();
@@ -44,35 +43,36 @@ namespace WorkSpeed.Business.Contexts.Productivity
             throw new NotImplementedException();
         }
 
-        public IEnumerable< (int, Category) > GetLines ( IEnumerable< Category > categories )
+        public double GetTotalVolume ()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable< (int, Category) > GetScans ( IEnumerable< Category > categories )
+        public (double client, double nonClient) GetCargoQuantity ()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable< int > GetQuantity ()
+        public IEnumerable< (int count, Category category) > GetLines ( IEnumerable< Category > categories )
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable< double > GetVolumes ()
+        public IEnumerable< (int count, Category category) > GetScans ( IEnumerable< Category > categories )
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable< double > GetWeigths ()
+        public IEnumerable< (int count, Category category) > GetQuantity ( IEnumerable< Category > categories )
         {
             throw new NotImplementedException();
         }
 
-        public TimeSpan GetTotalTime ()
+        public IEnumerable< (double count, Category category) > GetVolumes ( IEnumerable< Category > categories )
         {
             throw new NotImplementedException();
         }
+
 
         public IEnumerator< Period > GetEnumerator ()
         {

@@ -34,9 +34,6 @@
       <HashCode>IAABAoAEQAAIAIABAAAbACAoIEAAAAAAAABABIwAAAA=</HashCode>
       <FileName>ViewModels\ReportService\ReportViewModel.cs</FileName>
     </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="FilterVmCollection" />
-    </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.EmployeeReportViewModel">
@@ -134,7 +131,7 @@
       <FileName>ViewModels\Entities\OperationViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.EntityFilterViewModel&lt;T&gt;">
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.EntityFilterViewModel">
     <Position X="12.25" Y="2.25" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAIAAAAAAAAAAAAAAAAACAAAAEAAABAAgA=</HashCode>
