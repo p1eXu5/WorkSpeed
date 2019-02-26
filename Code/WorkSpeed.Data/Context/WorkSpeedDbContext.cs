@@ -31,8 +31,9 @@ namespace WorkSpeed.Data.Context
                         .ApplyConfiguration( new RankConfiguration() )
                         .ApplyConfiguration( new AppointmentConfiguration() )
                         .ApplyConfiguration( new ShiftConfiguration() )
-                        .ApplyConfiguration( new ShortBreakScheduleConfiguration() )
-                        .ApplyConfiguration( new AvatarConfiguration() )
+                        .ApplyConfiguration( new ShortBreakScheduleConfiguration() );
+
+            modelBuilder.ApplyConfiguration( new AvatarConfiguration() )
                         .ApplyConfiguration( new EmployeeConfiguration() );
 
             modelBuilder.ApplyConfiguration( new ProductConfiguration() )
