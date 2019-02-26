@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WorkSpeed.DesktopClient.Views.UserControls
+namespace WorkSpeed.DesktopClient.Views.Templates
 {
     /// <summary>
-    /// Interaction logic for ProductivityReportVm.xaml
+    /// Interaction logic for EmployeeProductivityView.xaml
     /// </summary>
-    public partial class ProductivityReportViewModel : UserControl
+    public partial class EmployeeProductivityView : Grid
     {
-        public ProductivityReportViewModel()
+        public EmployeeProductivityView()
         {
             InitializeComponent();
         }

@@ -3,26 +3,14 @@
                     >
     
     <!-- MainWindow -->
-    <Color x:Key="col_MainWindow.Background">#f2f2f4</Color>
-    <Color x:Key="col_MainWindow.BackgroundAlternative">#294966</Color>
-
-    <Color x:Key="col_MainWindow.Foreground">#a2bddb</Color>
-    <Color x:Key="col_MainWindow.ForegroundAlternative">#1780ac</Color>
-    <Color x:Key="col_MainWindow.ForegroundLight">#c6cdda</Color>
-
-    <SolidColorBrush x:Key="br_MainWindow.BackgroundAlternative" Color="{StaticResource col_MainWindow.BackgroundAlternative}" />
-    <SolidColorBrush x:Key="br_MainWindow.Foreground" Color="{StaticResource col_MainWindow.Foreground}" />
-    <SolidColorBrush x:Key="br_MainWindow.ForegroundAlternative" Color="{StaticResource col_MainWindow.ForegroundAlternative}" />
-
-    <SolidColorBrush x:Key="brd_MainWindow.ForegroundAlternative" Color="{DynamicResource col_MainWindow.ForegroundAlternative}" />
-
-
-
 
     <Color x:Key="col_Window.Background">#ebebeb</Color>
+    <Color x:Key="col_Window.BackgroundAlternative">#979797</Color>
     <Color x:Key="col_Window.Border">#6e6e6e</Color>
     <Color x:Key="col_Window.BorderAlternative">#3b3b3b</Color>
+
     <Color x:Key="col_Window.Foreground">#111111</Color>
+    <Color x:Key="col_Window.ForegroundAlternative">#3d3d3d</Color>
 
     <Color x:Key="col_Window.GlowLight.Top">#d9d9d9</Color>
     <Color x:Key="col_Window.GlowLight.Bottom">#ffffff</Color>
@@ -37,8 +25,11 @@
     <Color x:Key="col_Button.Pressed.Background">#4a8fff</Color>
 
     <SolidColorBrush x:Key="br_Window.Background" Color="{StaticResource col_Window.Background}" />
+    <SolidColorBrush x:Key="br_Window.BackgroundAlternative" Color="{StaticResource col_Window.BackgroundAlternative}" />
     <SolidColorBrush x:Key="br_Window.Border" Color="{DynamicResource col_Window.Border }" />
     <SolidColorBrush x:Key="br_Window.Foreground" Color="{DynamicResource col_Window.Foreground }" />
+    <SolidColorBrush x:Key="br_Window.ForegroundAlternative" Color="{DynamicResource col_Window.ForegroundAlternative }" />
+
     <SolidColorBrush x:Key="br_Control.Background" Color="{DynamicResource col_Control.Background }" />
     <SolidColorBrush x:Key="br_Control.BackgroundAlternative" Color="{DynamicResource col_Control.BackgroundAlternative }" />
     <SolidColorBrush x:Key="br_Control.Foreground" Color="{DynamicResource col_Control.Foreground }" />

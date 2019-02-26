@@ -17,6 +17,7 @@ namespace WorkSpeed.Data.Context.Configurations
             builder.Property( r => r.OneHourCost ).HasColumnType( "decimal" );
 
             builder.HasData( new Rank[] {
+                new Rank { Number = 1, OneHourCost = 0.01m },
                 new Rank { Number = 2, OneHourCost = 163m },
                 new Rank { Number = 3, OneHourCost = 180m },
                 new Rank { Number = 4, OneHourCost = 200m },

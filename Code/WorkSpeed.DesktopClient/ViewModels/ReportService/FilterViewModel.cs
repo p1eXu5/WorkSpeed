@@ -10,32 +10,36 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
-    public class EntityFilterViewModel : ViewModel, IEntityObservableCollection< object >
+    public class FilterViewModel : ViewModel, IEntityObservableCollection< object >
     {
         private static readonly Func< object, string> TRUE_CAPTION;
         private readonly ObservableCollection< object > _entities;
 
-        static EntityFilterViewModel ()
+        #region Ctor
+
+        static FilterViewModel ()
         {
             TRUE_CAPTION = b => "Да";
         }
 
-        private EntityFilterViewModel ()
+        private FilterViewModel ( string header )
         {
+            Header = header;
+
             _entities = new ObservableCollection< object >();
             Entities = new ReadOnlyObservableCollection< object >( _entities );
         }
 
-        public EntityFilterViewModel ( string header, bool isCheckedValue )
-            : this()
+        public FilterViewModel ( string header, bool isCheckedValue )
+            : this( header )
         {
             var boolItem = new FilterItemViewModel( isCheckedValue, TRUE_CAPTION );
             boolItem.PropertyChanged += OnFilterItemPropertyChanged;
             FilterItemVmCollection = new ObservableCollection< FilterItemViewModel >( new [] { boolItem });
         }
 
-        public EntityFilterViewModel ( string header, IEnumerable< object > entities, Func< object, string> captionFunc )
-            : this()
+        public FilterViewModel ( string header, IEnumerable< object > entities, Func< object, string> captionFunc )
+            : this( header )
         {
             if (entities == null) throw new ArgumentNullException(nameof(entities), @"entities cannot be null.");
             if (captionFunc == null) throw new ArgumentNullException(nameof(captionFunc), @"captionFunc cannot be null.");
@@ -50,8 +54,20 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             );
         }
 
+        #endregion
+
+
+        #region Properties
+
+        public string Header { get; }
+
         public ReadOnlyObservableCollection< object > Entities { get; set; }
         public ObservableCollection< FilterItemViewModel > FilterItemVmCollection  { get; private set; }
+
+        #endregion
+
+
+        #region Methods
 
         private void OnFilterItemPropertyChanged ( object sender, PropertyChangedEventArgs args )
         {
@@ -64,5 +80,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                 _entities.Remove( (( FilterItemViewModel )sender).Entity );
             }
         }
+
+        #endregion
     }
 }

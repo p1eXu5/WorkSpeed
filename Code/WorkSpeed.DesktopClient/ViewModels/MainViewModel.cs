@@ -23,6 +23,8 @@ namespace WorkSpeed.DesktopClient.ViewModels
 {
     public class MainViewModel : ViewModel
     {
+        #region Fields
+
         private readonly IImportService _importService;
         private readonly IDialogRepository _dialogRepository;
 
@@ -33,8 +35,14 @@ namespace WorkSpeed.DesktopClient.ViewModels
         private int? _importPercentage;
         private string _importStatusMessage;
         
-        private int _selectedTab;
+        private int _selectedIndex;
 
+        private ReadOnlyObservableCollection< FilterViewModel > _filterVmCollection;
+
+        #endregion
+
+
+        #region Ctor
 
         public MainViewModel ( IImportService importService, IReportService reportService, IDialogRepository dialogRepository )
         {
@@ -43,29 +51,39 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
            _progress = new Progress< (int code, string message) >( t => ProgressReport( t.code, t.message ) );
 
-            EmployeeReportViewModel = new EmployeeReportViewModel( reportService, dialogRepository );
-            ProductivityReportViewModel = new ProductivityReportViewModel( reportService, dialogRepository );
+            EmployeeReportVm = new EmployeeReportViewModel( reportService, dialogRepository );
+            ProductivityReportVm = new ProductivityReportViewModel( reportService, dialogRepository );
 
-            _selectedTab = (int)Tabs.EmployeeEditor;
+            SelectedIndex = (int)Tabs.EmployeeEditor;
+            EmployeeReportVm.OnSelectedAsync();
+            FilterVmCollection = EmployeeReportVm.FilterVmCollection;
         }
 
-
-        public IReportViewModel EmployeeReportViewModel { get; }
-        public IReportViewModel ProductivityReportViewModel { get; }
+        #endregion
 
 
-        public ICommand ImportAsyncCommand => new MvvmCommand( Import );
-        public ICommand TabItemChangedCommand => new MvvmCommand( TabItemChanged );
+        #region Properties
 
-
-        public string ImportStatusMessage
+        public int SelectedIndex
         {
-            get => _importStatusMessage;
+            get => _selectedIndex;
             set {
-                _importStatusMessage = value;
+                _selectedIndex = value;
                 OnPropertyChanged();
             }
         }
+
+        public ReadOnlyObservableCollection< FilterViewModel > FilterVmCollection
+        {
+            get => _filterVmCollection;
+            set {
+                _filterVmCollection = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public EmployeeReportViewModel EmployeeReportVm { get; }
+        public ProductivityReportViewModel ProductivityReportVm { get; }
 
         public bool IsImporting
         {
@@ -85,6 +103,27 @@ namespace WorkSpeed.DesktopClient.ViewModels
             }
         }
 
+        #endregion
+
+
+        #region Commands
+
+        public ICommand ImportAsyncCommand => new MvvmCommand( Import );
+        public ICommand TabItemChangedCommand => new MvvmCommand( TabItemChanged );
+
+        public string ImportStatusMessage
+        {
+            get => _importStatusMessage;
+            set {
+                _importStatusMessage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+
+        #region Methods
 
         private async void Import ( object obj )
         {
@@ -101,6 +140,10 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
                 var token = _cancellationTokenSource.Token;
                 await _importService.ImportFromXlsxAsync( ofd.FileName, _progress, token );
+
+                ImportStatusMessage = "Обновление данных.";
+                await EmployeeReportVm.OnSelectedAsync();
+                await ProductivityReportVm.OnSelectedAsync();
 
                 IsImporting = false;
             }
@@ -129,19 +172,27 @@ namespace WorkSpeed.DesktopClient.ViewModels
         private void TabItemChanged ( object obj )
         {
             int selected = (int)obj;
-            if ( selected == _selectedTab ) return;
+            if ( selected == _selectedIndex ) return;
 
-            _selectedTab = selected;
+            _selectedIndex = selected;
 
-            if ( selected == 1 ) {
-                EmployeeReportViewModel.OnSelectedAsync();
+            if ( selected == (int)Tabs.EmployeeEditor ) {
+                EmployeeReportVm.OnSelectedAsync();
+                FilterVmCollection = EmployeeReportVm.FilterVmCollection;
+            }
+            else if ( selected == ( int )Tabs.ProductivityReport ) {
+                ProductivityReportVm.OnSelectedAsync();
+                FilterVmCollection = ProductivityReportVm.FilterVmCollection;
             }
         }
 
+        #endregion
+
+
         private enum Tabs
         {
-            EmployeeEditor = 0,
-            ProductivityReport,
+            ProductivityReport = 0,
+            EmployeeEditor = 1,
         }
     }
 }

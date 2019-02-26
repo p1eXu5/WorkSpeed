@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Agbm.Wpf.MvvmBaseLibrary;
 using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Business.Contexts.Productivity;
@@ -25,6 +26,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         public ProductivityReportViewModel ( IReportService reportService, IDialogRepository dialogRepository )
             : base( reportService, dialogRepository )
         {
+            ExtendFilters();
             var operationVmCollection = new ObservableCollection< OperationViewModel >( _reportService.OperationCollection.Select( o => new OperationViewModel( o ) ));
             OperationVmCollection = new ReadOnlyObservableCollection< OperationViewModel >( operationVmCollection );
             Observe( _reportService.OperationCollection, operationVmCollection, o => o.Operation );
@@ -35,11 +37,9 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             view.SortDescriptions.Add( new SortDescription( "PositionId", ListSortDirection.Ascending ) );
             view.SortDescriptions.Add( new SortDescription( "AppointmentId", ListSortDirection.Ascending ) );
             view.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
-            
-            ExtendFilters();
-        }
 
-        private void CreateEmployeeProductivityVmCollection ()
+            
+            void CreateEmployeeProductivityVmCollection ()
         {
             _employeeProductivityVmCollection = new ObservableCollection< EmployeeProductivityViewModel >(
                 _reportService.EmployeeProductivityCollections.Select(
@@ -72,6 +72,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                     }
                 };
         }
+        }
 
         #endregion
 
@@ -95,7 +96,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         #region Methods
 
-        public override void OnSelectedAsync ()
+        public override Task OnSelectedAsync ()
         {
             throw new NotImplementedException();
         }
@@ -107,7 +108,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         private void ExtendFilters ()
         {
-            var filter = new EntityFilterViewModel( "Операции", _reportService.OperationCollection, p => (( Operation )p).Name );
+            var filter = new FilterViewModel( "Операции", _reportService.OperationCollection, p => (( Operation )p).Name );
             _filterVmCollection.Add( filter );
 
             ((INotifyCollectionChanged)_filterVmCollection[ OPERATION ].Entities).CollectionChanged += OnPredicateChange;
@@ -122,7 +123,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         private bool OperationPredicate ( object o )
         {
-            if (!(o is OperationViewModel operation)) return false;
+            if ( !(o is OperationViewModel operation) ) return false;
             return _filterVmCollection[ OPERATION ].Entities.Any( obj => (obj as Operation) == operation.Operation);
         }
 

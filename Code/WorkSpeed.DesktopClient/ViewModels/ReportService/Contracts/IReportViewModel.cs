@@ -8,6 +8,5 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
     public interface IReportViewModel
     {
-        void OnSelectedAsync ();
     }
 }

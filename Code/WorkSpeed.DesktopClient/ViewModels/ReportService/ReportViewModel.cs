@@ -1,26 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Data;
 using Agbm.Wpf.MvvmBaseLibrary;
 using WorkSpeed.Business.Contexts.Contracts;
-using WorkSpeed.Business.Contexts.Productivity;
-using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.Entities;
-using WorkSpeed.DesktopClient.ViewModels.Grouping;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
     public abstract class ReportViewModel : FilteredViewModel, IReportViewModel
     {
+        #region Fields
         protected const int IS_ACTIVE = 0;
         protected const int POSITION = 1;
         protected const int APPOINTMENT = 2;
@@ -28,18 +22,16 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         protected const int RANK = 4;
         protected const int IS_SMOKER = 5;
 
-        protected const int COUNT = 5;
-
-
-        protected readonly ObservableCollection< EntityFilterViewModel > _filterVmCollection;
+        protected readonly ObservableCollection< FilterViewModel > _filterVmCollection;
 
         protected readonly IReportService _reportService;
         protected readonly IDialogRepository _dialogRepository;
 
         protected CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
-
         private string _reportMessage;
+
+        #endregion
 
 
         #region Ctor
@@ -51,11 +43,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
             CreateCommonCollections();
             _filterVmCollection = GetFilterCollection();
-            FilterVmCollection = new ReadOnlyObservableCollection< EntityFilterViewModel >( _filterVmCollection );
-        }
+            FilterVmCollection = new ReadOnlyObservableCollection< FilterViewModel >( _filterVmCollection );
 
 
-        private void CreateCommonCollections ()
+            void CreateCommonCollections ()
         {
             var appointmentVmCollection = new ObservableCollection< AppointmentViewModel >( _reportService.AppointmentCollection.Select( a => new AppointmentViewModel( a ) ) );
             AppointmentVmCollection = new ReadOnlyObservableCollection< AppointmentViewModel >( appointmentVmCollection );
@@ -77,16 +68,12 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             ShortBreakVmCollection = new ReadOnlyObservableCollection< ShortBreakScheduleViewModel >( shortBreakCollection );
             Observe( _reportService.ShortBreakCollection, shortBreakCollection, sbs => sbs.ShortBreakSchedule );
         }
+        }
 
         #endregion
 
-        public ReadOnlyObservableCollection< AppointmentViewModel > AppointmentVmCollection { get; private set; }
-        public ReadOnlyObservableCollection< PositionViewModel > PositionVmCollection { get; private set; }
-        public ReadOnlyObservableCollection< RankViewModel > RankVmCollection { get; private set; }
-        public ReadOnlyObservableCollection< ShiftViewModel > ShiftVmCollection { get; private set; }
-        public ReadOnlyObservableCollection< ShortBreakScheduleViewModel > ShortBreakVmCollection { get; private set; }
 
-        public ReadOnlyObservableCollection< EntityFilterViewModel > FilterVmCollection { get; }
+        #region Properties
 
         public string ReportMessage
         {
@@ -96,20 +83,31 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                 OnPropertyChanged();
             }
         }
-
-        public abstract void OnSelectedAsync ();
-
         
+        public ReadOnlyObservableCollection< FilterViewModel > FilterVmCollection { get; }
+        
+        public ReadOnlyObservableCollection< AppointmentViewModel > AppointmentVmCollection { get; private set; }
+        public ReadOnlyObservableCollection< PositionViewModel > PositionVmCollection { get; private set; }
+        public ReadOnlyObservableCollection< RankViewModel > RankVmCollection { get; private set; }
+        public ReadOnlyObservableCollection< ShiftViewModel > ShiftVmCollection { get; private set; }
+        public ReadOnlyObservableCollection< ShortBreakScheduleViewModel > ShortBreakVmCollection { get; private set; }
 
-        protected ObservableCollection< EntityFilterViewModel > GetFilterCollection ()
+        #endregion
+
+
+        #region Methods
+
+        public abstract Task OnSelectedAsync ();
+
+        protected ObservableCollection< FilterViewModel > GetFilterCollection ()
         {
-            var coll = new ObservableCollection< EntityFilterViewModel>( new[] {
-                new EntityFilterViewModel( "Работает", true ),
-                new EntityFilterViewModel( "Зоны ответственности", PositionVmCollection, p => (( PositionViewModel )p).Name ),
-                new EntityFilterViewModel( "Должности", AppointmentVmCollection, a => (( AppointmentViewModel )a).InnerName ),
-                new EntityFilterViewModel( "Смены", ShiftVmCollection, s => (( ShiftViewModel )s).Name ),
-                new EntityFilterViewModel( "Ранги", RankVmCollection, r => (( RankViewModel )r).Number.ToString( CultureInfo.InvariantCulture ) ),
-                new EntityFilterViewModel( "Работает", true ),
+            var coll = new ObservableCollection< FilterViewModel>( new[] {
+                new FilterViewModel( "Работает", true ),
+                new FilterViewModel( "Зоны ответственности", PositionVmCollection, p => (( PositionViewModel )p).Name ),
+                new FilterViewModel( "Должности", AppointmentVmCollection, a => (( AppointmentViewModel )a).InnerName ),
+                new FilterViewModel( "Смены", ShiftVmCollection, s => (( ShiftViewModel )s).Name ),
+                new FilterViewModel( "Ранги", RankVmCollection, r => (( RankViewModel )r).Number.ToString( CultureInfo.InvariantCulture ) ),
+                new FilterViewModel( "Курит", true ),
             });
 
             ((INotifyCollectionChanged)coll[ IS_ACTIVE ].Entities).CollectionChanged += OnPredicateChange;
@@ -139,5 +137,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                    && _filterVmCollection[RANK].Entities.Any(obj => (obj as RankViewModel).Number == employee.Rank.Number)
                    && _filterVmCollection[IS_SMOKER].Entities.Any(obj => (obj is bool) == employee.IsSmoker);
         }
+
+        #endregion
     }
 }

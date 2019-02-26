@@ -82,7 +82,7 @@
     <Compile Include="ViewModels\Entities\AppointmentViewModel.cs" />
     <Compile Include="ViewModels\ReportService\FilteredViewModel.cs" />
     <Compile Include="ViewModels\ReportService\FilterItemViewModel.cs" />
-    <Compile Include="ViewModels\ReportService\EntityFilterViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\FilterViewModel.cs" />
     <Compile Include="ViewModels\ReportService\Contracts\IFilteredViewModel.cs" />
     <Compile Include="ViewModels\ReportService\Contracts\IEntityObservableCollection.cs" />
     <Compile Include="ViewModels\ReportService\Contracts\IReportViewModel.cs" />
@@ -118,10 +118,10 @@
     <Compile Include="Views\Dialogs\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Entities\EmployeeView.xaml.cs">
+    <Compile Include="Views\Templates\EmployeeView.xaml.cs">
       <DependentUpon>EmployeeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Productivity\EmployeeProductivityView.xaml.cs">
+    <Compile Include="Views\Templates\EmployeeProductivityView.xaml.cs">
       <DependentUpon>EmployeeProductivityView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Productivity\OperationHeaderView.xaml.cs">
@@ -135,6 +135,9 @@
     </Compile>
     <Compile Include="Views\Teeemp.xaml.cs">
       <DependentUpon>Teeemp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Templates\FilterSectionView.xaml.cs">
+      <DependentUpon>FilterSectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\EmployeeReportUserControl.xaml.cs">
       <DependentUpon>EmployeeReportUserControl.xaml</DependentUpon>
@@ -166,11 +169,11 @@
     <Compile Include="Views\UserControls\ShiftSetup.xaml.cs">
       <DependentUpon>ShiftSetup.xaml</DependentUpon>
     </Compile>
-    <Page Include="Resources\ButtonStyles.xaml">
+    <Page Include="Resources\Styles\FastButtonStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\CheckBoxStyle.xaml">
+    <Page Include="Resources\Styles\CheckBoxStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -178,35 +181,39 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\ListBoxStyles.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Window\DataTemplates.xaml">
+    <Page Include="Resources\Styles\GroupBoxStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Window\ProductivityDataTemplates.xaml">
+    <Page Include="Resources\Styles\ListBoxStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\ToggleButtonStyles.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Window\ComboBoxAnimations.xaml">
+    <Page Include="Resources\Templates\FilterDataTemplates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Window\ComboBoxStyles.xaml">
+    <Page Include="Resources\Templates\ProductivityDataTemplates.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\DataGridStyles.xaml">
+    <Page Include="Resources\Styles\ToggleButtonStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\ComboBoxAnimations.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\DataTemplates.xaml">
+    <Page Include="Resources\Styles\ComboBoxStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\DataGridStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Templates\FastDataTemplates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -218,35 +225,35 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Window\EmployeeReportDataTemplates.xaml">
+    <Page Include="Resources\Templates\EmployeeReportDataTemplates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Window\HeaderContentControlStyles.xaml">
+    <Page Include="Resources\Styles\HeaderContentControlStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Window\Images.xaml">
+    <Page Include="Resources\Images.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Window\ButtonStyles.xaml">
+    <Page Include="Resources\Styles\ButtonStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Window\Common.xaml">
+    <Page Include="Resources\Styles\MiscStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Window\NumericComboBoxStyles.xaml">
+    <Page Include="Resources\Styles\NumericComboBoxStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Window\TabControlStyles.xaml">
+    <Page Include="Resources\Styles\TabControlStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Entities\EmployeeView.xaml">
+    <Page Include="Views\Templates\EmployeeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -254,7 +261,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Productivity\EmployeeProductivityView.xaml">
+    <Page Include="Views\Templates\EmployeeProductivityView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -271,6 +278,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Teeemp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Templates\FilterSectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

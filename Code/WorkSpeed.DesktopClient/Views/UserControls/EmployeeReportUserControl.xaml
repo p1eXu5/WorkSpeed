@@ -3,10 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WorkSpeed.DesktopClient.Views.UserControls"
+             xmlns:local="clr-namespace:WorkSpeed.DesktopClient.ViewModels.ReportService"
              xmlns:conv="clr-namespace:WorkSpeed.DesktopClient.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance local:EmployeeReportViewModel}"
              >
     <UserControl.Resources>
         <conv:TabControlHeightConverter x:Key="conv_TabControlConverter" />
@@ -22,7 +23,7 @@
         </Grid.Height>
 
         <ScrollViewer HorizontalScrollBarVisibility="Visible">
-            <ListBox ItemsSource="{Binding ShiftGroupingVms}"
+            <ListBox ItemsSource="{Binding ShiftGroupingVmCollection}"
                      Height="Auto" Width="Auto" 
                      HorizontalAlignment="Left" VerticalAlignment="Top"
                      Background="{x:Null}"
@@ -68,9 +69,19 @@
                 <GroupBox Height="100" Width="200" />-->
             </ListBox>
         </ScrollViewer>
-        <TextBlock Text="{Binding EmployeesStatusMessage}" 
+        <TextBlock Text="{Binding ReportMessage}" 
                    VerticalAlignment="Center" HorizontalAlignment="Center"
                    Foreground="{StaticResource br_Window.Foreground}"
-                   />
+                   >
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ShiftGroupingVmCollection.Count}" Value="0" >
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
     </Grid>
 </UserControl>

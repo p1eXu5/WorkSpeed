@@ -31,7 +31,7 @@
   <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.ReportViewModel">
     <Position X="7.5" Y="2.25" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>IAABAoAEQAAIAIABAAAbACAoIEAAAAAAAABABIwAAAA=</HashCode>
+      <HashCode>AAABAoAEQAAIAIABAAAbACAoIAAAAAAAAABABIwAAAA=</HashCode>
       <FileName>ViewModels\ReportService\ReportViewModel.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -49,12 +49,12 @@
   <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.ProductivityReportViewModel">
     <Position X="9" Y="9.75" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>IAAAAEAAAEBCQAABAACAAAAAAAAAAABAAAAAAQgAQAI=</HashCode>
+      <HashCode>IAAAAEAAAEBCQAABAACAAAAAAAAAAABAAAAAAQgAAAI=</HashCode>
       <FileName>ViewModels\ReportService\ProductivityReportViewModel.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
-      <Property Name="EmployeeProductivityVmCollection" />
       <Property Name="OperationVmCollection" />
+      <Property Name="EmployeeProductivityVmCollection" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="WorkSpeed.DesktopClient.ViewModels.Grouping.AppointmentGroupingViewModel">
@@ -131,11 +131,11 @@
       <FileName>ViewModels\Entities\OperationViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.EntityFilterViewModel">
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.FilterViewModel">
     <Position X="12.25" Y="2.25" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAIAAAAAAAAAAAAAAAAACAAAAEAAABAAgA=</HashCode>
-      <FileName>ViewModels\ReportService\EntityFilterViewModel.cs</FileName>
+      <HashCode>BAAAAAAAAAAIAAAAAAAAAAAAAAAAACAAAAEAAABAAgA=</HashCode>
+      <FileName>ViewModels\ReportService\FilterViewModel.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>

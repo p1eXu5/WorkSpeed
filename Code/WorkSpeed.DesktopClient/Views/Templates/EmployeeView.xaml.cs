@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WorkSpeed.DesktopClient.Views.Productivity
+namespace WorkSpeed.DesktopClient.Views.Templates
 {
     /// <summary>
-    /// Interaction logic for EmployeeProductivityView.xaml
+    /// Interaction logic for EmployeeView.xaml
     /// </summary>
-    public partial class EmployeeProductivityView : Grid
+    public partial class EmployeeView : Border
     {
-        public EmployeeProductivityView()
+        public EmployeeView()
         {
             InitializeComponent();
         }

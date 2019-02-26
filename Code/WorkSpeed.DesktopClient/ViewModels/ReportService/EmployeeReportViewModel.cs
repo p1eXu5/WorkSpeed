@@ -19,8 +19,14 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
     public class EmployeeReportViewModel : ReportViewModel
     {
+        #region Fields
+
         private readonly ObservableCollection< ShiftGroupingViewModel > _shiftGroupingVmCollection;
-        
+
+        #endregion
+
+
+        #region Ctor
 
         public EmployeeReportViewModel ( IReportService reportService, IDialogRepository dialogRepository )
             : base( reportService, dialogRepository )
@@ -31,16 +37,21 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             SetupView( ShiftGroupingVmCollection );
         }
 
-        
+        #endregion
+
+
+        #region Properties
+
         public ReadOnlyObservableCollection< ShiftGroupingViewModel > ShiftGroupingVmCollection { get; }
+
+        #endregion
 
 
         #region Methods
 
-
-        public override async void OnSelectedAsync ()
+        public override Task OnSelectedAsync ()
         {
-            await LoadEmployeesAsync( null );
+            return LoadEmployeesAsync( null );
         }
 
         private async Task LoadEmployeesAsync ( object obj )
@@ -76,7 +87,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
             base.Refresh();
         }
-
 
         #endregion
 

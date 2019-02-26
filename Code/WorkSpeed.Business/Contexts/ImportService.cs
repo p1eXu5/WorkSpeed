@@ -151,20 +151,24 @@ namespace WorkSpeed.Business.Contexts
             var dbAppointments = await _dbContext.GetAppointments().ToArrayAsync();
             var dbRanks = await _dbContext.GetRanks().ToArrayAsync();
             var dbPositions = await _dbContext.GetPositions().ToArrayAsync();
+
+            var defaultAppointment = dbAppointments[ 0 ];
+            var defaultRank = dbRanks[ 0 ];
+            var defaultPosition = dbPositions[ 0 ];
             var defaultShift = await _dbContext.GetDefaultShiftAsync();
             var defaultShortBreakSchedule = await _dbContext.GetDefaultShortBreakScheduleAsync();
             var defaultAvatar = await _dbContext.GetDefaultAvatarAsync();
 
             foreach ( var employee in data.Where( Check.IsEmployeeCorrect ) ) {
 
-                employee.Rank = dbRanks.FirstOrDefault( r => r.Number == employee.Rank?.Number );
+                employee.Rank = dbRanks.FirstOrDefault( r => r.Number == employee.Rank?.Number ) ?? defaultRank;
 
                 employee.Appointment = employee.Appointment?.Abbreviations == null 
-                                           ? null 
+                                           ? defaultAppointment 
                                            : dbAppointments.FirstOrDefault( a => Check.CheckAbbreviation( a.Abbreviations, employee.Appointment.Abbreviations ) );
 
                 employee.Position = employee.Position?.Abbreviations == null 
-                                        ? null 
+                                        ? defaultPosition 
                                         : dbPositions.FirstOrDefault( p => Check.CheckAbbreviation( p.Abbreviations, employee.Position?.Abbreviations ) );
 
                 employee.Shift = defaultShift;

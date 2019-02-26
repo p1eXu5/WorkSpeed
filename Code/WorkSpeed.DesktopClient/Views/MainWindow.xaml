@@ -13,7 +13,7 @@
 
         d:DataContext="{d:DesignInstance local:MainViewModel}"
 
-        Title="MainWindow" MinHeight="500" Height="500" MinWidth="1200" Width="1200"
+        Title="MainWindow" MinHeight="500" Height="800" MinWidth="1300" Width="1200"
         WindowStyle="None"
         ResizeMode="CanResize"
         BorderThickness="1"
@@ -125,34 +125,39 @@
         <Grid>
             <Grid x:Name="content">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" MinWidth="100" />
+                    <ColumnDefinition Width="*" MinWidth="250" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="5*" MinWidth="1000"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- filters -->
-                <DockPanel VerticalAlignment="Stretch"
-                        LastChildFill="True"
-                        Background="{StaticResource br_Control.Background}"
-                        SnapsToDevicePixels="True"
-                        >
-                    <!-- filters header -->
-                    <Border Height="20" DockPanel.Dock="Top"
-                        Background="{StaticResource br_Control.BackgroundAlternative}"
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden">
+                    <DockPanel VerticalAlignment="Stretch"
+                               LastChildFill="True"
+                               Background="{StaticResource br_Control.Background}"
+                               SnapsToDevicePixels="True"
+                               Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ScrollViewer}, Path=ActualWidth}"
+                               >
+                        <!-- filters header -->
+                        <Border Height="20" DockPanel.Dock="Top"
+                            Background="{StaticResource br_Control.BackgroundAlternative}"
                         
-                        >
-                        <TextBlock Text="Фильтры" 
-                                VerticalAlignment="Center"
-                                Margin="10,0"
-                                Foreground="{StaticResource br_Control.ForegroundAlternative}"
-                                />
-                    </Border>
+                            >
+                            <TextBlock Text="Фильтры" 
+                                    VerticalAlignment="Center"
+                                    Margin="10,0"
+                                    Foreground="{StaticResource br_Control.ForegroundAlternative}"
+                                    />
+                        </Border>
 
-                    <Border BorderThickness="0,0,1,0" BorderBrush="{StaticResource br_Window.Border}" >
-                        <ListBox ItemsSource="{Binding FiltersVmCollection}"></ListBox>
-                    </Border>
-
-                </DockPanel>
+                        <Border BorderThickness="0,0,1,0" BorderBrush="{StaticResource br_Window.Border}" 
+                                Background="{StaticResource br_Window.BackgroundAlternative}"
+                                >
+                            <ListBox ItemsSource="{Binding FilterVmCollection}" />
+                        </Border>
+ 
+                    </DockPanel>
+                </ScrollViewer>
 
                 <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="2" />
 
@@ -265,12 +270,12 @@
                         </Button>
 
                         <TabControl x:Name="m_TabControl" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="2"
-                                    Padding="0"
                                     TabStripPlacement="Top"
                                     Background="{StaticResource br_Window.Background}"
                                     BorderThickness="0"
                                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                     IsHitTestVisible="True"
+                                    SelectedIndex="{Binding SelectedIndex}"
                                     >
                             <behavior:Interaction.Triggers>
                                 <behavior:EventTrigger EventName="SelectionChanged" SourceObject="{Binding ElementName=m_TabControl}" >
@@ -280,7 +285,7 @@
                                 </behavior:EventTrigger>
                             </behavior:Interaction.Triggers>
                             
-                            <!-- ProductivityReport -->
+                            <!-- ProductivityReport #0 -->
                             <TabItem RenderTransform="1,0,0,1,2,0"
                                     >
                                 <TabItem.Header>
@@ -296,10 +301,10 @@
                                     </StackPanel>
                                 </TabItem.Header>
 
-                                <uc:ProductivityReportViewModel DataContext="{Binding ProductivityReportViewModel}" />
+                                <uc:ProductivityReportViewModel DataContext="{Binding ProductivityReportVm}" />
                             </TabItem>
 
-                            <!-- EmployeeEditor -->
+                            <!-- EmployeeEditor #1 -->
                             <TabItem RenderTransform="1,0,0,1,1,0"
                                     >
                                 <TabItem.Header>
@@ -315,9 +320,10 @@
                                     </StackPanel>
                                 </TabItem.Header>
 
-                                <uc:EmployeeReportUserControl DataContext="{Binding EmployeeReportViewModel}" />
+                                <uc:EmployeeReportUserControl DataContext="{Binding EmployeeReportVm}" />
                             </TabItem>
 
+                            <!-- Settings #2 -->
                             <TabItem >
                                 <TabItem.Header>
                                     <StackPanel Orientation="Vertical">

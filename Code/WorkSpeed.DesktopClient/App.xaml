@@ -9,16 +9,20 @@
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Fonts.xaml" />
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Colors.xaml" />
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Glyphs.xaml" />
-                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Window/Images.xaml" />
-                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Window/ButtonStyles.xaml" />
-                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Window/ComboBoxAnimations.xaml" />
-                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Window/ComboBoxStyles.xaml" />
-                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Window/Common.xaml" />
-                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Window/TabControlStyles.xaml" />
-                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Window/HeaderContentControlStyles.xaml" />
-                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Window/DataTemplates.xaml" />
-                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Window/EmployeeReportDataTemplates.xaml" />
-                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Window/ProductivityDataTemplates.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Images.xaml" />
+                 
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Styles/ListBoxStyles.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Styles/ButtonStyles.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Styles/ComboBoxAnimations.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Styles/ComboBoxStyles.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Styles/MiscStyles.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Styles/TabControlStyles.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Styles/HeaderContentControlStyles.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Styles/GroupBoxStyle.xaml" />
+
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Templates/FilterDataTemplates.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Templates/EmployeeReportDataTemplates.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Templates/ProductivityDataTemplates.xaml" />
              </ResourceDictionary.MergedDictionaries>
          </ResourceDictionary>
     </Application.Resources>
