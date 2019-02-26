@@ -107,7 +107,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                 new FilterViewModel( "Должности", AppointmentVmCollection, a => (( AppointmentViewModel )a).InnerName ),
                 new FilterViewModel( "Смены", ShiftVmCollection, s => (( ShiftViewModel )s).Name ),
                 new FilterViewModel( "Ранги", RankVmCollection, r => (( RankViewModel )r).Number.ToString( CultureInfo.InvariantCulture ) ),
-                new FilterViewModel( "Курит", true ),
+                new FilterViewModel( "Курит", false ),
             });
 
             coll[ IS_ACTIVE ].FilterChanged += OnPredicateChange;
@@ -130,14 +130,14 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         {
             if (!(o is EmployeeViewModel employee)) return false;
 
-            var res = _filterVmCollection[ IS_ACTIVE ].Entities.Any( obj => (bool)(obj).Equals( employee.IsActive ) );
+            var res = _filterVmCollection[ IS_ACTIVE ].Entities.Any( obj => (bool)(obj).Equals( employee.IsActive ) )
+                      && _filterVmCollection[IS_SMOKER].Entities.Any(obj => (bool)(obj).Equals( employee.IsSmoker ) );
 
             return res;
             //&& _filterVmCollection[POSITION].Entities.Any(obj => (obj as PositionViewModel).Position == employee.Position)
             //&& _filterVmCollection[APPOINTMENT].Entities.Any(obj => (obj as AppointmentViewModel).Appointment == employee.Appointment)
             //&& _filterVmCollection[SHIFT].Entities.Any(obj => (obj as ShiftViewModel).Shift == employee.Shift)
             //&& _filterVmCollection[RANK].Entities.Any(obj => (obj as RankViewModel).Number == employee.Rank.Number)
-            //&& _filterVmCollection[IS_SMOKER].Entities.Any(obj => (obj is bool) == employee.IsSmoker);
         }
 
         #endregion

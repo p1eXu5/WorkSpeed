@@ -174,7 +174,7 @@ namespace WorkSpeed.Business.Contexts
                 employee.Shift = defaultShift;
                 employee.ShortBreakSchedule = defaultShortBreakSchedule;
                 employee.Avatar = defaultAvatar;
-
+                employee.IsSmoker = employee.IsSmoker ?? false;
 
                 var dbEmployee = dbEmployees.FirstOrDefault( e => e.Id.Equals( employee.Id ) );
                 var newEmployee = newEmployees.FirstOrDefault( e => e.Id.Equals( employee.Id ) );

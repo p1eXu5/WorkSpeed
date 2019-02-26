@@ -33,14 +33,14 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         public FilterViewModel ( string header, bool isCheckedValue )
             : this( header )
         {
-            _default = !isCheckedValue;
+            _default = false;
             _entities.Add( _default );
 
-            var boolItem = new FilterItemViewModel( isCheckedValue, TRUE_CAPTION );
+            var boolItem = new FilterItemViewModel( true, TRUE_CAPTION );
             boolItem.PropertyChanged += OnFilterItemPropertyChanged;
             FilterItemVmCollection = new ObservableCollection< FilterItemViewModel >( new [] { boolItem });
 
-            boolItem.IsChecked = true;
+            boolItem.IsChecked = isCheckedValue;
         }
 
         public FilterViewModel ( string header, IEnumerable< object > entities, Func< object, string> captionFunc )
@@ -84,11 +84,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             lock ( _locker ) {
 
                 if ( (( FilterItemViewModel )sender).IsChecked ) {
-                    if (_default != null) { _entities.Remove( _default ); }
+                    if (_default != null && _entities.Contains( _default ) ) { _entities.Remove( _default ); }
                     _entities.Add( (( FilterItemViewModel )sender).Entity );
                 }
                 else {
-                    if (_default != null) { _entities.Add( _default ); }
+                    if ( _default != null && !_entities.Contains( _default ) ) { _entities.Add( _default ); }
                     _entities.Remove( (( FilterItemViewModel )sender).Entity );
                 }
 

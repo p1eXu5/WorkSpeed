@@ -23,13 +23,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             get => _isChecked;
             set {
                 _isChecked = value;
-                ChangePropertyAsync();
+                OnPropertyChanged();
             }
-        }
-
-        private void ChangePropertyAsync ()
-        {
-            Application.Current.Dispatcher.BeginInvoke((Action)( () => OnPropertyChanged(nameof(IsChecked)) ));
         }
     }
 }

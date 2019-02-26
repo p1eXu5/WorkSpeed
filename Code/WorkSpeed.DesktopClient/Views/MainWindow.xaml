@@ -131,7 +131,6 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- filters -->
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden">
                     <DockPanel VerticalAlignment="Stretch"
                                LastChildFill="True"
                                Background="{StaticResource br_Control.Background}"
@@ -153,11 +152,12 @@
                         <Border BorderThickness="0,0,1,0" BorderBrush="{StaticResource br_Window.Border}" 
                                 Background="{StaticResource br_Window.BackgroundAlternative}"
                                 >
-                            <ListBox ItemsSource="{Binding FilterVmCollection}" />
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden">
+                                <ListBox ItemsSource="{Binding FilterVmCollection}" />
+                            </ScrollViewer>
                         </Border>
  
                     </DockPanel>
-                </ScrollViewer>
 
                 <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="2" />
 
