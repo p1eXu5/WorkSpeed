@@ -27,10 +27,12 @@ namespace WorkSpeed.DesktopClient.ViewModels.Productivity
             CreateProductivityVmCollection( employeeProductivity, operations, categories );
 
             SetupView( ProductivityVmCollection, predicate );
-            View.SortDescriptions.Add( new SortDescription( "OperationId", ListSortDirection.Ascending ) );
+            ViewList.SortDescriptions.Add( new SortDescription( "OperationId", ListSortDirection.Ascending ) );
         }
 
-        private void CreateProductivityVmCollection ( IEmployeeProductivityCollection employeeProductivity, ReadOnlyObservableCollection< Operation > operations, ReadOnlyObservableCollection< Category > categories )
+        private void CreateProductivityVmCollection ( IEmployeeProductivityCollection employeeProductivity, 
+                                                      ReadOnlyObservableCollection< Operation > operations, 
+                                                      ReadOnlyObservableCollection< Category > categories )
         {
             // Concrete productivities plus TimeProductivityViewModel
             ProductivityVmCollection = new List< ProductivityViewModel >( operations.Count + 1 );
@@ -59,6 +61,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.Productivity
 
             ProductivityVmCollection.Add( new TimeProductivityViewModel( employeeProductivity, operations ) );
         }
+
 
         public IEmployeeProductivityCollection EmployeeProductivityCollection { get; }
 

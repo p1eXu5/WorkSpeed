@@ -24,7 +24,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
             EmployeeVmCollection = new ReadOnlyObservableCollection< EmployeeViewModel >( employeeVmCollection );
 
             SetupView( EmployeeVmCollection, predicate );
-            View.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
+            ViewList.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
         }
 
         public Position Position { get; }

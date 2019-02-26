@@ -28,10 +28,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
 
             Appointments = new ReadOnlyObservableCollection< AppointmentGroupingViewModel >( _appointments );
 
-            View = CollectionViewSource.GetDefaultView( Appointments );
-            View.SortDescriptions.Add( new SortDescription( "Appointment.Id", ListSortDirection.Ascending ) );
+            ViewList = CollectionViewSource.GetDefaultView( Appointments );
+            ViewList.SortDescriptions.Add( new SortDescription( "Appointment.Id", ListSortDirection.Ascending ) );
 
-            View.Filter = Predicate;
+            ViewList.Filter = Predicate;
         }
 
         public Shift Shift { get; }

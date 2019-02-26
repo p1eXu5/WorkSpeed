@@ -38,11 +38,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             OperationVmCollection = new ReadOnlyObservableCollection< OperationViewModel >( operationVmCollection );
             Observe( _reportService.OperationCollection, operationVmCollection, o => o.Operation );
             
-            View = SetupView( EmployeeProductivityVmCollection, EmployeeProductivityPredicate );
+            ViewList = SetupView( EmployeeProductivityVmCollection, EmployeeProductivityPredicate );
 
-            View.SortDescriptions.Add( new SortDescription( "PositionId", ListSortDirection.Ascending ) );
-            View.SortDescriptions.Add( new SortDescription( "AppointmentId", ListSortDirection.Ascending ) );
-            View.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
+            ViewList.SortDescriptions.Add( new SortDescription( "PositionId", ListSortDirection.Ascending ) );
+            ViewList.SortDescriptions.Add( new SortDescription( "AppointmentId", ListSortDirection.Ascending ) );
+            ViewList.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
 
             _operationView = SetupView( OperationVmCollection, OperationPredicate );
         }
@@ -143,7 +143,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         {
             base.OnRefresh();
             _operationView.Refresh();
-            foreach ( var employeeProductivityViewModel in View.SourceCollection.Cast< EmployeeProductivityViewModel >() ) {
+            foreach ( var employeeProductivityViewModel in ViewList.SourceCollection.Cast< EmployeeProductivityViewModel >() ) {
                 employeeProductivityViewModel.Refresh();
             }
         }

@@ -28,10 +28,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
             );
             Positions = new ReadOnlyObservableCollection< PositionGroupingViewModel >( _positions );
 
-            View = CollectionViewSource.GetDefaultView( Positions );
-            View.SortDescriptions.Add( new SortDescription( "Position.Id", ListSortDirection.Ascending ) );
+            ViewList = CollectionViewSource.GetDefaultView( Positions );
+            ViewList.SortDescriptions.Add( new SortDescription( "Position.Id", ListSortDirection.Ascending ) );
 
-            View.Filter = Predicate;
+            ViewList.Filter = Predicate;
         }
 
         public Appointment Appointment { get;}
