@@ -19,7 +19,7 @@ namespace WorkSpeed.Data.Context.Configurations
             builder.Property( p => p.Name ).HasColumnType( "nvarchar(50)" ).IsRequired();
 
             var converter = new EnumToStringConverter< OperationGroups >();
-            builder.Property( p => p.Group ).HasConversion( converter ).HasColumnType( "varchar(10)" ).IsRequired();
+            builder.Property( p => p.Group ).HasConversion( converter ).HasColumnType( "varchar(16)" ).IsRequired();
 
             builder.Property( p => p.Complexity ).HasColumnType( "real" );
 
