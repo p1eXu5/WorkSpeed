@@ -10,22 +10,13 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
     /// <summary>
     ///     Base class for view models that have ability for contained collections filtering.
-    ///     (Implements <see cref="IFilteredViewModel"/>)
+    ///     (Implements <see cref="ICollectionViewList"/>)
     /// </summary>
-    public abstract class FilteredViewModel : ViewModel, IFilteredViewModel
+    public abstract class FilteredViewModel : ViewModel, ICollectionViewList
     {
         public List< ICollectionView > ViewList { get; protected set; }
         
-        protected static Predicate< object > DefaultPredicate { get; } = o => !(( IFilteredViewModel )o).ViewList.All( v => v.IsEmpty );
-
-        /// <summary>
-        ///     Refrashes default collection views stored in ViewList.
-        ///     (<see cref="IFilteredViewModel.Refresh"/>).
-        /// </summary>
-        public void Refresh ()
-        {
-            OnRefresh();
-        }
+        protected static Predicate< object > DefaultPredicate { get; } = o => !(( ICollectionViewList )o).ViewList.All( v => v.IsEmpty );
 
         /// <summary>
         ///     Gets default view from source.
@@ -45,10 +36,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             return view;
         }
 
-        /// <summary>
-        ///     Invokes by <see cref="Refresh"/>.
-        /// </summary>
-        protected virtual void OnRefresh ()
+        protected internal virtual void Refresh ()
         {
             ViewList.ForEach( v => v.Refresh() );
         }

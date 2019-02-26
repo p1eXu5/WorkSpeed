@@ -22,7 +22,7 @@ namespace WorkSpeed.Business.Contexts.Contracts
         ReadOnlyObservableCollection< Category > CategoryCollection { get; }
 
         ReadOnlyObservableCollection< ShiftGrouping > ShiftGroupingCollection { get; }
-        ReadOnlyObservableCollection< EmployeeProductivityCollection > EmployeeProductivityCollections { get; }
+        ReadOnlyObservableCollection< EmployeeProductivity > EmployeeProductivityCollections { get; }
 
         Task LoadShiftGroupingAsync ();
         Task LoadEmployeeProductivitiesAsync ();

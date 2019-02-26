@@ -11,7 +11,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.Productivity
 {
     public class TimeProductivityViewModel : ProductivityViewModel
     {
-        public TimeProductivityViewModel ( IEmployeeProductivityCollection productivity, ReadOnlyObservableCollection< Operation > operations )
+        public TimeProductivityViewModel ( IEmployeeProductivity productivity, ReadOnlyObservableCollection< Operation > operations )
             : base( new Operation { Id = -1 } )
         {
             SpeedLabeling = SPEED_IN_TIME;

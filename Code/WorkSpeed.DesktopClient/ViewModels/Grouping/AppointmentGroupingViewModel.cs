@@ -1,51 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Data;
-using Agbm.Wpf.MvvmBaseLibrary;
 using WorkSpeed.Business.Models;
 using WorkSpeed.Data.Models;
-using WorkSpeed.DesktopClient.ViewModels.Entities;
 using WorkSpeed.DesktopClient.ViewModels.ReportService;
 
 namespace WorkSpeed.DesktopClient.ViewModels.Grouping
 {
     public class AppointmentGroupingViewModel : FilteredViewModel
     {
-        private readonly ObservableCollection< PositionGroupingViewModel > _positions;
-
         public AppointmentGroupingViewModel ( AppointmentGrouping appointmentGrouping, Predicate< object > predicate )
         {
             Appointment = appointmentGrouping.Appointment ?? throw new ArgumentNullException( nameof( appointmentGrouping ), @"AppointmentGrouping cannot be null." );
 
-            _positions = new ObservableCollection< PositionGroupingViewModel >( 
+            var positionGroupingVmCollection = new ObservableCollection< PositionGroupingViewModel >( 
                 appointmentGrouping.PositionGrouping
-                                    .Select( p => new PositionGroupingViewModel( p, predicate ) ) 
+                                   .Select( p => new PositionGroupingViewModel( p, predicate ) ) 
             );
-            Positions = new ReadOnlyObservableCollection< PositionGroupingViewModel >( _positions );
+            PositionGroupingVmCollection = new ReadOnlyObservableCollection< PositionGroupingViewModel >( positionGroupingVmCollection );
 
-            ViewList = CollectionViewSource.GetDefaultView( Positions );
-            ViewList.SortDescriptions.Add( new SortDescription( "Position.Id", ListSortDirection.Ascending ) );
-
-            ViewList.Filter = Predicate;
+            var view = SetupView( PositionGroupingVmCollection );
+            view.SortDescriptions.Add( new SortDescription( "Position.Id", ListSortDirection.Ascending ) );
         }
 
         public Appointment Appointment { get;}
-        public ReadOnlyObservableCollection< PositionGroupingViewModel > Positions { get; }
+        public ReadOnlyObservableCollection< PositionGroupingViewModel > PositionGroupingVmCollection { get; }
 
         public string Name => Appointment.InnerName;
 
-        protected override void OnRefresh ()
+        protected internal override void Refresh ()
         {
-            foreach ( var position in _positions ) {
+            foreach ( var position in PositionGroupingVmCollection ) {
                 position.Refresh();
             }
 
-            base.OnRefresh();
+            base.Refresh();
         }
     }
 }

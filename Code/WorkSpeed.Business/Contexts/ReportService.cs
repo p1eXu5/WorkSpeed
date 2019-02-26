@@ -6,7 +6,6 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Business.Contexts.Productivity;
 using WorkSpeed.Business.Contexts.Productivity.Builders;
@@ -21,12 +20,14 @@ namespace WorkSpeed.Business.Contexts
 {
     public class ReportService : Service, IReportService
     {
+        #region Fields
+        
         public const string THRESHOLD_FILE = "thresholds.bin";
 
         private readonly IProductivityBuilder _productivityBuilder;
 
         private ObservableCollection< ShiftGrouping > _shiftGroupingCollection;
-        private ObservableCollection< EmployeeProductivityCollection > _employeeProductivityCollections;
+        private ObservableCollection< EmployeeProductivity > _employeeProductivityCollections;
 
         private ObservableCollection< Appointment > _appointmentCollection;
         private ObservableCollection< Rank > _rankCollection;
@@ -34,9 +35,12 @@ namespace WorkSpeed.Business.Contexts
         private ObservableCollection< Shift > _shiftCollection;
         private ObservableCollection< ShortBreakSchedule > _shortBreakCollection;
         private ObservableCollection< Operation > _operationCollection;
+        private ObservableCollection< Category > _categoryCollection;
 
         private readonly IFormatter _formatter = new BinaryFormatter();
         private OperationThresholds _thresholds;
+
+        #endregion
 
 
         #region Ctor
@@ -50,15 +54,10 @@ namespace WorkSpeed.Business.Contexts
             ReloadAllCollections();
         }
 
-        public void SetPeriodAsync ()
-        {
-            throw new NotImplementedException();
-        }
-
         private void CreateCollections ()
         {
-            _employeeProductivityCollections = new ObservableCollection< EmployeeProductivityCollection >();
-            EmployeeProductivityCollections = new ReadOnlyObservableCollection< EmployeeProductivityCollection >( _employeeProductivityCollections );
+            _employeeProductivityCollections = new ObservableCollection< EmployeeProductivity >();
+            EmployeeProductivityCollections = new ReadOnlyObservableCollection< EmployeeProductivity >( _employeeProductivityCollections );
 
             _shiftGroupingCollection = new ObservableCollection< ShiftGrouping >();
             ShiftGroupingCollection = new ReadOnlyObservableCollection< ShiftGrouping >( _shiftGroupingCollection );
@@ -80,6 +79,9 @@ namespace WorkSpeed.Business.Contexts
 
             _operationCollection = new ObservableCollection< Operation >();
             OperationCollection = new ReadOnlyObservableCollection< Operation >( _operationCollection );
+
+            _categoryCollection = new ObservableCollection< Category >();
+            CategoryCollection = new ReadOnlyObservableCollection< Category >( _categoryCollection );
         }
 
         private void SetupPeriod ()
@@ -92,20 +94,30 @@ namespace WorkSpeed.Business.Contexts
         #endregion
 
 
+        #region Properties
+        
         public Period Period { get; set; }
 
-        public ReadOnlyObservableCollection< EmployeeProductivityCollection > EmployeeProductivityCollections { get; set; }
-        public ReadOnlyObservableCollection< ShiftGrouping > ShiftGroupingCollection { get; set; }
+        public ReadOnlyObservableCollection< EmployeeProductivity > EmployeeProductivityCollections { get; private set; }
+        public ReadOnlyObservableCollection< Category > CategoryCollection { get; private set; }
+        public ReadOnlyObservableCollection< ShiftGrouping > ShiftGroupingCollection { get; private set; }
 
-        public ReadOnlyObservableCollection< Appointment > AppointmentCollection { get; set; }
-        public ReadOnlyObservableCollection< Rank > RankCollection { get; set; }
-        public ReadOnlyObservableCollection< Position > PositionCollection { get; set; }
-        public ReadOnlyObservableCollection< Shift > ShiftCollection { get; set; }
-        public ReadOnlyObservableCollection< ShortBreakSchedule > ShortBreakCollection { get; set; }
-        public ReadOnlyObservableCollection< Operation > OperationCollection { get; set; }
+        public ReadOnlyObservableCollection< Appointment > AppointmentCollection { get; private set; }
+        public ReadOnlyObservableCollection< Rank > RankCollection { get; private set; }
+        public ReadOnlyObservableCollection< Position > PositionCollection { get; private set; }
+        public ReadOnlyObservableCollection< Shift > ShiftCollection { get; private set; }
+        public ReadOnlyObservableCollection< ShortBreakSchedule > ShortBreakCollection { get; private set; }
+        public ReadOnlyObservableCollection< Operation > OperationCollection { get; private set; }
+
+        #endregion
 
 
         #region Methods
+
+        public void SetPeriodAsync ()
+        {
+            throw new NotImplementedException();
+        }
 
         public async void ReloadEntities< T > ()
         {
@@ -139,12 +151,17 @@ namespace WorkSpeed.Business.Contexts
                 return;
             }
 
+            if ( typeof( T ).IsAssignableFrom( typeof( Category ) ) ) {
+                ReloadCollection( _categoryCollection, DbContext.GetCategories() );
+                return;
+            }
+
             if ( typeof( T ).IsAssignableFrom( typeof( ShiftGrouping ) ) ) {
                 await LoadShiftGroupingAsync();
                 return;
             }
 
-            if ( typeof( T ).IsAssignableFrom( typeof( EmployeeProductivityCollection ) ) ) {
+            if ( typeof( T ).IsAssignableFrom( typeof( EmployeeProductivity ) ) ) {
                 await LoadEmployeeProductivitiesAsync();
                 return;
             }
@@ -158,17 +175,24 @@ namespace WorkSpeed.Business.Contexts
             ReloadEntities< Shift >();
             ReloadEntities< ShortBreakSchedule >();
             ReloadEntities< Operation >();
+            ReloadEntities< Category >();
+            ReloadEntities< ShiftGrouping >();
+            ReloadEntities< EmployeeProductivity >();
         }
 
-        private void ReloadCollection< T > ( ICollection< T > coll, IEnumerable< T > entities )
+        public void SetPeriodAsync ( Period period )
         {
-            if ( coll.Count > 0 ) {
-                    coll.Clear();
+            throw new NotImplementedException();
+        }
+
+        public OperationThresholds GetThresholds ()
+        {
+            if ( _thresholds == null ) {
+                ReadThresholds();
+                _thresholds.ThresholdChanged += OnThresholdChanged;
             }
 
-            foreach ( var entity in entities ) {
-                coll.Add( entity );
-            }
+            return _thresholds;
         }
 
         public Task LoadShiftGroupingAsync ()
@@ -215,8 +239,35 @@ namespace WorkSpeed.Business.Contexts
             return tcs.Task;
         }
 
+        /// <summary>
+        /// Writes thresholds to the file.
+        /// </summary>
+        public void WriteThresholds ()
+        {
+            using ( FileStream file = File.Create( THRESHOLD_FILE ) ) {
+                _formatter.Serialize( file, _thresholds );
+            }
+        }
 
-        private IEnumerable< EmployeeProductivityCollection > GetProductivityCollection ( Period period )
+
+        protected void OnThresholdChanged ( object threshold, EventArgs args )
+        {
+            WriteThresholds();
+        }
+
+
+        private void ReloadCollection< T > ( ICollection< T > coll, IEnumerable< T > entities )
+        {
+            if ( coll.Count > 0 ) {
+                    coll.Clear();
+            }
+
+            foreach ( var entity in entities ) {
+                coll.Add( entity );
+            }
+        }
+
+        private IEnumerable< EmployeeProductivity > GetProductivityCollection ( Period period )
         {
             var actions = _dbContext.GetEmployeeActions( period.Start, period.End ).ToArray();
             if ( actions.Length == 0 ) yield break;
@@ -229,10 +280,9 @@ namespace WorkSpeed.Business.Contexts
                 var breaks = grouping.Key.ShortBreakSchedule;
                 var shift = grouping.Key.Shift;
 
-                yield return new EmployeeProductivityCollection( grouping.Key, GetProductivities( grouping, breaks, shift ) );
+                yield return new EmployeeProductivity( grouping.Key, GetProductivities( grouping, breaks, shift ) );
             }
         }
-
 
         private (IReadOnlyDictionary< Operation, IProductivity >,HashSet< Period >) GetProductivities ( IEnumerable< EmployeeActionBase > actions, ShortBreakSchedule breaks, Shift shift )
         {
@@ -255,21 +305,6 @@ namespace WorkSpeed.Business.Contexts
             return _productivityBuilder.GetResult();
         }
 
-        public OperationThresholds GetThresholds ()
-        {
-            if ( _thresholds == null ) {
-                ReadThresholds();
-                _thresholds.ThresholdChanged += OnThresholdChanged;
-            }
-
-            return _thresholds;
-        }
-
-        protected void OnThresholdChanged ( object threshold, EventArgs args )
-        {
-            WriteThresholds();
-        }
-
         private void ReadThresholds ()
         {
             if ( !File.Exists( "thresholds.bin" ) ) {
@@ -282,16 +317,6 @@ namespace WorkSpeed.Business.Contexts
             using ( var stream = File.OpenRead( THRESHOLD_FILE ) ) {
                 stream.Position = 0;
                 _thresholds = ( OperationThresholds )_formatter.Deserialize( stream );
-            }
-        }
-
-        /// <summary>
-        /// Writes thresholds to the file.
-        /// </summary>
-        public void WriteThresholds ()
-        {
-            using ( FileStream file = File.Create( THRESHOLD_FILE ) ) {
-                _formatter.Serialize( file, _thresholds );
             }
         }
 
@@ -310,7 +335,7 @@ namespace WorkSpeed.Business.Contexts
 
             return thresholds;
         }
-        
+
         #endregion
     }
 }

@@ -124,7 +124,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         protected virtual void OnPredicateChange ( object sender, EventArgs args )
         {
-            OnRefresh();
+            Refresh();
         }
 
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]

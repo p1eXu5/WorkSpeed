@@ -7,6 +7,6 @@ namespace WorkSpeed.Data.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public List< CategoryCategorySet > Categories { get; set; }
+        public List< CategoryCategorySet > CategoryCategorySets { get; set; }
     }
 }

@@ -351,6 +351,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="ViewModelsDiagram.cd" />
     <Resource Include="Resources\Fonts\Rubik\Rubik-Black.ttf" />
     <Resource Include="Resources\Fonts\Rubik\Rubik-BlackItalic.ttf" />
     <Resource Include="Resources\Fonts\Rubik\Rubik-Bold.ttf" />

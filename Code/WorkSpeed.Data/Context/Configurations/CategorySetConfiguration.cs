@@ -16,7 +16,7 @@ namespace WorkSpeed.Data.Context.Configurations
 
             builder.Property( a => a.Name ).HasColumnType( "nvarchar(50)" );
 
-            builder.HasMany( c => c.Categories ).WithOne( ccs => ccs.CategorySet );
+            builder.HasMany( c => c.CategoryCategorySets ).WithOne( ccs => ccs.CategorySet );
 
             builder.HasData( new CategorySet[] {
                 new CategorySet { Id = 1, Name = "Категории Владивостока" }, 

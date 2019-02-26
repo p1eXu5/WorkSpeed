@@ -8,10 +8,10 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Business.Models.Productivity
 {
-    public class EmployeeProductivityCollection : IEmployeeProductivityCollection
+    public class EmployeeProductivity : IEmployeeProductivity
     {
 
-        public EmployeeProductivityCollection ( Employee employee, (IReadOnlyDictionary< Operation, IProductivity >, HashSet< Period > ) productivities )
+        public EmployeeProductivity ( Employee employee, (IReadOnlyDictionary< Operation, IProductivity >, HashSet< Period > ) productivities )
         {
             Employee = employee;
         }

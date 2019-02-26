@@ -107,5 +107,8 @@ namespace WorkSpeed.Data.Context.ReportService
 
         public static IQueryable< ShortBreakSchedule > GetShortBreakSchedules ( this WorkSpeedDbContext dbContext )
             => dbContext.ShortBreakSchedules.AsQueryable();
+
+        public static IEnumerable< Category > GetCategories ( this WorkSpeedDbContext dbContext )
+            => dbContext.CategorySets.Include( c => c.CategoryCategorySets ).First().CategoryCategorySets.Select( ccs => ccs.Category );
     }
 }

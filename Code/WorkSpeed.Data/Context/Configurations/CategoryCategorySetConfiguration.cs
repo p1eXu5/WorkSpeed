@@ -12,7 +12,7 @@ namespace WorkSpeed.Data.Context.Configurations
             builder.HasKey( ccs => new { ccs.CategoryId, ccs.CategorySetId } );
 
             builder.HasOne( ccs => ccs.Category ).WithMany( c => c.CategorySets ).HasForeignKey( ccs => ccs.CategoryId );
-            builder.HasOne( ccs => ccs.CategorySet ).WithMany( cs => cs.Categories ).HasForeignKey( ccs => ccs.CategorySetId );
+            builder.HasOne( ccs => ccs.CategorySet ).WithMany( cs => cs.CategoryCategorySets ).HasForeignKey( ccs => ccs.CategorySetId );
 
             builder.HasData( new CategoryCategorySet[] {
                 new CategoryCategorySet { CategorySetId = 1, CategoryId = 1 }, 

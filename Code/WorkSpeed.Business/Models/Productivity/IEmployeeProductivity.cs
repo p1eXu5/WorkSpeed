@@ -8,7 +8,7 @@ using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Business.Models.Productivity
 {
-    public interface IEmployeeProductivityCollection
+    public interface IEmployeeProductivity
     {
         double GetTotalHours ();
         IEnumerable< (double count, Operation operation)> GetTimes ( IEnumerable< Operation > operations );

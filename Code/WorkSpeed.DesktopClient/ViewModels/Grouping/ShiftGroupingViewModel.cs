@@ -2,50 +2,42 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Data;
-using Agbm.Wpf.MvvmBaseLibrary;
 using WorkSpeed.Business.Models;
 using WorkSpeed.Data.Models;
-using WorkSpeed.DesktopClient.ViewModels.Entities;
 using WorkSpeed.DesktopClient.ViewModels.ReportService;
 
 namespace WorkSpeed.DesktopClient.ViewModels.Grouping
 {
-    public class ShiftGroupingViewModel 
-        : FilteredViewModel
+    public class ShiftGroupingViewModel : FilteredViewModel
     {
-        private readonly ObservableCollection< AppointmentGroupingViewModel > _appointments;
-
         public ShiftGroupingViewModel ( ShiftGrouping shiftGrouping, Predicate< object > predicate )
         {
-            Shift = shiftGrouping.Shift ?? throw new ArgumentNullException(nameof(shiftGrouping), @"ShiftGroupingVmCollection cannot be null."); ;
+            Shift = shiftGrouping.Shift ?? throw new ArgumentNullException(nameof(shiftGrouping), @"ShiftGroupingVmCollection cannot be null.");
             
-            _appointments = new ObservableCollection< AppointmentGroupingViewModel >( 
-
+            var appointmentGroupingVmCollection = new ObservableCollection< AppointmentGroupingViewModel >( 
+                
                 shiftGrouping.Appointments
                              .Select( a => new AppointmentGroupingViewModel( a, predicate ) ) 
             );
 
-            Appointments = new ReadOnlyObservableCollection< AppointmentGroupingViewModel >( _appointments );
+            AppointmentGroupingVmCollection = new ReadOnlyObservableCollection< AppointmentGroupingViewModel >( appointmentGroupingVmCollection );
 
-            ViewList = CollectionViewSource.GetDefaultView( Appointments );
-            ViewList.SortDescriptions.Add( new SortDescription( "Appointment.Id", ListSortDirection.Ascending ) );
-
-            ViewList.Filter = Predicate;
+            var view = SetupView( AppointmentGroupingVmCollection );
+            view.SortDescriptions.Add( new SortDescription( "Appointment.Id", ListSortDirection.Ascending ) );
         }
 
         public Shift Shift { get; }
-        public ReadOnlyObservableCollection< AppointmentGroupingViewModel > Appointments { get; }
+        public ReadOnlyObservableCollection< AppointmentGroupingViewModel > AppointmentGroupingVmCollection { get; }
 
         public string Name => Shift.Name;
 
-        protected override void OnRefresh ()
+        protected internal override void Refresh ()
         {
-            foreach ( var appointment in _appointments ) {
+            foreach ( var appointment in AppointmentGroupingVmCollection ) {
                 appointment.Refresh();
             }
 
-            base.OnRefresh();
+            base.Refresh();
         }
     }
 }

@@ -32,7 +32,7 @@
 
     <DataTemplate DataType="{x:Type grouping:AppointmentGroupingViewModel}">
         <GroupBox Header="{Binding Name}" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <ListBox ItemsSource="{Binding Positions}"
+            <ListBox ItemsSource="{Binding PositionGroupingVmCollection}"
                      VerticalAlignment="Top"
                      HorizontalAlignment="Left"
                      Background="{x:Null}"
@@ -52,7 +52,7 @@
 
     <DataTemplate DataType="{x:Type grouping:ShiftGroupingViewModel}">
         <GroupBox Header="{Binding Name}" Padding="10" IsHitTestVisible="True">
-            <ListBox ItemsSource="{Binding Appointments}"
+            <ListBox ItemsSource="{Binding AppointmentGroupingVmCollection}"
                      HorizontalAlignment="Left" VerticalAlignment="Top"
                      Background="{x:Null}"
                      BorderThickness="0"

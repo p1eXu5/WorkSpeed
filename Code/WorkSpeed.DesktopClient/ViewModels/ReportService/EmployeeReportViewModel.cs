@@ -43,9 +43,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             await LoadEmployeesAsync( null );
         }
 
-
-        
-
         private async Task LoadEmployeesAsync ( object obj )
         {
             ReportMessage = "Идёт загрузка сотрудников";
@@ -71,13 +68,13 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             }
         }
 
-        protected override void OnRefresh ()
+        protected internal override void Refresh ()
         {
             foreach ( var shiftGroupingViewModel in ShiftGroupingVmCollection ) {
                 shiftGroupingViewModel.Refresh();
             }
 
-            base.OnRefresh();
+            base.Refresh();
         }
 
 
