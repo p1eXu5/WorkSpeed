@@ -14,6 +14,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
     /// </summary>
     public abstract class FilteredViewModel : ViewModel, ICollectionViewList
     {
+        protected FilteredViewModel ()
+        {
+            ViewList = new List< ICollectionView >(2);
+        }
+
         public List< ICollectionView > ViewList { get; protected set; }
         
         protected static Predicate< object > DefaultPredicate { get; } = o => !(( ICollectionViewList )o).ViewList.All( v => v.IsEmpty );
