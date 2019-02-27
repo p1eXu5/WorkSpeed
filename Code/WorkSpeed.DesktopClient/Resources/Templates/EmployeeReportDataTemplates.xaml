@@ -10,25 +10,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type grouping:PositionGroupingViewModel}">
-        <ListBox Background="Transparent" BorderBrush="{x:Null}" Margin="0,5"
-                 HorizontalAlignment="Left" VerticalAlignment="Top"
-                 VerticalContentAlignment="Top"
-                 ItemsSource="{Binding EmployeeVmCollection}"
-                 >
-            <ListBox.Template>
-                <ControlTemplate TargetType="ItemsControl">
-                    <Border>
-                        <ItemsPresenter />
-                    </Border>
-                </ControlTemplate>
-            </ListBox.Template>
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel MaxWidth="570" VerticalAlignment="Top" />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-        </ListBox>
-
+        <v:PositionGroupingView />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type grouping:AppointmentGroupingViewModel}">

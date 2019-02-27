@@ -1,0 +1,35 @@
+﻿<Grid x:Class="WorkSpeed.DesktopClient.Views.Templates.PositionGroupingView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WorkSpeed.DesktopClient.ViewModels.Grouping"
+      xmlns:conv="clr-namespace:WorkSpeed.DesktopClient.Converters"
+      mc:Ignorable="d" 
+      d:DesignHeight="250" d:DesignWidth="200"
+      d:DataContext="{d:DesignInstance local:PositionGroupingViewModel}"
+      >
+    <Grid.Resources>
+        <conv:WrapPanelMaxWidthConverter x:Key="conv_MaxWidth" />
+    </Grid.Resources>
+
+    <ListBox x:Name="lb_PositionGrouping" Background="Transparent" BorderBrush="{x:Null}" Margin="0,5"
+                 HorizontalAlignment="Left" VerticalAlignment="Top"
+                 VerticalContentAlignment="Top"
+                 ItemsSource="{Binding EmployeeVmCollection}"
+                 >
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <WrapPanel VerticalAlignment="Top" 
+                           >
+                    <WrapPanel.MaxWidth>
+                        <MultiBinding Converter="{StaticResource conv_MaxWidth}">
+                            <Binding ElementName="lb_PositionGrouping" Path="Items.Count" />
+                            <Binding Source="{StaticResource d_EmployeeCardWidth}" />
+                        </MultiBinding>
+                    </WrapPanel.MaxWidth>
+                </WrapPanel>
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+    </ListBox>
+</Grid>

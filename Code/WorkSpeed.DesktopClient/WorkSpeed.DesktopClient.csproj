@@ -70,6 +70,7 @@
     <Compile Include="Converters\EvenOddToZeroOneConverter.cs" />
     <Compile Include="Converters\ImageConverter.cs" />
     <Compile Include="Converters\TabControlHeightConverter.cs" />
+    <Compile Include="Converters\WrapPanelMaxWidthConverter.cs" />
     <Compile Include="TemplateSelectors\FilterTemplateSelector.cs" />
     <Compile Include="ViewModels\Productivity\AspectsViewModel.cs" />
     <Compile Include="ViewModels\Productivity\OtherProductivityViewModel.cs" />
@@ -138,6 +139,9 @@
     </Compile>
     <Compile Include="Views\Templates\FilterSectionView.xaml.cs">
       <DependentUpon>FilterSectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Templates\PositionGroupingView.xaml.cs">
+      <DependentUpon>PositionGroupingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Templates\ShiftGroupingView.xaml.cs">
       <DependentUpon>ShiftGroupingView.xaml</DependentUpon>
@@ -285,6 +289,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Templates\FilterSectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Templates\PositionGroupingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
