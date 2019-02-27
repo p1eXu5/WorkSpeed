@@ -149,6 +149,39 @@
                                     />
                         </Border>
 
+                        <Border DockPanel.Dock="Top" 
+                                Background="{StaticResource br_Window.Background}"
+                                >
+                            <Button Content="Обновить" 
+                                    Width="100" 
+                                    Margin="10"
+                                    Foreground="Green"
+                                    BorderBrush="Green"
+                                    Command="{Binding UpdateCommand}"
+                                    BorderThickness="1"
+                                    Background="#ddeedd"
+                                    >
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource st_Window.Button}">
+                                        <Setter Property="Border.CornerRadius" Value="3" />
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="BorderThickness" Value="0,0,0,1"></Setter>
+                                    <Setter Property="BorderBrush" Value="{StaticResource br_Window.Border}" />
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding EmployeeReportVm.IsModify}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+
                         <Border BorderThickness="0,0,1,0" BorderBrush="{StaticResource br_Window.Border}" 
                                 Background="{StaticResource br_Window.BackgroundAlternative}"
                                 >
@@ -159,7 +192,11 @@
  
                     </DockPanel>
 
-                <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="2" />
+                <GridSplitter Grid.Column="1" 
+                              VerticalAlignment="Stretch" 
+                              HorizontalAlignment="Stretch" 
+                              Width="2" Background="{StaticResource br_Window.Background}"
+                              />
 
                 <!-- main -->
                 <Grid Grid.Column="2">
