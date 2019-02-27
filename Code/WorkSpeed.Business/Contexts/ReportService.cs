@@ -168,6 +168,8 @@ namespace WorkSpeed.Business.Contexts
             }
         }
 
+        public void UpdateRange ( IEnumerable< Employee > employees ) => _dbContext.UpdateRange( employees );
+
         public void ReloadAllCollections ()
         {
             ReloadEntities< Appointment >();

@@ -11,6 +11,7 @@ using System.Windows.Data;
 using Agbm.Wpf.MvvmBaseLibrary;
 using Microsoft.Win32;
 using WorkSpeed.Business.Contexts.Contracts;
+using WorkSpeed.Data.Context;
 using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.Entities;
 using WorkSpeed.DesktopClient.ViewModels.Grouping;
@@ -52,6 +53,23 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         public override Task OnSelectedAsync ()
         {
             return LoadEmployeesAsync( null );
+        }
+
+        public override async Task UpdateAsync ()
+        {
+            var employees = from s in ShiftGroupingVmCollection
+                            where s.IsModify
+                            from a in s.AppointmentGroupingVmCollection
+                            where a.IsModify
+                            from p in a.PositionGroupingVmCollection
+                            where p.IsModify
+                            from e in p.EmployeeVmCollection
+                            where e.IsModify
+                            select e.Employee;
+
+            _reportService.UpdateRange( employees );
+
+            await LoadEmployeesAsync( null );
         }
 
         private async Task LoadEmployeesAsync ( object obj )

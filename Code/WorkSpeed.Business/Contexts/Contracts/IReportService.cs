@@ -29,5 +29,7 @@ namespace WorkSpeed.Business.Contexts.Contracts
 
         Period Period { get; }
         void SetPeriodAsync ( Period period );
+
+        void UpdateRange ( IEnumerable< Employee > employees );
     }
 }

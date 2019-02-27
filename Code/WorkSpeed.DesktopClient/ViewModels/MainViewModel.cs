@@ -100,15 +100,8 @@ namespace WorkSpeed.DesktopClient.ViewModels
             }
         }
 
-        #endregion
-
-
-        #region Commands
-
-        public ICommand LoadedCommand => new MvvmCommand( OnWindowLoaded );
-        public ICommand ImportAsyncCommand => new MvvmCommand( Import );
-
         public string ImportStatusMessage
+
         {
             get => _importStatusMessage;
             set {
@@ -116,6 +109,14 @@ namespace WorkSpeed.DesktopClient.ViewModels
                 OnPropertyChanged();
             }
         }
+        #endregion
+
+
+        #region Commands
+
+        public ICommand LoadedCommand => new MvvmCommand( OnWindowLoaded );
+        public ICommand ImportAsyncCommand => new MvvmCommand( Import );
+        public ICommand UpdateCommand => new MvvmCommand( Update );
 
         #endregion
 
@@ -140,8 +141,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
                 IsImporting = true;
 
-                var token = _cancellationTokenSource.Token;
-                await _importService.ImportFromXlsxAsync( ofd.FileName, _progress, token );
+                await ImportAsync( ofd.FileName );
 
                 ImportStatusMessage = "Обновление данных.";
                 await EmployeeReportVm.OnSelectedAsync();
@@ -149,6 +149,12 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
                 IsImporting = false;
             }
+        }
+
+        private async Task ImportAsync ( string fileName )
+        {
+            var token = _cancellationTokenSource.Token;
+            await _importService.ImportFromXlsxAsync( fileName, _progress, token ).ConfigureAwait( false );
         }
 
         private void ProgressReport ( int code, string message )
@@ -177,6 +183,16 @@ namespace WorkSpeed.DesktopClient.ViewModels
                 case (int)Tabs.EmployeeEditor :
                     FilterVmCollection = EmployeeReportVm.FilterVmCollection;
                     await EmployeeReportVm.OnSelectedAsync();
+                    break;
+            }
+        }
+
+        private async void Update ( object o )
+        {
+            switch ( SelectedIndex ) {
+
+                case (int)Tabs.EmployeeEditor:
+                    await EmployeeReportVm.UpdateAsync().ConfigureAwait( false );
                     break;
             }
         }

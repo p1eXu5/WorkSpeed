@@ -12,7 +12,7 @@ using WorkSpeed.DesktopClient.ViewModels.Entities;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
-    public abstract partial class ReportViewModel : FilteredViewModel, IReportViewModel
+    public abstract partial class ReportViewModel : FilteredViewModel
     {
         #region Fields
         
@@ -93,6 +93,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         #region Methods
 
         public abstract Task OnSelectedAsync ();
+
+        public abstract Task UpdateAsync ();
 
         protected ObservableCollection< FilterViewModel > GetFilterCollection ()
         {

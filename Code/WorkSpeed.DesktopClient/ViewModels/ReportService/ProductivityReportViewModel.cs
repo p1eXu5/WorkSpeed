@@ -101,6 +101,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             throw new NotImplementedException();
         }
 
+        public override Task UpdateAsync ()
+        {
+            throw new NotImplementedException();
+        }
+
         private async void LoadEmployeeProductivityAsync ()
         {
             await _reportService.LoadEmployeeProductivitiesAsync();
