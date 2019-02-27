@@ -117,8 +117,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         private bool EmployeeProductivityPredicate ( object o )
         {
             if (!(o is EmployeeProductivityViewModel employeeProductivityViewModel)) return false;
-
-            return base.EmployeePredicate( employeeProductivityViewModel.EmployeeVm );
+            return true;
         }
 
         private bool OperationPredicate ( object o )

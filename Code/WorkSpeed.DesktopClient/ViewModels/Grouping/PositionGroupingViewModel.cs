@@ -16,16 +16,16 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
 {
     public class PositionGroupingViewModel : FilteredViewModel
     {
-        
+        private readonly ReadOnlyObservableCollection< FilterViewModel > _filterVmCollection;
 
-
-        public PositionGroupingViewModel ( PositionGrouping positionGrouping, Predicate< object > predicate )
+        public PositionGroupingViewModel ( PositionGrouping positionGrouping, ReadOnlyObservableCollection< FilterViewModel > filters )
         {
             Position = positionGrouping.Position ?? throw new ArgumentNullException(nameof(positionGrouping), @"PositionGrouping cannot be null.");
+            _filterVmCollection = filters ?? throw new ArgumentNullException(nameof(filters), @"filters cannot be null.");
 
             CreateCollection();
 
-            var view = SetupView( EmployeeVmCollection, predicate );
+            var view = SetupView( EmployeeVmCollection );
             view.SortDescriptions.Add( new SortDescription( "IsNotActive", ListSortDirection.Ascending ) );
             view.SortDescriptions.Add( new SortDescription( "SecondName", ListSortDirection.Ascending ) );
 
@@ -55,9 +55,15 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
             IsModify = EmployeeVmCollection.Any( evm => evm.IsModify );
         }
 
-        protected internal override void Refresh ()
+        protected override bool PredicateFunc ( object o )
         {
-            base.Refresh();
+            if (!(o is EmployeeViewModel employee)) return false;
+
+            var res = _filterVmCollection[ ( int )Filters.IsActive ].Entities.Any( obj => ( bool )(obj).Equals( employee.IsActive ) )
+                      && _filterVmCollection[ ( int )Filters.IsSmoker ].Entities.Any( obj => ( bool )(obj).Equals( employee.IsSmoker ) )
+                      && _filterVmCollection[ ( int )Filters.Rank ].Entities.Any( obj => (obj as RankViewModel)?.Number == employee.Rank.Number );
+
+            return res;
         }
     }
 }

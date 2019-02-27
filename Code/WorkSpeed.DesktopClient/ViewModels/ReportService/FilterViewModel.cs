@@ -57,6 +57,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                         return item;
                     } ) 
             );
+
+            foreach ( var filterItem in FilterItemVmCollection ) {
+                filterItem.IsChecked = true;
+            }
         }
 
         #endregion

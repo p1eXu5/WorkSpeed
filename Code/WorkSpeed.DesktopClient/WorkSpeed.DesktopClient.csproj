@@ -83,6 +83,7 @@
     <Compile Include="ViewModels\Entities\AppointmentViewModel.cs" />
     <Compile Include="ViewModels\ReportService\FilteredViewModel.cs" />
     <Compile Include="ViewModels\ReportService\FilterItemViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Filters.cs" />
     <Compile Include="ViewModels\ReportService\FilterViewModel.cs" />
     <Compile Include="ViewModels\ReportService\Contracts\IFilteredViewModel.cs" />
     <Compile Include="ViewModels\ReportService\Contracts\IEntityObservableCollection.cs" />

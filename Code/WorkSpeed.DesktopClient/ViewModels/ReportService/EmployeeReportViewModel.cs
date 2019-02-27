@@ -69,7 +69,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
                 foreach ( var shiftGrouping in _reportService.ShiftGroupingCollection ) {
 
-                    var vm = new ShiftGroupingViewModel( shiftGrouping, EmployeePredicate );
+                    var vm = new ShiftGroupingViewModel( shiftGrouping, FilterVmCollection );
                     vm.PropertyChanged += OnIsModifyChanged;
                     _shiftGroupingVmCollection.Add( vm );
                     Refresh();
@@ -96,6 +96,14 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             base.OnIsModifyChanged( sender, args );
 
             IsModify = ShiftGroupingVmCollection.Any( shgvm => shgvm.IsModify );
+        }
+
+        protected override bool PredicateFunc ( object o )
+        {
+            if ( !(o is ShiftGroupingViewModel shiftGrouping) ) { return  false; }
+
+            return _filterVmCollection[ (int)Filters.Shift ].Entities.Any( obj => (obj as ShiftViewModel)?.Shift == shiftGrouping.Shift );
+
         }
 
         #endregion

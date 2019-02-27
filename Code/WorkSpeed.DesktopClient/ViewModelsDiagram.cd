@@ -3,7 +3,7 @@
   <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.FilteredViewModel" Collapsed="true">
     <Position X="8.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAABAAAAAIAAAAAAAAAAAIgAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAABAAAAAABAAAAAMAAAAAAAgAAAIAAAAAAAAAQAAAA=</HashCode>
       <FileName>ViewModels\ReportService\FilteredViewModel.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -31,7 +31,7 @@
   <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.ReportViewModel">
     <Position X="7.5" Y="2.25" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAABAoAEQAAIAIABAAAbACAoIAAAAAAAAABABIwAAAA=</HashCode>
+      <HashCode>AAABAoAAAAAAAIABAAASACAAIAAAAAAAAABABIwAAAA=</HashCode>
       <FileName>ViewModels\ReportService\ReportViewModel.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -39,7 +39,7 @@
   <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.EmployeeReportViewModel">
     <Position X="6.25" Y="9.75" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAABEBAAAAAAAAAAAAAAAAgAAAAAAAAAAgAAAA=</HashCode>
+      <HashCode>AAABAAAABEBAAAAAAAAAAAAAAAAgAAAAAAAAAAwAAAA=</HashCode>
       <FileName>ViewModels\ReportService\EmployeeReportViewModel.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -65,7 +65,7 @@
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAABAAAAAAAAAAAQAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAFAAAAAABAAAAAAAAAACQAQAAAAAAAAAAAAAQAAAA=</HashCode>
       <FileName>ViewModels\Grouping\AppointmentGroupingViewModel.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -84,7 +84,7 @@
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAABAAAAAAAAAAAgAAAAACAAgAAAAAAAAAAAAAQAAAA=</HashCode>
       <FileName>ViewModels\Grouping\PositionGroupingViewModel.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -93,17 +93,13 @@
   </Class>
   <Class Name="WorkSpeed.DesktopClient.ViewModels.Grouping.ShiftGroupingViewModel">
     <Position X="1.5" Y="9.75" Width="2.5" />
-    <AssociationLine Name="AppointmentGroupingVmCollection" Type="WorkSpeed.DesktopClient.ViewModels.Grouping.AppointmentGroupingViewModel" FixedFromPoint="true">
-      <Path>
-        <Point X="2.812" Y="11.819" />
-        <Point X="2.812" Y="13" />
-      </Path>
+    <AssociationLine Name="AppointmentGroupingVmCollection" Type="WorkSpeed.DesktopClient.ViewModels.Grouping.AppointmentGroupingViewModel">
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-2.502" Y="0.1" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAABAAAgAAAAAAAQAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAABAAAAAABAAAgAAAAAACQAAgAAAAAAAAAAAAQAAAA=</HashCode>
       <FileName>ViewModels\Grouping\ShiftGroupingViewModel.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -113,7 +109,7 @@
   <Class Name="WorkSpeed.DesktopClient.ViewModels.Entities.EmployeeViewModel">
     <Position X="9" Y="16.25" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAABAAgAAAABAAggEAQAACQASAAAAAAAAAAAAQACAAA=</HashCode>
+      <HashCode>AAABAAgIAAABAAggEAQAAiQAyAAAIAAAAAAAAQACAAA=</HashCode>
       <FileName>ViewModels\Entities\EmployeeViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -134,10 +130,9 @@
   <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.FilterViewModel">
     <Position X="12.25" Y="2.25" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>BAAAAAAAAAAIAAAAAAAAAAAAAAAAACAAAAEAAABAAgA=</HashCode>
+      <HashCode>BBAAAAAAAAAIAABAAAAAAAAAABAACCAAAAEAAABAAgA=</HashCode>
       <FileName>ViewModels\ReportService\FilterViewModel.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

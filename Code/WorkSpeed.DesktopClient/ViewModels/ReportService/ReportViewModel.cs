@@ -12,15 +12,10 @@ using WorkSpeed.DesktopClient.ViewModels.Entities;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
-    public abstract class ReportViewModel : FilteredViewModel, IReportViewModel
+    public abstract partial class ReportViewModel : FilteredViewModel, IReportViewModel
     {
         #region Fields
-        protected const int IS_ACTIVE = 0;
-        protected const int POSITION = 1;
-        protected const int APPOINTMENT = 2;
-        protected const int SHIFT = 3;
-        protected const int RANK = 4;
-        protected const int IS_SMOKER = 5;
+        
 
         protected readonly ObservableCollection< FilterViewModel > _filterVmCollection;
 
@@ -110,12 +105,12 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                 new FilterViewModel( "Курит", false ),
             });
 
-            coll[ IS_ACTIVE ].FilterChanged += OnPredicateChange;
-            coll[ POSITION ].FilterChanged += OnPredicateChange;
-            coll[ APPOINTMENT ].FilterChanged += OnPredicateChange;
-            coll[ SHIFT ].FilterChanged += OnPredicateChange;
-            coll[ RANK ].FilterChanged += OnPredicateChange;
-            coll[ IS_SMOKER ].FilterChanged += OnPredicateChange;
+            coll[ (int)Filters.IsActive ].FilterChanged += OnPredicateChange;
+            coll[ (int)Filters.Position ].FilterChanged += OnPredicateChange;
+            coll[ (int)Filters.Appointment ].FilterChanged += OnPredicateChange;
+            coll[ (int)Filters.Shift ].FilterChanged += OnPredicateChange;
+            coll[ (int)Filters.Rank ].FilterChanged += OnPredicateChange;
+            coll[ (int)Filters.IsSmoker ].FilterChanged += OnPredicateChange;
 
             return coll;
         }
@@ -123,21 +118,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         protected virtual void OnPredicateChange ( object sender, EventArgs args )
         {
             Refresh();
-        }
-
-        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-        protected bool EmployeePredicate(object o)
-        {
-            if (!(o is EmployeeViewModel employee)) return false;
-
-            var res = _filterVmCollection[ IS_ACTIVE ].Entities.Any( obj => (bool)(obj).Equals( employee.IsActive ) )
-                      && _filterVmCollection[IS_SMOKER].Entities.Any(obj => (bool)(obj).Equals( employee.IsSmoker ) );
-
-            return res;
-            //&& _filterVmCollection[POSITION].Entities.Any(obj => (obj as PositionViewModel).Position == employee.Position)
-            //&& _filterVmCollection[APPOINTMENT].Entities.Any(obj => (obj as AppointmentViewModel).Appointment == employee.Appointment)
-            //&& _filterVmCollection[SHIFT].Entities.Any(obj => (obj as ShiftViewModel).Shift == employee.Shift)
-            //&& _filterVmCollection[RANK].Entities.Any(obj => (obj as RankViewModel).Number == employee.Rank.Number)
         }
 
         #endregion

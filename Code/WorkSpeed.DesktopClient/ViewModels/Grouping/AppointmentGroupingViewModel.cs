@@ -4,15 +4,19 @@ using System.ComponentModel;
 using System.Linq;
 using WorkSpeed.Business.Models;
 using WorkSpeed.Data.Models;
+using WorkSpeed.DesktopClient.ViewModels.Entities;
 using WorkSpeed.DesktopClient.ViewModels.ReportService;
 
 namespace WorkSpeed.DesktopClient.ViewModels.Grouping
 {
     public class AppointmentGroupingViewModel : FilteredViewModel
     {
-        public AppointmentGroupingViewModel ( AppointmentGrouping appointmentGrouping, Predicate< object > predicate )
+        private readonly ReadOnlyObservableCollection< FilterViewModel > _filterVmCollection;
+
+        public AppointmentGroupingViewModel ( AppointmentGrouping appointmentGrouping, ReadOnlyObservableCollection< FilterViewModel > filters )
         {
             Appointment = appointmentGrouping.Appointment ?? throw new ArgumentNullException( nameof( appointmentGrouping ), @"AppointmentGrouping cannot be null." );
+            _filterVmCollection = filters ?? throw new ArgumentNullException(nameof(filters), @"filters cannot be null.");
 
             CreateCollection();
 
@@ -26,7 +30,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
                     appointmentGrouping.PositionGrouping
                                        .Select( p =>
                                                 {
-                                                    var pgvm = new PositionGroupingViewModel( p, predicate );
+                                                    var pgvm = new PositionGroupingViewModel( p, _filterVmCollection );
                                                     pgvm.PropertyChanged += OnIsModifyChanged;
                                                     return pgvm;
                                                 } ) 
@@ -54,6 +58,13 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
             base.OnIsModifyChanged( sender, args );
 
             IsModify = PositionGroupingVmCollection.Any( pgvm => pgvm.IsModify );
+        }
+
+        protected override bool PredicateFunc ( object o )
+        {
+            if ( !(o is PositionGroupingViewModel positionGrouping) ) { return  false; }
+
+            return _filterVmCollection[ (int)Filters.Position ].Entities.Any( obj => (obj as PositionViewModel)?.Position == positionGrouping.Position );
         }
     }
 }

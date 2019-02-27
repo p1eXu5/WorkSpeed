@@ -155,10 +155,10 @@
                             <Button Content="Обновить" 
                                     Width="100" 
                                     Margin="10"
-                                    Foreground="Green"
                                     BorderBrush="Green"
                                     Command="{Binding UpdateCommand}"
                                     BorderThickness="1"
+                                    Foreground="{StaticResource br_Button.MouseOver.Foreground}"
                                     Background="#ddeedd"
                                     >
                                 <Button.Style>
@@ -172,7 +172,7 @@
                                 <Style TargetType="Border">
                                     <Setter Property="BorderThickness" Value="0,0,0,1"></Setter>
                                     <Setter Property="BorderBrush" Value="{StaticResource br_Window.Border}" />
-                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Setter Property="Visibility" Value="Visible" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding EmployeeReportVm.IsModify}" Value="True">
                                             <Setter Property="Visibility" Value="Visible" />

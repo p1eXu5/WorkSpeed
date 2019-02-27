@@ -5,14 +5,18 @@ using System.Linq;
 using WorkSpeed.Business.Models;
 using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.ReportService;
+using WorkSpeed.DesktopClient.ViewModels.Entities;
 
 namespace WorkSpeed.DesktopClient.ViewModels.Grouping
 {
     public class ShiftGroupingViewModel : FilteredViewModel
     {
-        public ShiftGroupingViewModel ( ShiftGrouping shiftGrouping, Predicate< object > predicate )
+        private readonly ReadOnlyObservableCollection< FilterViewModel > _filterVmCollection;
+
+        public ShiftGroupingViewModel ( ShiftGrouping shiftGrouping, ReadOnlyObservableCollection< FilterViewModel > filters )
         {
             Shift = shiftGrouping.Shift ?? throw new ArgumentNullException(nameof(shiftGrouping), @"ShiftGroupingVmCollection cannot be null.");
+            _filterVmCollection = filters ?? throw new ArgumentNullException(nameof(filters), @"filters cannot be null.");
             
             CreateCollection();
 
@@ -26,7 +30,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
                     shiftGrouping.Appointments
                                  .Select( a =>
                                           {
-                                              var agvm = new AppointmentGroupingViewModel( a, predicate );
+                                              var agvm = new AppointmentGroupingViewModel( a, _filterVmCollection );
                                               agvm.PropertyChanged += OnIsModifyChanged;
                                               return agvm;
                                           } ) 
@@ -55,6 +59,13 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
             base.OnIsModifyChanged( sender, args );
 
             IsModify = AppointmentGroupingVmCollection.Any( agvm => agvm.IsModify );
+        }
+
+        protected override bool PredicateFunc ( object o )
+        {
+            if ( !(o is AppointmentGroupingViewModel appointmentGrouping) ) { return  false; }
+
+            return _filterVmCollection[ (int)Filters.Appointment ].Entities.Any( obj => (obj as AppointmentViewModel)?.Appointment == appointmentGrouping.Appointment );
         }
     }
 }

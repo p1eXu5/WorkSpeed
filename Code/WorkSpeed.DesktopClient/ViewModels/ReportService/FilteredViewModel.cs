@@ -23,7 +23,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         public List< ICollectionView > ViewList { get; protected set; }
         
-        protected static Predicate< object > DefaultPredicate { get; } = o => !(( ICollectionViewList )o).ViewList.All( v => v.IsEmpty );
 
         public bool IsModify
         {
@@ -39,13 +38,13 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         ///     Assigns Predicate to ViewList.Filter if source can be filtered.
         /// </summary>
         /// <param name="source">Source collection.</param>
-        /// <param name="predicate">When omited <see cref="DefaultPredicate"/> is using.</param>
+        /// <param name="predicate"></param>
         protected ICollectionView SetupView ( object source, Predicate< object > predicate = null )
         {
             var view = CollectionViewSource.GetDefaultView( source );
 
             if ( view.CanFilter ) {
-                view.Filter = predicate ?? DefaultPredicate;
+                view.Filter = predicate ?? PredicateFunc;
             }
 
             ViewList.Add( view );
@@ -72,6 +71,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         protected virtual void OnIsModifyChanged ( object sender, PropertyChangedEventArgs args )
         {
             if ( !args.PropertyName.Equals( nameof( IsModify ) ) ) return;
+        }
+
+        protected virtual bool PredicateFunc ( object o )
+        {
+            return !(( ICollectionViewList )o).ViewList.All( v => v.IsEmpty );
         }
     }
 }

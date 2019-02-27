@@ -23,6 +23,12 @@
     <Color x:Key="col_Control.ForegroundAlternative">#e0e0e0</Color>
 
     <Color x:Key="col_Button.Pressed.Background">#4a8fff</Color>
+    <Color x:Key="col_Button.MouseOver.Foreground">Green</Color>
+
+    <Color x:Key="col_Window.GlowDark.Top">#5c5c5c</Color>
+    <Color x:Key="col_Window.GlowDark.Bottom">#808080</Color>
+    
+
 
     <SolidColorBrush x:Key="br_Window.Background" Color="{StaticResource col_Window.Background}" />
     <SolidColorBrush x:Key="br_Window.BackgroundAlternative" Color="{StaticResource col_Window.BackgroundAlternative}" />
@@ -40,7 +46,7 @@
         <GradientStop Color="{DynamicResource col_Window.GlowLight.Bottom}" Offset="0.51" />
     </LinearGradientBrush>
 
-    <Color x:Key="col_Window.GlowDark.Top">#5c5c5c</Color>
-    <Color x:Key="col_Window.GlowDark.Bottom">#808080</Color>
+    <SolidColorBrush x:Key="br_Button.MouseOver.Foreground" Color="{DynamicResource col_Button.MouseOver.Foreground }" />
+
 
 </ResourceDictionary>
