@@ -115,10 +115,10 @@ namespace WorkSpeed.Business.Contexts
         }
 
 
-        private async void StoreData ( IEnumerable< Product > data )
+        private void StoreData ( IEnumerable< Product > data )
         {
             var newProducts = new List< Product >();
-            var dbProductList = await _dbContext.GetProducts().ToListAsync();
+            var dbProductList = _dbContext.GetProducts().ToList();
 
             foreach ( var product in data.Where( Check.IsProductCorrect ) ) {
 
@@ -143,21 +143,21 @@ namespace WorkSpeed.Business.Contexts
             _dbContext.SaveChanges();
         }
 
-        private async void StoreData ( IEnumerable< Employee > data )
+        private void StoreData ( IEnumerable< Employee > data )
         {
             var newEmployees = new List< Employee >();
 
-            var dbEmployees = await _dbContext.GetEmployees().ToArrayAsync();
-            var dbAppointments = await _dbContext.GetAppointments().ToArrayAsync();
-            var dbRanks = await _dbContext.GetRanks().ToArrayAsync();
-            var dbPositions = await _dbContext.GetPositions().ToArrayAsync();
+            var dbEmployees = _dbContext.GetEmployees().ToArray();
+            var dbAppointments = _dbContext.GetAppointments().ToArray();
+            var dbRanks = _dbContext.GetRanks().ToArray();
+            var dbPositions = _dbContext.GetPositions().ToArray();
 
             var defaultAppointment = dbAppointments[ 0 ];
             var defaultRank = dbRanks[ 0 ];
             var defaultPosition = dbPositions[ 0 ];
-            var defaultShift = await _dbContext.GetDefaultShiftAsync();
-            var defaultShortBreakSchedule = await _dbContext.GetDefaultShortBreakScheduleAsync();
-            var defaultAvatar = await _dbContext.GetDefaultAvatarAsync();
+            var defaultShift = _dbContext.GetDefaultShift();
+            var defaultShortBreakSchedule = _dbContext.GetDefaultShortBreakSchedule();
+            var defaultAvatar = _dbContext.GetDefaultAvatar();
 
             foreach ( var employee in data.Where( Check.IsEmployeeCorrect ) ) {
 
@@ -271,6 +271,7 @@ namespace WorkSpeed.Business.Contexts
                 _dbContext.SaveChanges();
             }
         }
+
 
         private void StoreDoubleActions ( IEnumerable< DoubleAddressAction > data )
         {
