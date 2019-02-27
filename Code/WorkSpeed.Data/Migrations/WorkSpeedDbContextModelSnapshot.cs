@@ -380,7 +380,7 @@ namespace WorkSpeed.Data.Migrations
                         {
                             Id = 1,
                             Abbreviations = "-;",
-                            InnerName = "-",
+                            InnerName = "Без должности",
                             OfficialName = "-",
                             SalaryPerOneHour = 47.85m
                         },

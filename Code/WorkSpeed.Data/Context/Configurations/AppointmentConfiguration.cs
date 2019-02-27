@@ -20,7 +20,7 @@ namespace WorkSpeed.Data.Context.Configurations
             builder.Property( a => a.Abbreviations ).HasColumnType( "nvarchar(50)" ).IsRequired();
 
             builder.HasData( new Appointment[] {
-                new Appointment { Id = 1, InnerName = "-", OfficialName = "-", SalaryPerOneHour = 47.85m, Abbreviations = "-;" },
+                new Appointment { Id = 1, InnerName = "Без должности", OfficialName = "-", SalaryPerOneHour = 47.85m, Abbreviations = "-;" },
                 new Appointment { Id = 2, InnerName = "Грузчик", OfficialName = "Грузчик", SalaryPerOneHour = 47.85m, Abbreviations = "гр.;гр;груз;грузч.;" },
                 new Appointment { Id = 3, InnerName = "Кладовщик на РРЦ", OfficialName = "Кладовщик склада", SalaryPerOneHour = 52.64m, Abbreviations = "кл.;кладовщик;кл;клад;клад.;" },
                 new Appointment { Id = 4, InnerName = "Кладовщик приемщик", OfficialName = "Кладовщик-приемщик", SalaryPerOneHour = 57.42m, Abbreviations = "пр.;приёмщик;приемщик;пр;" },

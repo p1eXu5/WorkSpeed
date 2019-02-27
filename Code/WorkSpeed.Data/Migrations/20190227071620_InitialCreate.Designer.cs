@@ -10,7 +10,7 @@ using WorkSpeed.Data.Context;
 namespace WorkSpeed.Data.Migrations
 {
     [DbContext(typeof(WorkSpeedDbContext))]
-    [Migration("20190226213152_InitialCreate")]
+    [Migration("20190227071620_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -382,7 +382,7 @@ namespace WorkSpeed.Data.Migrations
                         {
                             Id = 1,
                             Abbreviations = "-;",
-                            InnerName = "-",
+                            InnerName = "Без должности",
                             OfficialName = "-",
                             SalaryPerOneHour = 47.85m
                         },

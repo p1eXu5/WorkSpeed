@@ -126,9 +126,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\20190226213152_InitialCreate.cs" />
-    <Compile Include="Migrations\20190226213152_InitialCreate.designer.cs">
-      <DependentUpon>20190226213152_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\20190227071620_InitialCreate.cs" />
+    <Compile Include="Migrations\20190227071620_InitialCreate.designer.cs">
+      <DependentUpon>20190227071620_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\WorkSpeedDbContextModelSnapshot.cs" />
     <Compile Include="Models\Comparers\EmployeeActionComparer.cs" />
