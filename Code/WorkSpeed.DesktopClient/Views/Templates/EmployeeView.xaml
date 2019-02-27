@@ -10,17 +10,27 @@
         d:DataContext="{d:DesignInstance ent:EmployeeViewModel}"
         TextElement.FontFamily="{StaticResource font_Rubik}"
         Width="{StaticResource d_EmployeeCardWidth}" 
-        Height="{StaticResource d_EmployeeCardHeight}" 
+        Height="136" 
         Margin="2,5"
         Padding="0"
         IsHitTestVisible="True"
         BorderThickness="1" 
-        BorderBrush="{StaticResource br_Window.Border}"
         >
     <Border.Resources>
         <conv:ImageConverter x:Key="conv_ImageConverter" />
         <conv:AbbreviationsConverter x:Key="conv_AbbreviationConverter" />
     </Border.Resources>
+
+    <Border.Style>
+        <Style TargetType="Border">
+            <Setter Property="BorderBrush" Value="{StaticResource br_Window.Border}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsModify}" Value="True">
+                    <Setter Property="BorderBrush" Value="LimeGreen" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Border.Style>
 
     <Grid Background="{StaticResource br_Control.Background}"
               >
@@ -35,6 +45,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="15" />
         </Grid.RowDefinitions>
 
         <Image Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" 
@@ -143,5 +154,24 @@
 
                           />
         </HeaderedContentControl>
+
+        <DockPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3"
+                   Margin="5,0"
+                   >
+            <CheckBox DockPanel.Dock="Right" 
+                      Content="Уволен"
+                      FontSize="10"
+                      HorizontalAlignment="Right"
+                      IsChecked="{Binding IsNotActive}"
+                      />
+            <CheckBox DockPanel.Dock="Right" 
+                      Content="Курит"
+                      FontSize="10"
+                      HorizontalAlignment="Right"
+                      Margin="20,0"
+                      IsChecked="{Binding IsSmoker}"
+                      />
+        </DockPanel>
+
     </Grid>
 </Border>

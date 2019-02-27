@@ -70,6 +70,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                 foreach ( var shiftGrouping in _reportService.ShiftGroupingCollection ) {
 
                     var vm = new ShiftGroupingViewModel( shiftGrouping, EmployeePredicate );
+                    vm.PropertyChanged += OnIsModifyChanged;
                     _shiftGroupingVmCollection.Add( vm );
                     Refresh();
                 }
@@ -88,6 +89,13 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             }
 
             base.Refresh();
+        }
+
+        protected override void OnIsModifyChanged ( object sender, PropertyChangedEventArgs args )
+        {
+            base.OnIsModifyChanged( sender, args );
+
+            IsModify = ShiftGroupingVmCollection.Any( shgvm => shgvm.IsModify );
         }
 
         #endregion

@@ -14,6 +14,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
     /// </summary>
     public abstract class FilteredViewModel : ViewModel, ICollectionViewList
     {
+        private bool _isModify;
+
         protected FilteredViewModel ()
         {
             ViewList = new List< ICollectionView >(2);
@@ -22,6 +24,15 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         public List< ICollectionView > ViewList { get; protected set; }
         
         protected static Predicate< object > DefaultPredicate { get; } = o => !(( ICollectionViewList )o).ViewList.All( v => v.IsEmpty );
+
+        public bool IsModify
+        {
+            get => _isModify;
+            set {
+                _isModify = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         ///     Gets default view from source.
@@ -51,6 +62,16 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                     ;
                 }
             }
+        }
+
+        /// <summary>
+        ///     Checks is this IsModifyProperty.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        protected virtual void OnIsModifyChanged ( object sender, PropertyChangedEventArgs args )
+        {
+            if ( !args.PropertyName.Equals( nameof( IsModify ) ) ) return;
         }
     }
 }

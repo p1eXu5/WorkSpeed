@@ -14,18 +14,29 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
         {
             Appointment = appointmentGrouping.Appointment ?? throw new ArgumentNullException( nameof( appointmentGrouping ), @"AppointmentGrouping cannot be null." );
 
-            var positionGroupingVmCollection = new ObservableCollection< PositionGroupingViewModel >( 
-                appointmentGrouping.PositionGrouping
-                                   .Select( p => new PositionGroupingViewModel( p, predicate ) ) 
-            );
-            PositionGroupingVmCollection = new ReadOnlyObservableCollection< PositionGroupingViewModel >( positionGroupingVmCollection );
+            CreateCollection();
 
             var view = SetupView( PositionGroupingVmCollection );
             view.SortDescriptions.Add( new SortDescription( "Position.Id", ListSortDirection.Ascending ) );
+
+
+            void CreateCollection ()
+            {
+                var positionGroupingVmCollection = new ObservableCollection< PositionGroupingViewModel >( 
+                    appointmentGrouping.PositionGrouping
+                                       .Select( p =>
+                                                {
+                                                    var pgvm = new PositionGroupingViewModel( p, predicate );
+                                                    pgvm.PropertyChanged += OnIsModifyChanged;
+                                                    return pgvm;
+                                                } ) 
+                );
+                PositionGroupingVmCollection = new ReadOnlyObservableCollection< PositionGroupingViewModel >( positionGroupingVmCollection );
+            }
         }
 
         public Appointment Appointment { get;}
-        public ReadOnlyObservableCollection< PositionGroupingViewModel > PositionGroupingVmCollection { get; }
+        public ReadOnlyObservableCollection< PositionGroupingViewModel > PositionGroupingVmCollection { get; private set; }
 
         public string Name => Appointment.InnerName;
 
@@ -36,6 +47,13 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
             }
 
             base.Refresh();
+        }
+
+        protected override void OnIsModifyChanged ( object sender, PropertyChangedEventArgs args )
+        {
+            base.OnIsModifyChanged( sender, args );
+
+            IsModify = PositionGroupingVmCollection.Any( pgvm => pgvm.IsModify );
         }
     }
 }

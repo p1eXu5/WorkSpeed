@@ -14,10 +14,22 @@ namespace WorkSpeed.DesktopClient.ViewModels.Entities
     public class EmployeeViewModel : ViewModel
     {
         private readonly Employee _employee;
+        private readonly Employee _original;
+        private bool _isModify;
 
         public EmployeeViewModel(Employee employee)
         {
             _employee = employee ?? throw new ArgumentNullException( nameof( employee ), @"Employee can not be null." );
+
+            _original = new Employee {
+                Appointment = _employee.Appointment,
+                Rank = _employee.Rank,
+                Position = _employee.Position,
+                Shift = _employee.Shift,
+                ShortBreakSchedule = _employee.ShortBreakSchedule,
+                IsSmoker = _employee.IsSmoker,
+                IsActive = _employee.IsActive
+            };
 
             var name = _employee.Name.Split( new[] { ' ' } );
             SecondName = name[ 0 ];
@@ -35,12 +47,22 @@ namespace WorkSpeed.DesktopClient.ViewModels.Entities
 
         public string EmployeeId => "dfgdf";
 
+        public bool IsModify
+        {
+            get => _isModify;
+            set {
+                _isModify = value;
+                OnPropertyChanged();
+            }
+        }
+
         public Appointment Appointment
         {
             get => _employee.Appointment;
             set {
                 _employee.Appointment = value;
                 OnPropertyChanged();
+                CheckModify();;
             }
         }
 
@@ -50,6 +72,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.Entities
             set {
                 _employee.Rank = value;
                 OnPropertyChanged();
+                CheckModify();;
             }
         }
 
@@ -59,6 +82,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.Entities
             set {
                 _employee.Position = value;
                 OnPropertyChanged();
+                CheckModify();;
             }
         }
 
@@ -68,6 +92,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.Entities
             set {
                 _employee.Shift = value;
                 OnPropertyChanged();
+                CheckModify();;
             }
         }
 
@@ -77,6 +102,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.Entities
             set {
                 _employee.ShortBreakSchedule = value;
                 OnPropertyChanged();
+                CheckModify();;
             }
         }
 
@@ -87,9 +113,18 @@ namespace WorkSpeed.DesktopClient.ViewModels.Entities
             set {
                 _employee.IsActive = value;
                 OnPropertyChanged();
+                CheckModify();
             }
         }
 
+        public bool IsNotActive
+        {
+            get => !IsActive;
+            set {
+                IsActive = !value;
+                OnPropertyChanged();
+            }
+        }
 
         public bool? IsSmoker
         {
@@ -97,7 +132,19 @@ namespace WorkSpeed.DesktopClient.ViewModels.Entities
             set {
                 _employee.IsSmoker = value;
                 OnPropertyChanged();
+                CheckModify();
             }
+        }
+
+        private void CheckModify ()
+        {
+            IsModify = _employee.IsSmoker != _original.IsSmoker
+                       || _employee.IsActive != _original.IsActive
+                       || _employee.ShortBreakSchedule != _original.ShortBreakSchedule
+                       || _employee.Shift != _original.Shift
+                       || _employee.Position != _original.Position
+                       || _employee.Rank != _original.Rank
+                       || _employee.Appointment != _original.Appointment;
         }
     }
 }
