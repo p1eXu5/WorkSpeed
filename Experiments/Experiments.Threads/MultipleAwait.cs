@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Experiments.Threads
 {
     public class MultipleAwait : IProgram
     {
-        public void Run ()
+        public async void Run ()
         {
             Console.WriteLine( "Next: will call MethodAsync [ 1 ]" );
-            MethodAsync();
+            await Method3Async();
 
             Console.WriteLine( "After: was called MethodAsync [ 9 ]" );
         }
@@ -35,7 +36,8 @@ namespace Experiments.Threads
         private async Task Method3Async ()
         {
             Console.WriteLine( "Next: will run Foo as thread [ 4 ]" );
-            await Task.Run( () => Foo() );
+            var task = Task.Run( () => Foo() );
+            task.Wait();
 
             Console.WriteLine( "After: was invoked Foo [ 10 ]" );
         }
@@ -58,6 +60,7 @@ namespace Experiments.Threads
 
         private void Boo ()
         {
+            Thread.Sleep( 5000 );
             for ( int i = 0; i < 2; i++ ) {
                 Console.WriteLine( "    boo" );
             }

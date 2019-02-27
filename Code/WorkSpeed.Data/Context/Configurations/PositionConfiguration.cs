@@ -19,7 +19,7 @@ namespace WorkSpeed.Data.Context.Configurations
             builder.Property( p => p.Complexity ).HasColumnType( "real" );
 
             builder.HasData( new Position[] {
-                new Position { Id = 1, Name = "-", Abbreviations = "", Complexity = 1.0f },
+                new Position { Id = 1, Name = "-", Abbreviations = "-;", Complexity = 1.0f },
                 new Position { Id = 2, Name = "Склад", Abbreviations = "упр.;упр;склад;", Complexity = 1.0f },
                 new Position { Id = 3, Name = "Приёмка", Abbreviations = "пр.;приемка;пр;", Complexity = 1.0f },
                 new Position { Id = 4, Name = "Отгрузка", Abbreviations = "отгр.;отгр;от.;от;", Complexity = 1.0f },

@@ -67,12 +67,11 @@
                           Width="65"
                           VerticalContentAlignment="Center"
                           HorizontalContentAlignment="Left"
-                          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.AppointmentVms}"
+                          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.EmployeeReportVm.AppointmentVmCollection}"
                           SelectedValue="{Binding Appointment}"
                           SelectedValuePath="Appointment"
                           TextSearch.TextPath="Abbreviation"
                           DisplayMemberPath="InnerName"
-                          Text="гр."
                           />
             <Grid Margin="5,0,3,0">
                 <Path Data="{StaticResource g_Emblem}"
@@ -85,25 +84,25 @@
                     </Path.RenderTransform>
                 </Path>
                 <ComboBox BorderThickness="0"
-                              Width="30"
-                              VerticalContentAlignment="Center"
-                              HorizontalContentAlignment="Center"
-                              Margin="5,0" 
-                              ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.Ranks}"
-                              SelectedItem="{Binding Rank}"
-                              DisplayMemberPath="Number"
-                              Text="15"
-                              />
+                          Width="30"
+                          VerticalContentAlignment="Center"
+                          HorizontalContentAlignment="Center"
+                          Margin="5,0" 
+                          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.EmployeeReportVm.RankVmCollection}"
+                          SelectedValue="{Binding Rank}"
+                          SelectedValuePath="Rank"
+                          DisplayMemberPath="Number"
+                          />
             </Grid>
             <ComboBox BorderThickness="0" 
                           VerticalContentAlignment="Center"
                           Width="70"
-                          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.PositionVms}"
+                          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.EmployeeReportVm.PositionVmCollection}"
                           SelectedValue="{Binding Position}"
                           SelectedValuePath="Position"
                           TextSearch.TextPath="Abbreviation"
                           DisplayMemberPath="Name"
-                          Text="мез.4"
+
                           />
         </StackPanel>
 
@@ -116,7 +115,7 @@
                                    Text="Смена:" />
                 </Border>
             </HeaderedContentControl.Header>
-            <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.ShiftVms}"
+            <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.EmployeeReportVm.ShiftVmCollection}"
                           SelectedValue="{Binding Shift}"
                           SelectedValuePath="Shift"
                           DisplayMemberPath="Name"
@@ -135,7 +134,7 @@
                                                />
                 </Border>
             </HeaderedContentControl.Header>
-            <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.ShortBreakScheduleVms}"
+            <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.EmployeeReportVm.ShortBreakVmCollection}"
                           SelectedValue="{Binding ShortBreakSchedule}"
                           SelectedValuePath="ShortBreakSchedule"
                           DisplayMemberPath="Name" 

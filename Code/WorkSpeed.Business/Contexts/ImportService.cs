@@ -54,9 +54,9 @@ namespace WorkSpeed.Business.Contexts
 
 
 
-        public Task ImportFromXlsxAsync ( string fileName, IProgress< (int, string) > progress, CancellationToken cancellationToken )
+        public async Task ImportFromXlsxAsync ( string fileName, IProgress< (int, string) > progress, CancellationToken cancellationToken )
         {
-            return Task.Run( () => ImportFromXlsx( fileName, progress ), cancellationToken );
+            await Task.Run( () => ImportFromXlsx( fileName, progress ), cancellationToken );
         }
 
         public void ImportFromXlsx ( string fileName, IProgress< (int, string) > progress = null )

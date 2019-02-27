@@ -23,12 +23,12 @@ namespace WorkSpeed.Data.Context
         }
 
         public static IQueryable< Appointment > GetAppointments ( this WorkSpeedDbContext dbContext )
-            => dbContext.Appointments.AsQueryable();
+            => dbContext.Appointments.OrderBy( a => a.Id ).AsQueryable();
 
         public static IQueryable< Rank > GetRanks ( this WorkSpeedDbContext dbContext )
-            => dbContext.Ranks.AsQueryable();
+            => dbContext.Ranks.OrderBy( r => r.Number ).AsQueryable();
 
         public static IQueryable< Position > GetPositions ( this WorkSpeedDbContext dbContext )
-            => dbContext.Positions.AsQueryable();
+            => dbContext.Positions.OrderBy( p => p.Id ).AsQueryable();
     }
 }

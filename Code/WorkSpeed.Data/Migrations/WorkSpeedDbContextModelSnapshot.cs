@@ -379,6 +379,14 @@ namespace WorkSpeed.Data.Migrations
                         new
                         {
                             Id = 1,
+                            Abbreviations = "-;",
+                            InnerName = "-",
+                            OfficialName = "-",
+                            SalaryPerOneHour = 47.85m
+                        },
+                        new
+                        {
+                            Id = 2,
                             Abbreviations = "гр.;гр;груз;грузч.;",
                             InnerName = "Грузчик",
                             OfficialName = "Грузчик",
@@ -386,7 +394,7 @@ namespace WorkSpeed.Data.Migrations
                         },
                         new
                         {
-                            Id = 2,
+                            Id = 3,
                             Abbreviations = "кл.;кладовщик;кл;клад;клад.;",
                             InnerName = "Кладовщик на РРЦ",
                             OfficialName = "Кладовщик склада",
@@ -394,7 +402,7 @@ namespace WorkSpeed.Data.Migrations
                         },
                         new
                         {
-                            Id = 3,
+                            Id = 4,
                             Abbreviations = "пр.;приёмщик;приемщик;пр;",
                             InnerName = "Кладовщик приемщик",
                             OfficialName = "Кладовщик-приемщик",
@@ -402,7 +410,7 @@ namespace WorkSpeed.Data.Migrations
                         },
                         new
                         {
-                            Id = 4,
+                            Id = 5,
                             Abbreviations = "вод.;водитель;вод;карщик;",
                             InnerName = "Водитель погрузчика",
                             OfficialName = "Водитель погрузчика",
@@ -410,7 +418,7 @@ namespace WorkSpeed.Data.Migrations
                         },
                         new
                         {
-                            Id = 5,
+                            Id = 6,
                             Abbreviations = "ст.кл.;старший;ст;ст.;старшийкладовщик;ст.клад.;",
                             InnerName = "Старший кладовщик на РРЦ",
                             OfficialName = "Старший кладовщик склада",
@@ -418,7 +426,7 @@ namespace WorkSpeed.Data.Migrations
                         },
                         new
                         {
-                            Id = 6,
+                            Id = 7,
                             Abbreviations = "зам.пр.;зампоприёмке;зампр;",
                             InnerName = "Заместитель управляющего склада по отгрузке",
                             OfficialName = "Менеджер по отправке груза",
@@ -426,7 +434,7 @@ namespace WorkSpeed.Data.Migrations
                         },
                         new
                         {
-                            Id = 7,
+                            Id = 8,
                             Abbreviations = "зам.отгр.;зампоотгрузке;замотгр;",
                             InnerName = "Заместитель управляющего склада по приемке",
                             OfficialName = "Менеджер по приему груза",
@@ -434,7 +442,7 @@ namespace WorkSpeed.Data.Migrations
                         },
                         new
                         {
-                            Id = 8,
+                            Id = 9,
                             Abbreviations = "упр.скл.;управляющий;упр.;упр;упр.складом;",
                             InnerName = "Управляющий РРЦ",
                             OfficialName = "Управляющий складом",
@@ -824,90 +832,97 @@ namespace WorkSpeed.Data.Migrations
                         new
                         {
                             Id = 1,
+                            Abbreviations = "-;",
+                            Complexity = 1f,
+                            Name = "-"
+                        },
+                        new
+                        {
+                            Id = 2,
                             Abbreviations = "упр.;упр;склад;",
                             Complexity = 1f,
                             Name = "Склад"
                         },
                         new
                         {
-                            Id = 2,
+                            Id = 3,
                             Abbreviations = "пр.;приемка;пр;",
                             Complexity = 1f,
                             Name = "Приёмка"
                         },
                         new
                         {
-                            Id = 3,
+                            Id = 4,
                             Abbreviations = "отгр.;отгр;от.;от;",
                             Complexity = 1f,
                             Name = "Отгрузка"
                         },
                         new
                         {
-                            Id = 4,
+                            Id = 5,
                             Abbreviations = "вод.;водитель;вод;",
                             Complexity = 1f,
                             Name = "Водитель"
                         },
                         new
                         {
-                            Id = 5,
+                            Id = 6,
                             Abbreviations = "ст.см.кр.;ссмкр;",
                             Complexity = 1f,
                             Name = "Старший смены, крупняк"
                         },
                         new
                         {
-                            Id = 6,
+                            Id = 7,
                             Abbreviations = "кр.;кр;",
                             Complexity = 1f,
                             Name = "Крупняк"
                         },
                         new
                         {
-                            Id = 7,
+                            Id = 8,
                             Abbreviations = "ст.см.мез.;ссммез;",
                             Complexity = 1f,
                             Name = "Старший смены, мезонин"
                         },
                         new
                         {
-                            Id = 8,
+                            Id = 9,
                             Abbreviations = "мез.1;мезонин1;мез1;",
                             Complexity = 1f,
                             Name = "Мезонин, 1-й этаж"
                         },
                         new
                         {
-                            Id = 9,
+                            Id = 10,
                             Abbreviations = "мез.2;мезонин2;мез2;",
                             Complexity = 1f,
                             Name = "Мезонин, 2-й этаж"
                         },
                         new
                         {
-                            Id = 10,
+                            Id = 11,
                             Abbreviations = "мез.3;мезонин3;мез3;",
                             Complexity = 1f,
                             Name = "Мезонин, 3-й этаж"
                         },
                         new
                         {
-                            Id = 11,
+                            Id = 12,
                             Abbreviations = "мез.4;мезонин4;мез4;",
                             Complexity = 1f,
                             Name = "Мезонин, 4-й этаж"
                         },
                         new
                         {
-                            Id = 12,
+                            Id = 13,
                             Abbreviations = "рас.;расстановка;рас;",
                             Complexity = 1f,
                             Name = "Расстановка"
                         },
                         new
                         {
-                            Id = 13,
+                            Id = 14,
                             Abbreviations = "дор.;дор;",
                             Complexity = 1f,
                             Name = "Дорогая"
@@ -1001,6 +1016,11 @@ namespace WorkSpeed.Data.Migrations
                     b.ToTable("Ranks","dbo");
 
                     b.HasData(
+                        new
+                        {
+                            Number = 1,
+                            OneHourCost = 0.01m
+                        },
                         new
                         {
                             Number = 2,

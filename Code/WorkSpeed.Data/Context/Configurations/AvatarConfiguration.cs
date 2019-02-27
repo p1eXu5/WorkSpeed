@@ -16,7 +16,7 @@ namespace WorkSpeed.Data.Context.Configurations
             builder.HasKey( p => p.Id );
             builder.Property( p => p.Id ).UseSqlServerIdentityColumn();
 
-            //builder.Property(p => p.Picture).HasColumnType("varbinary(max)");
+            builder.Property(p => p.Picture).HasColumnType("varbinary(max)");
             builder.Property( p => p.Stride ).HasColumnType( "int" ).IsRequired();
             builder.Property( p => p.Width ).HasColumnType( "int" ).IsRequired();
             builder.Property( p => p.Height ).HasColumnType( "int" ).IsRequired();
