@@ -87,7 +87,6 @@
     <Compile Include="ViewModels\ReportService\FilterViewModel.cs" />
     <Compile Include="ViewModels\ReportService\Contracts\IFilteredViewModel.cs" />
     <Compile Include="ViewModels\ReportService\Contracts\IEntityObservableCollection.cs" />
-    <Compile Include="ViewModels\ReportService\Contracts\IReportViewModel.cs" />
     <Compile Include="ViewModels\ReportService\ProductivityReportViewModel.cs" />
     <Compile Include="ViewModels\Productivity\CategorizedProductivityViewModel.cs" />
     <Compile Include="ViewModels\Entities\CategoryViewModel.cs" />
