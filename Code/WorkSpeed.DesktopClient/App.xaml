@@ -25,6 +25,7 @@
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Styles/TabControlStyles.xaml" />
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Styles/HeaderContentControlStyles.xaml" />
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Styles/GroupBoxStyle.xaml" />
+                 <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Styles/ToggleButtonStyles.xaml" />
 
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Templates/FilterDataTemplates.xaml" />
                  <ResourceDictionary Source="pack://application:,,,/WorkSpeed.DesktopClient;component/Resources/Templates/EmployeeReportDataTemplates.xaml" />

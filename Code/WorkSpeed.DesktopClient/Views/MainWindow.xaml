@@ -9,6 +9,7 @@
         xmlns:behavior="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:con="clr-namespace:WorkSpeed.DesktopClient.Converters"
         xmlns:uc="clr-namespace:WorkSpeed.DesktopClient.Views.UserControls"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
 
         d:DataContext="{d:DesignInstance local:MainViewModel}"
@@ -139,9 +140,8 @@
                                >
                         <!-- filters header -->
                         <Border Height="20" DockPanel.Dock="Top"
-                            Background="{StaticResource br_Control.BackgroundAlternative}"
-                        
-                            >
+                                Background="{StaticResource br_Control.BackgroundAlternative}"
+                                >
                             <TextBlock Text="Фильтры" 
                                     VerticalAlignment="Center"
                                     Margin="10,0"
@@ -149,6 +149,7 @@
                                     />
                         </Border>
 
+                        <!-- update button -->
                         <Border DockPanel.Dock="Top" 
                                 Background="{StaticResource br_Window.Background}"
                                 >
@@ -175,6 +176,43 @@
                                     <Setter Property="Visibility" Value="Collapsed" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding EmployeeReportVm.IsModify}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+
+                        <Border DockPanel.Dock="Top" 
+                                Background="{StaticResource br_Window.BackgroundAlternative}"
+                                BorderThickness="0,0,1,1" BorderBrush="{StaticResource br_Window.Border}"
+                                >
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel VerticalAlignment="Center"
+                                            Orientation="Horizontal"
+                                            Margin="0,5"
+                                            >
+                                    <TextBlock Margin="10,0,12,0" Text="С" VerticalAlignment="Center"
+                                               />
+                                    <xctk:DateTimePicker Width="200" Value="{Binding ProductivityReportVm.StartTime, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                                </StackPanel>
+                                <StackPanel VerticalAlignment="Center"
+                                            Orientation="Horizontal"
+                                            Margin="0,0,0,5"
+                                            >
+                                    <TextBlock Margin="10,0,5,0" Text="По" VerticalAlignment="Center"
+                                               />
+                                    <xctk:DateTimePicker Width="200" Value="{Binding ProductivityReportVm.EndTime, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                                </StackPanel>
+                            </StackPanel>
+
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="BorderThickness" Value="0,0,0,1"></Setter>
+                                    <Setter Property="BorderBrush" Value="{StaticResource br_Window.Border}" />
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding SelectedIndex}" Value="0">
                                             <Setter Property="Visibility" Value="Visible" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -267,7 +305,7 @@
                     </StackPanel>
 
                     <Grid IsSharedSizeScope="True" 
-                      HorizontalAlignment="Stretch" 
+                          HorizontalAlignment="Stretch" 
                       >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
@@ -310,19 +348,12 @@
                                     TabStripPlacement="Top"
                                     Background="{StaticResource br_Window.Background}"
                                     BorderThickness="0"
-                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                    HorizontalAlignment="Stretch" 
+                                    VerticalAlignment="Stretch"
                                     IsHitTestVisible="True"
                                     SelectedIndex="{Binding SelectedIndex}"
                                     >
-                            <!--<behavior:Interaction.Triggers>
-                                <behavior:EventTrigger EventName="SelectionChanged" SourceObject="{Binding ElementName=m_TabControl}" >
-                                    <behavior:InvokeCommandAction Command="{Binding TabItemChangedCommand}"
-                                                                  CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=TabControl}, Path=SelectedIndex}"
-                                                                  />
-                                </behavior:EventTrigger>
-                            </behavior:Interaction.Triggers>-->
-                            
-                            <!-- ProductivityReport #0 -->
+
                             <TabItem RenderTransform="1,0,0,1,2,0"
                                     >
                                 <TabItem.Header>
@@ -338,7 +369,7 @@
                                     </StackPanel>
                                 </TabItem.Header>
 
-                                <uc:ProductivityReportViewModel DataContext="{Binding ProductivityReportVm}" />
+                                <uc:ProductivityReportUserControl DataContext="{Binding ProductivityReportVm}" />
                             </TabItem>
 
                             <!-- EmployeeEditor #1 -->
@@ -357,7 +388,7 @@
                                     </StackPanel>
                                 </TabItem.Header>
 
-                                <uc:EmployeeReportUserControl DataContext="{Binding EmployeeReportVm}" />
+                                <!--<uc:EmployeeReportUserControl DataContext="{Binding EmployeeReportVm}" />-->
                             </TabItem>
 
                             <!-- Settings #2 -->
@@ -365,10 +396,10 @@
                                 <TabItem.Header>
                                     <StackPanel Orientation="Vertical">
                                         <Path Style="{StaticResource st_Window.Common.Path}" 
-                                        Height="40"
-                                        Data="{StaticResource g_Settings}"
-                                        HorizontalAlignment="Center"
-                                        />
+                                              Height="40"
+                                              Data="{StaticResource g_Settings}"
+                                              HorizontalAlignment="Center"
+                                              />
                                         <Border Margin="0,5,0,0">
                                             <TextBlock  FontSize="18" Text="Настройки"  />
                                         </Border>

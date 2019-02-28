@@ -18,9 +18,9 @@ namespace WorkSpeed.DesktopClient.Views.UserControls
     /// <summary>
     /// Interaction logic for ProductivityReportVm.xaml
     /// </summary>
-    public partial class ProductivityReportViewModel : UserControl
+    public partial class ProductivityReportUserControl : UserControl
     {
-        public ProductivityReportViewModel()
+        public ProductivityReportUserControl()
         {
             InitializeComponent();
         }

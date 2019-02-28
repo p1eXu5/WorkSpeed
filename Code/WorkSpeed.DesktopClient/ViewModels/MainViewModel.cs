@@ -52,7 +52,8 @@ namespace WorkSpeed.DesktopClient.ViewModels
            _progress = new Progress< (int code, string message) >( t => ProgressReport( t.code, t.message ) );
 
             EmployeeReportVm = new EmployeeReportViewModel( reportService, dialogRepository );
-            ProductivityReportVm = new ProductivityReportViewModel( reportService, dialogRepository );   
+            ProductivityReportVm = new ProductivityReportViewModel( reportService, dialogRepository );
+            
         }
 
         #endregion
@@ -126,7 +127,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
         private void OnWindowLoaded ( object o )
         {
-            SelectedIndex = (int)Tabs.EmployeeEditor;
+            SelectedIndex = (int)Tabs.ProductivityReport;
         }
 
         private async Task ImportAsync ( object obj )

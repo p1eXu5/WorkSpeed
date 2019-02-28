@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -79,6 +80,24 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         public ReadOnlyObservableCollection< OperationViewModel > OperationVmCollection { get; private set; }
         public ReadOnlyObservableCollection< EmployeeProductivityViewModel > EmployeeProductivityVmCollection { get; private set; }
+
+        public DateTime StartTime
+        {
+            get => Period.Start;
+            set {
+                Period = new Period( value, Period.End );
+                OnPropertyChanged();
+            }
+        }
+
+        public DateTime EndTime
+        {
+            get => Period.End;
+            set {
+                Period = new Period( Period.Start, value );
+                OnPropertyChanged();
+            }
+        }
 
         public Period Period
         {

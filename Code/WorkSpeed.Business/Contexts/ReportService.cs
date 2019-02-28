@@ -185,7 +185,7 @@ namespace WorkSpeed.Business.Contexts
             ReloadEntities< Category >();
         }
 
-        public void SetPeriodAsync ( Period period )
+        public Task SetPeriodAsync ( Period period )
         {
             throw new NotImplementedException();
         }
@@ -204,16 +204,17 @@ namespace WorkSpeed.Business.Contexts
         {
             IEnumerable< ShiftGrouping > grouping = new ShiftGrouping[0];
 
-            var task = Task.Run( () => { 
-                try {
-                    lock ( _lock ) {
-                        grouping = _dbContext.GetShiftGrouping().Select( s => new ShiftGrouping( s.shift, s.appointments ) ).ToArray();
-                    }
-                }
-                catch ( Exception ex ) {
-                    ;
-                }
-            });
+            var task = Task.Run( () => 
+                        { 
+                            lock ( _lock ) {
+                                try {
+                                    grouping = _dbContext.GetShiftGrouping().Select( s => new ShiftGrouping( s.shift, s.appointments ) ).ToArray();
+                                }
+                                catch ( Exception ex ) {
+                                    grouping = new ShiftGrouping[0];
+                                }
+                            }
+                        });
 
             await task;
 
@@ -231,27 +232,31 @@ namespace WorkSpeed.Business.Contexts
 
 
 
-        public Task LoadEmployeeProductivitiesAsync ()
+        public async Task LoadEmployeeProductivitiesAsync ()
         {
-            var tcs = new TaskCompletionSource< bool >();
+            IEnumerable< EmployeeProductivity > productivity = new EmployeeProductivity[0];
 
-            Task.Run( () =>
+            var task = Task.Run( () =>
                       {
-                          try {
-                              _employeeProductivityCollections.Clear();
-                              foreach ( var collection in GetProductivityCollection( Period ) ) {
-                                  _employeeProductivityCollections.Add( collection );
+                          lock ( _lock ) {
+                              try {
+                                  productivity = GetProductivityCollection( Period );
                               }
-                              tcs.SetResult( true );
+                              catch ( Exception ex ) {
+                                  productivity = new EmployeeProductivity[0];
+                              }
                           }
-                          catch ( Exception ) {
-                              _employeeProductivityCollections.Clear();
-                              tcs.SetResult( false );
-                          }
-                      }
-                    );
+                    });
 
-            return tcs.Task;
+            await task;
+
+            if ( EmployeeProductivityCollections.Any() ) {
+                _employeeProductivityCollections.Clear();
+            }
+
+            foreach ( var collection in productivity ) {
+                _employeeProductivityCollections.Add( collection );
+            }
         }
 
         /// <summary>

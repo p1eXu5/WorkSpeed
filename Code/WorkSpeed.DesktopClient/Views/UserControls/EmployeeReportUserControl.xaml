@@ -23,7 +23,8 @@
             </MultiBinding>
         </Grid.Height>
 
-        <ScrollViewer HorizontalScrollBarVisibility="Visible" Padding="5,10,0,0">
+        <ScrollViewer HorizontalScrollBarVisibility="Visible" 
+                      Padding="5,10,0,0">
             <ListBox ItemsSource="{Binding ShiftGroupingVmCollection}"
                      Height="Auto" Width="Auto" 
                      HorizontalAlignment="Left" VerticalAlignment="Top"

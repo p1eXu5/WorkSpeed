@@ -57,6 +57,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.8.19076.18510, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xceed.Wpf.Toolkit.3.8.19076.18510\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -158,8 +161,8 @@
     <Compile Include="Views\UserControls\CategoriesThreshold.xaml.cs">
       <DependentUpon>CategoriesThreshold.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UserControls\ProductivityReportViewModel.xaml.cs">
-      <DependentUpon>ProductivityReportViewModel.xaml</DependentUpon>
+    <Compile Include="Views\UserControls\ProductivityReportUserControl.xaml.cs">
+      <DependentUpon>ProductivityReportUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\ProductivityTable.xaml.cs">
       <DependentUpon>ProductivityTable.xaml</DependentUpon>
@@ -326,7 +329,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UserControls\ProductivityReportViewModel.xaml">
+    <Page Include="Views\UserControls\ProductivityReportUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
