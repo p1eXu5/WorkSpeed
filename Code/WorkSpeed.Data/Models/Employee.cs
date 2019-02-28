@@ -5,6 +5,9 @@ using WorkSpeed.Data.Models.Actions;
 
 namespace WorkSpeed.Data.Models
 {
+    /// <summary>
+    /// Required: Name, IsActive.
+    /// </summary>
     public class Employee : IEntity, IKeyedEntity< string >
     {
         [ MaxLength (7), MinLength (7)]

@@ -66,7 +66,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
             set {
                 _selectedIndex = value;
                 OnPropertyChanged();
-                TabItemChangedAsync( value );
+                UpdateAsyncCommand.Execute( null );
             }
         }
 
@@ -109,6 +109,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
                 OnPropertyChanged();
             }
         }
+
         #endregion
 
 
@@ -116,7 +117,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
         public ICommand LoadedCommand => new MvvmCommand( OnWindowLoaded );
         public IAsyncCommand ImportAsyncCommand => new MvvmAsyncCommand( ImportAsync );
-        public IAsyncCommand UpdateCommand => new MvvmAsyncCommand( UpdateAsync );
+        public IAsyncCommand UpdateAsyncCommand => new MvvmAsyncCommand( UpdateAsync );
 
         #endregion
 
@@ -153,8 +154,8 @@ namespace WorkSpeed.DesktopClient.ViewModels
         private async Task ImportAsync ( string fileName )
         {
             var token = _cancellationTokenSource.Token;
-            await _importService.ImportFromXlsxAsync( fileName, _progress, token ).ConfigureAwait( false );
-            await ((MvvmAsyncCommand)UpdateCommand).ExecuteAsync().ConfigureAwait( false );
+            await _importService.ImportFromXlsxAsync( fileName, _progress, token );
+            await ((MvvmAsyncCommand)UpdateAsyncCommand).ExecuteAsync().ConfigureAwait( false );
         }
 
         private async Task UpdateAsync ( object o )
@@ -162,7 +163,13 @@ namespace WorkSpeed.DesktopClient.ViewModels
             switch ( SelectedIndex ) {
 
                 case (int)Tabs.EmployeeEditor:
-                    await EmployeeReportVm.LoadEmployeesAsync( null ).ConfigureAwait( false );
+                    FilterVmCollection = EmployeeReportVm.FilterVmCollection;
+                    await EmployeeReportVm.UpdateAsync().ConfigureAwait( false );
+                    break;
+
+                case (int)Tabs.ProductivityReport:
+                    FilterVmCollection = ProductivityReportVm.FilterVmCollection;
+                    await ProductivityReportVm.UpdateAsync().ConfigureAwait( false );
                     break;
             }
         }
@@ -186,17 +193,6 @@ namespace WorkSpeed.DesktopClient.ViewModels
             var view = _dialogRepository.GetView( new ErrorViewModel( message ) );
             view?.ShowDialog();
         }
-
-        private async void TabItemChangedAsync ( int tabIndex )
-        {
-            switch ( tabIndex ) {
-                case (int)Tabs.EmployeeEditor :
-                    FilterVmCollection = EmployeeReportVm.FilterVmCollection;
-                    await EmployeeReportVm.OnSelectedAsync();
-                    break;
-            }
-        }
-
 
         #endregion
 

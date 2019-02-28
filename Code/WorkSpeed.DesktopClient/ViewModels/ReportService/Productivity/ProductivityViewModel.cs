@@ -68,6 +68,9 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
             }
         }
 
+        /// <summary>
+        ///     Sets next aspect collection.
+        /// </summary>
         protected void Next ()
         {
             if ( _queue.Count == 0 ) return;

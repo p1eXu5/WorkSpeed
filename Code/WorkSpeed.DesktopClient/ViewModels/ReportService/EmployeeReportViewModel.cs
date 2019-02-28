@@ -24,6 +24,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         #region Fields
 
         private readonly ObservableCollection< ShiftGroupingViewModel > _shiftGroupingVmCollection;
+        private bool onStart;
 
         #endregion
 
@@ -38,6 +39,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             Observe( _reportService.ShiftGroupingCollection, _shiftGroupingVmCollection, shgvm => shgvm.ShiftGrouping, FilterVmCollection );
 
             SetupView( ShiftGroupingVmCollection );
+
+            onStart = true;
         }
 
         #endregion
@@ -76,26 +79,14 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         private async Task LoadEmployeesAsync ()
         {
             ReportMessage = "Идёт загрузка сотрудников";
+
             await _reportService.LoadShiftGroupingAsync();
 
-            if (_reportService.ShiftGroupingCollection.Any())
-            {
+            if ( ShiftGroupingVmCollection.Any() ) {
                 ReportMessage = "";
-
-                if ( _shiftGroupingVmCollection.Any() ) {
-                    _shiftGroupingVmCollection.Clear();
-                }
-
-                foreach ( var shiftGrouping in _reportService.ShiftGroupingCollection ) {
-
-                    var vm = new ShiftGroupingViewModel( shiftGrouping, FilterVmCollection );
-                    vm.PropertyChanged += OnIsModifyChanged;
-                    _shiftGroupingVmCollection.Add( vm );
-                    Refresh();
-                }
+                Refresh();
             }
-            else
-            {
+            else {
                 ReportMessage = "Сотрудники отсутствуют. Чтобы добавить сотрудников, имортируйте их.";
             }
         }
@@ -124,7 +115,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                       && base.PredicateFunc( o );
 
             return res;
-
         }
 
         #endregion

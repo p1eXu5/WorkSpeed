@@ -31,7 +31,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering
             _entities = new List< object >();
         }
 
-        public FilterViewModel ( string header, bool isCheckedValue )
+        public FilterViewModel ( string header, bool? isCheckedValue = null )
             : this( header )
         {
             var trueItem = new FilterItemViewModel( true, TRUE_CAPTION );
@@ -42,8 +42,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering
 
             FilterItemVmCollection = new ObservableCollection< FilterItemViewModel >( new [] { trueItem, falseItem });
 
-            trueItem.IsChecked = isCheckedValue;
-            falseItem.IsChecked = isCheckedValue;
+            trueItem.IsChecked = isCheckedValue ?? true;
+            falseItem.IsChecked = !isCheckedValue ?? true;
         }
 
         public FilterViewModel ( string header, IEnumerable< object > entities, Func< object, string> captionFunc )

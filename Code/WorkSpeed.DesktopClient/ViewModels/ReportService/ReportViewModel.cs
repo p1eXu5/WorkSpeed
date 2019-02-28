@@ -101,7 +101,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                 new FilterViewModel( "Должности", AppointmentVmCollection, a => (( AppointmentViewModel )a).InnerName ),
                 new FilterViewModel( "Смены", ShiftVmCollection, s => (( ShiftViewModel )s).Name ),
                 new FilterViewModel( "Ранги", RankVmCollection, r => (( RankViewModel )r).Number.ToString( CultureInfo.InvariantCulture ) ),
-                new FilterViewModel( "Курит", true ),
+                new FilterViewModel( "Курит", null ),
             });
 
             coll[ (int)FilterIndexes.IsActive ].FilterChanged += OnPredicateChange;

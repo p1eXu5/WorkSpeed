@@ -28,7 +28,7 @@ namespace WorkSpeed.Business.Contexts.Contracts
         Task LoadEmployeeProductivitiesAsync ();
 
         Period Period { get; }
-        void SetPeriodAsync ( Period period );
+        Task SetPeriodAsync ( Period period );
 
         void UpdateRange ( IEnumerable< Employee > employees );
     }

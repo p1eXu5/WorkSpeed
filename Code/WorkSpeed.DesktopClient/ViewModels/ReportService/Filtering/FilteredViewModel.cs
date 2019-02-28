@@ -18,10 +18,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering
 
         protected FilteredViewModel ()
         {
-            ViewList = new List< ICollectionView >(2);
+            ViewList = new List< ListCollectionView >(2);
         }
 
-        public List< ICollectionView > ViewList { get; protected set; }
+        public List< ListCollectionView > ViewList { get; protected set; }
         
 
         public bool IsModify
@@ -41,7 +41,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering
         /// <param name="predicate"></param>
         protected ICollectionView SetupView ( object source, Predicate< object > predicate = null )
         {
-            var view = CollectionViewSource.GetDefaultView( source );
+            ListCollectionView view = ( ListCollectionView )CollectionViewSource.GetDefaultView( source );
 
             if ( view.CanFilter ) {
                 view.Filter = predicate ?? PredicateFunc;
@@ -54,12 +54,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering
         protected internal virtual void Refresh ()
         {
             foreach ( var view in ViewList ) {
-                try {
                     view.Refresh();
-                }
-                catch ( Exception ex ) {
-                    ;
-                }
             }
         }
 

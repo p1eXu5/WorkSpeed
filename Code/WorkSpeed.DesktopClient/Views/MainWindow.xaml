@@ -156,7 +156,7 @@
                                     Width="100" 
                                     Margin="10"
                                     BorderBrush="Green"
-                                    Command="{Binding UpdateCommand}"
+                                    Command="{Binding UpdateAsyncCommand}"
                                     BorderThickness="1"
                                     Foreground="{StaticResource br_Button.MouseOver.Foreground}"
                                     Background="#ddeedd"

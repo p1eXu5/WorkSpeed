@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -12,68 +11,65 @@ using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.Entities;
 using WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity;
 using WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering;
-using WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
     public class ProductivityReportViewModel : ReportViewModel
     {
-        protected const int OPERATION = 6;
-
-        private ObservableCollection< EmployeeProductivityViewModel > _employeeProductivityVmCollection;
-
-
         #region Ctor
 
         public ProductivityReportViewModel ( IReportService reportService, IDialogRepository dialogRepository )
             : base( reportService, dialogRepository )
         {
             ExtendFilters();
+
             var operationVmCollection = new ObservableCollection< OperationViewModel >( _reportService.OperationCollection.Select( o => new OperationViewModel( o ) ));
             OperationVmCollection = new ReadOnlyObservableCollection< OperationViewModel >( operationVmCollection );
             Observe( _reportService.OperationCollection, operationVmCollection, o => o.Operation );
+
             SetupView( OperationVmCollection, OperationPredicate );
 
             CreateEmployeeProductivityVmCollection();
-            var view = SetupView( EmployeeProductivityVmCollection, EmployeeProductivityPredicate );
+
+            var view = SetupView( EmployeeProductivityVmCollection );
+
             view.SortDescriptions.Add( new SortDescription( "PositionId", ListSortDirection.Ascending ) );
             view.SortDescriptions.Add( new SortDescription( "AppointmentId", ListSortDirection.Ascending ) );
             view.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
 
             
             void CreateEmployeeProductivityVmCollection ()
-        {
-            _employeeProductivityVmCollection = new ObservableCollection< EmployeeProductivityViewModel >(
-                _reportService.EmployeeProductivityCollections.Select(
-                    p => new EmployeeProductivityViewModel( p, _reportService.OperationCollection, _reportService.CategoryCollection, ProductivityPredicate )
-                )
-            );
+            {
+                var employeeProductivityVmCollection = new ObservableCollection< EmployeeProductivityViewModel >(
+                                                                                                                                   _reportService.EmployeeProductivityCollections.Select(
+                                                                                                                                                                                         p => new EmployeeProductivityViewModel( p, FilterVmCollection, _reportService.CategoryCollection )
+                                                                                                                                                                                        )
+                                                                                                                                  );
 
-            EmployeeProductivityVmCollection = new ReadOnlyObservableCollection< EmployeeProductivityViewModel >( _employeeProductivityVmCollection );
+                EmployeeProductivityVmCollection = new ReadOnlyObservableCollection< EmployeeProductivityViewModel >( employeeProductivityVmCollection );
 
-            (( INotifyCollectionChanged )_reportService.EmployeeProductivityCollections).CollectionChanged +=
-                ( s, e ) =>
-                {
-                    if ( e.NewItems[ 0 ] != null ) {
-                        _employeeProductivityVmCollection.Add(
-                            new EmployeeProductivityViewModel(
-                                ( EmployeeProductivity )e.NewItems[ 0 ],
-                                _reportService.OperationCollection,
-                                _reportService.CategoryCollection,
-                                ProductivityPredicate
-                            )
-                        );
-                    }
+                (( INotifyCollectionChanged )_reportService.EmployeeProductivityCollections).CollectionChanged +=
+                    ( s, e ) =>
+                    {
+                        if ( e.NewItems?[ 0 ] != null ) {
+                            employeeProductivityVmCollection.Add(
+                                new EmployeeProductivityViewModel(
+                                    ( EmployeeProductivity )e.NewItems[ 0 ],
+                                    FilterVmCollection,
+                                    _reportService.CategoryCollection
+                                )
+                            );
+                        }
 
-                    if ( e.OldItems[ 0 ] != null ) {
-                        _employeeProductivityVmCollection.Remove( _employeeProductivityVmCollection.First( vm => ReferenceEquals( vm.EmployeeProductivity, e.OldItems[ 0 ] ) ) );
-                    }
+                        if ( e.OldItems?[ 0 ] != null ) {
+                            employeeProductivityVmCollection.Remove( employeeProductivityVmCollection.First( vm => ReferenceEquals( vm.EmployeeProductivity, e.OldItems[ 0 ] ) ) );
+                        }
 
-                    if ( e.NewItems[ 0 ] == null && e.OldItems[ 0 ] == null ) {
-                        _employeeProductivityVmCollection.Clear();
-                    }
-                };
-        }
+                        if ( e.NewItems?[ 0 ] == null && e.OldItems?[ 0 ] == null ) {
+                            employeeProductivityVmCollection.Clear();
+                        }
+                    };
+            }
         }
 
         #endregion
@@ -88,7 +84,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         {
             get => _reportService.Period;
             set {
-                _reportService.SetPeriodAsync( value );
+                _reportService.SetPeriodAsync( value ).FireAndForgetSafeAsync();
                 OnPropertyChanged();
             }
         }
@@ -98,19 +94,40 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         #region Methods
 
-        public override Task OnSelectedAsync ()
+        public override async Task UpdateAsync ()
         {
-            throw new NotImplementedException();
+            await LoadEmployeeProductivityAsync().ConfigureAwait( false );
         }
 
-        public override Task UpdateAsync ()
+        
+        protected internal override void Refresh ()
         {
-            throw new NotImplementedException();
+            foreach ( var employeeProductivityViewModel in EmployeeProductivityVmCollection ) {
+                employeeProductivityViewModel.Refresh();
+            }
+
+            base.Refresh();
+        }
+ 
+        protected override bool PredicateFunc ( object o )
+        {
+            if (!(o is EmployeeProductivityViewModel employeeProductivity)) return false;
+
+            var res = _filterVmCollection[ ( int )FilterIndexes.IsActive ].Entities.Any( obj => (obj).Equals( employeeProductivity.EmployeeVm.IsActive ) )
+                      && _filterVmCollection[ ( int )FilterIndexes.IsSmoker ].Entities.Any( obj => (obj).Equals( employeeProductivity.EmployeeVm.IsSmoker ) )
+                      && _filterVmCollection[ ( int )FilterIndexes.Rank ].Entities.Any( obj => (obj as RankViewModel)?.Number == employeeProductivity.EmployeeVm.Rank.Number );
+
+            return res;
         }
 
-        private async void LoadEmployeeProductivityAsync ()
+        
+        private bool OperationPredicate ( object o )
         {
-            await _reportService.LoadEmployeeProductivitiesAsync();
+            if ( !(o is OperationViewModel operation) ) return false;
+
+            var res = _filterVmCollection[ (int)FilterIndexes.Operation ].Entities.Any( obj => (obj as Operation) == operation.Operation);
+
+            return res;
         }
 
         private void ExtendFilters ()
@@ -118,34 +135,22 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             var filter = new FilterViewModel( "Операции", _reportService.OperationCollection, p => (( Operation )p).Name );
             _filterVmCollection.Add( filter );
 
-            _filterVmCollection[ OPERATION ].FilterChanged += OnPredicateChange;
-        }
- 
-        private bool EmployeeProductivityPredicate ( object o )
-        {
-            if (!(o is EmployeeProductivityViewModel employeeProductivityViewModel)) return false;
-            return true;
+            _filterVmCollection[ (int)FilterIndexes.Operation ].FilterChanged += OnPredicateChange;
         }
 
-        private bool OperationPredicate ( object o )
+        private async Task LoadEmployeeProductivityAsync ()
         {
-            if ( !(o is OperationViewModel operation) ) return false;
-            return _filterVmCollection[ OPERATION ].Entities.Any( obj => (obj as Operation) == operation.Operation);
-        }
+            ReportMessage = "Идёт загрузка выработки";
 
-        private bool ProductivityPredicate ( object o )
-        {
-            if ( !( o is ProductivityViewModel productivityVm ) ) return false;
-            return _filterVmCollection[ OPERATION ].Entities.Any( obj => (obj as Operation) == productivityVm.Operation);
-        }
+            await _reportService.LoadEmployeeProductivitiesAsync();
 
-        protected internal override void Refresh ()
-        {   
-            foreach ( var employeeProductivityViewModel in EmployeeProductivityVmCollection ) {
-                employeeProductivityViewModel.Refresh();
+            if ( EmployeeProductivityVmCollection.Any() ) {
+                ReportMessage = "";
+                Refresh();
             }
-
-            base.Refresh();
+            else {
+                ReportMessage = "Операции за указанный период отсутствуют.";
+            }
         }
 
         #endregion

@@ -200,37 +200,36 @@ namespace WorkSpeed.Business.Contexts
             return _thresholds;
         }
 
-        public Task LoadShiftGroupingAsync ()
+        public async Task LoadShiftGroupingAsync ()
         {
-            var tcs = new TaskCompletionSource< bool >();
+            IEnumerable< ShiftGrouping > grouping = new ShiftGrouping[0];
 
-            Task.Run( () => { 
+            var task = Task.Run( () => { 
                 try {
-                    LoadShiftGrouping();
-                    tcs.SetResult( true );
+                    lock ( _lock ) {
+                        grouping = _dbContext.GetShiftGrouping().Select( s => new ShiftGrouping( s.shift, s.appointments ) ).ToArray();
+                    }
                 }
-                catch ( Exception ) {
-
-                    if ( _shiftGroupingCollection.Any() ) { _shiftGroupingCollection.Clear(); }
-                    tcs.SetResult( false );
+                catch ( Exception ex ) {
+                    ;
                 }
-            }).ConfigureAwait( false );
+            });
 
-            return tcs.Task;
-        }
+            await task;
 
-        private void LoadShiftGrouping ()
-        {
             lock ( _lock ) {
+
                 if ( _shiftGroupingCollection.Any() ) {
                     _shiftGroupingCollection.Clear();
                 }
 
-                foreach ( var grouping in _dbContext.GetShiftGrouping().Select( s => new ShiftGrouping( s.shift, s.appointments ) ) ) {
-                    _shiftGroupingCollection.Add( grouping );
+                foreach ( var shiftGrouping in grouping ) {
+                    _shiftGroupingCollection.Add( shiftGrouping );
                 }
             }
         }
+
+
 
         public Task LoadEmployeeProductivitiesAsync ()
         {

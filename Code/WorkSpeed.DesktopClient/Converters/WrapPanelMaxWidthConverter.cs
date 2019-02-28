@@ -31,9 +31,9 @@ namespace WorkSpeed.DesktopClient.Converters
 
             var count = System.Convert.ToDouble( values[ 0 ] );
             var width = System.Convert.ToDouble( values[ 1 ] );
-            var horElemCount = Math.Round( 0.38 * Math.Sqrt( count ) * 2 );
+            var horElemCount = (count > 3) ? Math.Ceiling( 0.38 * Math.Sqrt( count ) * 2 ) : (double)count;
 
-            return horElemCount * width;
+            return horElemCount * width  + (count > 1 ? count * 5 - 2 : 5 ) ;
         }
 
         public object[] ConvertBack ( object value, Type[] targetTypes, object parameter, CultureInfo culture )
