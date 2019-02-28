@@ -9,6 +9,6 @@ namespace WorkSpeed.Business.Contexts.Productivity.Builders
 {
     public interface IProductivityCalculator
     {
-        IEnumerable< Productivity > Calculate ( IEnumerable< EmployeeActionBase > actions );
+        IEnumerable< Models.Productivity > Calculate ( IEnumerable< EmployeeActionBase > actions );
     }
 }

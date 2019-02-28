@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Business.Contexts.Productivity;
 using WorkSpeed.Business.Contexts.Productivity.Builders;
+using WorkSpeed.Business.Contexts.Productivity.Models;
 using WorkSpeed.Business.Models;
-using WorkSpeed.Business.Models.Productivity;
 using WorkSpeed.Data.Context;
 using WorkSpeed.Data.Context.ReportService;
 using WorkSpeed.Data.Models;
@@ -52,7 +52,6 @@ namespace WorkSpeed.Business.Contexts
             _productivityBuilder = builder ?? throw new ArgumentNullException(nameof(builder), @"IProductivityBuilder cannot be null.");
             
             CreateCollections();
-            SetupPeriod();
 
             void CreateCollections ()
         {
@@ -83,21 +82,12 @@ namespace WorkSpeed.Business.Contexts
             _categoryCollection = new ObservableCollection< Category >();
             CategoryCollection = new ReadOnlyObservableCollection< Category >( _categoryCollection );
         }
-
-            void SetupPeriod ()
-        {
-            var now = DateTime.Now;
-            var start = now.Date.Subtract( TimeSpan.FromDays( now.Day - 1 ) );
-            Period = new Period( start, now );
-        }
         }
 
         #endregion
 
 
         #region Properties
-        
-        public Period Period { get; set; }
 
         public ReadOnlyObservableCollection< EmployeeProductivity > EmployeeProductivityCollections { get; private set; }
         public ReadOnlyObservableCollection< Category > CategoryCollection { get; private set; }
@@ -109,6 +99,17 @@ namespace WorkSpeed.Business.Contexts
         public ReadOnlyObservableCollection< Shift > ShiftCollection { get; private set; }
         public ReadOnlyObservableCollection< ShortBreakSchedule > ShortBreakCollection { get; private set; }
         public ReadOnlyObservableCollection< Operation > OperationCollection { get; private set; }
+
+        public OperationThresholds Thresholds
+        {
+            get {
+                if ( _thresholds == null ) {
+                    ReadThresholds();
+                }
+
+                return _thresholds;
+            } 
+        }
 
         #endregion
 
@@ -156,16 +157,6 @@ namespace WorkSpeed.Business.Contexts
                 ReloadCollection( _categoryCollection, DbContext.GetCategories() );
                 return;
             }
-
-            if ( typeof( T ).IsAssignableFrom( typeof( ShiftGrouping ) ) ) {
-                await LoadShiftGroupingAsync();
-                return;
-            }
-
-            if ( typeof( T ).IsAssignableFrom( typeof( EmployeeProductivity ) ) ) {
-                await LoadEmployeeProductivitiesAsync();
-                return;
-            }
         }
 
         public void UpdateRange ( IEnumerable< Employee > employees )
@@ -183,11 +174,6 @@ namespace WorkSpeed.Business.Contexts
             ReloadEntities< ShortBreakSchedule >();
             ReloadEntities< Operation >();
             ReloadEntities< Category >();
-        }
-
-        public Task SetPeriodAsync ( Period period )
-        {
-            throw new NotImplementedException();
         }
 
         public OperationThresholds GetThresholds ()
@@ -230,9 +216,7 @@ namespace WorkSpeed.Business.Contexts
             }
         }
 
-
-
-        public async Task LoadEmployeeProductivitiesAsync ()
+        public async Task LoadEmployeeProductivitiesAsync ( Period period )
         {
             IEnumerable< EmployeeProductivity > productivity = new EmployeeProductivity[0];
 
@@ -240,7 +224,7 @@ namespace WorkSpeed.Business.Contexts
                       {
                           lock ( _lock ) {
                               try {
-                                  productivity = GetProductivityCollection( Period );
+                                  productivity = GetProductivityCollection( period ).ToArray();
                               }
                               catch ( Exception ex ) {
                                   productivity = new EmployeeProductivity[0];
@@ -293,7 +277,7 @@ namespace WorkSpeed.Business.Contexts
             if ( actions.Length == 0 ) yield break;
 
             _productivityBuilder.BuildNew();
-            _productivityBuilder.Thresholds = _thresholds;
+            _productivityBuilder.Thresholds = Thresholds;
 
             foreach ( IGrouping< Employee, EmployeeActionBase > grouping in actions ) {
 

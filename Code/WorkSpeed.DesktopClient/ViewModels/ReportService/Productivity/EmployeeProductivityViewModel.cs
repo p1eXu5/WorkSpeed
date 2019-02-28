@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using WorkSpeed.Business.Models.Productivity;
+using WorkSpeed.Business.Contexts.Productivity.Models;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Enums;
 using WorkSpeed.DesktopClient.ViewModels.Entities;

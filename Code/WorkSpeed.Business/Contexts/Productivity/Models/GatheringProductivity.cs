@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
 
-namespace WorkSpeed.Business.Models.Productivity
+namespace WorkSpeed.Business.Contexts.Productivity.Models
 {
     public class GatheringProductivity
     {

@@ -159,7 +159,7 @@
                                     BorderBrush="Green"
                                     Command="{Binding UpdateAsyncCommand}"
                                     BorderThickness="1"
-                                    Foreground="{StaticResource br_Button.MouseOver.Foreground}"
+                                    Foreground="{StaticResource br_Button.Foreground}"
                                     Background="#ddeedd"
                                     >
                                 <Button.Style>
@@ -204,7 +204,24 @@
                                                />
                                     <xctk:DateTimePicker Width="200" Value="{Binding ProductivityReportVm.EndTime, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
                                 </StackPanel>
-                            </StackPanel>
+
+                            <Button Content="Обновить" 
+                                    Width="100" 
+                                    Margin="0,5,0,10"
+                                    BorderBrush="DarkBlue"
+                                    Command="{Binding UpdateAsyncCommand}"
+                                    BorderThickness="1"
+                                    Foreground="{StaticResource br_Button.Foreground2}"
+                                    Background="#ddddee"
+                                    >
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource st_Window.Button}">
+                                        <Setter Property="Border.CornerRadius" Value="3" />
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+
+                        </StackPanel>
 
                             <Border.Style>
                                 <Style TargetType="Border">

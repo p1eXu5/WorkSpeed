@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using WorkSpeed.Business.Models.Productivity;
+using WorkSpeed.Business.Contexts.Productivity.Models;
 using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity

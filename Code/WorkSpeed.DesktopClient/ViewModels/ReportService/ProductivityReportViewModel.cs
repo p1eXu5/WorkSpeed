@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Agbm.Wpf.MvvmBaseLibrary;
 using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Business.Contexts.Productivity;
-using WorkSpeed.Business.Models.Productivity;
+using WorkSpeed.Business.Contexts.Productivity.Models;
 using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.Entities;
 using WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity;
@@ -17,11 +17,14 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
     public class ProductivityReportViewModel : ReportViewModel
     {
+        private Period _period;
+
         #region Ctor
 
         public ProductivityReportViewModel ( IReportService reportService, IDialogRepository dialogRepository )
             : base( reportService, dialogRepository )
         {
+            SetupPeriod();
             ExtendFilters();
 
             var operationVmCollection = new ObservableCollection< OperationViewModel >( _reportService.OperationCollection.Select( o => new OperationViewModel( o ) ));
@@ -38,7 +41,18 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             view.SortDescriptions.Add( new SortDescription( "AppointmentId", ListSortDirection.Ascending ) );
             view.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
 
-            
+
+
+            void SetupPeriod ()
+            {
+                //var now = DateTime.Now;
+                //var start = now.Date.Subtract( TimeSpan.FromDays( now.Day - 1 ) );
+                //Period = new Period( start, now );
+                var start = new DateTime( 2018, 11, 28, 8, 0, 0);
+                var end = new DateTime( 2018, 11, 29, 8, 0, 0);
+                Period = new Period( start, end );
+            }
+
             void CreateEmployeeProductivityVmCollection ()
             {
                 var employeeProductivityVmCollection = new ObservableCollection< EmployeeProductivityViewModel >(
@@ -101,9 +115,9 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         public Period Period
         {
-            get => _reportService.Period;
+            get => _period;
             set {
-                _reportService.SetPeriodAsync( value ).FireAndForgetSafeAsync();
+                _period = value;
                 OnPropertyChanged();
             }
         }
@@ -161,7 +175,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         {
             ReportMessage = "Идёт загрузка выработки";
 
-            await _reportService.LoadEmployeeProductivitiesAsync();
+            await _reportService.LoadEmployeeProductivitiesAsync( Period );
 
             if ( EmployeeProductivityVmCollection.Any() ) {
                 ReportMessage = "";

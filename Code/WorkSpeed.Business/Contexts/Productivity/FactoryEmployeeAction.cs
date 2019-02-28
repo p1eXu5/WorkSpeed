@@ -64,13 +64,13 @@ namespace WorkSpeed.Business.Contexts.Productivity
         /// </summary>
         /// <param name="employee"></param>
         /// <returns></returns>
-        public Productivity GetProductivity ( Employee employee )
+        public Models.Productivity GetProductivity ( Employee employee )
         {
-            if ( !HasOperations( employee ) ) return new Productivity();
+            if ( !HasOperations( employee ) ) return new Models.Productivity();
 
             var actionRepository = _actionRepositories[ employee.Id ];
 
-            var productivity = new Productivity {
+            var productivity = new Models.Productivity {
 
 
             };
@@ -97,6 +97,11 @@ namespace WorkSpeed.Business.Contexts.Productivity
         public void ClearActions ()
         {
             _actionRepositories.Clear();
+        }
+
+        Models.Productivity IFactoryEmployeeAction.GetProductivity(Employee employee)
+        {
+            throw new NotImplementedException();
         }
     }
 }

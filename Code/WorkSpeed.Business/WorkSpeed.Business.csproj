@@ -149,7 +149,7 @@
     <Compile Include="Contexts\Productivity\ModelExtensions.cs" />
     <Compile Include="Contexts\Productivity\PauseBetweenActions.cs" />
     <Compile Include="Contexts\Productivity\Period.cs" />
-    <Compile Include="Contexts\Productivity\Productivity.cs" />
+    <Compile Include="Contexts\Productivity\Models\Productivity.cs" />
     <Compile Include="Contexts\Productivity\RepositoryEmployeeAction.cs" />
     <Compile Include="Contexts\ReportService.cs" />
     <Compile Include="FileModels\EmployeeShortImportModel.cs" />
@@ -198,16 +198,16 @@
     <Compile Include="Models\AllActions.cs" />
     <Compile Include="Models\AppointmentGrouping.cs" />
     <Compile Include="Models\PositionGrouping.cs" />
-    <Compile Include="Models\Productivity\EmployeeProductivity.cs" />
-    <Compile Include="Models\Productivity\GatheringProductivity.cs" />
+    <Compile Include="Contexts\Productivity\Models\EmployeeProductivity.cs" />
+    <Compile Include="Contexts\Productivity\Models\GatheringProductivity.cs" />
     <Compile Include="Contexts\Productivity\IProductivity.cs" />
-    <Compile Include="Models\Productivity\IEmployeeProductivity.cs" />
-    <Compile Include="Models\Productivity\ReceptionProductivity.cs" />
+    <Compile Include="Contexts\Productivity\Models\IEmployeeProductivity.cs" />
+    <Compile Include="Contexts\Productivity\Models\ReceptionProductivity.cs" />
     <Compile Include="Models\ShiftGrouping.cs" />
     <Compile Include="Models\OperationThresholds.cs" />
     <Compile Include="Contexts\Productivity\AddTimeOptions.cs" />
     <Compile Include="Contexts\Productivity\Builders\IProductivityCalculator.cs" />
-    <Compile Include="Contexts\Productivity\Productivity2.cs" />
+    <Compile Include="Contexts\Productivity\Models\Productivity2.cs" />
     <Compile Include="Models\ActionModels\ProductMgh.cs" />
     <Compile Include="FileModels\ActionImportModel.cs" />
     <Compile Include="FileModels\WithProductActionImportModel.cs" />
@@ -257,6 +257,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Contexts\Exceptions\" />
+    <Folder Include="Models\Productivity\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

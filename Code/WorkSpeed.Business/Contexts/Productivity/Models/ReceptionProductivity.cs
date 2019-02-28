@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WorkSpeed.Business.Contexts.Productivity;
 using WorkSpeed.Data.Models;
 
-namespace WorkSpeed.Business.Models.Productivity
+namespace WorkSpeed.Business.Contexts.Productivity.Models
 {
     public class ReceptionProductivity
     {

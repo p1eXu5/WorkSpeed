@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Business.Contexts.Productivity;
+using WorkSpeed.Business.Contexts.Productivity.Models;
 using WorkSpeed.Business.Models;
-using WorkSpeed.Business.Models.Productivity;
 using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Business.Contexts.Contracts
@@ -25,10 +25,7 @@ namespace WorkSpeed.Business.Contexts.Contracts
         ReadOnlyObservableCollection< EmployeeProductivity > EmployeeProductivityCollections { get; }
 
         Task LoadShiftGroupingAsync ();
-        Task LoadEmployeeProductivitiesAsync ();
-
-        Period Period { get; }
-        Task SetPeriodAsync ( Period period );
+        Task LoadEmployeeProductivitiesAsync ( Period period );
 
         void UpdateRange ( IEnumerable< Employee > employees );
     }

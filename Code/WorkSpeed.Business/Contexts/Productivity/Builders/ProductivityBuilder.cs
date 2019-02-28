@@ -28,6 +28,10 @@ namespace WorkSpeed.Business.Contexts.Productivity.Builders
             _downtimePeriods = new HashSet< Period >();
         }
 
+        /// <summary>
+        ///     Returns (productivities, downtimes).
+        /// </summary>
+        /// <returns></returns>
         public (IReadOnlyDictionary< Operation, IProductivity >, HashSet< Period >) GetResult ()
         {
             return ( _productivitys, _downtimePeriods );
@@ -64,7 +68,7 @@ namespace WorkSpeed.Business.Contexts.Productivity.Builders
             }
 
             if ( !_productivitys.ContainsKey( action.Operation ) ) {
-                _productivitys[ action.Operation ] = new Productivity();
+                _productivitys[ action.Operation ] = new Models.Productivity();
             }
 
             _productivitys[ action.Operation ].Add( action, period );

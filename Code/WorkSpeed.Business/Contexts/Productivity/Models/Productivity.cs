@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
-using WorkSpeed.Data.Models.Enums;
 
-namespace WorkSpeed.Business.Contexts.Productivity
+namespace WorkSpeed.Business.Contexts.Productivity.Models
 {
     public class Productivity : IProductivity
     {

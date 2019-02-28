@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Business.Contexts.Productivity;
-using WorkSpeed.Business.Models.Productivity;
 using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity

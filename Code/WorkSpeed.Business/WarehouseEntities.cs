@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Business.Contexts.Productivity;
+using WorkSpeed.Business.Contexts.Productivity.Models;
 using WorkSpeed.Business.Interfaces;
 using WorkSpeed.Data;
 using WorkSpeed.Data.Models;
