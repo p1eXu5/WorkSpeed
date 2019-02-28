@@ -172,7 +172,7 @@
                                 <Style TargetType="Border">
                                     <Setter Property="BorderThickness" Value="0,0,0,1"></Setter>
                                     <Setter Property="BorderBrush" Value="{StaticResource br_Window.Border}" />
-                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Setter Property="Visibility" Value="Collapsed" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding EmployeeReportVm.IsModify}" Value="True">
                                             <Setter Property="Visibility" Value="Visible" />

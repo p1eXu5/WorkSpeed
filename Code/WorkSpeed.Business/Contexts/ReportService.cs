@@ -168,7 +168,11 @@ namespace WorkSpeed.Business.Contexts
             }
         }
 
-        public void UpdateRange ( IEnumerable< Employee > employees ) => _dbContext.UpdateRange( employees );
+        public void UpdateRange ( IEnumerable< Employee > employees )
+        {
+            _dbContext.UpdateRange( employees );
+            _dbContext.SaveChanges();
+        }
 
         public void ReloadAllCollections ()
         {
@@ -210,7 +214,7 @@ namespace WorkSpeed.Business.Contexts
                     if ( _shiftGroupingCollection.Any() ) { _shiftGroupingCollection.Clear(); }
                     tcs.SetResult( false );
                 }
-            });
+            }).ConfigureAwait( false );
 
             return tcs.Task;
         }

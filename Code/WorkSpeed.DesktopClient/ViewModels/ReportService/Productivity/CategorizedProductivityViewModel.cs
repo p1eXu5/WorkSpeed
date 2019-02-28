@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
 
-namespace WorkSpeed.DesktopClient.ViewModels.Productivity
+namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
 {
     public class CategorizedProductivityViewModel : ProductivityViewModel
     {

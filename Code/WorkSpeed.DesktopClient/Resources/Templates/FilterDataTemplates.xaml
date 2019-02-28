@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:rs="clr-namespace:WorkSpeed.DesktopClient.ViewModels.ReportService"
+                    xmlns:rs="clr-namespace:WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering"
                     xmlns:templates="clr-namespace:WorkSpeed.DesktopClient.Views.Templates">
 
     <DataTemplate DataType="{x:Type rs:FilterItemViewModel}">

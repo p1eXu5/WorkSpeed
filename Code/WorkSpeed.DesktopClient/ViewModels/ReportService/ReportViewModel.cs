@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -9,10 +7,11 @@ using System.Threading.Tasks;
 using Agbm.Wpf.MvvmBaseLibrary;
 using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.DesktopClient.ViewModels.Entities;
+using WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
-    public abstract partial class ReportViewModel : FilteredViewModel
+    public abstract class ReportViewModel : FilteredViewModel
     {
         #region Fields
         
@@ -92,8 +91,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         #region Methods
 
-        public abstract Task OnSelectedAsync ();
-
         public abstract Task UpdateAsync ();
 
         protected ObservableCollection< FilterViewModel > GetFilterCollection ()
@@ -104,15 +101,15 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                 new FilterViewModel( "Должности", AppointmentVmCollection, a => (( AppointmentViewModel )a).InnerName ),
                 new FilterViewModel( "Смены", ShiftVmCollection, s => (( ShiftViewModel )s).Name ),
                 new FilterViewModel( "Ранги", RankVmCollection, r => (( RankViewModel )r).Number.ToString( CultureInfo.InvariantCulture ) ),
-                new FilterViewModel( "Курит", false ),
+                new FilterViewModel( "Курит", true ),
             });
 
-            coll[ (int)Filters.IsActive ].FilterChanged += OnPredicateChange;
-            coll[ (int)Filters.Position ].FilterChanged += OnPredicateChange;
-            coll[ (int)Filters.Appointment ].FilterChanged += OnPredicateChange;
-            coll[ (int)Filters.Shift ].FilterChanged += OnPredicateChange;
-            coll[ (int)Filters.Rank ].FilterChanged += OnPredicateChange;
-            coll[ (int)Filters.IsSmoker ].FilterChanged += OnPredicateChange;
+            coll[ (int)FilterIndexes.IsActive ].FilterChanged += OnPredicateChange;
+            coll[ (int)FilterIndexes.Position ].FilterChanged += OnPredicateChange;
+            coll[ (int)FilterIndexes.Appointment ].FilterChanged += OnPredicateChange;
+            coll[ (int)FilterIndexes.Shift ].FilterChanged += OnPredicateChange;
+            coll[ (int)FilterIndexes.Rank ].FilterChanged += OnPredicateChange;
+            coll[ (int)FilterIndexes.IsSmoker ].FilterChanged += OnPredicateChange;
 
             return coll;
         }

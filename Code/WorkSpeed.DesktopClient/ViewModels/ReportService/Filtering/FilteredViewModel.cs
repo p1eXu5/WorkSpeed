@@ -6,7 +6,7 @@ using System.Windows.Data;
 using Agbm.Wpf.MvvmBaseLibrary;
 using WorkSpeed.DesktopClient.ViewModels.ReportService.Contracts;
 
-namespace WorkSpeed.DesktopClient.ViewModels.ReportService
+namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering
 {
     /// <summary>
     ///     Base class for view models that have ability for contained collections filtering.
@@ -75,7 +75,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         protected virtual bool PredicateFunc ( object o )
         {
-            return !(( ICollectionViewList )o).ViewList.All( v => v.IsEmpty );
+            return (( ICollectionViewList )o).ViewList.All( v => !v.IsEmpty );
         }
     }
 }

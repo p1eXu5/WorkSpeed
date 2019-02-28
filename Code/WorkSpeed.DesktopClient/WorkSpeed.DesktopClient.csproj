@@ -72,43 +72,43 @@
     <Compile Include="Converters\TabControlHeightConverter.cs" />
     <Compile Include="Converters\WrapPanelMaxWidthConverter.cs" />
     <Compile Include="TemplateSelectors\FilterTemplateSelector.cs" />
-    <Compile Include="ViewModels\Productivity\AspectsViewModel.cs" />
-    <Compile Include="ViewModels\Productivity\OtherProductivityViewModel.cs" />
-    <Compile Include="ViewModels\Productivity\ShipmentProductivityViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Productivity\AspectsViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Productivity\OtherProductivityViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Productivity\ShipmentProductivityViewModel.cs" />
     <Compile Include="ViewModels\ReportService\EmployeeReportViewModel.cs" />
-    <Compile Include="ViewModels\Entities\AbbreviationViewModel.cs" />
-    <Compile Include="ViewModels\Entities\RankViewModel.cs" />
-    <Compile Include="ViewModels\Grouping\AppointmentGroupingViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Entities\AbbreviationViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Entities\RankViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Grouping\AppointmentGroupingViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\ErrorViewModel.cs" />
-    <Compile Include="ViewModels\Entities\AppointmentViewModel.cs" />
-    <Compile Include="ViewModels\ReportService\FilteredViewModel.cs" />
-    <Compile Include="ViewModels\ReportService\FilterItemViewModel.cs" />
-    <Compile Include="ViewModels\ReportService\Filters.cs" />
-    <Compile Include="ViewModels\ReportService\FilterViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Entities\AppointmentViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Filtering\FilteredViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Filtering\FilterItemViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Filtering\FilterIndexes.cs" />
+    <Compile Include="ViewModels\ReportService\Filtering\FilterViewModel.cs" />
     <Compile Include="ViewModels\ReportService\Contracts\IFilteredViewModel.cs" />
     <Compile Include="ViewModels\ReportService\Contracts\IEntityObservableCollection.cs" />
     <Compile Include="ViewModels\ReportService\ProductivityReportViewModel.cs" />
-    <Compile Include="ViewModels\Productivity\CategorizedProductivityViewModel.cs" />
-    <Compile Include="ViewModels\Entities\CategoryViewModel.cs" />
-    <Compile Include="ViewModels\Productivity\EmployeeProductivityViewModel.cs" />
-    <Compile Include="ViewModels\Productivity\GatheringProductivityViewModel.cs" />
-    <Compile Include="ViewModels\Entities\OperationViewModel.cs" />
-    <Compile Include="ViewModels\Entities\PositionViewModel.cs" />
-    <Compile Include="ViewModels\Productivity\ProductivityViewModel.cs" />
-    <Compile Include="ViewModels\Productivity\ReceptionProductivityViewModel.cs" />
-    <Compile Include="ViewModels\Entities\ShiftViewModel.cs" />
-    <Compile Include="ViewModels\Entities\ShortBreakScheduleViewModel.cs" />
-    <Compile Include="ViewModels\Entities\ShortBreakViewModel.cs" />
-    <Compile Include="ViewModels\Grouping\PositionGroupingViewModel.cs" />
-    <Compile Include="ViewModels\Grouping\ShiftGroupingViewModel.cs" />
-    <Compile Include="ViewModels\Productivity\TimeProductivityViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Productivity\CategorizedProductivityViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Entities\CategoryViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Productivity\EmployeeProductivityViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Productivity\GatheringProductivityViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Entities\OperationViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Entities\PositionViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Productivity\ProductivityViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Productivity\ReceptionProductivityViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Entities\ShiftViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Entities\ShortBreakScheduleViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Entities\ShortBreakViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Grouping\PositionGroupingViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Grouping\ShiftGroupingViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Productivity\TimeProductivityViewModel.cs" />
     <Compile Include="ViewModels\ReportService\ReportViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ActionsImportStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\CategoriesThresholdStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\CheckEmployeesStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\Directions.cs" />
     <Compile Include="ViewModels\StageViewModels\EmployeesImportStageViewModel.cs" />
-    <Compile Include="ViewModels\Entities\EmployeeViewModel.cs" />
+    <Compile Include="ViewModels\ReportService\Entities\EmployeeViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\ImportStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\IStageViewModel.cs" />
     <Compile Include="ViewModels\StageViewModels\MoveRequestedEventArgs.cs" />
@@ -119,31 +119,28 @@
     <Compile Include="Views\Dialogs\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Templates\EmployeeView.xaml.cs">
+    <Compile Include="Views\ReportService\Entities\EmployeeView.xaml.cs">
       <DependentUpon>EmployeeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Templates\EmployeeProductivityView.xaml.cs">
+    <Compile Include="Views\ReportService\Productivity\EmployeeProductivityView.xaml.cs">
       <DependentUpon>EmployeeProductivityView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Productivity\OperationHeaderView.xaml.cs">
+    <Compile Include="Views\ReportService\Productivity\OperationHeaderView.xaml.cs">
       <DependentUpon>OperationHeaderView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Productivity\ProductivityUserControl.xaml.cs">
+    <Compile Include="Views\ReportService\Productivity\ProductivityUserControl.xaml.cs">
       <DependentUpon>ProductivityUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Productivity\ProductivityView.xaml.cs">
+    <Compile Include="Views\ReportService\Productivity\ProductivityView.xaml.cs">
       <DependentUpon>ProductivityView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Teeemp.xaml.cs">
-      <DependentUpon>Teeemp.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Templates\FilterSectionView.xaml.cs">
+    <Compile Include="Views\ReportService\Filtering\FilterSectionView.xaml.cs">
       <DependentUpon>FilterSectionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Templates\PositionGroupingView.xaml.cs">
+    <Compile Include="Views\ReportService\Grouping\PositionGroupingView.xaml.cs">
       <DependentUpon>PositionGroupingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Templates\ShiftGroupingView.xaml.cs">
+    <Compile Include="Views\ReportService\Grouping\ShiftGroupingView.xaml.cs">
       <DependentUpon>ShiftGroupingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\EmployeeReportUserControl.xaml.cs">
@@ -260,7 +257,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Templates\EmployeeView.xaml">
+    <Page Include="Views\ReportService\Entities\EmployeeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -268,35 +265,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Templates\EmployeeProductivityView.xaml">
+    <Page Include="Views\ReportService\Productivity\EmployeeProductivityView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Productivity\OperationHeaderView.xaml">
+    <Page Include="Views\ReportService\Productivity\OperationHeaderView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Productivity\ProductivityUserControl.xaml">
+    <Page Include="Views\ReportService\Productivity\ProductivityUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Productivity\ProductivityView.xaml">
+    <Page Include="Views\ReportService\Productivity\ProductivityView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Teeemp.xaml">
+    <Page Include="Views\ReportService\Filtering\FilterSectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Templates\FilterSectionView.xaml">
+    <Page Include="Views\ReportService\Grouping\PositionGroupingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Templates\PositionGroupingView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Templates\ShiftGroupingView.xaml">
+    <Page Include="Views\ReportService\Grouping\ShiftGroupingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

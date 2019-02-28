@@ -669,15 +669,15 @@ namespace WorkSpeed.Business.Contexts
             /// <param name="acceptor">Db or handled new employee</param>
             public static void CheckEmployeeDifference ( Employee donor, Employee acceptor )
             {
-                if ( acceptor.Rank == null && donor.Rank != null ) {
+                if ( acceptor.Rank != donor.Rank ) {
                     acceptor.Rank = donor.Rank;
                 }
 
-                if ( acceptor.Appointment == null && donor.Appointment != null ) {
+                if ( acceptor.Appointment != donor.Appointment ) {
                     acceptor.Appointment = donor.Appointment;
                 }
 
-                if ( acceptor.Position == null && donor.Position != null ) {
+                if ( acceptor.Position != donor.Position ) {
                     acceptor.Position = donor.Position;
                 }
 

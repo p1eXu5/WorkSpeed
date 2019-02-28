@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Agbm.Wpf.MvvmBaseLibrary;
 using WorkSpeed.Data.Models;
 
-namespace WorkSpeed.DesktopClient.ViewModels.Productivity
+namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
 {
     public class ProductivityViewModel : ViewModel
     {

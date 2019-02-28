@@ -4,9 +4,10 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WorkSpeed.DesktopClient.ViewModels.ReportService"
+      xmlns:filtering="clr-namespace:WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering"
       mc:Ignorable="d" 
       d:DesignHeight="150" d:DesignWidth="200"
-      d:DataContext="{d:DesignInstance local:FilterViewModel}"
+      d:DataContext="{d:DesignInstance filtering:FilterViewModel}"
       >
     <GroupBox Header="{Binding Header}"
               FontFamily="{StaticResource font_Rubik}"

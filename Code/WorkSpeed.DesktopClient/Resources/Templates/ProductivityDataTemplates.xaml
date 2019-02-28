@@ -3,7 +3,7 @@
                     xmlns:vp="clr-namespace:WorkSpeed.DesktopClient.Views.Productivity"
                     xmlns:entities="clr-namespace:WorkSpeed.DesktopClient.Views.Entities"
                     xmlns:vme="clr-namespace:WorkSpeed.DesktopClient.ViewModels.Entities"
-                    xmlns:vmp="clr-namespace:WorkSpeed.DesktopClient.ViewModels.Productivity"
+                    xmlns:vmp="clr-namespace:WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity"
                     xmlns:templates="clr-namespace:WorkSpeed.DesktopClient.Views.Templates">
     
     <DataTemplate DataType="{x:Type vmp:ProductivityViewModel}">

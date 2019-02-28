@@ -1,6 +1,6 @@
-﻿namespace WorkSpeed.DesktopClient.ViewModels.ReportService 
+﻿namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering 
 {
-    public enum Filters
+    public enum FilterIndexes
     {
         IsActive = 0,
         Position = 1,

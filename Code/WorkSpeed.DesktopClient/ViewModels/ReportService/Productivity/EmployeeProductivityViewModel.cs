@@ -6,9 +6,9 @@ using WorkSpeed.Business.Models.Productivity;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Enums;
 using WorkSpeed.DesktopClient.ViewModels.Entities;
-using WorkSpeed.DesktopClient.ViewModels.ReportService;
+using WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering;
 
-namespace WorkSpeed.DesktopClient.ViewModels.Productivity
+namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
 {
     public class EmployeeProductivityViewModel : FilteredViewModel
     {

@@ -14,7 +14,8 @@ using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Data.Context;
 using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.Entities;
-using WorkSpeed.DesktopClient.ViewModels.Grouping;
+using WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering;
+using WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
@@ -34,6 +35,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         {
             _shiftGroupingVmCollection = new ObservableCollection< ShiftGroupingViewModel >();
             ShiftGroupingVmCollection = new ReadOnlyObservableCollection< ShiftGroupingViewModel >( _shiftGroupingVmCollection );
+            Observe( _reportService.ShiftGroupingCollection, _shiftGroupingVmCollection, shgvm => shgvm.ShiftGrouping, FilterVmCollection );
 
             SetupView( ShiftGroupingVmCollection );
         }
@@ -50,29 +52,28 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         #region Methods
 
-        public override Task OnSelectedAsync ()
-        {
-            return LoadEmployeesAsync( null );
-        }
-
         public override async Task UpdateAsync ()
         {
-            var employees = from s in ShiftGroupingVmCollection
-                            where s.IsModify
-                            from a in s.AppointmentGroupingVmCollection
-                            where a.IsModify
-                            from p in a.PositionGroupingVmCollection
-                            where p.IsModify
-                            from e in p.EmployeeVmCollection
-                            where e.IsModify
-                            select e.Employee;
+            if ( IsModify ) {
 
-            _reportService.UpdateRange( employees );
+                var employees = from s in ShiftGroupingVmCollection
+                                where s.IsModify
+                                from a in s.AppointmentGroupingVmCollection
+                                where a.IsModify
+                                from p in a.PositionGroupingVmCollection
+                                where p.IsModify
+                                from e in p.EmployeeVmCollection
+                                where e.IsModify
+                                select e.Employee;
 
-            await LoadEmployeesAsync( null );
+                _reportService.UpdateRange( employees );
+                IsModify = false;
+            }
+
+            await LoadEmployeesAsync().ConfigureAwait( false );
         }
 
-        private async Task LoadEmployeesAsync ( object obj )
+        private async Task LoadEmployeesAsync ()
         {
             ReportMessage = "Идёт загрузка сотрудников";
             await _reportService.LoadShiftGroupingAsync();
@@ -101,8 +102,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         protected internal override void Refresh ()
         {
-            foreach (var shiftGroupingViewModel in ShiftGroupingVmCollection)
-            {
+            foreach (var shiftGroupingViewModel in ShiftGroupingVmCollection) {
                 shiftGroupingViewModel.Refresh();
             }
 
@@ -120,7 +120,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         {
             if ( !(o is ShiftGroupingViewModel shiftGrouping) ) { return  false; }
 
-            return _filterVmCollection[ (int)Filters.Shift ].Entities.Any( obj => (obj as ShiftViewModel)?.Shift == shiftGrouping.Shift );
+            var res = _filterVmCollection[ (int)FilterIndexes.Shift ].Entities.Any( obj => (obj as ShiftViewModel)?.Shift == shiftGrouping.Shift )
+                      && base.PredicateFunc( o );
+
+            return res;
 
         }
 

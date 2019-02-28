@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 using Agbm.Wpf.MvvmBaseLibrary;
 using WorkSpeed.Data.Models;
 
-namespace WorkSpeed.DesktopClient.ViewModels.ReportService
+namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering
 {
     public class FilterViewModel : ViewModel
     {
         private static readonly Func< object, string> TRUE_CAPTION;
+        private static readonly Func< object, string> FALSE_CAPTION;
         private readonly List< object > _entities;
-        private readonly object _default;
         private readonly object _locker = new object();
 
         #region Ctor
@@ -22,6 +22,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         static FilterViewModel ()
         {
             TRUE_CAPTION = b => "Да";
+            FALSE_CAPTION = b => "Нет";
         }
 
         private FilterViewModel ( string header )
@@ -33,14 +34,16 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         public FilterViewModel ( string header, bool isCheckedValue )
             : this( header )
         {
-            _default = false;
-            _entities.Add( _default );
+            var trueItem = new FilterItemViewModel( true, TRUE_CAPTION );
+            trueItem.PropertyChanged += OnFilterItemPropertyChanged;
 
-            var boolItem = new FilterItemViewModel( true, TRUE_CAPTION );
-            boolItem.PropertyChanged += OnFilterItemPropertyChanged;
-            FilterItemVmCollection = new ObservableCollection< FilterItemViewModel >( new [] { boolItem });
+            var falseItem = new FilterItemViewModel( false, FALSE_CAPTION );
+            falseItem.PropertyChanged += OnFilterItemPropertyChanged;
 
-            boolItem.IsChecked = isCheckedValue;
+            FilterItemVmCollection = new ObservableCollection< FilterItemViewModel >( new [] { trueItem, falseItem });
+
+            trueItem.IsChecked = isCheckedValue;
+            falseItem.IsChecked = isCheckedValue;
         }
 
         public FilterViewModel ( string header, IEnumerable< object > entities, Func< object, string> captionFunc )
@@ -88,17 +91,14 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             lock ( _locker ) {
 
                 if ( (( FilterItemViewModel )sender).IsChecked ) {
-                    if (_default != null && _entities.Contains( _default ) ) { _entities.Remove( _default ); }
                     _entities.Add( (( FilterItemViewModel )sender).Entity );
                 }
                 else {
-                    if ( _default != null && !_entities.Contains( _default ) ) { _entities.Add( _default ); }
                     _entities.Remove( (( FilterItemViewModel )sender).Entity );
                 }
-
-                OnFilterChanged();
             }
 
+            OnFilterChanged();
         }
 
         private void OnFilterChanged ()

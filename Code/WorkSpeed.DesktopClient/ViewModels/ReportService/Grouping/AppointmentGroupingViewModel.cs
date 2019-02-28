@@ -5,9 +5,9 @@ using System.Linq;
 using WorkSpeed.Business.Models;
 using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.Entities;
-using WorkSpeed.DesktopClient.ViewModels.ReportService;
+using WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering;
 
-namespace WorkSpeed.DesktopClient.ViewModels.Grouping
+namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping
 {
     public class AppointmentGroupingViewModel : FilteredViewModel
     {
@@ -64,7 +64,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
         {
             if ( !(o is PositionGroupingViewModel positionGrouping) ) { return  false; }
 
-            return _filterVmCollection[ (int)Filters.Position ].Entities.Any( obj => (obj as PositionViewModel)?.Position == positionGrouping.Position );
+            var res = _filterVmCollection[ (int)FilterIndexes.Position ].Entities.Any( obj => (obj as PositionViewModel)?.Position == positionGrouping.Position )
+                      && base.PredicateFunc( o );
+
+            return res;
         }
     }
 }

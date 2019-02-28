@@ -33,7 +33,9 @@ namespace Experiments.Threads
             Console.WriteLine( "After: was called Method2Async [ 12 ]" );
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         private async Task Method3Async ()
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             Console.WriteLine( "Next: will run Foo as thread [ 4 ]" );
             var task = Task.Run( () => Foo() );

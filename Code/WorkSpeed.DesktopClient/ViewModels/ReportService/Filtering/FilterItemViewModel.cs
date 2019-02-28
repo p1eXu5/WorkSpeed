@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Threading.Tasks;
-using System.Windows;
 using Agbm.Wpf.MvvmBaseLibrary;
 
-namespace WorkSpeed.DesktopClient.ViewModels.ReportService
+namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering
 {
     public class FilterItemViewModel : ViewModel
     {

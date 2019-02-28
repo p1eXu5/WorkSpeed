@@ -8,17 +8,22 @@ using WorkSpeed.Business.Contexts.Productivity;
 using WorkSpeed.Business.Models.Productivity;
 using WorkSpeed.Data.Models;
 
-namespace WorkSpeed.DesktopClient.ViewModels.Productivity
+namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
 {
-    public class GatheringProductivityViewModel : CategorizedProductivityViewModel
+    public class ReceptionProductivityViewModel : CategorizedProductivityViewModel
     {
-        #region Ctor
-
-        public GatheringProductivityViewModel ( IProductivity productivity, Operation operation, IEnumerable< Category > categories ) 
+        public ReceptionProductivityViewModel ( IProductivity productivity, Operation operation, IEnumerable< Category > categories ) 
             : base( operation, categories )
         {
-            SpeedLabeling = SPEED_IN_LINES;
-            Speed = productivity.GetLinesPerHour();
+            SpeedLabeling = SPEED_IN_SCANS;
+            Speed = productivity.GetScansPerHour();
+
+            _queue.Enqueue( new AspectsViewModel {
+
+                Aspects = new ObservableCollection< (double, string) >( productivity.GetScans( _categories )
+                                                                                    .Select( t => (Convert.ToDouble( t.count ), $"{t.category.Name}: {t.count}") ) ),
+                Annotation = "сканн"
+            } );
 
             _queue.Enqueue( new AspectsViewModel {
 
@@ -41,9 +46,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.Productivity
                 Annotation = "штук"
             } );
 
-            Next ();
+            Next();
         }
-
-        #endregion
     }
 }

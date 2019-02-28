@@ -6,8 +6,9 @@ using WorkSpeed.Business.Models;
 using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.ReportService;
 using WorkSpeed.DesktopClient.ViewModels.Entities;
+using WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering;
 
-namespace WorkSpeed.DesktopClient.ViewModels.Grouping
+namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping
 {
     public class ShiftGroupingViewModel : FilteredViewModel
     {
@@ -15,7 +16,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
 
         public ShiftGroupingViewModel ( ShiftGrouping shiftGrouping, ReadOnlyObservableCollection< FilterViewModel > filters )
         {
-            Shift = shiftGrouping.Shift ?? throw new ArgumentNullException(nameof(shiftGrouping), @"ShiftGroupingVmCollection cannot be null.");
+            ShiftGrouping = shiftGrouping ?? throw new ArgumentNullException(nameof(shiftGrouping), @"ShiftGroupingVmCollection cannot be null.");
             _filterVmCollection = filters ?? throw new ArgumentNullException(nameof(filters), @"filters cannot be null.");
             
             CreateCollection();
@@ -40,7 +41,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
             }
         }
 
-        public Shift Shift { get; }
+        public ShiftGrouping ShiftGrouping { get; }
+        public Shift Shift => ShiftGrouping.Shift;
         public ReadOnlyObservableCollection< AppointmentGroupingViewModel > AppointmentGroupingVmCollection { get; private set; }
 
         public string Name => Shift.Name;
@@ -65,7 +67,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
         {
             if ( !(o is AppointmentGroupingViewModel appointmentGrouping) ) { return  false; }
 
-            return _filterVmCollection[ (int)Filters.Appointment ].Entities.Any( obj => (obj as AppointmentViewModel)?.Appointment == appointmentGrouping.Appointment );
+            var res = _filterVmCollection[ (int)FilterIndexes.Appointment ].Entities.Any( obj => (obj as AppointmentViewModel)?.Appointment == appointmentGrouping.Appointment )
+                      && base.PredicateFunc( o ) ;
+
+            return res;
         }
     }
 }

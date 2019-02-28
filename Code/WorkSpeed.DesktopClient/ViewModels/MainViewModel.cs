@@ -16,8 +16,8 @@ using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.Dialogs;
 using WorkSpeed.DesktopClient.ViewModels.Entities;
-using WorkSpeed.DesktopClient.ViewModels.Grouping;
 using WorkSpeed.DesktopClient.ViewModels.ReportService;
+using WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering;
 
 namespace WorkSpeed.DesktopClient.ViewModels
 {
@@ -79,8 +79,8 @@ namespace WorkSpeed.DesktopClient.ViewModels
             }
         }
 
-        public EmployeeReportViewModel EmployeeReportVm { get; }
-        public ProductivityReportViewModel ProductivityReportVm { get; }
+        public ReportViewModel EmployeeReportVm { get; }
+        public ReportViewModel ProductivityReportVm { get; }
 
         public bool IsImporting
         {
@@ -115,8 +115,8 @@ namespace WorkSpeed.DesktopClient.ViewModels
         #region Commands
 
         public ICommand LoadedCommand => new MvvmCommand( OnWindowLoaded );
-        public ICommand ImportAsyncCommand => new MvvmCommand( Import );
-        public ICommand UpdateCommand => new MvvmCommand( Update );
+        public IAsyncCommand ImportAsyncCommand => new MvvmAsyncCommand( ImportAsync );
+        public IAsyncCommand UpdateCommand => new MvvmAsyncCommand( UpdateAsync );
 
         #endregion
 
@@ -128,7 +128,7 @@ namespace WorkSpeed.DesktopClient.ViewModels
             SelectedIndex = (int)Tabs.EmployeeEditor;
         }
 
-        private async void Import ( object obj )
+        private async Task ImportAsync ( object obj )
         {
             var ofd = new OpenFileDialog
             {
@@ -141,13 +141,12 @@ namespace WorkSpeed.DesktopClient.ViewModels
 
                 IsImporting = true;
 
-                await ImportAsync( ofd.FileName );
-
-                ImportStatusMessage = "Обновление данных.";
-                await EmployeeReportVm.OnSelectedAsync();
-                //await ProductivityReportVm.OnSelectedAsync();
-
-                IsImporting = false;
+                try {
+                    await ImportAsync( ofd.FileName );
+                }
+                finally {
+                    IsImporting = false;
+                }
             }
         }
 
@@ -155,6 +154,17 @@ namespace WorkSpeed.DesktopClient.ViewModels
         {
             var token = _cancellationTokenSource.Token;
             await _importService.ImportFromXlsxAsync( fileName, _progress, token ).ConfigureAwait( false );
+            await ((MvvmAsyncCommand)UpdateCommand).ExecuteAsync().ConfigureAwait( false );
+        }
+
+        private async Task UpdateAsync ( object o )
+        {
+            switch ( SelectedIndex ) {
+
+                case (int)Tabs.EmployeeEditor:
+                    await EmployeeReportVm.LoadEmployeesAsync( null ).ConfigureAwait( false );
+                    break;
+            }
         }
 
         private void ProgressReport ( int code, string message )
@@ -187,15 +197,6 @@ namespace WorkSpeed.DesktopClient.ViewModels
             }
         }
 
-        private async void Update ( object o )
-        {
-            switch ( SelectedIndex ) {
-
-                case (int)Tabs.EmployeeEditor:
-                    await EmployeeReportVm.UpdateAsync().ConfigureAwait( false );
-                    break;
-            }
-        }
 
         #endregion
 

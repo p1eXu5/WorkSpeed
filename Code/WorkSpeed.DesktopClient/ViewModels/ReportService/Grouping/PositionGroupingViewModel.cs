@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Data;
-using Agbm.Wpf.MvvmBaseLibrary;
 using WorkSpeed.Business.Models;
 using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.Entities;
-using WorkSpeed.DesktopClient.ViewModels.ReportService;
+using WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering;
 
-namespace WorkSpeed.DesktopClient.ViewModels.Grouping
+namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping
 {
     public class PositionGroupingViewModel : FilteredViewModel
     {
@@ -59,9 +54,9 @@ namespace WorkSpeed.DesktopClient.ViewModels.Grouping
         {
             if (!(o is EmployeeViewModel employee)) return false;
 
-            var res = _filterVmCollection[ ( int )Filters.IsActive ].Entities.Any( obj => ( bool )(obj).Equals( employee.IsActive ) )
-                      && _filterVmCollection[ ( int )Filters.IsSmoker ].Entities.Any( obj => ( bool )(obj).Equals( employee.IsSmoker ) )
-                      && _filterVmCollection[ ( int )Filters.Rank ].Entities.Any( obj => (obj as RankViewModel)?.Number == employee.Rank.Number );
+            var res = _filterVmCollection[ ( int )FilterIndexes.IsActive ].Entities.Any( obj => ( bool )(obj).Equals( employee.IsActive ) )
+                      && _filterVmCollection[ ( int )FilterIndexes.IsSmoker ].Entities.Any( obj => ( bool )(obj).Equals( employee.IsSmoker ) )
+                      && _filterVmCollection[ ( int )FilterIndexes.Rank ].Entities.Any( obj => (obj as RankViewModel)?.Number == employee.Rank.Number );
 
             return res;
         }

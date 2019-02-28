@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WorkSpeed.DesktopClient.ViewModels.Productivity
+namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
 {
     public class AspectsViewModel
     {

@@ -10,7 +10,9 @@ using WorkSpeed.Business.Contexts.Productivity;
 using WorkSpeed.Business.Models.Productivity;
 using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.Entities;
-using WorkSpeed.DesktopClient.ViewModels.Productivity;
+using WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity;
+using WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering;
+using WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
