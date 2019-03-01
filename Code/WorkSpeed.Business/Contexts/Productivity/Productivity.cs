@@ -5,6 +5,7 @@ using System.Linq;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.ActionDetails;
 using WorkSpeed.Data.Models.Actions;
+using WorkSpeed.Data.Models.Enums;
 
 namespace WorkSpeed.Business.Contexts.Productivity
 {
@@ -44,6 +45,10 @@ namespace WorkSpeed.Business.Contexts.Productivity
         public double GetLinesPerHour ()
         {
             if ( _actions.Count == 0 ) { return 0.0; }
+
+            var groupNum = (int)_actions.Keys.First().Operation.Group;
+
+            if ( groupNum <= (int)OperationGroups.Reception )
 
             var lines = _actions.Keys.Where( a => a );
         }
