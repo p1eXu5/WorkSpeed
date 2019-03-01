@@ -7,7 +7,7 @@ using WorkSpeed.Business.Models;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
 
-namespace WorkSpeed.Business.Contexts.Productivity.Builders
+namespace WorkSpeed.Business.Contexts.Productivity
 {
     public interface IProductivityBuilder
     {

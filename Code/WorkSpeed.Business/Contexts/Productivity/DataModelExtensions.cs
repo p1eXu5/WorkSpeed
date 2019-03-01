@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Business.Contexts.Productivity
 {
-    public static class ModelExtensions
+    public static class DataModelExtensions
     {
         public static Queue< Period > GetBreaks ( this ShortBreakSchedule shortBreak, DateTime downtime )
         {

@@ -277,9 +277,9 @@ namespace WorkSpeed.Business.Contexts
         {
             var actions = data.AsParallel()
                               .Where( a => Check.IsEmployeeBaseActionCorrect( a ) 
-                                           && Check.IsProductCorrect(a.DoubleAddressDetails[0].Product)
-                                           && Check.IsAddressCorrect(a.DoubleAddressDetails[0].SenderAddress)
-                                           && Check.IsAddressCorrect(a.DoubleAddressDetails[0].ReceiverAddress) )
+                                           && Check.IsProductCorrect(a.WithProductActionDetails[0].Product)
+                                           && Check.IsAddressCorrect(a.WithProductActionDetails[0].SenderAddress)
+                                           && Check.IsAddressCorrect(a.WithProductActionDetails[0].ReceiverAddress) )
                               .AsSequential()
                               .GroupBy( a => a.Id ).ToArray();
 
@@ -310,7 +310,7 @@ namespace WorkSpeed.Business.Contexts
 
                 var details = new List< DoubleAddressActionDetail >();
 
-                foreach ( var detail in actionGrouping.Select( a => a.DoubleAddressDetails[0] ) ) {
+                foreach ( var detail in actionGrouping.Select( a => a.WithProductActionDetails[0] ) ) {
                     
                     // check product
                     CheckProduct( detail );
@@ -325,7 +325,7 @@ namespace WorkSpeed.Business.Contexts
                     details.Add( detail );
                 }
 
-                action.DoubleAddressDetails = details;
+                action.WithProductActionDetails = details;
                 newActions.Add( action );
             }
 

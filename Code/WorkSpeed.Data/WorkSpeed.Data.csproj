@@ -131,6 +131,7 @@
       <DependentUpon>20190227071620_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\WorkSpeedDbContextModelSnapshot.cs" />
+    <Compile Include="Models\Actions\IWithProductDetailedAction.cs" />
     <Compile Include="Models\Comparers\EmployeeActionComparer.cs" />
     <Compile Include="Models\Comparers\EmployeeComparer.cs" />
     <Compile Include="Models\Comparers\OperationComparer.cs" />
@@ -201,8 +202,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
+    <None Include="ActionDiagram.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

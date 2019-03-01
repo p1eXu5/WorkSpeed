@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using WorkSpeed.Business.Models;
+using WorkSpeed.Business.Contexts.Productivity.Models;
 using WorkSpeed.Data;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Actions;
 using WorkSpeed.Data.Models.Enums;
 using WorkSpeed.Data.Models.Extensions;
 
-namespace WorkSpeed.Business.Contexts.Productivity.Builders
+namespace WorkSpeed.Business.Contexts.Productivity
 {
     public class ProductivityBuilder : IProductivityBuilder
     {
@@ -68,10 +69,10 @@ namespace WorkSpeed.Business.Contexts.Productivity.Builders
             }
 
             if ( !_productivitys.ContainsKey( action.Operation ) ) {
-                _productivitys[ action.Operation ] = new Models.Productivity();
+                _productivitys[ action.Operation ] = new Productivity();
             }
-
             _productivitys[ action.Operation ].Add( action, period );
+            
             return (period, action);
         }
 

@@ -3,18 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.ActionDetails;
 using WorkSpeed.Data.Models.Actions;
 
-namespace WorkSpeed.Business.Contexts.Productivity.Models
+namespace WorkSpeed.Business.Contexts.Productivity
 {
+    /// <summary>
+    ///     Created for each operation.
+    /// </summary>
     public class Productivity : IProductivity
     {
         private readonly Dictionary< EmployeeActionBase, Period > _actions;
+
+        #region Ctor
 
         public Productivity ()
         {
             _actions = new Dictionary< EmployeeActionBase, Period >();
         }
+
+        #endregion
+
 
         public void Add ( EmployeeActionBase action, Period period )
         {
@@ -34,7 +43,9 @@ namespace WorkSpeed.Business.Contexts.Productivity.Models
 
         public double GetLinesPerHour ()
         {
-            throw new NotImplementedException();
+            if ( _actions.Count == 0 ) { return 0.0; }
+
+            var lines = _actions.Keys.Where( a => a );
         }
 
         public double GetScansPerHour ()

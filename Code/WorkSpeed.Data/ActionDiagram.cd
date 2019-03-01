@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="WorkSpeed.Data.Models.ActionDetails.ActionDetailBase" Collapsed="true">
+    <Position X="7.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ActionDetails\ActionDetailBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.Data.Models.ActionDetails.InventoryActionDetail" Collapsed="true">
+    <Position X="6.25" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAAACAAAAAACAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ActionDetails\InventoryActionDetail.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.Data.Models.ActionDetails.ReceptionActionDetail" Collapsed="true">
+    <Position X="9.75" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAIAAAAAAAAgAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ActionDetails\ReceptionActionDetail.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.Data.Models.ActionDetails.ShipmentActionDetail" Collapsed="true">
+    <Position X="4" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABQAAAAQAAAAAAAQCAAAAAAAAIAAAACAAA=</HashCode>
+      <FileName>Models\ActionDetails\ShipmentActionDetail.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.Data.Models.ActionDetails.SingleAddressActionDetail" Collapsed="true">
+    <Position X="8" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ActionDetails\SingleAddressActionDetail.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.Data.Models.ActionDetails.WithProductActionDetail" Collapsed="true">
+    <Position X="10.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Models\ActionDetails\WithProductActionDetail.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.Data.Models.Actions.DoubleAddressAction" Collapsed="true">
+    <Position X="2.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Actions\DoubleAddressAction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.Data.Models.Actions.EmployeeActionBase" Collapsed="true">
+    <Position X="7.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAACAAAAAAAAAAAAKAAAAAAAAAEAAAAAAgA=</HashCode>
+      <FileName>Models\Actions\EmployeeActionBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="WorkSpeed.Data.Models.Actions.InventoryAction" Collapsed="true">
+    <Position X="5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Actions\InventoryAction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.Data.Models.Actions.OtherAction" Collapsed="true">
+    <Position X="7.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Actions\OtherAction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.Data.Models.Actions.ReceptionAction">
+    <Position X="9.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Models\Actions\ReceptionAction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.Data.Models.Actions.ShipmentAction" Collapsed="true">
+    <Position X="11.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAAQAAAAAAAACAAAAAAAAIAAAACAAA=</HashCode>
+      <FileName>Models\Actions\ShipmentAction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.Data.Models.ActionDetails.DoubleAddressActionDetail" Collapsed="true">
+    <Position X="12.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAAAAEAAAAAAAAAAAAAAAAABAAgAA=</HashCode>
+      <FileName>Models\ActionDetails\DoubleAddressActionDetail.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
