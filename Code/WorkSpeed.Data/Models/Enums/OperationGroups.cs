@@ -6,6 +6,7 @@ namespace WorkSpeed.Data.Models.Enums
 {
     public enum OperationGroups
     {
+        Undefined,
         Gathering = 1,
         BuyerGathering,
         Packing,

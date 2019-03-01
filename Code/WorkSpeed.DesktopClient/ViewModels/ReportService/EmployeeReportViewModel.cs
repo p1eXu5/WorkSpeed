@@ -24,7 +24,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         #region Fields
 
         private readonly ObservableCollection< ShiftGroupingViewModel > _shiftGroupingVmCollection;
-        private bool onStart;
 
         #endregion
 
@@ -40,7 +39,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
             SetupView( ShiftGroupingVmCollection );
 
-            onStart = true;
         }
 
         #endregion

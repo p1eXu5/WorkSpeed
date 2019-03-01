@@ -23,29 +23,37 @@ namespace WorkSpeed.Business.Contexts.Productivity.Models
 
         public Employee Employee { get; set; }
 
-        public IProductivity this[ Operation operation ]
-        {
-            get {
-                return Productivities.ContainsKey( operation )
-                           ? Productivities[ operation ]
-                           : new Productivity();
-            }
-        }
+        public IProductivity this[ Operation operation ] => Productivities.ContainsKey( operation )
+                                                                ? Productivities[ operation ]
+                                                                : new Productivity();
 
         public IReadOnlyDictionary< Operation, IProductivity > Productivities { get; }
 
         public HashSet< Period > DowntimePeriods { get; }
 
 
-        public IEnumerable< (double count, Operation operation) > GetTimes ( IEnumerable< Operation > operations )
+        public IEnumerable< (double hours, Operation operation) > GetOperationTimes ( IEnumerable< Operation > operations )
         {
-            throw new NotImplementedException();
+            var opArr = operations.ToArray();
+            var res = new (double hours, Operation operation)[ opArr.Length ];
+
+            for ( var i = 0; i < opArr.Length; ++i ) {
+
+                if ( Productivities.ContainsKey( opArr[ i ] ) ) {
+                    res[i] = ( Productivities[ opArr[i] ].GetTotalHours(), opArr[i] );
+                }
+                else {
+                    res[i] = ( 0.0, opArr[i] );
+                }
+            }
+
+            return res;
         }
 
 
         public double GetTotalHours ()
         {
-            throw new NotImplementedException();
+            return Productivities.Values.Sum( v => v.GetTotalHours() );
         }
     }
 }

@@ -1,25 +1,59 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.FilteredViewModel" Collapsed="true">
-    <Position X="8.25" Y="0.5" Width="1.5" />
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.ReportViewModel">
+    <Position X="7.5" Y="2" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAABAAAAAABAAAAAMAAAAAAAgAAAIAAAAAAAAAQAAAA=</HashCode>
-      <FileName>ViewModels\ReportService\FilteredViewModel.cs</FileName>
+      <HashCode>AAABAoAAAAAAAIABAAASACAAIAAAAAgAAABABIQAAAA=</HashCode>
+      <FileName>ViewModels\ReportService\ReportViewModel.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <ShowAsCollectionAssociation>
+      <Property Name="FilterVmCollection" />
+    </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="WorkSpeed.DesktopClient.ViewModels.Productivity.EmployeeProductivityViewModel">
-    <Position X="14.75" Y="13" Width="2.5" />
-    <AssociationLine Name="EmployeeVm" Type="WorkSpeed.DesktopClient.ViewModels.Entities.EmployeeViewModel" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="16" Y="14.877" />
-        <Point X="16" Y="17.188" />
-        <Point X="11.5" Y="17.188" />
-      </Path>
-    </AssociationLine>
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.EmployeeReportViewModel">
+    <Position X="6.25" Y="9.75" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AgAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAACAAAAAABAA=</HashCode>
-      <FileName>ViewModels\Productivity\EmployeeProductivityViewModel.cs</FileName>
+      <HashCode>AAABAAAABEBAAAAAAAAAABAAAAAgAAgAAAAAAAQAAAA=</HashCode>
+      <FileName>ViewModels\ReportService\EmployeeReportViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.ProductivityReportViewModel">
+    <Position X="9" Y="9.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAFCQAABAAAAAAAAIAAgAAhAAAAAAAAAAAI=</HashCode>
+      <FileName>ViewModels\ReportService\ProductivityReportViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="OperationVmCollection" />
+      <Property Name="EmployeeProductivityVmCollection" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.Entities.EmployeeViewModel">
+    <Position X="9" Y="16.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAgIAAABAAggEAQAAiQAyAAAIAAAAAAAAQACAAA=</HashCode>
+      <FileName>ViewModels\ReportService\Entities\EmployeeViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.Entities.OperationViewModel">
+    <Position X="13.5" Y="9.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABAQAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>ViewModels\ReportService\Entities\OperationViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity.ProductivityViewModel">
+    <Position X="22.5" Y="13.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>IqAAAAAAAAAAAAAAEAAAgAABAAgAQBABBAEACAAIAAI=</HashCode>
+      <FileName>ViewModels\ReportService\Productivity\ProductivityViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity.EmployeeProductivityViewModel">
+    <Position X="16.5" Y="12.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAQAAAAAAACAAAAAAAAAAACAAAAAABAA=</HashCode>
+      <FileName>ViewModels\ReportService\Productivity\EmployeeProductivityViewModel.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="EmployeeVm" />
@@ -28,110 +62,102 @@
       <Property Name="ProductivityVmCollection" />
     </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.ReportViewModel">
-    <Position X="7.5" Y="2.25" Width="2.75" />
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering.FilterViewModel">
+    <Position X="13.5" Y="2.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAABAoAAAAAAAIABAAASACAAIAAAAAAAAABABIwAAAA=</HashCode>
-      <FileName>ViewModels\ReportService\ReportViewModel.cs</FileName>
+      <HashCode>BAAAAAAAAAAIAEBAAAAAAAAAABAACCAAAAEAAABAAgA=</HashCode>
+      <FileName>ViewModels\ReportService\Filtering\FilterViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering.FilteredViewModel" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAABAAAAAMAAAAAAAgAAAIAAAAAAAAAQAAAA=</HashCode>
+      <FileName>ViewModels\ReportService\Filtering\FilteredViewModel.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.EmployeeReportViewModel">
-    <Position X="6.25" Y="9.75" Width="2.25" />
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping.ShiftGroupingViewModel" Collapsed="true">
+    <Position X="1.5" Y="9.75" Width="2.25" />
+    <InheritanceLine Type="WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering.FilteredViewModel" FixedToPoint="true">
+      <Path>
+        <Point X="8.875" Y="1.191" />
+        <Point X="8.875" Y="1.625" />
+        <Point X="1.125" Y="1.625" />
+        <Point X="1.125" Y="10.125" />
+        <Point X="1.5" Y="10.125" />
+      </Path>
+    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAABAAAABEBAAAAAAAAAAAAAAAAgAAAAAAAAAAwAAAA=</HashCode>
-      <FileName>ViewModels\ReportService\EmployeeReportViewModel.cs</FileName>
+      <HashCode>AAABAAAAAABAAAgAAAAAACQAAgAAAAAAAAABAAQAAAA=</HashCode>
+      <FileName>ViewModels\ReportService\Grouping\ShiftGroupingViewModel.cs</FileName>
     </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="ShiftGroupingVmCollection" />
-    </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.ProductivityReportViewModel">
-    <Position X="9" Y="9.75" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>IAAAAEAAAEBCQAABAACAAAAAAAAAAABAAAAAAQgAAAI=</HashCode>
-      <FileName>ViewModels\ReportService\ProductivityReportViewModel.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="OperationVmCollection" />
-      <Property Name="EmployeeProductivityVmCollection" />
-    </ShowAsCollectionAssociation>
-  </Class>
-  <Class Name="WorkSpeed.DesktopClient.ViewModels.Grouping.AppointmentGroupingViewModel">
-    <Position X="1.5" Y="13" Width="2.5" />
-    <AssociationLine Name="PositionGroupingVmCollection" Type="WorkSpeed.DesktopClient.ViewModels.Grouping.PositionGroupingViewModel">
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-2.182" Y="0.123" />
-      </MemberNameLabel>
-    </AssociationLine>
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping.AppointmentGroupingViewModel" Collapsed="true">
+    <Position X="1.5" Y="12.5" Width="2.25" />
+    <InheritanceLine Type="WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering.FilteredViewModel" FixedToPoint="true">
+      <Path>
+        <Point X="8.875" Y="1.191" />
+        <Point X="8.875" Y="1.625" />
+        <Point X="1.125" Y="1.625" />
+        <Point X="1.125" Y="12.812" />
+        <Point X="1.5" Y="12.812" />
+      </Path>
+    </InheritanceLine>
     <TypeIdentifier>
       <HashCode>AAAFAAAAAABAAAAAAAAAACQAQAAAAAAAAAAAAAQAAAA=</HashCode>
-      <FileName>ViewModels\Grouping\AppointmentGroupingViewModel.cs</FileName>
+      <FileName>ViewModels\ReportService\Grouping\AppointmentGroupingViewModel.cs</FileName>
     </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="PositionGroupingVmCollection" />
-    </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="WorkSpeed.DesktopClient.ViewModels.Grouping.PositionGroupingViewModel">
-    <Position X="1.5" Y="16.25" Width="2.5" />
-    <AssociationLine Name="EmployeeVmCollection" Type="WorkSpeed.DesktopClient.ViewModels.Entities.EmployeeViewModel" FixedToPoint="true">
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping.PositionGroupingViewModel" Collapsed="true">
+    <Position X="1.5" Y="15.25" Width="2.25" />
+    <InheritanceLine Type="WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering.FilteredViewModel" FixedToPoint="true">
       <Path>
-        <Point X="4" Y="17.188" />
-        <Point X="9" Y="17.188" />
+        <Point X="8.875" Y="1.191" />
+        <Point X="8.875" Y="1.625" />
+        <Point X="1.125" Y="1.625" />
+        <Point X="1.125" Y="15.562" />
+        <Point X="1.5" Y="15.562" />
       </Path>
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="0.141" Y="0.216" />
-      </MemberNameLabel>
-    </AssociationLine>
+    </InheritanceLine>
     <TypeIdentifier>
       <HashCode>AAABAAAAAAAAAAAgAAAAACAAgAAAAAAAAAAAAAQAAAA=</HashCode>
-      <FileName>ViewModels\Grouping\PositionGroupingViewModel.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="EmployeeVmCollection" />
-    </ShowAsCollectionAssociation>
-  </Class>
-  <Class Name="WorkSpeed.DesktopClient.ViewModels.Grouping.ShiftGroupingViewModel">
-    <Position X="1.5" Y="9.75" Width="2.5" />
-    <AssociationLine Name="AppointmentGroupingVmCollection" Type="WorkSpeed.DesktopClient.ViewModels.Grouping.AppointmentGroupingViewModel">
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-2.502" Y="0.1" />
-      </MemberNameLabel>
-    </AssociationLine>
-    <TypeIdentifier>
-      <HashCode>AAABAAAAAABAAAgAAAAAACQAAgAAAAAAAAAAAAQAAAA=</HashCode>
-      <FileName>ViewModels\Grouping\ShiftGroupingViewModel.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="AppointmentGroupingVmCollection" />
-    </ShowAsCollectionAssociation>
-  </Class>
-  <Class Name="WorkSpeed.DesktopClient.ViewModels.Entities.EmployeeViewModel">
-    <Position X="9" Y="16.25" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AAABAAgIAAABAAggEAQAAiQAyAAAIAAAAAAAAQACAAA=</HashCode>
-      <FileName>ViewModels\Entities\EmployeeViewModel.cs</FileName>
+      <FileName>ViewModels\ReportService\Grouping\PositionGroupingViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="WorkSpeed.DesktopClient.ViewModels.Productivity.ProductivityViewModel">
-    <Position X="18.5" Y="11.5" Width="3" />
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity.ReceptionProductivityViewModel">
+    <Position X="16.25" Y="22.25" Width="3.5" />
     <TypeIdentifier>
-      <HashCode>IqAAAAAAAAAAAAAAEAAAgAABAAgAQBABBAEACAAIAAI=</HashCode>
-      <FileName>ViewModels\Productivity\ProductivityViewModel.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\ReportService\Productivity\ReceptionProductivityViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="WorkSpeed.DesktopClient.ViewModels.Entities.OperationViewModel">
-    <Position X="13.5" Y="9.75" Width="2.25" />
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity.CategorizedProductivityViewModel">
+    <Position X="19" Y="19.75" Width="3.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAABAQAAAAAAAAAAAEAAAAAAAA=</HashCode>
-      <FileName>ViewModels\Entities\OperationViewModel.cs</FileName>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\ReportService\Productivity\CategorizedProductivityViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.FilterViewModel">
-    <Position X="12.25" Y="2.25" Width="2.75" />
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity.ShipmentProductivityViewModel">
+    <Position X="24.5" Y="19.75" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>BBAAAAAAAAAIAABAAAAAAAAAABAACCAAAAEAAABAAgA=</HashCode>
-      <FileName>ViewModels\ReportService\FilterViewModel.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\ReportService\Productivity\ShipmentProductivityViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity.OtherProductivityViewModel">
+    <Position X="28" Y="19.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\ReportService\Productivity\OtherProductivityViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity.GatheringProductivityViewModel">
+    <Position X="22" Y="22.25" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\ReportService\Productivity\GatheringProductivityViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

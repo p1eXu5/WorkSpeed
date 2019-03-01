@@ -46,15 +46,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
                 ProductivityVmCollection = new List< ProductivityViewModel >( operations.Length + 1 );
 
                 foreach ( var operation in operations ) {
+
                     switch ( operation.Group ) {
-                        case OperationGroups.Gathering :
-                        case OperationGroups.Packing :
-                        case OperationGroups.Placing :
-                        case OperationGroups.BuyerGathering :
-                        case OperationGroups.Defragmentation :
-                        case OperationGroups.Inventory :
-                            ProductivityVmCollection.Add( new GatheringProductivityViewModel( employeeProductivity[ operation ], operation, categories ) );
-                            break;
                         case OperationGroups.Reception :
                             ProductivityVmCollection.Add( new ReceptionProductivityViewModel( employeeProductivity[ operation ], operation, categories ) );
                             break;
@@ -63,6 +56,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
                             break;
                         case OperationGroups.Other :
                             ProductivityVmCollection.Add( new OtherProductivityViewModel( employeeProductivity[ operation ], operation ) );
+                            break;
+                        case OperationGroups.Undefined:
+                            break;
+                        default:
+                            ProductivityVmCollection.Add( new GatheringProductivityViewModel( employeeProductivity[ operation ], operation, categories ) );
                             break;
                     }
                 }

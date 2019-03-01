@@ -56,10 +56,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             void CreateEmployeeProductivityVmCollection ()
             {
                 var employeeProductivityVmCollection = new ObservableCollection< EmployeeProductivityViewModel >(
-                                                                                                                                   _reportService.EmployeeProductivityCollections.Select(
-                                                                                                                                                                                         p => new EmployeeProductivityViewModel( p, FilterVmCollection, _reportService.CategoryCollection )
-                                                                                                                                                                                        )
-                                                                                                                                  );
+                    _reportService.EmployeeProductivityCollections.Select(
+                        p => new EmployeeProductivityViewModel( p, FilterVmCollection, _reportService.CategoryCollection )
+                    )
+                );
 
                 EmployeeProductivityVmCollection = new ReadOnlyObservableCollection< EmployeeProductivityViewModel >( employeeProductivityVmCollection );
 
@@ -129,7 +129,17 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         public override async Task UpdateAsync ()
         {
-            await LoadEmployeeProductivityAsync().ConfigureAwait( false );
+            ReportMessage = "Идёт загрузка выработки";
+
+            await _reportService.LoadEmployeeProductivitiesAsync( Period );
+
+            if ( EmployeeProductivityVmCollection.Any() ) {
+                ReportMessage = "";
+                Refresh();
+            }
+            else {
+                ReportMessage = "Операции за указанный период отсутствуют.";
+            }
         }
 
         
@@ -169,21 +179,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             _filterVmCollection.Add( filter );
 
             _filterVmCollection[ (int)FilterIndexes.Operation ].FilterChanged += OnPredicateChange;
-        }
-
-        private async Task LoadEmployeeProductivityAsync ()
-        {
-            ReportMessage = "Идёт загрузка выработки";
-
-            await _reportService.LoadEmployeeProductivitiesAsync( Period );
-
-            if ( EmployeeProductivityVmCollection.Any() ) {
-                ReportMessage = "";
-                Refresh();
-            }
-            else {
-                ReportMessage = "Операции за указанный период отсутствуют.";
-            }
         }
 
         #endregion

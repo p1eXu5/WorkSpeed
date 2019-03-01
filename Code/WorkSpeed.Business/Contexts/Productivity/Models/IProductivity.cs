@@ -12,13 +12,14 @@ namespace WorkSpeed.Business.Contexts.Productivity
         void Add ( EmployeeActionBase action, Period period );
 
         TimeSpan GetTime ();
+        double GetTotalHours ();
         double GetLinesPerHour ();
         double GetScansPerHour ();
         double GetTotalVolume ();
-        (double client, double nonClient) GetCargoQuantity();
+        (double clientCargo, double nonClientCargo) GetCargoQuantity();
 
         IEnumerable< (int count,Category category) > GetLines ( IEnumerable< Category > categories );
-        IEnumerable< (int count,Category category) > GetScans ( IEnumerable< Category > categories );
+        IEnumerable< (int scans,Category category) > GetScans ( IEnumerable< Category > categories );
         IEnumerable< (int count,Category category) > GetQuantity ( IEnumerable< Category > categories );
         IEnumerable< (double count,Category category) > GetVolumes ( IEnumerable< Category > categories );
     }

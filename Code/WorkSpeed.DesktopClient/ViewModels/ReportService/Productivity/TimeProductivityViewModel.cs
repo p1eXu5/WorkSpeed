@@ -17,8 +17,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
 
             _queue.Enqueue( new AspectsViewModel {
 
-                Aspects = new ObservableCollection< (double, string) >( productivity.GetTimes( operations )
-                                                                                    .Select( t => (Convert.ToDouble( t.count ), $"{t.operation.Name}: {t.count}") ) ),
+                Aspects = new ObservableCollection< (double, string) >( productivity.GetOperationTimes( operations )
+                                                                                    .Select( t => (Convert.ToDouble( t.hours ), $"{t.operation.Name}: {t.hours}") ) ),
                 Annotation = "время"
             } );
 

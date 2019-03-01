@@ -208,7 +208,7 @@ namespace WorkSpeed.Business.FileModels.Converters
                 Operation = new Operation { Name = productivityImportModel.Operation.Trim() },
                 Employee = GetEmployee( productivityImportModel ),
 
-                WithProductActionDetails = new List< DoubleAddressActionDetail > {
+                DoubleAddressDetails = new List< DoubleAddressActionDetail > {
                     new DoubleAddressActionDetail {
                         ProductId = productivityImportModel.ProductId ?? 0,
                         Product = GetProduct( productivityImportModel ),

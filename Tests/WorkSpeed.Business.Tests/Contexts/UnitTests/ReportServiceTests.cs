@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Moq;
 using WorkSpeed.Business.Contexts;
-using WorkSpeed.Business.Contexts.Productivity.Builders;
+using WorkSpeed.Business.Contexts.Productivity;
 using WorkSpeed.Data.Context;
 using WorkSpeed.Data.Models;
 

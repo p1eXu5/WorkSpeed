@@ -217,16 +217,16 @@ namespace WorkSpeed.Business.Contexts
 
         public async Task LoadEmployeeProductivitiesAsync ( Period period )
         {
-            IEnumerable< EmployeeProductivity > productivity = new EmployeeProductivity[0];
+            IEnumerable< EmployeeProductivity > employeeProductivities = new EmployeeProductivity[0];
 
             var task = Task.Run( () =>
                       {
                           lock ( _lock ) {
                               try {
-                                  productivity = GetProductivityCollection( period ).ToArray();
+                                  employeeProductivities = GetProductivityCollection( period ).ToArray();
                               }
                               catch ( Exception ex ) {
-                                  productivity = new EmployeeProductivity[0];
+                                  employeeProductivities = new EmployeeProductivity[0];
                               }
                           }
                     });
@@ -237,8 +237,8 @@ namespace WorkSpeed.Business.Contexts
                 _employeeProductivityCollections.Clear();
             }
 
-            foreach ( var collection in productivity ) {
-                _employeeProductivityCollections.Add( collection );
+            foreach ( var emplProd in employeeProductivities ) {
+                _employeeProductivityCollections.Add( emplProd );
             }
         }
 
@@ -272,18 +272,15 @@ namespace WorkSpeed.Business.Contexts
 
         private IEnumerable< EmployeeProductivity > GetProductivityCollection ( Period period )
         {
-            var actions = _dbContext.GetEmployeeActions( period.Start, period.End ).ToArray();
-            if ( actions.Length == 0 ) yield break;
+            var actionGroupingArray = _dbContext.GetEmployeeActions( period.Start, period.End ).ToArray();
+            if ( actionGroupingArray.Length == 0 ) yield break;
 
-            _productivityBuilder.BuildNew();
-            _productivityBuilder.Thresholds = Thresholds;
+            foreach ( IGrouping< Employee, EmployeeActionBase > actionGrouping in actionGroupingArray ) {
 
-            foreach ( IGrouping< Employee, EmployeeActionBase > grouping in actions ) {
+                var breaks = actionGrouping.Key.ShortBreakSchedule;
+                var shift = actionGrouping.Key.Shift;
 
-                var breaks = grouping.Key.ShortBreakSchedule;
-                var shift = grouping.Key.Shift;
-
-                yield return new EmployeeProductivity( grouping.Key, GetProductivities( grouping, breaks, shift ) );
+                yield return new EmployeeProductivity( actionGrouping.Key, GetProductivities( actionGrouping, breaks, shift ) );
             }
         }
 
@@ -293,6 +290,8 @@ namespace WorkSpeed.Business.Contexts
             if ( actionArr.Length == 0 ) { return (new Dictionary< Operation, IProductivity >(0), new HashSet< Period >()); }
 
             _productivityBuilder.BuildNew();
+            _productivityBuilder.Thresholds = Thresholds;
+
             var current = _productivityBuilder.CheckDuration( actionArr[ 0 ] );
             var next = current;
 

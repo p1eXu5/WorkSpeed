@@ -11,7 +11,7 @@ namespace WorkSpeed.Business.Contexts.Productivity.Models
     public interface IEmployeeProductivity
     {
         double GetTotalHours ();
-        IEnumerable< (double count, Operation operation)> GetTimes ( IEnumerable< Operation > operations );
+        IEnumerable< (double hours, Operation operation)> GetOperationTimes ( IEnumerable< Operation > operations );
         IProductivity this[ Operation operation ] { get; }
         Employee Employee { get; }
     }
