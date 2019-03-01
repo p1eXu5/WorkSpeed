@@ -11,7 +11,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
 {
     public interface IProductivityBuilder
     {
-        (IReadOnlyDictionary< Operation, IProductivity >, HashSet< Period >) GetResult ();
+        (IReadOnlyDictionary< Operation, IProductivity > productivityMap, HashSet< Period > downtimes) GetResult ();
 
         OperationThresholds Thresholds { set; }
 

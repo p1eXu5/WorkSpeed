@@ -19,7 +19,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
         public ProductivityObservableCollection()
         {
-            _actions = new SortedSet< EmployeeActionBase > (new EmployeeActionComparer< EmployeeActionBase >());
+            _actions = new SortedSet< EmployeeActionBase > (new EmployeeActionBaseComparer< EmployeeActionBase >());
         }
 
         public IProductivityCalculator ProductivityCalculator { get; set; }

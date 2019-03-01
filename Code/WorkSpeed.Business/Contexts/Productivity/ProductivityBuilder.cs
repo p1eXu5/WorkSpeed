@@ -33,7 +33,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
         ///     Returns (productivities, downtimes).
         /// </summary>
         /// <returns></returns>
-        public (IReadOnlyDictionary< Operation, IProductivity >, HashSet< Period >) GetResult ()
+        public (IReadOnlyDictionary< Operation, IProductivity > productivityMap, HashSet< Period > downtimes) GetResult ()
         {
             return ( _productivitys, _downtimePeriods );
         }
@@ -47,6 +47,13 @@ namespace WorkSpeed.Business.Contexts.Productivity
             _downtimePeriods.Clear();
         }
 
+        /// <summary>
+        ///     Check operation duration.
+        ///     Duration changes for receptions, buyer gatheriond and (probably) for
+        ///     packing operation (if it was fast packing).
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
         public (Period, EmployeeActionBase) CheckDuration ( EmployeeActionBase action )
         {
             if (action.Operation == null) throw new ArgumentException( @"Operation cannot be null.", nameof( action.Operation ) );
@@ -55,10 +62,12 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
             switch ( action.GetOperationGroup() ) {
                 case OperationGroups.Packing:
-                    period = new Period( action.StartTime, action.StartTime.Add( (( DoubleAddressAction )action).GetPlacingDuration( new[]{ 7.0, 8.0, 9.0, 10.0 } ) ) );
+                    var newDuration = (( DoubleAddressAction )action).GetPackingDuration( new[]{ 7.0, 8.0, 9.0, 10.0 } );
+                    period = new Period( action.StartTime, action.StartTime.Add( newDuration ) );
                     break;
                 case OperationGroups.BuyerGathering:
-                    period = new Period( action.StartTime, action.StartTime.Add((( DoubleAddressAction )action).GetBuyerGatheringDuration( 5, 30, 60 ) ) );
+                    newDuration = (( DoubleAddressAction )action).GetBuyerGatheringDuration( 5, 30, 60 );
+                    period = new Period( action.StartTime, action.StartTime.Add( newDuration ) );
                     break;
                 case OperationGroups.Reception:
                     period = new Period( action.StartTime, action.StartTime.Add( action.Duration + TimeSpan.FromSeconds( 10 ) ) );
@@ -76,6 +85,12 @@ namespace WorkSpeed.Business.Contexts.Productivity
             return (period, action);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="currentAction"></param>
+        /// <param name="nextAction"></param>
+        /// <returns>Tuple from new Perion and current action.</returns>
         public (Period, EmployeeActionBase) CheckPause ( (Period, EmployeeActionBase) currentAction, (Period, EmployeeActionBase) nextAction )
         {
             var pause = nextAction.Item1.Start - currentAction.Item1.End;
@@ -109,13 +124,16 @@ namespace WorkSpeed.Business.Contexts.Productivity
                 }
             }
 
-            if ( pause.Seconds <= Thresholds[ currentAction.Item2.Operation ] ) {
+            if ( pause.TotalSeconds <= (Thresholds?[ currentAction.Item2.Operation ] ?? 20) ) {
 
                 newPeriod = new Period( currentAction.Item1.Start, currentAction.Item1.End.Add( pause ) );
             }
             else {
-                newPeriod = new Period( currentAction.Item1.Start, currentAction.Item1.End.Add( TimeSpan.FromSeconds( Thresholds[ currentAction.Item2.Operation ] ) ) );
-                // save pause in downtime periods
+                newPeriod = new Period( 
+                    start: currentAction.Item1.Start, 
+                    end: currentAction.Item1.End.Add( TimeSpan.FromSeconds( (Thresholds?[ currentAction.Item2.Operation ] ?? 20) ) ) 
+                );
+
                 _downtimePeriods.Add( new Period( newPeriod.End, nextAction.Item1.Start ) );
             }
 

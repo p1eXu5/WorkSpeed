@@ -120,7 +120,7 @@ namespace WorkSpeed.Business.Contexts
             throw new NotImplementedException();
         }
 
-        public async void ReloadEntities< T > ()
+        public void ReloadEntities< T > ()
         {
             if ( typeof( T ).IsAssignableFrom( typeof( Appointment ) ) ) {
                 ReloadCollection( _appointmentCollection, DbContext.GetAppointments() );
@@ -292,12 +292,11 @@ namespace WorkSpeed.Business.Contexts
             _productivityBuilder.BuildNew();
             _productivityBuilder.Thresholds = Thresholds;
 
-            var current = _productivityBuilder.CheckDuration( actionArr[ 0 ] );
-            var next = current;
+            var next = _productivityBuilder.CheckDuration( actionArr[ 0 ] );
 
             for ( int i = 1; i < actionArr.Length; ++i ) {
 
-                current = _productivityBuilder.CheckDuration( actionArr[ i ] );
+                var current = _productivityBuilder.CheckDuration( actionArr[ i ] );
                 next =  _productivityBuilder.CheckPause( current, next );
             }
 

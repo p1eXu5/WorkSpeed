@@ -126,7 +126,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Comparers\EmployeeActionComparer.cs" />
+    <Compile Include="Migrations\20190301072817_InitialCreate.cs" />
+    <Compile Include="Migrations\20190301072817_InitialCreate.designer.cs">
+      <DependentUpon>20190301072817_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\WorkSpeedDbContextModelSnapshot.cs" />
+    <Compile Include="Models\Comparers\EmployeeActionBaseComparer.cs" />
     <Compile Include="Models\Comparers\EmployeeComparer.cs" />
     <Compile Include="Models\Comparers\OperationComparer.cs" />
     <Compile Include="Context\Configurations\CategoryCategorySetConfiguration.cs" />
@@ -214,9 +219,7 @@
   <ItemGroup>
     <None Include="Resources\default_face.bmp" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -9,6 +9,8 @@ namespace WorkSpeed.Business.Contexts.Productivity
     {
         Period this[ EmployeeActionBase action ] { get; set; }
 
+        IReadOnlyDictionary< EmployeeActionBase, Period > ActionPeriodMap { get; }
+
         void Add ( EmployeeActionBase action, Period period );
 
         TimeSpan GetTime ();

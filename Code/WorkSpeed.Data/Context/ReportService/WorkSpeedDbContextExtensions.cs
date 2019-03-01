@@ -66,33 +66,33 @@ namespace WorkSpeed.Data.Context.ReportService
                                                 .Include( a => a.DoubleAddressDetails )
                                                 .Include( a => a.Employee )
                                                 .Include( a => a.Operation )
-                                                .Where( a => a.StartTime >= start && a.StartTime < end )
+                                                .Where( a => a.StartTime >= start && a.StartTime < end && a.Duration > TimeSpan.Zero )
                                                 .AsQueryable();
 
             var receptionActions = dbContext.ReceptionActions
                                             .Include( a => a.ReceptionActionDetails )
                                             .Include( a => a.Employee )
                                             .Include( a => a.Operation )
-                                            .Where( a => a.StartTime >= start && a.StartTime < end )
+                                            .Where( a => a.StartTime >= start && a.StartTime < end && a.Duration > TimeSpan.Zero )
                                             .AsQueryable();
 
             var inventoryActions = dbContext.InventoryActions
                                             .Include( a => a.InventoryActionDetails )
                                             .Include( a => a.Employee )
                                             .Include( a => a.Operation )
-                                            .Where( a => a.StartTime >= start && a.StartTime < end )
+                                            .Where( a => a.StartTime >= start && a.StartTime < end && a.Duration > TimeSpan.Zero )
                                             .AsQueryable();
 
             var shipmentActions = dbContext.ShipmentActions
                                            .Include( a => a.Employee )
                                            .Include( a => a.Operation )
-                                           .Where( a => a.StartTime >= start && a.StartTime < end )
+                                           .Where( a => a.StartTime >= start && a.StartTime < end && a.Duration > TimeSpan.Zero )
                                            .AsQueryable();
 
             var otherActions = dbContext.OtherActions
                                         .Include( a => a.Employee )
                                         .Include( a => a.Operation )
-                                        .Where( a => a.StartTime >= start && a.StartTime < end )
+                                        .Where( a => a.StartTime >= start && a.StartTime < end && a.Duration > TimeSpan.Zero )
                                         .AsQueryable();
 
             var set = new HashSet< EmployeeActionBase >();

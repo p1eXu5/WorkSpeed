@@ -12,26 +12,27 @@ namespace WorkSpeed.Data.Models.Extensions
 {
     public static class ActionExtensions
     {
-        public static TimeSpan GetPlacingDuration ( this DoubleAddressAction action, double[] koefs )
+        public static TimeSpan GetPackingDuration ( this DoubleAddressAction action, double[] koefs )
         {
             if ( action.Operation == null 
-                 || action.Operation.Group != OperationGroups.Placing
+                 || action.Operation.Group != OperationGroups.Packing
                  || action.DoubleAddressDetails == null
                  || action.DoubleAddressDetails.Count == 0 
                  || koefs == null
                  || koefs.Length < 4 ) return action.Duration;
 
             var quantity = action.DoubleAddressDetails.Sum( d => d.ProductQuantity );
-            var dur = action.Duration.Seconds;
-            int s;
+            var dur = action.Duration.TotalSeconds;
 
             if ( quantity < 10 ) { return GetDuration( 0 ); }
             if ( quantity < 20 ) { return GetDuration( 1 ); }
             if ( quantity < 30 ) { return GetDuration( 2 ); }
             return GetDuration( 3 );
 
+
             TimeSpan GetDuration ( int i )
             {
+                var s = 0;
                 checked { s = (int)Math.Floor(quantity * koefs[ i ]); }
                 return dur < s 
                     ? TimeSpan.FromSeconds( s )
