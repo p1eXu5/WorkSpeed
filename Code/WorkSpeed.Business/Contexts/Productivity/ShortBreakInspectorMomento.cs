@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WorkSpeed.Business.Contexts.Productivity
 {
-    public struct ShortBreakInspectorMomento : IShortBreakInspectorMomento
+    public struct ShortBreakInspectorMomento
     {
-        public Period Break { get; private set; }
+        public Period Break { get; internal set; }
 
         public ShortBreakInspectorMomento ( Period @break )
         {

@@ -300,8 +300,8 @@ namespace WorkSpeed.Business.Contexts
                 next =  _productivityBuilder.CheckPause( current, next );
             }
 
-            _productivityBuilder.SubstractBreaks( breaks );
             _productivityBuilder.SubstractLunch( shift );
+            _productivityBuilder.SubstractBreaks( breaks );
 
             return _productivityBuilder.GetResult();
         }

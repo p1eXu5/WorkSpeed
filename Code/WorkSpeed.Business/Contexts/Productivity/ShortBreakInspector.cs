@@ -13,6 +13,8 @@ namespace WorkSpeed.Business.Contexts.Productivity
         private readonly (TimeSpan start, TimeSpan end)[] _breaks;
         private readonly ShortBreakSchedule _shortBreakSchedule;
 
+        private readonly double _periodicity;
+
         public ICollection< (TimeSpan start, TimeSpan end) > Breaks => _breaks;
 
         /// <summary>
@@ -29,13 +31,13 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
             _shortBreakSchedule = shortBreaks;
 
-            var count =(int)Math.Floor( MinPerDay / shortBreaks.Periodicity.TotalMinutes );
+            var count =(int)( MinPerDay / shortBreaks.Periodicity.TotalMinutes );
             _breaks = new (TimeSpan start, TimeSpan end)[ count ];
 
-            var breakPeriodicity = shortBreaks.Periodicity.TotalMinutes;
+            _periodicity = shortBreaks.Periodicity.TotalMinutes;
             var dur = shortBreaks.Duration.TotalMinutes;
 
-            var breakStart = shortBreaks.FirstBreakTime.TotalMinutes % breakPeriodicity;
+            var breakStart = shortBreaks.FirstBreakTime.TotalMinutes % _periodicity;
 
             for ( int i = 0; i < count; ++i ) {
 
@@ -43,7 +45,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
                 if ( end >= MinPerDay ) { end -= MinPerDay; }
 
                 _breaks[i] = ( (TimeSpan.FromMinutes( breakStart ), TimeSpan.FromMinutes( end )) );
-                breakStart += breakPeriodicity;
+                breakStart += _periodicity;
                 if ( breakStart >= MinPerDay ) { breakStart -= MinPerDay; }
             }
         }
@@ -124,12 +126,32 @@ namespace WorkSpeed.Business.Contexts.Productivity
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="period"></param>
+        /// <param name="downtime">Downtime with duration less than break duration.</param>
         /// <param name="momento"></param>
         /// <returns></returns>
-        public bool IsBreak ( Period period, ShortBreakInspectorMomento momento )
+        public bool IsBreak ( Period downtime, ShortBreakInspectorMomento momento )
         {
-            throw new NotImplementedException();
+            if ( downtime.Start < momento.Break.End ) { return true; }
+            
+            int distance = (int)((downtime.End - momento.Break.End).TotalMinutes / _periodicity);
+            
+            if ( distance == 0 ) {
+                // move next
+                momento.Break = new Period( 
+                                        momento.Break.Start.Add( _shortBreakSchedule.Periodicity ), 
+                                        momento.Break.End.Add( _shortBreakSchedule.Periodicity ) 
+                                    );
+            }
+            else {
+                // move distance
+                momento.Break = new Period( 
+                                        momento.Break.Start.Add( TimeSpan.FromMinutes( _periodicity * distance ) ), 
+                                        momento.Break.End.Add( TimeSpan.FromMinutes( _periodicity * distance ) ) 
+                                    );
+            }
+
+
+            return false;
         }
 
     }

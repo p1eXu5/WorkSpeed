@@ -16,8 +16,8 @@ namespace WorkSpeed.Business.Contexts.Productivity
         private static readonly TimeSpan _shiftMarker;
 
         private readonly Dictionary< Operation, IProductivity > _productivityMap;
-        private readonly HashSet< Period > _downtimePeriods;
         private readonly IShortBreakInspectorFactory _shortBreakInspectorFactory;
+        private readonly HashSet< Period > _downtimePeriods;
 
         #region Ctor
 
@@ -59,7 +59,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
         }
 
         /// <summary>
-        ///     Check operation duration.
+        ///     #1. Check operation duration.
         ///     Duration changes for receptions, buyer gatheriond and (probably) for
         ///     packing operation (if it was fast packing).
         /// </summary>
@@ -97,7 +97,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
         }
 
         /// <summary>
-        /// 
+        ///     #2.
         /// </summary>
         /// <param name="currentAction"></param>
         /// <param name="nextAction"></param>
@@ -183,30 +183,21 @@ namespace WorkSpeed.Business.Contexts.Productivity
         }
 
         /// <summary>
-        ///     Substracts breaks from downtime.
+        ///     #4. Substracts breaks from downtime.
         /// </summary>
         /// <param name="breaks"></param>
         public void SubstractBreaks ( ShortBreakSchedule breaks )
         {
-
             // each employee must finish current action before leaving for a break
             if ( !_downtimePeriods.Any() ) { return; }
 
-            Queue< Period > breakQueue = breaks.GetBreaks( downtimePeriods.First().Start );
-
             var inspector = _shortBreakInspectorFactory.GetShortBreakInspector( breaks );
-
             var firstDowntime = _downtimePeriods.FirstOrDefault( d => d.Duration >= breaks.Duration );
 
             // чувак был сильно занят, либо совершил только одно действие
             if ( firstDowntime == Period.Zero ) {  return; }
 
             var momento = inspector.SetBreak( firstDowntime );
-
-            Period brk;
-            //ChangeBreak();
-
-            bool debt = false;
 
             foreach ( var downtimePeriod in _downtimePeriods.ToArray() ) {
 
@@ -216,46 +207,14 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
                     _downtimePeriods.Remove( downtimePeriod );
                     _downtimePeriods.Add( downtimePeriod - momento.Break );
-
-                    if ( debt ) {
-                        // it's mean employee lost the break
-                        debt = false;
-                    }
-                    continue;
                 }
-                
-                if ( debt ) {
-                    if ( downtimePeriod.Contains( breaks.Duration ) ) {
-
-                        _downtimePeriods.Remove( downtimePeriod );
-                        _downtimePeriods.Add( downtimePeriod.CutEnd( breaks.Duration ) );
-                        debt = false;
-                    }
-                }
-
-                //if ( downtimePeriod < brk ) {
-
-                //    // not large and not intersects
-                //    continue;
-                //}
-
-                //debt = CheckActions();
-                ChangeBreak();
-            }
-
-            bool CheckActions()
-            {
-                return _productivityMap.Values.FirstOrDefault( p => p.FirstOrDefault( per => per.Contains( brk )  ) != default( Period ) ) != null;
-            }
-
-            void ChangeBreak ()
-            {
-                brk = breakQueue.Dequeue();
-                breakQueue.Enqueue( brk );
             }
         }
 
-
+        /// <summary>
+        ///     #3.
+        /// </summary>
+        /// <param name="shift"></param>
         public void SubstractLunch ( Shift shift )
         {
             foreach ( var periods in GetShiftPeriods() ) {

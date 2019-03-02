@@ -585,6 +585,39 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             Assert.That( res.downtimes.Sum( d => d.Duration.TotalSeconds ), Is.EqualTo( 40 ) );
         }
 
+        #endregion
+
+
+        #region SubstractBreaks
+
+        [ Test ]
+        public void SubstractBreaks_ActionBreaksInTime_DowntimesEmptyInResult ()
+        {
+            // Arrange:
+            var builder = GetBuilder();
+            var operation = new Operation { Name = "Packing Operation", Group = OperationGroups.Gathering };
+
+            var shortBreaks = new ShortBreakSchedule {
+                Duration = TimeSpan.FromMinutes( 5 ),
+                FirstBreakTime = new TimeSpan( 8, 55, 0),
+                Periodicity = TimeSpan.FromHours( 1 )
+            };
+
+            var actions = new DoubleAddressAction[] {
+
+                new DoubleAddressAction() {
+                    StartTime = DateTime.Parse( "22.02.2019 8:00:00" ),
+                    Duration = TimeSpan.FromMinutes( 4 ),
+                    Operation = operation,
+                },
+
+
+            };
+
+            // Action:
+
+            // Assert:
+        }
 
         #endregion
 

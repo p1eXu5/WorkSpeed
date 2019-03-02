@@ -8,6 +8,5 @@ namespace WorkSpeed.Business.Contexts.Productivity
 {
     internal interface IShortBreakInspectorMomento
     {
-        
     }
 }
