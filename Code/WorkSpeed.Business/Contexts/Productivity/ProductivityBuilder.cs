@@ -15,8 +15,11 @@ namespace WorkSpeed.Business.Contexts.Productivity
     {
         private static readonly TimeSpan _shiftMarker;
 
-        private readonly Dictionary< Operation, IProductivity > _productivitys;
+        private readonly Dictionary< Operation, IProductivity > _productivityMap;
         private readonly HashSet< Period > _downtimePeriods;
+        private readonly IShortBreakInspectorFactory _shortBreakInspectorFactory;
+
+        #region Ctor
 
         static ProductivityBuilder ()
         {
@@ -25,9 +28,15 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
         public ProductivityBuilder ()
         {
-            _productivitys = new Dictionary< Operation, IProductivity >();
+            _productivityMap = new Dictionary< Operation, IProductivity >();
             _downtimePeriods = new HashSet< Period >();
+            _shortBreakInspectorFactory = new ShortBreakInspectorFactory();
         }
+
+        #endregion
+
+
+        #region Properties
 
         /// <summary>
         ///     Returns (productivities, downtimes).
@@ -35,15 +44,17 @@ namespace WorkSpeed.Business.Contexts.Productivity
         /// <returns></returns>
         public (IReadOnlyDictionary< Operation, IProductivity > productivityMap, HashSet< Period > downtimes) GetResult ()
         {
-            return ( _productivitys, _downtimePeriods );
+            return ( _productivityMap, _downtimePeriods );
         }
 
         public OperationThresholds Thresholds { get; set; }
 
+        #endregion
+
 
         public void BuildNew ()
         {
-            _productivitys.Clear();
+            _productivityMap.Clear();
             _downtimePeriods.Clear();
         }
 
@@ -77,10 +88,10 @@ namespace WorkSpeed.Business.Contexts.Productivity
                     break;
             }
 
-            if ( !_productivitys.ContainsKey( action.Operation ) ) {
-                _productivitys[ action.Operation ] = new Productivity();
+            if ( !_productivityMap.ContainsKey( action.Operation ) ) {
+                _productivityMap[ action.Operation ] = new Productivity();
             }
-            _productivitys[ action.Operation ].Add( action, period );
+            _productivityMap[ action.Operation ].Add( action, period );
             
             return (period, action);
         }
@@ -91,7 +102,8 @@ namespace WorkSpeed.Business.Contexts.Productivity
         /// <param name="currentAction"></param>
         /// <param name="nextAction"></param>
         /// <returns>Tuple from new Perion and current action.</returns>
-        public (Period, EmployeeActionBase) CheckPause ( (Period, EmployeeActionBase) currentAction, (Period, EmployeeActionBase) nextAction )
+        public (Period, EmployeeActionBase) CheckPause ( (Period period, EmployeeActionBase action) currentAction, 
+                                                         (Period period, EmployeeActionBase action ) nextAction )
         {
             var pause = nextAction.Item1.Start - currentAction.Item1.End;
 
@@ -104,22 +116,51 @@ namespace WorkSpeed.Business.Contexts.Productivity
                 var currentGroup = currentAction.Item2.GetOperationGroup();
                 var nextGroup = nextAction.Item2.GetOperationGroup();
 
-                if ( currentGroup == OperationGroups.Packing ) {
+                if ( (currentGroup == OperationGroups.Packing && nextGroup != OperationGroups.Packing)
+                     || ( currentGroup == OperationGroups.Packing && nextGroup == OperationGroups.Packing && nextAction.period.Start == nextAction.action.StartTime ) ) {
 
-                    newPeriod = new Period( currentAction.Item1.Start.Add( pause ), nextAction.Item1.Start ); 
-                    _productivitys[ currentAction.Item2.Operation ][ currentAction.Item2 ] = newPeriod;
+                    newPeriod = new Period( currentAction.period.Start.Add( pause ), nextAction.period.Start ); 
+                    _productivityMap[ currentAction.Item2.Operation ][ currentAction.Item2 ] = newPeriod;
                     return (newPeriod, currentAction.Item2);
                 }
-                else if ( nextGroup == OperationGroups.Packing ) {
+                else if ( nextGroup == OperationGroups.Packing
+                          && nextAction.period.Start < nextAction.action.StartTime ) {
 
-                    newPeriod = new Period( currentAction.Item1.End, nextAction.Item1.End.Subtract( pause ) );
-                    _productivitys[ nextAction.Item2.Operation ][ nextAction.Item2 ] = newPeriod;
-                    return currentAction;
+                    // если период операции смещался => next.End - invariant
+
+                    Period newNextPeriod;
+                    
+                    if ( currentAction.period.End >= nextAction.period.End ) {
+
+                        Period newCurrentPeriod;
+
+                        if ( currentAction.period.Start < nextAction.period.Start ) {
+                            
+                            newCurrentPeriod = new Period( currentAction.period.Start, nextAction.period.Start );
+                            _productivityMap[ currentAction.action.Operation ][ currentAction.action ] = newCurrentPeriod;
+                            return (newCurrentPeriod, currentAction.action);
+                        }
+
+                        // считаем длину текущей операции общей
+
+                        newCurrentPeriod = new Period( currentAction.period.Start, currentAction.period.GetMedian() );
+                        newNextPeriod = new Period( newCurrentPeriod.End, currentAction.period.End );
+
+                        _productivityMap[ nextAction.action.Operation ][ nextAction.action ] = newNextPeriod;
+                        _productivityMap[ currentAction.action.Operation ][ currentAction.action ] = newCurrentPeriod;
+                        return (newCurrentPeriod, currentAction.action);
+                    }
+                    else {
+
+                        newNextPeriod = new Period( currentAction.period.End, nextAction.period.End );
+                        _productivityMap[ nextAction.action.Operation ][ nextAction.action ] = newNextPeriod;
+                        return currentAction;
+                    }
                 }
                 else {
 
                     newPeriod = new Period( currentAction.Item1.Start, nextAction.Item1.Start ); 
-                    _productivitys[ currentAction.Item2.Operation ][ currentAction.Item2 ] = newPeriod;
+                    _productivityMap[ currentAction.Item2.Operation ][ currentAction.Item2 ] = newPeriod;
                     return (newPeriod, currentAction.Item2);
                 }
             }
@@ -137,33 +178,44 @@ namespace WorkSpeed.Business.Contexts.Productivity
                 _downtimePeriods.Add( new Period( newPeriod.End, nextAction.Item1.Start ) );
             }
 
-            _productivitys[ currentAction.Item2.Operation ][ currentAction.Item2 ] = newPeriod;
+            _productivityMap[ currentAction.Item2.Operation ][ currentAction.Item2 ] = newPeriod;
             return (newPeriod, currentAction.Item2);
         }
 
         /// <summary>
-        /// Substracts breaks from downtime.
+        ///     Substracts breaks from downtime.
         /// </summary>
         /// <param name="breaks"></param>
         public void SubstractBreaks ( ShortBreakSchedule breaks )
         {
-            var downtimePeriods = _downtimePeriods.ToArray();
 
             // each employee must finish current action before leaving for a break
-            if ( downtimePeriods.Length == 0 ) { return; }
+            if ( !_downtimePeriods.Any() ) { return; }
 
             Queue< Period > breakQueue = breaks.GetBreaks( downtimePeriods.First().Start );
+
+            var inspector = _shortBreakInspectorFactory.GetShortBreakInspector( breaks );
+
+            var firstDowntime = _downtimePeriods.FirstOrDefault( d => d.Duration >= breaks.Duration );
+
+            // чувак был сильно занят, либо совершил только одно действие
+            if ( firstDowntime == Period.Zero ) {  return; }
+
+            var momento = inspector.SetBreak( firstDowntime );
+
             Period brk;
-            ChangeBreak();
+            //ChangeBreak();
 
             bool debt = false;
 
             foreach ( var downtimePeriod in _downtimePeriods.ToArray() ) {
 
-                if ( downtimePeriod.Contains( brk ) ) {
+                if ( downtimePeriod.Duration < breaks.Duration ) { continue; }
+
+                if ( inspector.IsBreak( downtimePeriod, momento ) ) {
 
                     _downtimePeriods.Remove( downtimePeriod );
-                    _downtimePeriods.Add( downtimePeriod - brk );
+                    _downtimePeriods.Add( downtimePeriod - momento.Break );
 
                     if ( debt ) {
                         // it's mean employee lost the break
@@ -181,19 +233,19 @@ namespace WorkSpeed.Business.Contexts.Productivity
                     }
                 }
 
-                if ( downtimePeriod < brk ) {
+                //if ( downtimePeriod < brk ) {
 
-                    // not large and not intersects
-                    continue;
-                }
+                //    // not large and not intersects
+                //    continue;
+                //}
 
-                debt = CheckActions();
+                //debt = CheckActions();
                 ChangeBreak();
             }
 
             bool CheckActions()
             {
-                return _productivitys.Values.FirstOrDefault( p => p.FirstOrDefault( per => per.Contains( brk )  ) != default( Period ) ) != null;
+                return _productivityMap.Values.FirstOrDefault( p => p.FirstOrDefault( per => per.Contains( brk )  ) != default( Period ) ) != null;
             }
 
             void ChangeBreak ()

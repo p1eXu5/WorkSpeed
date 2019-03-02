@@ -132,6 +132,9 @@
     <Compile Include="Contexts\Productivity\ActionDetails\WithScansActionDetails.cs" />
     <Compile Include="Contexts\Past\BreakRepository.cs" />
     <Compile Include="Contexts\Productivity\IProductivityBuilder.cs" />
+    <Compile Include="Contexts\Productivity\IShortBreakInspector.cs" />
+    <Compile Include="Contexts\Productivity\IShortBreakInspectorFactory.cs" />
+    <Compile Include="Contexts\Productivity\IShortBreakInspectorMomento.cs" />
     <Compile Include="Contexts\Productivity\ProductivityBuilder.cs" />
     <Compile Include="Contexts\Past\CategoryFilter.cs" />
     <Compile Include="Contexts\Productivity\Comparers\DayPeriodEqualityComparer.cs" />
@@ -146,6 +149,9 @@
     <Compile Include="Contexts\Productivity\Period.cs" />
     <Compile Include="Contexts\Productivity\Productivity.cs" />
     <Compile Include="Contexts\Past\RepositoryEmployeeAction.cs" />
+    <Compile Include="Contexts\Productivity\ShortBreakInspector.cs" />
+    <Compile Include="Contexts\Productivity\ShortBreakInspectorFactory.cs" />
+    <Compile Include="Contexts\Productivity\ShortBreakInspectorMomento.cs" />
     <Compile Include="Contexts\ReportService.cs" />
     <Compile Include="FileModels\EmployeeShortImportModel.cs" />
     <Compile Include="FileModels\OtherActionImportModel.cs" />

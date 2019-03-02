@@ -83,6 +83,11 @@ namespace WorkSpeed.Business.Contexts.Productivity
             return Start.Date == other.Start.Date;
         }
 
+        public DateTime GetMedian ()
+        {
+            var d = (End - Start).TotalSeconds / 2;
+            return Start.Add( TimeSpan.FromSeconds( d ) );
+        }
 
 
         public override bool Equals ( object obj )

@@ -35,6 +35,8 @@ namespace WorkSpeed.Business.Contexts.Productivity
             return queue;
         }
 
+
+
         public static bool Contains ( this Category category, float? productVolume )
         {
             if ( category.MinVolume.HasValue && category.MaxVolume.HasValue ) {
