@@ -190,11 +190,15 @@ namespace WorkSpeed.Business.Contexts.Productivity
         {
             foreach ( var periods in GetShiftPeriods() ) {
 
-                var period = periods.FirstOrDefault( p => p.Contains( shift.Lunch ) );
-                if ( period != default( Period ) ) { continue; }
+                var period = periods.FirstOrDefault( p => p.Duration >= shift.Lunch );
+                if ( period == default( Period ) ) { continue; }
 
                 _downtimePeriods.Remove( period );
-                _downtimePeriods.Add( period.CutEnd( shift.Lunch ) );
+
+                var newPeriod = period.CutEnd( shift.Lunch );
+                if ( newPeriod.Duration > TimeSpan.Zero ) {
+                    _downtimePeriods.Add( period.CutEnd( shift.Lunch ) );
+                }
             }
         }
 
@@ -248,25 +252,11 @@ namespace WorkSpeed.Business.Contexts.Productivity
             }
         }
 
-        private void RemoveBreakFromDowntime ( Period downtimePeriod, Period @break )
-        {
-            _downtimePeriods.Remove( downtimePeriod );
 
-            var newDowntime = downtimePeriod - @break;
-            if ( newDowntime > Period.Zero ) {
-                var removed = downtimePeriod.Duration - newDowntime.Duration;
-
-                if ( removed == @break.Duration ) {
-                    _downtimePeriods.Add( newDowntime );
-                }
-                else if ( downtimePeriod.Duration > @break.Duration && removed < @break.Duration ) {
-                    var diffPeriod = new Period( @break.End, @break.End.Add( @break.Duration - removed ) );
-                    newDowntime -= diffPeriod;
-                    _downtimePeriods.Add( newDowntime );
-                }
-            }
-        }
-
+        /// <summary>
+        ///     Returns each shift periods.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerable< IEnumerable< Period >> GetShiftPeriods ()
         {
             Period period;
@@ -286,6 +276,25 @@ namespace WorkSpeed.Business.Contexts.Productivity
                 }
 
             } while ( period != default( Period ) );
+        }
+
+        private void RemoveBreakFromDowntime ( Period downtimePeriod, Period @break )
+        {
+            _downtimePeriods.Remove( downtimePeriod );
+
+            var newDowntime = downtimePeriod - @break;
+            if ( newDowntime.Duration > TimeSpan.Zero ) {
+                var removed = downtimePeriod.Duration - newDowntime.Duration;
+
+                if ( removed == @break.Duration ) {
+                    _downtimePeriods.Add( newDowntime );
+                }
+                else if ( downtimePeriod.Duration > @break.Duration && removed < @break.Duration ) {
+                    var diffPeriod = new Period( @break.End, @break.End.Add( @break.Duration - removed ) );
+                    newDowntime -= diffPeriod;
+                    _downtimePeriods.Add( newDowntime );
+                }
+            }
         }
     }
 }

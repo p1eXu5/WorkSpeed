@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using WorkSpeed.Business.Contexts.Productivity;
-using WorkSpeed.Business.Models;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.ActionDetails;
 using WorkSpeed.Data.Models.Actions;
@@ -764,9 +760,97 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             // Assert:
             var res = builder.GetResult();
             Assert.That( res.downtimes, Is.Not.Empty );
-            Assert.That( res.downtimes.Count, Is.EqualTo( 2 ) );
         }
 
+        #endregion
+
+
+        #region SubstractLunch
+
+        [ Test, Category( "SubstractLunch" ) ]
+        public void SubstractLunch_ByDefault_SubstractLunch ()
+        {
+            // Arrange:
+            var builder = GetBuilder();
+            var shipmentOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Shipment };
+            var gatheringOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Gathering };
+
+            var shift = new Shift {
+                Lunch = TimeSpan.FromMinutes( 30 ),
+            };
+
+            var actions = new EmployeeActionBase[] {
+
+                new ShipmentAction() {
+                    StartTime = DateTime.Parse( "22.02.2019 8:00:00" ),
+                    Duration = TimeSpan.FromMinutes( 60 ),
+                    Operation = shipmentOperation,
+                },
+
+                new DoubleAddressAction() {
+                    StartTime = DateTime.Parse( "22.02.2019 9:30:20" ),
+                    Duration = TimeSpan.FromMinutes( 55 ),
+                    Operation = gatheringOperation,
+                },
+            };
+
+            // Action:
+            var next = builder.CheckDuration( actions[1] );
+            var current = builder.CheckDuration( actions[0] );
+            builder.CheckPause( current, next );
+            builder.SubstractLunch( shift );
+
+            // Assert:
+            var res = builder.GetResult();
+            Assert.That( res.downtimes, Is.Empty );
+        }
+
+
+        [ Test, Category( "SubstractLunch" ) ]
+        public void SubstractLunch_TwoDowntimesGreaterLunch_SubstractOneLunch ()
+        {
+            // Arrange:
+            var builder = GetBuilder();
+            var shipmentOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Shipment };
+            var gatheringOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Gathering };
+
+            var shift = new Shift {
+                Lunch = TimeSpan.FromMinutes( 30 ),
+            };
+
+            var actions = new EmployeeActionBase[] {
+
+                new ShipmentAction() {
+                    StartTime = DateTime.Parse( "22.02.2019 8:00:00" ),
+                    Duration = TimeSpan.FromMinutes( 60 ),
+                    Operation = shipmentOperation,
+                },
+
+                new DoubleAddressAction() {
+                    StartTime = DateTime.Parse( "22.02.2019 9:30:20" ),
+                    Duration = TimeSpan.FromMinutes( 30 ),
+                    Operation = gatheringOperation,
+                },
+
+                new DoubleAddressAction() {
+                    StartTime = DateTime.Parse( "22.02.2019 10:30:40" ),
+                    Duration = TimeSpan.FromMinutes( 55 ),
+                    Operation = gatheringOperation,
+                },
+            };
+
+            // Action:
+            var next = builder.CheckDuration( actions[2] );
+            var current = builder.CheckDuration( actions[1] );
+            next = builder.CheckPause( current, next );
+            current = builder.CheckDuration( actions[ 0 ] );
+            builder.CheckPause( current, next );
+            builder.SubstractLunch( shift );
+
+            // Assert:
+            var res = builder.GetResult();
+            Assert.That( res.downtimes, Is.Not.Empty );
+        }
 
         #endregion
 
