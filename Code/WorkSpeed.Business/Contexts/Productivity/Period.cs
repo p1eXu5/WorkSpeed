@@ -47,9 +47,11 @@ namespace WorkSpeed.Business.Contexts.Productivity
             return Period.Zero;
         }
 
-        public bool IsIntersect ( Period other )
+        public bool IsIntersectsWith ( Period other )
         {
-            throw new NotImplementedException();
+            return (Start > other.Start && Start < other.End)
+                    || ( End > other.Start && End < other.End)
+                    || Contains( other );
         }
 
         public DayPeriod GetDayPeriod ()
@@ -137,12 +139,27 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
             if ( periodB.Start >= periodA.Start && periodB.Start < periodA.End ) {
 
+                //
+                //  |___________A___________|
+                //                                      
+                //        |_____B________|
+                //
+                //  |__res___|
+                //
                 if ( periodB.End <= periodA.End ) {
 
                     newBorder = periodA.End.Subtract( periodB.Duration );
                     return new Period( periodA.Start, newBorder );
                 }
 
+
+                //
+                //  |___________A___________|
+                //
+                //        |_____B______________|
+                //
+                //  |_res_|
+                //
                 if ( periodB.End > periodA.End ) {
 
                     return new Period( periodA.Start, periodB.Start );

@@ -59,7 +59,10 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         [ TestCase( "2.03.2019 13:53", "2.03.2019 14:01", "2.03.2019 14:00" ) ]
         [ TestCase( "2.03.2019 23:56", "3.03.2019 0:01", "3.03.2019 0:00" ) ]
         [ TestCase( "2.03.2019 20:12", "3.03.2019 20:21", "3.03.2019 20:00" ) ]
-        public void SetPoint_ByDefault_ReturnsMomentoWithExpectedBreakEnd ( string start, string end, string expectedEnd )
+        [ TestCase( "2.03.2019 8:55:20", "2.03.2019 9:00", "2.03.2019 9:00" ) ]
+        [ TestCase( "2.03.2019 23:55:20", "2.03.2019 23:59:45", "3.03.2019 0:00" ) ]
+        [ TestCase( "2.03.2019 23:55:20", "3.03.2019 0:05:45", "3.03.2019 0:00" ) ]
+        public void SetBreak_ByDefault_ReturnsMomentoWithExpectedBreakEnd ( string start, string end, string expectedEnd )
         {
              // Arrange:
             var shortBreaks = new ShortBreakSchedule {

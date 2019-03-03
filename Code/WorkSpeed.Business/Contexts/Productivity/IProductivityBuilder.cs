@@ -22,7 +22,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
         (Period, EmployeeActionBase) CheckPause ( (Period period, EmployeeActionBase action) currentAction, 
                                                   (Period period, EmployeeActionBase action ) nextAction );
 
-        void SubstractBreaks ( ShortBreakSchedule breaks );
+        void SubstractBreaks ( ShortBreakSchedule shortBreaks );
         void SubstractLunch ( Shift shift );
     }
 }

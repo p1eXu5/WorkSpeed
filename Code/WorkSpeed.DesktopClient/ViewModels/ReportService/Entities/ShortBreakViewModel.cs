@@ -27,11 +27,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.Entities
         //    }
         //}
 
-        //public TimeSpan Duration
+        //public TimeSpan BreakDuration
         //{
-        //    get => _break.Duration;
+        //    get => _break.BreakDuration;
         //    set {
-        //        _break.Duration = value;
+        //        _break.BreakDuration = value;
         //        OnPropertyChanged();
         //    }
         //}

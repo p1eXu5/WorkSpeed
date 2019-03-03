@@ -161,7 +161,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contexts\Productivity\UnitTests\DataModelExtensionTests.cs" />
+    <Compile Include="Contexts\Productivity\UnitTests\PeriodTests.cs" />
     <Compile Include="Contexts\Productivity\UnitTests\ProductivityBuilderTests.cs" />
     <Compile Include="Contexts\Productivity\UnitTests\ProductivityTests.cs" />
     <Compile Include="Contexts\Productivity\UnitTests\ShortBreakInspectorTests.cs" />

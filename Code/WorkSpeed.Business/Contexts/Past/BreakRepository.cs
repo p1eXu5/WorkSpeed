@@ -53,11 +53,11 @@ namespace WorkSpeed.Business.Contexts.Productivity
             //if ( shortBreak == null ) throw new ArgumentNullException( nameof( shortBreak ), "ShortBreak cannot be null" );
 
             //// Check duration
-            //if ( shortBreak.Duration < ShortBreakDownLimit || shortBreak.Duration > ShortBreakUpLimit )
+            //if ( shortBreak.BreakDuration < ShortBreakDownLimit || shortBreak.BreakDuration > ShortBreakUpLimit )
             //    throw new ArgumentException();
 
             //// Check interval
-            //var interval = shortBreak.Periodicity - shortBreak.Duration;
+            //var interval = shortBreak.Periodicity - shortBreak.BreakDuration;
 
             //if ( interval < ShortBreakIntervalDownLimit || interval > ShortBreakIntervalUpLimit )
             //    throw new ArgumentException();
@@ -76,7 +76,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
             //do
             //{
             //    start = end + interval;
-            //    end += interval + shortBreak.Duration;
+            //    end += interval + shortBreak.BreakDuration;
 
             //    if ( end < TimeSpan.FromDays( 1 ) )
             //    {
@@ -97,7 +97,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
             //var lastEnd = end;
             //end = offset;
-            //start = end - shortBreak.Duration;
+            //start = end - shortBreak.BreakDuration;
 
             //while ( start > lastEnd )
             //{
@@ -105,7 +105,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
             //    dayPeriod = new DayPeriod( start, end );
             //    dayPeriodList.Add( dayPeriod );
             //    end = start - interval;
-            //    start = end - shortBreak.Duration;
+            //    start = end - shortBreak.BreakDuration;
             //}
 
             //return dayPeriodList;

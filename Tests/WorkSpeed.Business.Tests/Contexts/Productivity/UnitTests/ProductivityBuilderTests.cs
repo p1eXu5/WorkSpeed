@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using WorkSpeed.Business.Contexts.Productivity;
+using WorkSpeed.Business.Models;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.ActionDetails;
 using WorkSpeed.Data.Models.Actions;
@@ -590,8 +592,16 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
 
         #region SubstractBreaks
 
-        [ Test ]
-        public void SubstractBreaks_ActionBreaksInTime_DowntimesEmptyInResult ()
+        [ Category( "SubstractBreaks" ) ]
+        [ TestCase( "22.02.2019 8:00:00", 54, "22.02.2019 8:59:00" ) ]
+        [ TestCase( "22.02.2019 8:00:00", 55, "22.02.2019 8:59:00" ) ]
+        [ TestCase( "22.02.2019 8:00:00", 55, "22.02.2019 9:00:00" ) ]
+        [ TestCase( "22.02.2019 8:00:00", 56, "22.02.2019 9:00:00" ) ]
+        [ TestCase( "22.02.2019 23:00:00", 55, "23.02.2019 0:00:00" ) ]
+        [ TestCase( "22.02.2019 23:00:00", 56, "23.02.2019 0:00:00" ) ]
+        [ TestCase( "22.02.2019 23:00:00", 55, "22.02.2019 23:59:00" ) ]
+        [ TestCase( "22.02.2019 23:00:00", 55, "23.02.2019 0:00:20" ) ]
+        public void SubstractBreaks_ActionBreakInBreakTime_DowntimesEmptyInResult ( string st0, int dur0, string st1 )
         {
             // Arrange:
             var builder = GetBuilder();
@@ -606,25 +616,164 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             var actions = new DoubleAddressAction[] {
 
                 new DoubleAddressAction() {
-                    StartTime = DateTime.Parse( "22.02.2019 8:00:00" ),
-                    Duration = TimeSpan.FromMinutes( 4 ),
+                    StartTime = DateTime.Parse( st0 ),
+                    Duration = TimeSpan.FromMinutes( dur0 ),
                     Operation = operation,
                 },
 
-
+                new DoubleAddressAction() {
+                    StartTime = DateTime.Parse( st1 ),
+                    Duration = TimeSpan.FromMinutes( 55 ),
+                    Operation = operation,
+                },
             };
 
             // Action:
+            var next = builder.CheckDuration( actions[1] );
+            var current = builder.CheckDuration( actions[0] );
+            builder.CheckPause( current, next );
+            builder.SubstractBreaks( shortBreaks );
 
             // Assert:
+            var res = builder.GetResult();
+            Assert.That( res.downtimes, Is.Empty );
         }
+
+
+        [ Category( "SubstractBreaks" ) ]
+        [ TestCase( "22.02.2019 8:00:00", 54, "22.02.2019 9:00:00" ) ]
+        [ TestCase( "22.02.2019 23:00:00", 54, "23.02.2019 0:00:00" ) ]
+        [ TestCase( "22.02.2019 8:00:00", 55, "22.02.2019 9:01:00" ) ]
+        [ TestCase( "22.02.2019 23:00:00", 55, "23.02.2019 0:01:00" ) ]
+        [ TestCase( "22.02.2019 23:00:00", 55, "23.02.2019 0:00:40" ) ]
+        public void SubstractBreaks_ActionBreakGreaterBreakTime_DowntimesNotEmptyInResult ( string st0, int dur0, string st1 )
+        {
+            // Arrange:
+            var builder = GetBuilder();
+            var operation = new Operation { Name = "Packing Operation", Group = OperationGroups.Gathering };
+
+            var shortBreaks = new ShortBreakSchedule {
+                Duration = TimeSpan.FromMinutes( 5 ),
+                FirstBreakTime = new TimeSpan( 8, 55, 0),
+                Periodicity = TimeSpan.FromHours( 1 )
+            };
+
+            var actions = new DoubleAddressAction[] {
+
+                new DoubleAddressAction() {
+                    StartTime = DateTime.Parse( st0 ),
+                    Duration = TimeSpan.FromMinutes( dur0 ),
+                    Operation = operation,
+                },
+
+                new DoubleAddressAction() {
+                    StartTime = DateTime.Parse( st1 ),
+                    Duration = TimeSpan.FromMinutes( 55 ),
+                    Operation = operation,
+                },
+            };
+
+            // Action:
+            var next = builder.CheckDuration( actions[1] );
+            var current = builder.CheckDuration( actions[0] );
+            builder.CheckPause( current, next );
+            builder.SubstractBreaks( shortBreaks );
+
+            // Assert:
+            var res = builder.GetResult();
+            Assert.That( res.downtimes, Is.Not.Empty );
+        }
+
+
+        [ Test, Category( "SubstractBreaks" ) ]
+        public void SubstractBreaks__ShipmentActionWhenBreakTime_FirstDowntimeNotInTime__DowntimesNotEmptyInResult ()
+        {
+            // Arrange:
+            var builder = GetBuilder();
+            var shipmentOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Shipment };
+            var gatheringOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Gathering };
+
+            var shortBreaks = new ShortBreakSchedule {
+                Duration = TimeSpan.FromMinutes( 5 ),
+                FirstBreakTime = new TimeSpan( 8, 55, 0),
+                Periodicity = TimeSpan.FromHours( 1 )
+            };
+
+            var actions = new EmployeeActionBase[] {
+
+                new ShipmentAction() {
+                    StartTime = DateTime.Parse( "22.02.2019 8:00:00" ),
+                    Duration = TimeSpan.FromMinutes( 65 ),
+                    Operation = shipmentOperation,
+                },
+
+                new DoubleAddressAction() {
+                    StartTime = DateTime.Parse( "22.02.2019 8:10:20" ),
+                    Duration = TimeSpan.FromMinutes( 55 ),
+                    Operation = gatheringOperation,
+                },
+            };
+
+            // Action:
+            var next = builder.CheckDuration( actions[1] );
+            var current = builder.CheckDuration( actions[0] );
+            builder.CheckPause( current, next );
+            builder.SubstractBreaks( shortBreaks );
+
+            // Assert:
+            var res = builder.GetResult();
+            Assert.That( res.downtimes, Is.Empty );
+        }
+
+
+        [ Test, Category( "SubstractBreaks" ) ]
+        public void SubstractBreaks__ShipmentActionWhenBreakTime_FirstDowntimeInTime__DowntimesNotEmptyInResult ()
+        {
+            // Arrange:
+            var builder = GetBuilder();
+            var shipmentOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Shipment };
+            var gatheringOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Gathering };
+
+            var shortBreaks = new ShortBreakSchedule {
+                Duration = TimeSpan.FromMinutes( 5 ),
+                FirstBreakTime = new TimeSpan( 8, 55, 0),
+                Periodicity = TimeSpan.FromHours( 1 )
+            };
+
+            var actions = new EmployeeActionBase[] {
+
+                new ShipmentAction() {
+                    StartTime = DateTime.Parse( "22.02.2019 8:00:00" ),
+                    Duration = TimeSpan.FromMinutes( 110 ),
+                    Operation = shipmentOperation,
+                },
+
+                new DoubleAddressAction() {
+                    StartTime = DateTime.Parse( "22.02.2019 10:10:20" ),
+                    Duration = TimeSpan.FromMinutes( 55 ),
+                    Operation = gatheringOperation,
+                },
+            };
+
+            // Action:
+            var next = builder.CheckDuration( actions[1] );
+            var current = builder.CheckDuration( actions[0] );
+            builder.CheckPause( current, next );
+            builder.SubstractBreaks( shortBreaks );
+
+            // Assert:
+            var res = builder.GetResult();
+            Assert.That( res.downtimes, Is.Not.Empty );
+            Assert.That( res.downtimes.Count, Is.EqualTo( 2 ) );
+        }
+
 
         #endregion
 
 
         #region Factory
 
-        private ProductivityBuilder GetBuilder ()
+        private ProductivityBuilder GetBuilder ( int thresholdInSec = 20 )
         {
             return new ProductivityBuilder();
         }

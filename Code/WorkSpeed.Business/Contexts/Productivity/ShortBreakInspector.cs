@@ -16,6 +16,8 @@ namespace WorkSpeed.Business.Contexts.Productivity
         private readonly double _periodicity;
 
         public ICollection< (TimeSpan start, TimeSpan end) > Breaks => _breaks;
+        public TimeSpan BreakDuration => _shortBreakSchedule.Duration;
+        public TimeSpan FirstBreakTime => _shortBreakSchedule.FirstBreakTime;
 
         /// <summary>
         /// 
@@ -57,15 +59,14 @@ namespace WorkSpeed.Business.Contexts.Productivity
         /// <returns></returns>
         public ShortBreakInspectorMomento SetBreak ( Period period )
         {
-            if (period.Duration < _shortBreakSchedule.Duration) { throw new ArgumentException(@"perion duration wrong.", nameof(period.Duration)); }
-
             var periodEnd = period.End.TimeOfDay;
             var mid = (_breaks.Length ) / 2;
             var diff = mid;
 
             while ( mid > 0 && mid < (_breaks.Length - 1) ) {
 
-                if ( periodEnd > _breaks[ mid ].end && periodEnd < _breaks[ mid + 1 ].end ) {
+                if ( (periodEnd >= _breaks[ mid ].end || ( periodEnd >= _breaks[ mid ].start && periodEnd < _breaks[ mid ].end ) ) 
+                     && periodEnd < _breaks[ mid + 1 ].end ) {
                     return new ShortBreakInspectorMomento( 
                                     new Period( 
                                         new DateTime( period.End.Year, period.End.Month, period.End.Day, _breaks[mid].start.Hours, _breaks[mid].start.Minutes, _breaks[mid].start.Seconds ), 
@@ -84,16 +85,17 @@ namespace WorkSpeed.Business.Contexts.Productivity
                 }
             }
 
-            if ( periodEnd > _breaks[ mid ].end && periodEnd < _breaks[ mid + 1 ].end ) {
-                return new ShortBreakInspectorMomento( 
-                               new Period( 
-                                   new DateTime( period.End.Year, period.End.Month, period.End.Day, _breaks[mid].start.Hours, _breaks[mid].start.Minutes, _breaks[mid].start.Seconds ), 
-                                   new DateTime( period.End.Year, period.End.Month, period.End.Day, _breaks[mid].end.Hours, _breaks[mid].end.Minutes, _breaks[mid].end.Seconds )
-                               ) 
-                           );
-            }
 
             if ( mid == 0 ) {
+                if ( (periodEnd >= _breaks[ mid ].end || ( periodEnd >= _breaks[ mid ].start && periodEnd < _breaks[ mid ].end ) ) 
+                    && periodEnd < _breaks[ mid + 1 ].end ) {
+                    return new ShortBreakInspectorMomento( 
+                                   new Period( 
+                                       new DateTime( period.End.Year, period.End.Month, period.End.Day, _breaks[mid].start.Hours, _breaks[mid].start.Minutes, _breaks[mid].start.Seconds ), 
+                                       new DateTime( period.End.Year, period.End.Month, period.End.Day, _breaks[mid].end.Hours, _breaks[mid].end.Minutes, _breaks[mid].end.Seconds )
+                                   ) 
+                               );
+                }
 
                 var lastBreak = _breaks[ _breaks.Length - 1 ];
 
@@ -115,25 +117,61 @@ namespace WorkSpeed.Business.Contexts.Productivity
                            );
             }
 
+            if ( _breaks[ mid ].end < _breaks[ mid ].start ) {
+
+                return new ShortBreakInspectorMomento( 
+                           new Period(
+                               new DateTime( period.End.Year, period.End.Month, period.End.Day, _breaks[ mid ].start.Hours, _breaks[ mid ].start.Minutes, _breaks[ mid ].start.Seconds ),
+                               new DateTime( period.End.Year, period.End.Month, period.End.Day + 1, _breaks[ mid ].end.Hours, _breaks[ mid ].end.Minutes, _breaks[ mid ].end.Seconds )
+                           ) 
+                       );
+            }
+
             return new ShortBreakInspectorMomento( 
                            new Period(
-                               new DateTime( period.End.Year, period.End.Month, period.End.Day - 1, _breaks[0].start.Hours, _breaks[0].start.Minutes, _breaks[0].start.Seconds ),
-                               new DateTime( period.End.Year, period.End.Month, period.End.Day - 1, _breaks[0].end.Hours, _breaks[0].end.Minutes, _breaks[0].end.Seconds )
+                               new DateTime( period.End.Year, period.End.Month, period.End.Day - 1, _breaks[ mid ].start.Hours, _breaks[ mid ].start.Minutes, _breaks[ mid ].start.Seconds ),
+                               new DateTime( period.End.Year, period.End.Month, period.End.Day - 1, _breaks[ mid ].end.Hours, _breaks[ mid ].end.Minutes, _breaks[ mid ].end.Seconds )
                            ) 
                        );
         }
 
         /// <summary>
-        /// 
+        ///     Checks intersaction, move break to the next period.
         /// </summary>
         /// <param name="downtime">Downtime with duration less than break duration.</param>
         /// <param name="momento"></param>
         /// <returns></returns>
         public bool IsBreak ( Period downtime, ShortBreakInspectorMomento momento )
         {
-            if ( downtime.Start < momento.Break.End ) { return true; }
-            
-            int distance = (int)((downtime.End - momento.Break.End).TotalMinutes / _periodicity);
+            if ( downtime.IsIntersectsWith( momento.Break ) ) {
+                momento.LockDeposit();
+                return true;
+            }
+
+            if ( downtime.Start > momento.Break.End ) {
+
+                if ( !momento.IsDepositLocked() ) {
+                    momento.UnlockDeposit();
+                }
+                else {
+                    momento.SetDeposit();
+                }
+                Next( downtime, momento );
+                return IsBreak( downtime, momento );
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        ///     Move break to the next period, sets momento deposit.
+        /// </summary>
+        /// <param name="nextDowntime"></param>
+        /// <param name="momento"></param>
+        public void Next ( Period nextDowntime, ShortBreakInspectorMomento momento )
+        {
+
+            int distance = (int)((nextDowntime.End - momento.Break.End).TotalMinutes / _periodicity);
             
             if ( distance == 0 ) {
                 // move next
@@ -148,10 +186,19 @@ namespace WorkSpeed.Business.Contexts.Productivity
                                         momento.Break.Start.Add( TimeSpan.FromMinutes( _periodicity * distance ) ), 
                                         momento.Break.End.Add( TimeSpan.FromMinutes( _periodicity * distance ) ) 
                                     );
+
+                if ( distance == 1 ) {
+                    
+                }
             }
+        }
 
-
-            return false;
+        public Period GetPreviousBreak ( ShortBreakInspectorMomento momento )
+        {
+            return new Period( 
+                            momento.Break.Start.Subtract( _shortBreakSchedule.Periodicity ), 
+                            momento.Break.End.Subtract( _shortBreakSchedule.Periodicity ) 
+                        );
         }
 
     }

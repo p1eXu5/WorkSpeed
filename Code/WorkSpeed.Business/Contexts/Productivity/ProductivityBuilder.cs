@@ -60,7 +60,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
         /// <summary>
         ///     #1. Check operation duration.
-        ///     Duration changes for receptions, buyer gatheriond and (probably) for
+        ///     BreakDuration changes for receptions, buyer gatheriond and (probably) for
         ///     packing operation (if it was fast packing).
         /// </summary>
         /// <param name="action"></param>
@@ -183,35 +183,6 @@ namespace WorkSpeed.Business.Contexts.Productivity
         }
 
         /// <summary>
-        ///     #4. Substracts breaks from downtime.
-        /// </summary>
-        /// <param name="breaks"></param>
-        public void SubstractBreaks ( ShortBreakSchedule breaks )
-        {
-            // each employee must finish current action before leaving for a break
-            if ( !_downtimePeriods.Any() ) { return; }
-
-            var inspector = _shortBreakInspectorFactory.GetShortBreakInspector( breaks );
-            var firstDowntime = _downtimePeriods.FirstOrDefault( d => d.Duration >= breaks.Duration );
-
-            // чувак был сильно занят, либо совершил только одно действие
-            if ( firstDowntime == Period.Zero ) {  return; }
-
-            var momento = inspector.SetBreak( firstDowntime );
-
-            foreach ( var downtimePeriod in _downtimePeriods.ToArray() ) {
-
-                if ( downtimePeriod.Duration < breaks.Duration ) { continue; }
-
-                if ( inspector.IsBreak( downtimePeriod, momento ) ) {
-
-                    _downtimePeriods.Remove( downtimePeriod );
-                    _downtimePeriods.Add( downtimePeriod - momento.Break );
-                }
-            }
-        }
-
-        /// <summary>
         ///     #3.
         /// </summary>
         /// <param name="shift"></param>
@@ -224,6 +195,75 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
                 _downtimePeriods.Remove( period );
                 _downtimePeriods.Add( period.CutEnd( shift.Lunch ) );
+            }
+        }
+
+        /// <summary>
+        ///     #4. Substracts shortBreaks from downtime.
+        /// </summary>
+        /// <param name="shortBreaks"></param>
+        public void SubstractBreaks ( ShortBreakSchedule shortBreaks )
+        {
+            // each employee must finish current action before leaving for a break
+            if ( !_downtimePeriods.Any() ) { return; }
+
+            var maxDowntime = shortBreaks.Periodicity + shortBreaks.Periodicity - shortBreaks.Duration;
+            var dtArr = _downtimePeriods.Where( d => d.Duration < maxDowntime ).ToArray();
+            var inspector = _shortBreakInspectorFactory.GetShortBreakInspector( shortBreaks );
+            var firstDowntime = dtArr[ 0 ];
+
+            Period brk;
+            var momento = inspector.SetBreak( firstDowntime );
+
+            if ( momento.Break.Start.TimeOfDay > inspector.FirstBreakTime ) {
+                momento.SetDeposit();
+                brk = inspector.GetPreviousBreak( momento );
+            }
+            else {
+                brk = momento.Break;
+            }
+
+            foreach ( var downtimePeriod in dtArr ) {
+
+                if ( inspector.IsBreak( downtimePeriod, momento ) ) {
+
+                    RemoveBreakFromDowntime( downtimePeriod, momento.Break );
+                    brk = momento.Break;
+                }
+                else if ( momento.HasDeposit ) {
+                    var operation = _productivityMap.FirstOrDefault( p => p.Key.Group == OperationGroups.Shipment && p.Value.Any( a => a.IsIntersectsWith( brk ) ) ).Key;
+                    if ( operation != null ) {
+
+                        var downtimes = _downtimePeriods.Where( p => p > brk && p < momento.Break ).OrderBy( p => p.Duration ).ToArray();
+
+                        if ( downtimes.Length > 0 ) {
+                            int i = 0;
+                            while ( downtimes[ i ].Duration < brk.Duration || i < downtimes.Length ) { ++i; }
+                            var momentoBreak = new Period( downtimes[ i ].Start, downtimes[ i ].Start.Add( brk.Duration ) );
+                            RemoveBreakFromDowntime( downtimes[ i ], momentoBreak );
+                        }
+                    }
+                    momento.RemoveDeposit();
+                }
+            }
+        }
+
+        private void RemoveBreakFromDowntime ( Period downtimePeriod, Period @break )
+        {
+            _downtimePeriods.Remove( downtimePeriod );
+
+            var newDowntime = downtimePeriod - @break;
+            if ( newDowntime > Period.Zero ) {
+                var removed = downtimePeriod.Duration - newDowntime.Duration;
+
+                if ( removed == @break.Duration ) {
+                    _downtimePeriods.Add( newDowntime );
+                }
+                else if ( downtimePeriod.Duration > @break.Duration && removed < @break.Duration ) {
+                    var diffPeriod = new Period( @break.End, @break.End.Add( @break.Duration - removed ) );
+                    newDowntime -= diffPeriod;
+                    _downtimePeriods.Add( newDowntime );
+                }
             }
         }
 
