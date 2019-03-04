@@ -28,12 +28,12 @@ namespace WorkSpeed.Business.Contexts
 {
     public class ImportService : Service, IImportService
     {
+        #region Fields
+
         private readonly ITypeRepository _typeRepository;
 
         private IProgress< (int, string) > _progress;
         private readonly object _locker = new Object();
-
-
 
         private Employee[] _employees;
         private Address[] _addresses;
@@ -42,6 +42,15 @@ namespace WorkSpeed.Business.Contexts
         private readonly HashSet< Employee > _newEmployees = new HashSet< Employee >( ComparerFactory.EmployeeComparer );
         private readonly HashSet< Address > _newAddresses = new HashSet< Address >( ComparerFactory.AddressComparer );
         private readonly HashSet< Product > _newProducts = new HashSet< Product >( ComparerFactory.ProductComparer );
+
+        private Position _defaultPosition;
+        private Appointment _defaultAppointment;
+        private Rank _defaultRank;
+        private Shift _defaultShift;
+        private ShortBreakSchedule _defaultBreaks;
+        private Avatar _defaultAvatar;
+
+        #endregion
 
 
         #region Ctor
@@ -53,6 +62,17 @@ namespace WorkSpeed.Business.Contexts
 
         #endregion
 
+
+        #region Properties
+
+        private Position DefaultPosition => _defaultPosition ?? ( _defaultPosition = _dbContext.GetDefaultPosition() );
+        private Appointment DefaultAppointment => _defaultAppointment ?? ( _defaultAppointment = _dbContext.GetDefaultAppointment() );
+        private Rank DefaultRank => _defaultRank ?? _defaultRank ?? ( _defaultRank = _dbContext.GetDefaultRank() );
+        private Shift DefaultShift => _defaultShift ?? ( _defaultShift = _dbContext.GetDefaultShift() );
+        private ShortBreakSchedule DefaultBreaks => _defaultBreaks ?? ( _defaultBreaks = _dbContext.GetDefaultShortBreakSchedule() );
+        private Avatar DefaultAvatar => _defaultAvatar ?? ( _defaultAvatar = _dbContext.GetDefaultAvatar() );
+
+        #endregion
 
 
         public async Task ImportFromXlsxAsync ( string fileName, IProgress< (int, string) > progress, CancellationToken cancellationToken )
@@ -156,29 +176,21 @@ namespace WorkSpeed.Business.Contexts
             var dbRanks = _dbContext.GetRanks().ToArray();
             var dbPositions = _dbContext.GetPositions().ToArray();
 
-            var defaultAppointment = dbAppointments[ 0 ];
-            var defaultRank = dbRanks[ 0 ];
-            var defaultPosition = dbPositions[ 0 ];
-            var defaultShift = _dbContext.GetDefaultShift();
-            var defaultShortBreakSchedule = _dbContext.GetDefaultShortBreakSchedule();
-            var defaultAvatar = _dbContext.GetDefaultAvatar();
-
             foreach ( var employee in data.Where( Check.IsEmployeeCorrect ) ) {
 
-                employee.Rank = dbRanks.FirstOrDefault( r => r.Number == employee.Rank?.Number ) ?? defaultRank;
+                employee.Rank = dbRanks.FirstOrDefault( r => r.Number == employee.Rank?.Number ) ?? DefaultRank;
 
                 employee.Appointment = employee.Appointment?.Abbreviations == null 
-                                           ? defaultAppointment 
-                                           : dbAppointments.FirstOrDefault( a => Check.CheckAbbreviation( a.Abbreviations, employee.Appointment.Abbreviations ) ) ?? defaultAppointment;
+                                           ? DefaultAppointment 
+                                           : dbAppointments.FirstOrDefault( a => Check.CheckAbbreviation( a.Abbreviations, employee.Appointment.Abbreviations ) ) ?? DefaultAppointment;
 
                 employee.Position = employee.Position?.Abbreviations == null 
-                                        ? defaultPosition 
-                                        : dbPositions.FirstOrDefault( p => Check.CheckAbbreviation( p.Abbreviations, employee.Position?.Abbreviations ) ) ?? defaultPosition;
+                                        ? DefaultPosition 
+                                        : dbPositions.FirstOrDefault( p => Check.CheckAbbreviation( p.Abbreviations, employee.Position?.Abbreviations ) ) ?? DefaultPosition;
 
-                employee.Shift = defaultShift;
-                employee.ShortBreakSchedule = defaultShortBreakSchedule;
-                employee.Avatar = defaultAvatar;
-                employee.IsSmoker = employee.IsSmoker ?? false;
+                employee.Shift = DefaultShift;
+                employee.ShortBreakSchedule = DefaultBreaks;
+                employee.Avatar = DefaultAvatar;
 
                 var dbEmployee = dbEmployees.FirstOrDefault( e => e.Id.Equals( employee.Id ) );
                 var newEmployee = newEmployees.FirstOrDefault( e => e.Id.Equals( employee.Id ) );
@@ -546,6 +558,14 @@ namespace WorkSpeed.Business.Contexts
             var newEmployee = _newEmployees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
 
             if ( dbEmployee == null && newEmployee == null ) {
+
+                action.Employee.Position = DefaultPosition;
+                action.Employee.Appointment = DefaultAppointment;
+                action.Employee.Rank = DefaultRank;
+                action.Employee.Shift = DefaultShift;
+                action.Employee.ShortBreakSchedule = DefaultBreaks;
+                action.Employee.Avatar = DefaultAvatar;
+
                 _newEmployees.Add( action.Employee );
             }
             else if ( dbEmployee != null ) {

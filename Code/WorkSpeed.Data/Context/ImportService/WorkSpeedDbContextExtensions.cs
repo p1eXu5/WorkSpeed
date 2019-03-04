@@ -19,25 +19,26 @@ namespace WorkSpeed.Data.Context.ImportService
             => dbContext.Employees.AsQueryable();
 
 
-        
+        public static Position GetDefaultPosition ( this WorkSpeedDbContext dbContext )
+            => dbContext.Positions.First( s => s.Id == 1 );
 
-        public static async Task< Shift > GetDefaultShiftAsync ( this WorkSpeedDbContext dbContext )
-            => await dbContext.Shifts.FirstAsync( s => s.Id == 1 );
+        public static Rank GetDefaultRank ( this WorkSpeedDbContext dbContext )
+            => dbContext.Ranks.First( s => s.Number == 3 );
+
+        public static Appointment  GetDefaultAppointment ( this WorkSpeedDbContext dbContext )
+            => dbContext.Appointments.First( s => s.Id == 1 );
 
         public static Shift  GetDefaultShift ( this WorkSpeedDbContext dbContext )
             => dbContext.Shifts.First( s => s.Id == 1 );
 
-        public static async Task< ShortBreakSchedule > GetDefaultShortBreakScheduleAsync ( this WorkSpeedDbContext dbContext )
-            => await dbContext.ShortBreakSchedules.FirstAsync( s => s.Id == 1 );
-
         public static ShortBreakSchedule GetDefaultShortBreakSchedule ( this WorkSpeedDbContext dbContext )
             => dbContext.ShortBreakSchedules.First( s => s.Id == 1 );
 
-        public static async Task< Avatar > GetDefaultAvatarAsync ( this WorkSpeedDbContext dbContext )
-            => await dbContext.Avatars.FirstAsync( a => a.Id == 1 );
-
         public static Avatar GetDefaultAvatar ( this WorkSpeedDbContext dbContext )
             => dbContext.Avatars.First( a => a.Id == 1 );
+
+
+
 
         public static IQueryable< Operation > GetOperations ( this WorkSpeedDbContext dbContext, ISet< OperationGroups > group )
             => dbContext.Operations.Where( o => group.Contains( o.Group ) ).AsQueryable();

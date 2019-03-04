@@ -69,8 +69,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         #region Properties
 
-        public FilterIndexes SelectedFilter { get; set; }
-
         public string ReportMessage
         {
             get => _reportMessage;
@@ -103,7 +101,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                 new FilterViewModel( "Должности", FilterIndexes.Appointment, AppointmentVmCollection, a => (( AppointmentViewModel )a).InnerName ),
                 new FilterViewModel( "Смены", FilterIndexes.Shift, ShiftVmCollection, s => (( ShiftViewModel )s).Name ),
                 new FilterViewModel( "Ранги", FilterIndexes.Rank, RankVmCollection, r => (( RankViewModel )r).Number.ToString( CultureInfo.InvariantCulture ) ),
-                new FilterViewModel( "Курит", FilterIndexes.IsSmoker, null ),
+                new FilterViewModel( "Курит", FilterIndexes.IsSmoker, new object[] {
+                                                                                        new Tuple<bool?,string> ( true, "Да" ), 
+                                                                                        new Tuple<bool?,string> (false, "Нет"), 
+                                                                                        new Tuple<bool?,string> (null, "Не известно")
+                                                                                    }, b => ((Tuple<bool?,string>)b).Item2 ),
             });
 
             coll[ (int)FilterIndexes.IsActive ].FilterChanged += OnPredicateChange;
@@ -118,7 +120,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         protected virtual void OnPredicateChange ( object sender, FilterChangedEventArgs args )
         {
-            SelectedFilter = args.FilterIndex;
             Refresh();
         }
 

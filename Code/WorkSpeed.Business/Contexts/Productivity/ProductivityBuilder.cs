@@ -193,6 +193,8 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
             var maxDowntime = shortBreaks.Periodicity + shortBreaks.Periodicity - shortBreaks.Duration;
             var dtArr = _downtimePeriods.Where( d => d.Duration < maxDowntime ).OrderBy( d => d.Start ).ToArray();
+            if ( dtArr.Length <= 0 ) return;
+
             var inspector = _shortBreakInspectorFactory.GetShortBreakInspector( shortBreaks );
             var firstDowntime = dtArr[ 0 ];
 
@@ -238,6 +240,8 @@ namespace WorkSpeed.Business.Contexts.Productivity
         /// <param name="shift"></param>
         public void SubstractLunch ( Shift shift )
         {
+            if ( !_downtimePeriods.Any() ) { return; }
+
             foreach ( var periods in GetShiftPeriods() ) {
 
                 var period = periods.FirstOrDefault( p => p.Duration >= shift.Lunch );
@@ -271,6 +275,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
                 }
                 else {
                     var res = _downtimePeriods.Skip( count ).Where( p => p < period ).ToArray();
+                    if ( res.Length <= 0 ) { yield break; }
                     count = res.Length;
                     yield return res;
                 }

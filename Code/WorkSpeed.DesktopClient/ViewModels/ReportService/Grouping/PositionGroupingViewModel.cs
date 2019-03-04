@@ -58,7 +58,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping
             if (!(o is EmployeeViewModel employee)) return false;
 
             var res = _filterVmCollection[ ( int )FilterIndexes.IsActive ].Entities.Any( obj => ( bool )(obj).Equals( employee.IsActive ) )
-                      && _filterVmCollection[ ( int )FilterIndexes.IsSmoker ].Entities.Any( obj => ( bool )(obj).Equals( employee.IsSmoker ) )
+                      && _filterVmCollection[ ( int )FilterIndexes.IsSmoker ].Entities.Any( obj => ((Tuple<bool?,string>)obj).Item1.Equals( employee.IsSmoker ) )
                       && _filterVmCollection[ ( int )FilterIndexes.Rank ].Entities.Any( obj => (obj as RankViewModel)?.Number == employee.Rank.Number );
 
             return res;

@@ -168,7 +168,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             if (!(o is EmployeeProductivityViewModel employeeProductivity)) return false;
 
             var res = _filterVmCollection[ ( int )FilterIndexes.IsActive ].Entities.Any( obj => (obj).Equals( employeeProductivity.EmployeeVm.IsActive ) )
-                      && _filterVmCollection[ ( int )FilterIndexes.IsSmoker ].Entities.Any( obj => (obj).Equals( employeeProductivity.EmployeeVm.IsSmoker ) )
+                      && _filterVmCollection[ ( int )FilterIndexes.IsSmoker ].Entities.Any( obj => ((Tuple<bool?,string>)obj).Item1.Equals( employeeProductivity.EmployeeVm.IsSmoker ) )
                       && _filterVmCollection[ ( int )FilterIndexes.Rank ].Entities.Any( obj => (obj as RankViewModel)?.Number == employeeProductivity.EmployeeVm.Rank.Number );
 
             return res;

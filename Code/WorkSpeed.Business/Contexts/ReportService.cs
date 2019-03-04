@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -223,16 +224,17 @@ namespace WorkSpeed.Business.Contexts
             var task = Task.Run( () =>
                       {
                           lock ( _lock ) {
-                              try {
-                                  employeeProductivities = GetEmployeeProductivities( period ).ToArray();
-                              }
-                              catch ( Exception ex ) {
-                                  employeeProductivities = new EmployeeProductivity[0];
-                              }
+                              employeeProductivities = GetEmployeeProductivities( period ).ToArray();
                           }
                     });
-
-            await task;
+            try {
+                await task;
+            }
+            catch ( Exception ex ) {
+                employeeProductivities = new EmployeeProductivity[0];
+                Debug.WriteLine( ex.Message );
+                Debug.WriteLine( ex.StackTrace );
+            }
 
             if ( EmployeeProductivityCollections.Any() ) {
                 _employeeProductivityCollections.Clear();
