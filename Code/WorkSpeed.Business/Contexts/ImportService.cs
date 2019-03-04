@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -77,6 +78,9 @@ namespace WorkSpeed.Business.Contexts
             }
             catch ( DirectoryNotFoundException ) {
                 _progress?.Report( (-1, @"Путь к файлу не найден.") );
+            }
+            catch ( DbUpdateException ex ) {
+                _progress?.Report( (-1, @"Не удалось сохранить експортируемые данные." + $"\n{ex.Message}") );
             }
             catch ( Exception ex ) {
                 _progress?.Report( (-1, @"Не удалось прочитать файл. Файл либо открыт в другой программе, " 
@@ -209,7 +213,7 @@ namespace WorkSpeed.Business.Contexts
             var shipmentActions = new List< ShipmentAction >();
             var otherActions = new List< OtherAction >();
 
-            foreach ( var action in data.Where( d => d.Duration > TimeSpan.Zero ) ) {
+            foreach ( var action in data ) {
 
                 switch ( action ) {
                     case DoubleAddressAction doubleAddressAction :
@@ -272,14 +276,15 @@ namespace WorkSpeed.Business.Contexts
             }
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
         private void StoreDoubleActions ( IEnumerable< DoubleAddressAction > data )
         {
             var actions = data.AsParallel()
                               .Where( a => Check.IsEmployeeBaseActionCorrect( a ) 
-                                           && Check.IsProductCorrect(a.DoubleAddressDetails[0].Product)
-                                           && Check.IsAddressCorrect(a.DoubleAddressDetails[0].SenderAddress)
-                                           && Check.IsAddressCorrect(a.DoubleAddressDetails[0].ReceiverAddress) )
+                                           && Check.IsProductCorrect(a.DoubleAddressDetails[0].Product) )
                               .AsSequential()
                               .GroupBy( a => a.Id ).ToArray();
 
@@ -287,10 +292,15 @@ namespace WorkSpeed.Business.Contexts
 
             var periodStart = actions.Min( a => a.First().StartTime );
             var periodEnd = actions.Max( a => a.First().StartTime );
-            if ( periodStart == periodEnd ) periodEnd += TimeSpan.FromMilliseconds( 1 );
 
             var dbActions = _dbContext.GetDoubleAddressActions( periodStart, periodEnd ).ToArray();
-            var dbOperations = _dbContext.GetOperations( OperationGroups.Gathering ).ToArray();
+            var dbOperations = _dbContext.GetOperations( new HashSet< OperationGroups > {
+                OperationGroups.BuyerGathering,
+                OperationGroups.Defragmentation,
+                OperationGroups.Gathering,
+                OperationGroups.Packing,
+                OperationGroups.Placing
+            }).ToArray();
 
             foreach ( var actionGrouping in actions ) {
 
@@ -304,7 +314,7 @@ namespace WorkSpeed.Business.Contexts
                 if ( null == dbOperation ) continue;
                 action.Operation = dbOperation;
 
-                CheckWithEmployeeAction( action );
+                CheckWithExistedAction( action );
 
                 if ( !actionGrouping.All( a => a.Employee.Id.Equals( action.Employee.Id ) && a.Operation.Name.Equals( action.Operation.Name ) )) continue;
 
@@ -332,12 +342,15 @@ namespace WorkSpeed.Business.Contexts
             _dbContext.AddRange( newActions );
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
         private void StoreReceptionActions ( IEnumerable< ReceptionAction > data )
         {
             var actions = data.AsParallel()
                               .Where( a => Check.IsEmployeeBaseActionCorrect( a ) 
-                                           && Check.IsProductCorrect( a.ReceptionActionDetails[0].Product )
-                                           && Check.IsAddressCorrect( a.ReceptionActionDetails[0].Address ) )
+                                           && Check.IsProductCorrect( a.ReceptionActionDetails[0].Product ) )
                               .AsSequential()
                               .GroupBy( a => a.Id ).ToArray();
 
@@ -345,25 +358,36 @@ namespace WorkSpeed.Business.Contexts
 
             var periodStart = actions.Min( a => a.First().StartTime );
             var periodEnd = actions.Max( a => a.First().StartTime );
-            if ( periodStart == periodEnd ) periodEnd += TimeSpan.FromMilliseconds( 1 );
-
             var dbActions = _dbContext.GetReceptionActions( periodStart, periodEnd ).ToArray();
+
             var dbOperations = _dbContext.GetOperations( OperationGroups.Reception ).ToArray();
+            Operation clientOperation = null;
+            Operation nonClientOperation = null;
+            if ( dbOperations[ 0 ].Name.Contains( "транзитов" ) ) {
+                clientOperation = dbOperations[ 0 ];
+                nonClientOperation = dbOperations[ 1 ];
+            }
+            else {
+                clientOperation = dbOperations[ 1 ];
+                nonClientOperation = dbOperations[ 0 ];
+            }
 
             foreach ( var actionGrouping in actions ) {
 
                 // check action
-                var action = actionGrouping.First();
-                var dbAction = dbActions.FirstOrDefault( a => a.Id.Equals( action.Id ) );
+                var firstActionInGroup = actionGrouping.First();
+                var dbAction = dbActions.FirstOrDefault( a => a.Id.Equals( firstActionInGroup.Id ) );
                 if ( dbAction != null ) continue;
+                if ( !actionGrouping.All( a => a.Employee.Id.Equals( firstActionInGroup.Employee.Id ) && a.Operation.Name.Equals( firstActionInGroup.Operation.Name ) )) continue;
 
-                var dbOperation = dbOperations.FirstOrDefault( o => o.Name.Equals( action.Operation.Name ) );
-                if ( null == dbOperation ) continue;
-                action.Operation = dbOperation;
+                foreach ( var act in actionGrouping ) {
+                    
+                    CheckWithExistedAction( act );
+                    firstActionInGroup.Operation = firstActionInGroup.ReceptionActionDetails[0].IsClientScanning 
+                                       ? clientOperation
+                                       : nonClientOperation;
+                }
 
-                CheckWithEmployeeAction( action );
-
-                if ( !actionGrouping.All( a => a.Employee.Id.Equals( action.Employee.Id ) && a.Operation.Name.Equals( action.Operation.Name ) )) continue;
 
                 var details = new List< ReceptionActionDetail >();
 
@@ -375,25 +399,28 @@ namespace WorkSpeed.Business.Contexts
                     // check addresses
                     CheckAddress( detail.Address, a => detail.Address = a );
 
-                    detail.ReceptionAction = action;
-                    detail.ReceptionActionId = action.Id;
+                    detail.ReceptionAction = firstActionInGroup;
+                    detail.ReceptionActionId = firstActionInGroup.Id;
 
                     details.Add( detail );
                 }
 
-                action.ReceptionActionDetails = details;
-                newActions.Add( action );
+                firstActionInGroup.ReceptionActionDetails = details;
+                newActions.Add( firstActionInGroup );
             }
 
             _dbContext.AddRange( newActions );
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
         private void StoreInventoryActions ( IEnumerable< InventoryAction > data  )
         {
             var actions = data.AsParallel()
                               .Where( a => Check.IsEmployeeBaseActionCorrect( a ) 
-                                           && Check.IsProductCorrect( a.InventoryActionDetails[0].Product )
-                                           && Check.IsAddressCorrect( a.InventoryActionDetails[0].Address ) )
+                                           && Check.IsProductCorrect( a.InventoryActionDetails[0].Product ) )
                               .AsSequential()
                               .GroupBy( a => a.Id ).ToArray();
 
@@ -401,8 +428,6 @@ namespace WorkSpeed.Business.Contexts
 
             var periodStart = actions.Min( a => a.First().StartTime );
             var periodEnd = actions.Max( a => a.First().StartTime );
-            if ( periodStart == periodEnd ) periodEnd += TimeSpan.FromMilliseconds( 1 );
-
             var dbActions = _dbContext.GetInventoryActions( periodStart, periodEnd ).ToArray();
             var dbOperations = _dbContext.GetOperations( OperationGroups.Inventory ).ToArray();
 
@@ -417,7 +442,7 @@ namespace WorkSpeed.Business.Contexts
                 if ( null == dbOperation ) continue;
                 action.Operation = dbOperation;
 
-                CheckWithEmployeeAction( action );
+                CheckWithExistedAction( action );
 
                 if ( !actionGrouping.All( a => a.Employee.Id.Equals( action.Employee.Id ) && a.Operation.Name.Equals( action.Operation.Name ) )) continue;
 
@@ -444,6 +469,10 @@ namespace WorkSpeed.Business.Contexts
             _dbContext.AddRange( newActions );
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
         private void StoreShipmentActions ( IEnumerable< ShipmentAction > data )
         {
             var newActions = new HashSet< ShipmentAction >( ComparerFactory.EmployeeActionBaseComparer );
@@ -452,8 +481,6 @@ namespace WorkSpeed.Business.Contexts
 
             var periodStart = actions.Min( a => a.StartTime );
             var periodEnd = actions.Max( a => a.StartTime );
-            if ( periodStart == periodEnd ) periodEnd += TimeSpan.FromMilliseconds( 1 );
-
             var dbActions = _dbContext.GetShipmentActions( periodStart, periodEnd ).ToArray();
             var dbOperations = _dbContext.GetOperations( OperationGroups.Shipment ).ToArray();
 
@@ -466,7 +493,7 @@ namespace WorkSpeed.Business.Contexts
                 if ( null == dbOperation ) continue;
                 action.Operation = dbOperation;
 
-                CheckWithEmployeeAction( action );
+                CheckWithExistedAction( action );
 
                 newActions.Add( action );
             }
@@ -474,6 +501,10 @@ namespace WorkSpeed.Business.Contexts
             _dbContext.AddRange( newActions );
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
         private void StoreOtherActions ( IEnumerable< OtherAction > data )
         {
             var newActions = new HashSet< OtherAction >( ComparerFactory.EmployeeActionBaseComparer );
@@ -482,7 +513,6 @@ namespace WorkSpeed.Business.Contexts
 
             var periodStart = actions.Min( a => a.StartTime );
             var periodEnd = actions.Max( a => a.StartTime );
-            if ( periodStart == periodEnd ) periodEnd += TimeSpan.FromMilliseconds( 1 );
 
             var dbActions = _dbContext.GetOtherActions( periodStart, periodEnd ).ToArray();
             var dbOperations = _dbContext.GetOperations( OperationGroups.Other ).ToArray();
@@ -496,7 +526,7 @@ namespace WorkSpeed.Business.Contexts
                 if ( null == dbOperation ) continue;
                 action.Operation = dbOperation;
 
-                CheckWithEmployeeAction( action );
+                CheckWithExistedAction( action );
 
                 newActions.Add( action );
             }
@@ -504,8 +534,12 @@ namespace WorkSpeed.Business.Contexts
             _dbContext.AddRange( newActions );
         }
 
-
-        private void CheckWithEmployeeAction< T > ( T action) where T : EmployeeActionBase
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="action"></param>
+        private void CheckWithExistedAction< T > ( T action) where T : EmployeeActionBase
         {
             var dbEmployee = _employees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
             var newEmployee = _newEmployees.FirstOrDefault( e => e.Id.Equals( action.Employee.Id ) );
@@ -589,20 +623,33 @@ namespace WorkSpeed.Business.Contexts
                 if ( a.Id.Length < 10 ) return false;
                 int.TryParse( a.Id.Substring( 4 ), out var num );
 
-                return num > 0
-                       && !string.IsNullOrWhiteSpace( a.Id )
-                       && char.IsLetter( a.Id[ 0 ] ) && char.IsLetter( a.Id[ 1 ] )
-                       && char.IsDigit( a.Id[ 2 ] ) && a.Id[ 3 ].Equals( '-' )
-                       && a.StartTime >= DNS_BEGIN_TIME && a.StartTime < _nowDate && a.Duration > TimeSpan.Zero
-                       && IsEmployeeCorrect( a.Employee )
-                       && a.Operation?.Name?.Length > 1;
+                var res = num > 0
+                    && !string.IsNullOrWhiteSpace( a.Id )
+                    && char.IsLetter( a.Id[ 0 ] ) && char.IsLetter( a.Id[ 1 ] )
+                    && char.IsDigit( a.Id[ 2 ] ) && a.Id[ 3 ].Equals( '-' )
+                    && a.StartTime >= DNS_BEGIN_TIME && a.StartTime < _nowDate
+                    && IsEmployeeCorrect( a.Employee )
+                    && a.Operation?.Name?.Length > 1;
+#if DEBUG
+                if ( !res ) {
+                    Debug.WriteLine( $"num: {num}; a.Id[ 0 ]: {a.Id[ 0 ]}; a.Id[ 1 ]: {a.Id[ 1 ]}; a.Id[ 2 ]: {a.Id[ 2 ]}; a.Id[ 3 ]: {a.Id[ 3 ]};" );
+                    Debug.WriteLine( $"a.StartTime: {a.StartTime}; DNS_BEGIN_TIME: {DNS_BEGIN_TIME};" );
+                    Debug.WriteLine( $"IsEmployeeCorrect: {IsEmployeeCorrect( a.Employee )}; a.Operation?.Name?.Length: {a.Operation?.Name?.Length};" );
+                }
+#endif
+                return res;
             }
 
             public static bool IsProductCorrect ( Product p )
             {
-                return p != null && !String.IsNullOrWhiteSpace( p.Name ) && p.Id > 0;
+                var res = p != null && !String.IsNullOrWhiteSpace( p.Name ) && p.Id > 0;
+#if DEBUG
+                if ( !res ) {
+                    Debug.WriteLine( $"p.Name: {p.Name}; p.Id: {p.Id};" );
+                }
+#endif
+                return res;
             }
-
             public static bool IsEmployeeCorrect ( Employee e )
             {
                 if ( e.Id.Length != 7 ) return false;
@@ -614,11 +661,6 @@ namespace WorkSpeed.Business.Contexts
                        && !string.IsNullOrWhiteSpace( e.Id )
                        && e.Name.Length >= 1
                        && char.IsLetter( e.Id[0] ) && char.IsLetter( e.Id[1] );
-            }
-
-            public static bool IsAddressCorrect ( Address a )
-            {
-                return a != null && char.IsLetter( a.Letter[ 0 ] ) && a.Row > 0 && a.Section > 0 && a.Shelf > 0 && a.Box > 0;
             }
 
 

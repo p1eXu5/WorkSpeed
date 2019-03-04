@@ -405,7 +405,7 @@
                                     </StackPanel>
                                 </TabItem.Header>
 
-                                <!--<uc:EmployeeReportUserControl DataContext="{Binding EmployeeReportVm}" />-->
+                                <uc:EmployeeReportUserControl DataContext="{Binding EmployeeReportVm}" />
                             </TabItem>
 
                             <!-- Settings #2 -->

@@ -83,10 +83,12 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
                             var epvm = new EmployeeProductivityViewModel( ( EmployeeProductivity )e.NewItems[ 0 ], FilterVmCollection, _reportService.CategoryCollection );
                             employeeProductivityVmCollection.Add( epvm );
+                            return;
                         }
 
                         if ( e.OldItems?[ 0 ] != null ) {
                             employeeProductivityVmCollection.Remove( employeeProductivityVmCollection.First( vm => ReferenceEquals( vm.EmployeeProductivity, e.OldItems[ 0 ] ) ) );
+                            return;
                         }
 
                         if ( e.NewItems?[ 0 ] == null && e.OldItems?[ 0 ] == null ) {

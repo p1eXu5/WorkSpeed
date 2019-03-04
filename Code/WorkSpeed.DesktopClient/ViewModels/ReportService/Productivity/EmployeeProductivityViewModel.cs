@@ -79,6 +79,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
 
         #region Properties
 
+        public int? PositionId => EmployeeVm.Employee.PositionId;
+        public int? AppointmentId => EmployeeVm.Employee.Appointment.Id;
+        public string Name => EmployeeVm.Employee.Name;
+
         public IEmployeeProductivity EmployeeProductivity { get; }
 
         public EmployeeViewModel EmployeeVm { get; }
