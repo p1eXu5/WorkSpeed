@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using WorkSpeed.Business.Models;
 using WorkSpeed.Data.Models;
-using WorkSpeed.DesktopClient.ViewModels.Entities;
+using WorkSpeed.DesktopClient.ViewModels.ReportService.Entities;
 using WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping

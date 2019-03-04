@@ -63,34 +63,42 @@ namespace WorkSpeed.Data.Context.ReportService
         public static IEnumerable< IGrouping< Employee, EmployeeActionBase >> GetEmployeeActions ( this WorkSpeedDbContext dbContext, DateTime start, DateTime end )
         {
             var doubleAddressActions = dbContext.DoubleAddressActions
-                                                .Include( a => a.DoubleAddressDetails )
                                                 .Include( a => a.Employee )
+                                                .ThenInclude( e => e.Avatar )
                                                 .Include( a => a.Operation )
+                                                .Include( a => a.DoubleAddressDetails )
+                                                .ThenInclude( d => d.Product )
                                                 .Where( a => a.StartTime >= start && a.StartTime < end && a.Duration > TimeSpan.Zero )
                                                 .AsQueryable();
 
             var receptionActions = dbContext.ReceptionActions
-                                            .Include( a => a.ReceptionActionDetails )
                                             .Include( a => a.Employee )
+                                            .ThenInclude( e => e.Avatar )
                                             .Include( a => a.Operation )
+                                            .Include( a => a.ReceptionActionDetails )
+                                            .ThenInclude( d => d.Product )
                                             .Where( a => a.StartTime >= start && a.StartTime < end && a.Duration > TimeSpan.Zero )
                                             .AsQueryable();
 
             var inventoryActions = dbContext.InventoryActions
-                                            .Include( a => a.InventoryActionDetails )
                                             .Include( a => a.Employee )
+                                            .ThenInclude( e => e.Avatar )
                                             .Include( a => a.Operation )
+                                            .Include( a => a.InventoryActionDetails )
+                                            .ThenInclude( d => d.Product )
                                             .Where( a => a.StartTime >= start && a.StartTime < end && a.Duration > TimeSpan.Zero )
                                             .AsQueryable();
 
             var shipmentActions = dbContext.ShipmentActions
                                            .Include( a => a.Employee )
+                                           .ThenInclude( e => e.Avatar )
                                            .Include( a => a.Operation )
                                            .Where( a => a.StartTime >= start && a.StartTime < end && a.Duration > TimeSpan.Zero )
                                            .AsQueryable();
 
             var otherActions = dbContext.OtherActions
                                         .Include( a => a.Employee )
+                                        .ThenInclude( e => e.Avatar )
                                         .Include( a => a.Operation )
                                         .Where( a => a.StartTime >= start && a.StartTime < end && a.Duration > TimeSpan.Zero )
                                         .AsQueryable();
@@ -112,6 +120,6 @@ namespace WorkSpeed.Data.Context.ReportService
             => dbContext.ShortBreakSchedules.AsQueryable();
 
         public static IEnumerable< Category > GetCategories ( this WorkSpeedDbContext dbContext )
-            => dbContext.CategorySets.Include( c => c.CategoryCategorySets ).First().CategoryCategorySets.Select( ccs => ccs.Category );
+            => dbContext.CategorySets.Include( c => c.CategoryCategorySets ).ThenInclude( ccs => ccs.Category ).First().CategoryCategorySets.Select( ccs => ccs.Category );
     }
 }

@@ -1,4 +1,4 @@
-﻿<Border x:Class="WorkSpeed.DesktopClient.Views.ReportService.Entities.EmployeeView"
+﻿<Border x:Class="WorkSpeed.DesktopClient.Views.ReportService.Entities.ReadOnlyEmployeeView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -11,10 +11,9 @@
         TextElement.FontFamily="{StaticResource font_Rubik}"
         Width="{StaticResource d_EmployeeCardWidth}" 
         Height="136" 
-        Margin="2,5"
         Padding="0"
         IsHitTestVisible="True"
-        BorderThickness="1"
+        BorderThickness="1,0,1,1"
         TextElement.Foreground="Black"
         >
     <Border.Resources>

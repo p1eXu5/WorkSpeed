@@ -15,7 +15,7 @@ using WorkSpeed.Business.Contexts;
 using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.Dialogs;
-using WorkSpeed.DesktopClient.ViewModels.Entities;
+using WorkSpeed.DesktopClient.ViewModels.ReportService.Entities;
 using WorkSpeed.DesktopClient.ViewModels.ReportService;
 using WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering;
 

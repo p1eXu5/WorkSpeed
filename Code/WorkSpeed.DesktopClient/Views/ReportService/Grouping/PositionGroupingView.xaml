@@ -1,4 +1,4 @@
-﻿<Grid x:Class="WorkSpeed.DesktopClient.Views.Templates.PositionGroupingView"
+﻿<Grid x:Class="WorkSpeed.DesktopClient.Views.ReportService.Grouping.PositionGroupingView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

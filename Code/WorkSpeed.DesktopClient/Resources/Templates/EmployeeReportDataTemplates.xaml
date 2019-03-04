@@ -1,16 +1,20 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:entities="clr-namespace:WorkSpeed.DesktopClient.ViewModels.Entities"
+
+                    xmlns:vme="clr-namespace:WorkSpeed.DesktopClient.ViewModels.ReportService.Entities"
                     xmlns:grouping="clr-namespace:WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping"
-                    xmlns:v="clr-namespace:WorkSpeed.DesktopClient.Views.Templates"
-                    xmlns:templates="clr-namespace:WorkSpeed.DesktopClient.Views.Templates">
+
+                    xmlns:vg="clr-namespace:WorkSpeed.DesktopClient.Views.ReportService.Grouping"
+                    xmlns:ve="clr-namespace:WorkSpeed.DesktopClient.Views.ReportService.Entities"
+                    xmlns:templates="clr-namespace:WorkSpeed.DesktopClient.Views.Templates"
+                    >
     
-    <DataTemplate DataType="{x:Type entities:EmployeeViewModel}">
-        <templates:EmployeeView DataContext="{Binding}" />
+    <DataTemplate DataType="{x:Type vme:EmployeeViewModel}">
+        <ve:EmployeeView DataContext="{Binding}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type grouping:PositionGroupingViewModel}">
-        <v:PositionGroupingView />
+        <vg:PositionGroupingView />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type grouping:AppointmentGroupingViewModel}">
@@ -38,7 +42,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type grouping:ShiftGroupingViewModel}">
-        <v:ShiftGroupingView />
+        <vg:ShiftGroupingView />
     </DataTemplate>
 
 </ResourceDictionary>

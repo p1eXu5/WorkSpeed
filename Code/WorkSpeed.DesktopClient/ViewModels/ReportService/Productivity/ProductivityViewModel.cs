@@ -20,7 +20,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
         private string _speedLabeling;
         private string _annotation;
         protected Queue< AspectsViewModel> _queue;
-        private AspectsViewModel _aspects;
+        private IEnumerable< (double val, string ann) > _selectedAspects;
 
 
         public ProductivityViewModel ( Operation operation )
@@ -32,11 +32,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
         public Operation Operation { get; }
         public int OperationId => Operation.Id;
 
-        public AspectsViewModel Aspects
+        public IEnumerable< (double val, string ann) > SelectedAspects
         {
-            get => _aspects;
+            get => _selectedAspects;
             private set {
-                _aspects = value;
+                _selectedAspects = value;
                 OnPropertyChanged();
             }
         }
@@ -74,8 +74,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
         protected void Next ()
         {
             if ( _queue.Count == 0 ) return;
-            Aspects = _queue.Dequeue();
-            _queue.Enqueue( Aspects );
+            var next = _queue.Dequeue();
+            SelectedAspects = next.Aspects;
+            Annotation = next.Annotation;
+            _queue.Enqueue( next );
         }
     }
 }

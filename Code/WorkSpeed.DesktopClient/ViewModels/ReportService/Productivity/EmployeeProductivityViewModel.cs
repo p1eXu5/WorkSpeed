@@ -6,7 +6,7 @@ using System.Linq;
 using WorkSpeed.Business.Contexts.Productivity.Models;
 using WorkSpeed.Data.Models;
 using WorkSpeed.Data.Models.Enums;
-using WorkSpeed.DesktopClient.ViewModels.Entities;
+using WorkSpeed.DesktopClient.ViewModels.ReportService.Entities;
 using WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
@@ -16,6 +16,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
         #region Fields
 
         private readonly ReadOnlyObservableCollection< FilterViewModel > _filterVmCollection;
+
 
         #endregion
 
@@ -35,6 +36,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
 
             var view = SetupView( ProductivityVmCollection );
             view.SortDescriptions.Add( new SortDescription( "OperationId", ListSortDirection.Ascending ) );
+
 
 
 
@@ -78,6 +80,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
 
         public EmployeeViewModel EmployeeVm { get; }
         public List< ProductivityViewModel > ProductivityVmCollection { get; private set; }
+        public string[] Foo { get; set; }
 
         #endregion
 

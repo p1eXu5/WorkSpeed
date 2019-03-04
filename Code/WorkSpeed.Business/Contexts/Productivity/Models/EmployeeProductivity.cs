@@ -51,7 +51,7 @@ namespace WorkSpeed.Business.Contexts.Productivity.Models
         }
 
 
-        public double GetTotalHours ()
+        public double GetTotalWorkHours ()
         {
             return Productivities.Values.Sum( v => v.GetTotalHours() );
         }

@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Agbm.Wpf.MvvmBaseLibrary;
 using WorkSpeed.Business.Contexts.Contracts;
-using WorkSpeed.DesktopClient.ViewModels.Entities;
+using WorkSpeed.DesktopClient.ViewModels.ReportService.Entities;
 using WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService

@@ -13,7 +13,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
             : base( new Operation { Id = -1 } )
         {
             SpeedLabeling = SPEED_IN_TIME;
-            Speed = productivity.GetTotalHours();
+            Speed = productivity.GetTotalWorkHours();
 
             _queue.Enqueue( new AspectsViewModel {
 

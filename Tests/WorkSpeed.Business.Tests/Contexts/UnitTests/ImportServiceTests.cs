@@ -601,7 +601,7 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         {
             // Arrange:
             var service = GetFakeImportService();
-            service.Actions = new[] {
+            service.Actions = new EmployeeActionBase[] {
                 GetDoubleAddressAction()
             };
 
@@ -611,6 +611,26 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
             // Assert:
             var actions = service.DbContext.DoubleAddressActions.ToArray();
             Assert.That( actions, Is.Not.Empty );
+        }
+
+        [ Test, Category( "DoubleAddressAction" ) ]
+        public void ImportFromXlsx__OneDoubleAddressAction_SeveralDetails__AddsOneActionAndSeveralDetails ()
+        {
+            // Arrange:
+            var service = GetFakeImportService();
+            service.Actions = new EmployeeActionBase[] {
+                GetDoubleAddressAction(),
+                GetDoubleAddressAction(),
+                GetDoubleAddressAction(),
+            };
+
+            // Action:
+            service.ImportFromXlsx( ACTIONS, null );
+
+            // Assert:
+            var actions = service.DbContext.DoubleAddressActions.ToArray();
+            Assert.That( actions.Length, Is.EqualTo( 1 ) );
+            Assert.That( actions[0].DoubleAddressDetails.Count, Is.EqualTo( 3 ) );
         }
 
         [ TestCase( "ZP8-12345" ), Category( "DoubleAddressAction" ) ]

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Agbm.Wpf.MvvmBaseLibrary;
 
-namespace WorkSpeed.DesktopClient.ViewModels.Entities
+namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Entities
 {
     public abstract class AbbreviationViewModel : ViewModel
     {

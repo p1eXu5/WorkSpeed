@@ -141,7 +141,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
         /// <param name="downtime">Downtime with duration less than break duration.</param>
         /// <param name="momento"></param>
         /// <returns></returns>
-        public bool IsBreak ( Period downtime, ShortBreakInspectorMomento momento )
+        public bool IsBreak ( Period downtime, ref ShortBreakInspectorMomento momento )
         {
             if ( downtime.IsIntersectsWith( momento.Break ) ) {
                 momento.LockDeposit();
@@ -156,8 +156,8 @@ namespace WorkSpeed.Business.Contexts.Productivity
                 else {
                     momento.SetDeposit();
                 }
-                Next( downtime, momento );
-                return IsBreak( downtime, momento );
+                Next( downtime, ref momento );
+                return IsBreak( downtime, ref momento );
             }
 
             return false;
@@ -168,7 +168,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
         /// </summary>
         /// <param name="nextDowntime"></param>
         /// <param name="momento"></param>
-        public void Next ( Period nextDowntime, ShortBreakInspectorMomento momento )
+        public void Next ( Period nextDowntime, ref ShortBreakInspectorMomento momento )
         {
 
             int distance = (int)((nextDowntime.End - momento.Break.End).TotalMinutes / _periodicity);
@@ -193,7 +193,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
             }
         }
 
-        public Period GetPreviousBreak ( ShortBreakInspectorMomento momento )
+        public Period GetPreviousBreak ( ref ShortBreakInspectorMomento momento )
         {
             return new Period( 
                             momento.Break.Start.Subtract( _shortBreakSchedule.Periodicity ), 

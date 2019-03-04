@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WorkSpeed.DesktopClient.Views.ReportService.Grouping
+namespace WorkSpeed.DesktopClient.Views.ReportService.Entities
 {
     /// <summary>
-    /// Interaction logic for ShiftGroupingView.xaml
+    /// Interaction logic for ReadOnlyEmployeeView.xaml
     /// </summary>
-    public partial class ShiftGroupingView : Grid
+    public partial class ReadOnlyEmployeeView : Border
     {
-        public ShiftGroupingView()
+        public ReadOnlyEmployeeView()
         {
             InitializeComponent();
         }

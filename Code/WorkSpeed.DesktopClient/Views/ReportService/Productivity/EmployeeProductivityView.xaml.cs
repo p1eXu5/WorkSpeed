@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WorkSpeed.DesktopClient.Views.Templates
+namespace WorkSpeed.DesktopClient.Views.ReportService.Productivity
 {
     /// <summary>
     /// Interaction logic for EmployeeProductivityView.xaml

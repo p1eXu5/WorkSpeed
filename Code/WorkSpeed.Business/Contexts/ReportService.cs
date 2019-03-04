@@ -48,39 +48,40 @@ namespace WorkSpeed.Business.Contexts
 
         public ReportService ( WorkSpeedDbContext dbContext, IProductivityBuilder builder ) : base( dbContext )
         {
-            _productivityBuilder = builder ?? throw new ArgumentNullException(nameof(builder), @"IProductivityBuilder cannot be null.");
+            _productivityBuilder = builder;
             
             CreateCollections();
 
+
             void CreateCollections ()
-        {
-            _employeeProductivityCollections = new ObservableCollection< EmployeeProductivity >();
-            EmployeeProductivityCollections = new ReadOnlyObservableCollection< EmployeeProductivity >( _employeeProductivityCollections );
+            {
+                _employeeProductivityCollections = new ObservableCollection< EmployeeProductivity >();
+                EmployeeProductivityCollections = new ReadOnlyObservableCollection< EmployeeProductivity >( _employeeProductivityCollections );
 
-            _shiftGroupingCollection = new ObservableCollection< ShiftGrouping >();
-            ShiftGroupingCollection = new ReadOnlyObservableCollection< ShiftGrouping >( _shiftGroupingCollection );
+                _shiftGroupingCollection = new ObservableCollection< ShiftGrouping >();
+                ShiftGroupingCollection = new ReadOnlyObservableCollection< ShiftGrouping >( _shiftGroupingCollection );
 
-            _appointmentCollection = new ObservableCollection< Appointment >();
-            AppointmentCollection = new ReadOnlyObservableCollection< Appointment >( _appointmentCollection );
+                _appointmentCollection = new ObservableCollection< Appointment >();
+                AppointmentCollection = new ReadOnlyObservableCollection< Appointment >( _appointmentCollection );
 
-            _rankCollection = new ObservableCollection< Rank >();
-            RankCollection = new ReadOnlyObservableCollection< Rank >( _rankCollection );
+                _rankCollection = new ObservableCollection< Rank >();
+                RankCollection = new ReadOnlyObservableCollection< Rank >( _rankCollection );
 
-            _positionCollection = new ObservableCollection< Position >();
-            PositionCollection = new ReadOnlyObservableCollection< Position >( _positionCollection );
+                _positionCollection = new ObservableCollection< Position >();
+                PositionCollection = new ReadOnlyObservableCollection< Position >( _positionCollection );
 
-            _shiftCollection = new ObservableCollection< Shift >();
-            ShiftCollection = new ReadOnlyObservableCollection< Shift >( _shiftCollection );
+                _shiftCollection = new ObservableCollection< Shift >();
+                ShiftCollection = new ReadOnlyObservableCollection< Shift >( _shiftCollection );
 
-            _shortBreakCollection = new ObservableCollection< ShortBreakSchedule >();
-            ShortBreakCollection = new ReadOnlyObservableCollection< ShortBreakSchedule >( _shortBreakCollection );
+                _shortBreakCollection = new ObservableCollection< ShortBreakSchedule >();
+                ShortBreakCollection = new ReadOnlyObservableCollection< ShortBreakSchedule >( _shortBreakCollection );
 
-            _operationCollection = new ObservableCollection< Operation >();
-            OperationCollection = new ReadOnlyObservableCollection< Operation >( _operationCollection );
+                _operationCollection = new ObservableCollection< Operation >();
+                OperationCollection = new ReadOnlyObservableCollection< Operation >( _operationCollection );
 
-            _categoryCollection = new ObservableCollection< Category >();
-            CategoryCollection = new ReadOnlyObservableCollection< Category >( _categoryCollection );
-        }
+                _categoryCollection = new ObservableCollection< Category >();
+                CategoryCollection = new ReadOnlyObservableCollection< Category >( _categoryCollection );
+            }
         }
 
         #endregion
@@ -120,6 +121,23 @@ namespace WorkSpeed.Business.Contexts
             throw new NotImplementedException();
         }
 
+        public void UpdateRange ( IEnumerable< Employee > employees )
+        {
+            _dbContext.UpdateRange( employees );
+            _dbContext.SaveChanges();
+        }
+
+        public void ReloadAllCollections ()
+        {
+            ReloadEntities< Appointment >();
+            ReloadEntities< Rank >();
+            ReloadEntities< Position >();
+            ReloadEntities< Shift >();
+            ReloadEntities< ShortBreakSchedule >();
+            ReloadEntities< Operation >();
+            ReloadEntities< Category >();
+        }
+
         public void ReloadEntities< T > ()
         {
             if ( typeof( T ).IsAssignableFrom( typeof( Appointment ) ) ) {
@@ -156,23 +174,6 @@ namespace WorkSpeed.Business.Contexts
                 ReloadCollection( _categoryCollection, DbContext.GetCategories() );
                 return;
             }
-        }
-
-        public void UpdateRange ( IEnumerable< Employee > employees )
-        {
-            _dbContext.UpdateRange( employees );
-            _dbContext.SaveChanges();
-        }
-
-        public void ReloadAllCollections ()
-        {
-            ReloadEntities< Appointment >();
-            ReloadEntities< Rank >();
-            ReloadEntities< Position >();
-            ReloadEntities< Shift >();
-            ReloadEntities< ShortBreakSchedule >();
-            ReloadEntities< Operation >();
-            ReloadEntities< Category >();
         }
 
         public OperationThresholds GetThresholds ()
@@ -223,7 +224,7 @@ namespace WorkSpeed.Business.Contexts
                       {
                           lock ( _lock ) {
                               try {
-                                  employeeProductivities = GetProductivityCollection( period ).ToArray();
+                                  employeeProductivities = GetEmployeeProductivities( period ).ToArray();
                               }
                               catch ( Exception ex ) {
                                   employeeProductivities = new EmployeeProductivity[0];
@@ -270,7 +271,7 @@ namespace WorkSpeed.Business.Contexts
             }
         }
 
-        private IEnumerable< EmployeeProductivity > GetProductivityCollection ( Period period )
+        private IEnumerable< EmployeeProductivity > GetEmployeeProductivities ( Period period )
         {
             var actionGroupingArray = _dbContext.GetEmployeeActions( period.Start, period.End ).ToArray();
             if ( actionGroupingArray.Length == 0 ) yield break;
@@ -280,13 +281,14 @@ namespace WorkSpeed.Business.Contexts
                 var breaks = actionGrouping.Key.ShortBreakSchedule;
                 var shift = actionGrouping.Key.Shift;
 
-                yield return new EmployeeProductivity( actionGrouping.Key, GetProductivities( actionGrouping, breaks, shift ) );
+                var ep = BuildProductivities( actionGrouping, breaks, shift );
+                yield return new EmployeeProductivity( actionGrouping.Key, ep );
             }
         }
 
-        private (IReadOnlyDictionary< Operation, IProductivity >,HashSet< Period >) GetProductivities ( IEnumerable< EmployeeActionBase > actions, ShortBreakSchedule breaks, Shift shift )
+        protected virtual (IReadOnlyDictionary< Operation, IProductivity >,HashSet< Period >) BuildProductivities ( IEnumerable< EmployeeActionBase > actions, ShortBreakSchedule breaks, Shift shift )
         {
-            var actionArr = actions.ToArray();
+            var actionArr = actions.OrderByDescending( a => a.StartTime ).ToArray();
             if ( actionArr.Length == 0 ) { return (new Dictionary< Operation, IProductivity >(0), new HashSet< Period >()); }
 
             _productivityBuilder.BuildNew();
@@ -300,8 +302,8 @@ namespace WorkSpeed.Business.Contexts
                 next =  _productivityBuilder.CheckPause( current, next );
             }
 
-            _productivityBuilder.SubstractLunch( shift );
             _productivityBuilder.SubstractBreaks( breaks );
+            _productivityBuilder.SubstractLunch( shift );
 
             return _productivityBuilder.GetResult();
         }

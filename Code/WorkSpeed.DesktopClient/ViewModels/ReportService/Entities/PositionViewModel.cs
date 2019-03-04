@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Agbm.Wpf.MvvmBaseLibrary;
 using WorkSpeed.Data.Models;
 
-namespace WorkSpeed.DesktopClient.ViewModels.Entities
+namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Entities
 {
     public class PositionViewModel : AbbreviationViewModel
     {

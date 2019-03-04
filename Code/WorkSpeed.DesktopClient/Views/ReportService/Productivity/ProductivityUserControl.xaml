@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="WorkSpeed.DesktopClient.Views.Productivity.ProductivityUserControl"
+﻿<UserControl x:Class="WorkSpeed.DesktopClient.Views.ReportService.Productivity.ProductivityUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -22,7 +22,7 @@
             <Border BorderBrush="Black" BorderThickness="0,0,1,1" 
                     SnapsToDevicePixels="True"
                     >
-                <TextBlock>Empty Field</TextBlock>
+                <TextBlock></TextBlock>
             </Border>
 
             <ListBox Grid.Column="1" ItemsSource="{Binding OperationVms}" >

@@ -14,10 +14,10 @@ namespace WorkSpeed.Business.Contexts.Productivity
     public class ProductivityBuilder : IProductivityBuilder
     {
         private static readonly TimeSpan _shiftMarker;
-
-        private readonly Dictionary< Operation, IProductivity > _productivityMap;
         private readonly IShortBreakInspectorFactory _shortBreakInspectorFactory;
-        private readonly HashSet< Period > _downtimePeriods;
+
+        private Dictionary< Operation, IProductivity > _productivityMap;
+        private HashSet< Period > _downtimePeriods;
 
         #region Ctor
 
@@ -54,8 +54,8 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
         public void BuildNew ()
         {
-            _productivityMap.Clear();
-            _downtimePeriods.Clear();
+            _productivityMap = new Dictionary< Operation, IProductivity >();
+            _downtimePeriods = new HashSet< Period >();
         }
 
         /// <summary>
@@ -183,27 +183,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
         }
 
         /// <summary>
-        ///     #3.
-        /// </summary>
-        /// <param name="shift"></param>
-        public void SubstractLunch ( Shift shift )
-        {
-            foreach ( var periods in GetShiftPeriods() ) {
-
-                var period = periods.FirstOrDefault( p => p.Duration >= shift.Lunch );
-                if ( period == default( Period ) ) { continue; }
-
-                _downtimePeriods.Remove( period );
-
-                var newPeriod = period.CutEnd( shift.Lunch );
-                if ( newPeriod.Duration > TimeSpan.Zero ) {
-                    _downtimePeriods.Add( period.CutEnd( shift.Lunch ) );
-                }
-            }
-        }
-
-        /// <summary>
-        ///     #4. Substracts shortBreaks from downtime.
+        ///     #3. Substracts shortBreaks from downtime.
         /// </summary>
         /// <param name="shortBreaks"></param>
         public void SubstractBreaks ( ShortBreakSchedule shortBreaks )
@@ -212,7 +192,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
             if ( !_downtimePeriods.Any() ) { return; }
 
             var maxDowntime = shortBreaks.Periodicity + shortBreaks.Periodicity - shortBreaks.Duration;
-            var dtArr = _downtimePeriods.Where( d => d.Duration < maxDowntime ).ToArray();
+            var dtArr = _downtimePeriods.Where( d => d.Duration < maxDowntime ).OrderBy( d => d.Start ).ToArray();
             var inspector = _shortBreakInspectorFactory.GetShortBreakInspector( shortBreaks );
             var firstDowntime = dtArr[ 0 ];
 
@@ -221,7 +201,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
             if ( momento.Break.Start.TimeOfDay > inspector.FirstBreakTime ) {
                 momento.SetDeposit();
-                brk = inspector.GetPreviousBreak( momento );
+                brk = inspector.GetPreviousBreak( ref momento );
             }
             else {
                 brk = momento.Break;
@@ -229,7 +209,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
             foreach ( var downtimePeriod in dtArr ) {
 
-                if ( inspector.IsBreak( downtimePeriod, momento ) ) {
+                if ( inspector.IsBreak( downtimePeriod, ref momento ) ) {
 
                     RemoveBreakFromDowntime( downtimePeriod, momento.Break );
                     brk = momento.Break;
@@ -248,6 +228,26 @@ namespace WorkSpeed.Business.Contexts.Productivity
                         }
                     }
                     momento.RemoveDeposit();
+                }
+            }
+        }
+
+        /// <summary>
+        ///     #4.
+        /// </summary>
+        /// <param name="shift"></param>
+        public void SubstractLunch ( Shift shift )
+        {
+            foreach ( var periods in GetShiftPeriods() ) {
+
+                var period = periods.FirstOrDefault( p => p.Duration >= shift.Lunch );
+                if ( period == default( Period ) ) { continue; }
+
+                _downtimePeriods.Remove( period );
+
+                var newPeriod = period.CutEnd( shift.Lunch );
+                if ( newPeriod.Duration > TimeSpan.Zero ) {
+                    _downtimePeriods.Add( newPeriod );
                 }
             }
         }

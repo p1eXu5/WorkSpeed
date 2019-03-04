@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WorkSpeed.DesktopClient.Views.Entities
+namespace WorkSpeed.DesktopClient.Views.ReportService.Productivity
 {
     /// <summary>
     /// Interaction logic for OperationView.xaml
     /// </summary>
-    public partial class OperationView : Grid
+    public partial class OperationHeaderView : Grid
     {
-        public OperationView()
+        public OperationHeaderView()
         {
             InitializeComponent();
         }

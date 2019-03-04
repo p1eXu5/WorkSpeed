@@ -9,7 +9,7 @@ using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Business.Contexts.Productivity;
 using WorkSpeed.Business.Contexts.Productivity.Models;
 using WorkSpeed.Data.Models;
-using WorkSpeed.DesktopClient.ViewModels.Entities;
+using WorkSpeed.DesktopClient.ViewModels.ReportService.Entities;
 using WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity;
 using WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering;
 
@@ -66,14 +66,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                 (( INotifyCollectionChanged )_reportService.EmployeeProductivityCollections).CollectionChanged +=
                     ( s, e ) =>
                     {
+
                         if ( e.NewItems?[ 0 ] != null ) {
-                            employeeProductivityVmCollection.Add(
-                                new EmployeeProductivityViewModel(
-                                    ( EmployeeProductivity )e.NewItems[ 0 ],
-                                    FilterVmCollection,
-                                    _reportService.CategoryCollection
-                                )
-                            );
+
+                            var epvm = new EmployeeProductivityViewModel( ( EmployeeProductivity )e.NewItems[ 0 ], FilterVmCollection, _reportService.CategoryCollection );
+                            employeeProductivityVmCollection.Add( epvm );
                         }
 
                         if ( e.OldItems?[ 0 ] != null ) {

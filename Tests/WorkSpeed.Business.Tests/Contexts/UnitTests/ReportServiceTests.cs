@@ -97,6 +97,19 @@ namespace WorkSpeed.Business.Tests.Contexts.UnitTests
         }
 
 
+        [ Test ]
+        public void ReloadCollection_Categories_LoadCategories ()
+        {
+            var service = GetReportService( false );
+
+            service.ReloadEntities< Category >();
+
+            var category = service.CategoryCollection.First();
+
+            Assert.That( category, Is.Not.Null );
+        }
+
+
         #region Factory
 
 
