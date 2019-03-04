@@ -32,6 +32,11 @@ namespace WorkSpeed.Business.Contexts.Productivity.Models
         public HashSet< Period > DowntimePeriods { get; }
 
 
+        public double GetTotalDowntimeHours ()
+        {
+            return DowntimePeriods.Sum( dt => dt.Duration.TotalHours );
+        }
+
         public IEnumerable< (double hours, Operation operation) > GetOperationTimes ( IEnumerable< Operation > operations )
         {
             var opArr = operations.ToArray();

@@ -13,12 +13,22 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
             : base( operations.First( o => o.Id == -1 ) )
         {
             SpeedLabeling = SPEED_IN_TIME;
-            Speed = productivity.GetTotalWorkHours();
+            var dt = productivity.GetTotalDowntimeHours();
+            Speed = productivity.GetTotalWorkHours() + dt;
+
+            List< (double,string) > timeList = new List< (double, string) >( 
+                productivity.GetOperationTimes( operations.Where( o => o.Id > 0 ) )
+                            .Where( t => t.hours > 0.0 )
+                            .Select( t => (Convert.ToDouble( t.hours ), $"{t.operation.Name}: {t.hours:F1}") ) 
+            );
+
+            if ( dt > 0.0 ) {
+                timeList.Add( (Convert.ToDouble( dt ), $"Время бездействия: {dt:F1}") );
+            }
 
             _queue.Enqueue( new AspectsViewModel {
 
-                Aspects = new ObservableCollection< (double, string) >( productivity.GetOperationTimes( operations.Where( o => o.Id > 0 ) )
-                                                                                    .Select( t => (Convert.ToDouble( t.hours ), $"{t.operation.Name}: {t.hours}") ) ),
+                Aspects = new ObservableCollection< (double, string) >( timeList ),
                 Annotation = "время"
             } );
 
