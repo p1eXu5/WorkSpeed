@@ -277,7 +277,7 @@ namespace WorkSpeed.Business.Contexts
         }
 
         /// <summary>
-        /// 
+        ///     Prepares gathering actions for saving in db if they are.
         /// </summary>
         /// <param name="data"></param>
         private void StoreDoubleActions ( IEnumerable< DoubleAddressAction > data )
@@ -343,7 +343,7 @@ namespace WorkSpeed.Business.Contexts
         }
 
         /// <summary>
-        /// 
+        ///     Prepares reception actions for saving in db if they are.
         /// </summary>
         /// <param name="data"></param>
         private void StoreReceptionActions ( IEnumerable< ReceptionAction > data )
@@ -413,7 +413,7 @@ namespace WorkSpeed.Business.Contexts
         }
 
         /// <summary>
-        /// 
+        ///     Prepares inventory actions for saving in db if they are.
         /// </summary>
         /// <param name="data"></param>
         private void StoreInventoryActions ( IEnumerable< InventoryAction > data  )
@@ -470,7 +470,7 @@ namespace WorkSpeed.Business.Contexts
         }
 
         /// <summary>
-        /// 
+        ///     Prepares shipment actions for saving in db if they are.
         /// </summary>
         /// <param name="data"></param>
         private void StoreShipmentActions ( IEnumerable< ShipmentAction > data )
@@ -502,7 +502,7 @@ namespace WorkSpeed.Business.Contexts
         }
 
         /// <summary>
-        /// 
+        ///     Prepares other actions for saving in db if they are.
         /// </summary>
         /// <param name="data"></param>
         private void StoreOtherActions ( IEnumerable< OtherAction > data )
@@ -535,7 +535,8 @@ namespace WorkSpeed.Business.Contexts
         }
 
         /// <summary>
-        /// 
+        ///     Check does employee exist in db or has it alredy added in collection with new employees.
+        ///     If hasn't then adds employee into collection with new employees.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="action"></param>
