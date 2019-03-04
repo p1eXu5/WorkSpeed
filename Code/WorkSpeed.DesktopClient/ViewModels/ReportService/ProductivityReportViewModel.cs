@@ -184,6 +184,16 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             _filterVmCollection[ (int)FilterIndexes.Operation ].FilterChanged += OnPredicateChange;
         }
 
+        protected override void OnPredicateChange ( object sender, FilterChangedEventArgs args )
+        {
+            if ( args.FilterIndex == FilterIndexes.Operation ) {
+                ViewList[0].Refresh();
+                foreach ( var vm in EmployeeProductivityVmCollection ) {
+                    vm.Refresh();
+                }
+            }
+        }
+
         #endregion
     }
 }
