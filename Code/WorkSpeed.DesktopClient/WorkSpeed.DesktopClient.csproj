@@ -75,6 +75,7 @@
     <Compile Include="Converters\TabControlHeightConverter.cs" />
     <Compile Include="Converters\WrapPanelMaxWidthConverter.cs" />
     <Compile Include="TemplateSelectors\FilterTemplateSelector.cs" />
+    <Compile Include="ViewModels\ReportService\Filtering\FilterChangedEventArgs.cs" />
     <Compile Include="ViewModels\ReportService\Productivity\AspectsViewModel.cs" />
     <Compile Include="ViewModels\ReportService\Productivity\OtherProductivityViewModel.cs" />
     <Compile Include="ViewModels\ReportService\Productivity\ShipmentProductivityViewModel.cs" />

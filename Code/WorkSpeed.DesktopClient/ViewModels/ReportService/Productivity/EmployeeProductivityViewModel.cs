@@ -60,6 +60,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
                             ProductivityVmCollection.Add( new OtherProductivityViewModel( employeeProductivity[ operation ], operation ) );
                             break;
                         case OperationGroups.Undefined:
+                            ProductivityVmCollection.Add( new TimeProductivityViewModel( employeeProductivity, operations ) );
                             break;
                         default:
                             ProductivityVmCollection.Add( new GatheringProductivityViewModel( employeeProductivity[ operation ], operation, categories ) );
@@ -67,7 +68,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
                     }
                 }
 
-                ProductivityVmCollection.Add( new TimeProductivityViewModel( employeeProductivity, operations ) );
             }
         }
 

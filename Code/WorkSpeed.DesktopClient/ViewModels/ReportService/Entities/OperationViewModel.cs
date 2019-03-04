@@ -16,6 +16,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Entities
             _operation = operation;
         }
 
+        public int Id => _operation.Id;
         public Operation Operation => _operation;
 
         public string Name => _operation.Name;

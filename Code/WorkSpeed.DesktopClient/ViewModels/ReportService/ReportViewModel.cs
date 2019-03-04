@@ -69,6 +69,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         #region Properties
 
+        public FilterIndexes SelectedFilter { get; set; }
+
         public string ReportMessage
         {
             get => _reportMessage;
@@ -96,12 +98,12 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         protected ObservableCollection< FilterViewModel > GetFilterCollection ()
         {
             var coll = new ObservableCollection< FilterViewModel>( new[] {
-                new FilterViewModel( "Работает", true ),
-                new FilterViewModel( "Зоны ответственности", PositionVmCollection, p => (( PositionViewModel )p).Name ),
-                new FilterViewModel( "Должности", AppointmentVmCollection, a => (( AppointmentViewModel )a).InnerName ),
-                new FilterViewModel( "Смены", ShiftVmCollection, s => (( ShiftViewModel )s).Name ),
-                new FilterViewModel( "Ранги", RankVmCollection, r => (( RankViewModel )r).Number.ToString( CultureInfo.InvariantCulture ) ),
-                new FilterViewModel( "Курит", null ),
+                new FilterViewModel( "Работает", FilterIndexes.IsActive, true ),
+                new FilterViewModel( "Зоны ответственности", FilterIndexes.Position, PositionVmCollection, p => (( PositionViewModel )p).Name ),
+                new FilterViewModel( "Должности", FilterIndexes.Appointment, AppointmentVmCollection, a => (( AppointmentViewModel )a).InnerName ),
+                new FilterViewModel( "Смены", FilterIndexes.Shift, ShiftVmCollection, s => (( ShiftViewModel )s).Name ),
+                new FilterViewModel( "Ранги", FilterIndexes.Rank, RankVmCollection, r => (( RankViewModel )r).Number.ToString( CultureInfo.InvariantCulture ) ),
+                new FilterViewModel( "Курит", FilterIndexes.IsSmoker, null ),
             });
 
             coll[ (int)FilterIndexes.IsActive ].FilterChanged += OnPredicateChange;
@@ -114,8 +116,9 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             return coll;
         }
 
-        protected virtual void OnPredicateChange ( object sender, EventArgs args )
+        protected virtual void OnPredicateChange ( object sender, FilterChangedEventArgs args )
         {
+            SelectedFilter = args.FilterIndex;
             Refresh();
         }
 

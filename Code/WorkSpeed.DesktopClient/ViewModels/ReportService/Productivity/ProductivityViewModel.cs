@@ -14,7 +14,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
         protected const string SPEED_IN_LINES = "стр./ч";
         protected const string SPEED_IN_SCANS = "скан./ч";
         protected const string SPEED_IN_VOLUMES = "куб./ч";
-        protected const string SPEED_IN_TIME = "часов";
+        protected const string SPEED_IN_TIME = "час.";
 
         private double _speed;
         private string _speedLabeling;

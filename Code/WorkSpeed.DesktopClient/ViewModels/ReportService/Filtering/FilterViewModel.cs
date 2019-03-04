@@ -12,6 +12,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering
 {
     public class FilterViewModel : ViewModel
     {
+        private readonly FilterIndexes _filterIndex;
         private static readonly Func< object, string> TRUE_CAPTION;
         private static readonly Func< object, string> FALSE_CAPTION;
         private readonly List< object > _entities;
@@ -25,14 +26,15 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering
             FALSE_CAPTION = b => "Нет";
         }
 
-        private FilterViewModel ( string header )
+        private FilterViewModel ( string header, FilterIndexes filterIndex )
         {
             Header = header;
+            _filterIndex = filterIndex;
             _entities = new List< object >();
         }
 
-        public FilterViewModel ( string header, bool? isCheckedValue = null )
-            : this( header )
+        public FilterViewModel ( string header, FilterIndexes filterIndex, bool? isCheckedValue = null )
+            : this( header, filterIndex )
         {
             var trueItem = new FilterItemViewModel( true, TRUE_CAPTION );
             trueItem.PropertyChanged += OnFilterItemPropertyChanged;
@@ -46,8 +48,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering
             falseItem.IsChecked = !isCheckedValue ?? true;
         }
 
-        public FilterViewModel ( string header, IEnumerable< object > entities, Func< object, string> captionFunc )
-            : this( header )
+        public FilterViewModel ( string header, FilterIndexes filterIndex, IEnumerable< object > entities, Func< object, string> captionFunc )
+            : this( header, filterIndex )
         {
             if (entities == null) throw new ArgumentNullException(nameof(entities), @"entities cannot be null.");
             if (captionFunc == null) throw new ArgumentNullException(nameof(captionFunc), @"captionFunc cannot be null.");
@@ -69,7 +71,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering
         #endregion
 
 
-        public event EventHandler< EventArgs > FilterChanged;
+        public event EventHandler< FilterChangedEventArgs > FilterChanged;
 
 
         #region Properties
@@ -103,7 +105,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering
 
         private void OnFilterChanged ()
         {
-            FilterChanged?.Invoke( this, EventArgs.Empty );
+            FilterChanged?.Invoke( this, new FilterChangedEventArgs( _filterIndex ) );
         }
 
         #endregion

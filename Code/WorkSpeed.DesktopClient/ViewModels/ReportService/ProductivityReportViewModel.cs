@@ -17,6 +17,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
     public class ProductivityReportViewModel : ReportViewModel
     {
+        private Operation _timesOperation;
         private Period _period;
 
         #region Ctor
@@ -24,14 +25,19 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         public ProductivityReportViewModel ( IReportService reportService, IDialogRepository dialogRepository )
             : base( reportService, dialogRepository )
         {
+            _timesOperation = new Operation { Id = -1, Name = "Время" };
+
             SetupPeriod();
-            ExtendFilters();
 
             var operationVmCollection = new ObservableCollection< OperationViewModel >( _reportService.OperationCollection.Select( o => new OperationViewModel( o ) ));
+            operationVmCollection.Add( new OperationViewModel( _timesOperation ) );
             OperationVmCollection = new ReadOnlyObservableCollection< OperationViewModel >( operationVmCollection );
             Observe( _reportService.OperationCollection, operationVmCollection, o => o.Operation );
 
-            SetupView( OperationVmCollection, OperationPredicate );
+            ExtendFilters();
+
+            var opView = SetupView( OperationVmCollection, OperationPredicate );
+            opView.SortDescriptions.Add( new SortDescription( "Id", ListSortDirection.Ascending ) );
 
             CreateEmployeeProductivityVmCollection();
 
@@ -142,9 +148,9 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         
         protected internal override void Refresh ()
         {
-            foreach ( var employeeProductivityViewModel in EmployeeProductivityVmCollection ) {
-                employeeProductivityViewModel.Refresh();
-            }
+            //foreach ( var employeeProductivityViewModel in EmployeeProductivityVmCollection ) {
+            //    employeeProductivityViewModel.Refresh();
+            //}
 
             base.Refresh();
         }
@@ -172,7 +178,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         private void ExtendFilters ()
         {
-            var filter = new FilterViewModel( "Операции", _reportService.OperationCollection, p => (( Operation )p).Name );
+            var filter = new FilterViewModel( "Операции", FilterIndexes.Operation, OperationVmCollection.Select( o => o.Operation ), p => (( Operation )p).Name );
             _filterVmCollection.Add( filter );
 
             _filterVmCollection[ (int)FilterIndexes.Operation ].FilterChanged += OnPredicateChange;
