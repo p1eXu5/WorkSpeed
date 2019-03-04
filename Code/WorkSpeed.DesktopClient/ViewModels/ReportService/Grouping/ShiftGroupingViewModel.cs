@@ -21,8 +21,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping
             
             CreateCollection();
 
-            var view = SetupView( AppointmentGroupingVmCollection );
-            view.SortDescriptions.Add( new SortDescription( "Appointment.Id", ListSortDirection.Ascending ) );
+            SetupView( AppointmentGroupingVmCollection, ( vsc ) =>
+                                                        {
+                                                            vsc.SortDescriptions.Add( new SortDescription( "Appointment.Id", ListSortDirection.Ascending ) );
+                                                            vsc.Filter = PredicateFunc;
+                                                        } );
 
 
             void CreateCollection ()

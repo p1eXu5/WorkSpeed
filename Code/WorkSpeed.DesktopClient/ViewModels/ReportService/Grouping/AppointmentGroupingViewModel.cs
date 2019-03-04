@@ -20,9 +20,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping
 
             CreateCollection();
 
-            var view = SetupView( PositionGroupingVmCollection );
-            view.SortDescriptions.Add( new SortDescription( "Position.Id", ListSortDirection.Ascending ) );
-
+            SetupView( PositionGroupingVmCollection, ( vsc ) =>
+                                                    {
+                                                        vsc.SortDescriptions.Add( new SortDescription( "Position.Id", ListSortDirection.Ascending ) );
+                                                        vsc.Filter = PredicateFunc;
+                                                    } );
 
             void CreateCollection ()
             {

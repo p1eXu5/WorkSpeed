@@ -20,9 +20,12 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping
 
             CreateCollection();
 
-            var view = SetupView( EmployeeVmCollection );
-            view.SortDescriptions.Add( new SortDescription( "IsNotActive", ListSortDirection.Ascending ) );
-            view.SortDescriptions.Add( new SortDescription( "SecondName", ListSortDirection.Ascending ) );
+            SetupView( EmployeeVmCollection, ( vsc ) =>
+                                            {
+                                                vsc.SortDescriptions.Add( new SortDescription( "IsNotActive", ListSortDirection.Ascending ) );
+                                                vsc.SortDescriptions.Add( new SortDescription( "SecondName", ListSortDirection.Ascending ) );
+                                                vsc.Filter = PredicateFunc;
+                                            } );
 
 
             void CreateCollection ()

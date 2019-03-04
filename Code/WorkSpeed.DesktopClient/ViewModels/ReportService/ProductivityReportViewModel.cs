@@ -36,16 +36,22 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
             ExtendFilters();
 
-            var opView = SetupView( OperationVmCollection, OperationPredicate );
-            opView.SortDescriptions.Add( new SortDescription( "Id", ListSortDirection.Ascending ) );
+            SetupView( OperationVmCollection, (vsc) =>
+                                                {
+                                                    vsc.SortDescriptions.Add( new SortDescription( "Id", ListSortDirection.Ascending ) );
+                                                    vsc.Filter = OperationPredicate;
+                                                } );
 
             CreateEmployeeProductivityVmCollection();
 
-            var view = SetupView( EmployeeProductivityVmCollection );
+            SetupView( EmployeeProductivityVmCollection, ( vsc ) =>
+                                                            {
+                                                                vsc.SortDescriptions.Add( new SortDescription( "PositionId", ListSortDirection.Ascending ) );
+                                                                vsc.SortDescriptions.Add( new SortDescription( "AppointmentId", ListSortDirection.Ascending ) );
+                                                                vsc.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
+                                                                vsc.Filter = PredicateFunc;
+                                                            } );
 
-            view.SortDescriptions.Add( new SortDescription( "PositionId", ListSortDirection.Ascending ) );
-            view.SortDescriptions.Add( new SortDescription( "AppointmentId", ListSortDirection.Ascending ) );
-            view.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
 
 
 

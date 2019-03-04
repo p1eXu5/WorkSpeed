@@ -77,15 +77,17 @@
                         >
 
             <ComboBox BorderThickness="0"
-                          Width="65"
-                          VerticalContentAlignment="Center"
-                          HorizontalContentAlignment="Left"
-                          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.EmployeeReportVm.AppointmentVmCollection}"
-                          SelectedValue="{Binding Appointment}"
-                          SelectedValuePath="Appointment"
-                          TextSearch.TextPath="Abbreviation"
-                          DisplayMemberPath="InnerName"
-                          />
+                      IsReadOnly="True"
+                      IsEditable="False"
+                      Width="65"
+                      VerticalContentAlignment="Center"
+                      HorizontalContentAlignment="Left"
+                      ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.EmployeeReportVm.AppointmentVmCollection}"
+                      SelectedValue="{Binding Appointment}"
+                      SelectedValuePath="Appointment"
+                      TextSearch.TextPath="Abbreviation"
+                      DisplayMemberPath="InnerName"
+                      />
             <Grid Margin="5,0,3,0">
                 <Path Data="{StaticResource g_Emblem}"
                           Stroke="{StaticResource br_Window.Border}"
@@ -97,6 +99,8 @@
                     </Path.RenderTransform>
                 </Path>
                 <ComboBox BorderThickness="0"
+                          IsReadOnly="True"
+                          IsEditable="False"
                           Width="30"
                           VerticalContentAlignment="Center"
                           HorizontalContentAlignment="Center"
@@ -108,15 +112,16 @@
                           />
             </Grid>
             <ComboBox BorderThickness="0" 
-                          VerticalContentAlignment="Center"
-                          Width="70"
-                          ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.EmployeeReportVm.PositionVmCollection}"
-                          SelectedValue="{Binding Position}"
-                          SelectedValuePath="Position"
-                          TextSearch.TextPath="Abbreviation"
-                          DisplayMemberPath="Name"
-
-                          />
+                      IsReadOnly="True"
+                      IsEditable="False"
+                      VerticalContentAlignment="Center"
+                      Width="70"
+                      ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.EmployeeReportVm.PositionVmCollection}"
+                      SelectedValue="{Binding Position}"
+                      SelectedValuePath="Position"
+                      TextSearch.TextPath="Abbreviation"
+                      DisplayMemberPath="Name"
+                      />
         </StackPanel>
 
         <HeaderedContentControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"
@@ -129,10 +134,12 @@
                 </Border>
             </HeaderedContentControl.Header>
             <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.EmployeeReportVm.ShiftVmCollection}"
-                          SelectedValue="{Binding Shift}"
-                          SelectedValuePath="Shift"
-                          DisplayMemberPath="Name"
-                          />
+                      IsReadOnly="True"
+                      IsEditable="False"
+                      SelectedValue="{Binding Shift}"
+                      SelectedValuePath="Shift"
+                      DisplayMemberPath="Name"
+                      />
         </HeaderedContentControl>
 
         <HeaderedContentControl Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"
@@ -148,6 +155,8 @@
                 </Border>
             </HeaderedContentControl.Header>
             <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Window}, Path=DataContext.EmployeeReportVm.ShortBreakVmCollection}"
+                      IsReadOnly="True"
+                      IsEditable="False"
                           SelectedValue="{Binding ShortBreakSchedule}"
                           SelectedValuePath="ShortBreakSchedule"
                           DisplayMemberPath="Name" 
@@ -163,6 +172,7 @@
                       FontSize="10"
                       HorizontalAlignment="Right"
                       IsChecked="{Binding IsNotActive}"
+                      IsEnabled="False"
                       />
             <CheckBox DockPanel.Dock="Right" 
                       Content="Курит"
@@ -170,6 +180,7 @@
                       HorizontalAlignment="Right"
                       Margin="20,0"
                       IsChecked="{Binding IsSmoker}"
+                      IsEnabled="False"
                       />
         </DockPanel>
 

@@ -140,7 +140,7 @@
             <ToggleButton Grid.Column="0" Grid.ColumnSpan="2"
                           IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsDropDownOpen}"
                           Style="{StaticResource st_ComboBox.ToggleButton}"
-                          IsEnabled="{TemplateBinding IsEnabled}"
+                          IsEnabled="{TemplateBinding IsEditable}"
                           BorderThickness="{TemplateBinding BorderThickness}"
                           KeyboardNavigation.IsTabStop="False"
                           Focusable="False"

@@ -34,8 +34,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
 
             CreateProductivityVmCollection();
 
-            var view = SetupView( ProductivityVmCollection );
-            view.SortDescriptions.Add( new SortDescription( "OperationId", ListSortDirection.Ascending ) );
+            SetupView( ProductivityVmCollection, ( vsc ) =>
+                                                            {
+                                                                vsc.SortDescriptions.Add( new SortDescription( "OperationId", ListSortDirection.Ascending ) );
+                                                                vsc.Filter = PredicateFunc;
+                                                            } );
 
 
 

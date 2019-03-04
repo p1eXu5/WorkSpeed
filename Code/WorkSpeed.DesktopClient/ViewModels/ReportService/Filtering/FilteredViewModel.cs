@@ -38,17 +38,21 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering
         ///     Assigns Predicate to ViewList.Filter if source can be filtered.
         /// </summary>
         /// <param name="source">Source collection.</param>
-        /// <param name="predicate"></param>
-        protected ICollectionView SetupView ( object source, Predicate< object > predicate = null )
+        /// <param name="callback"></param>
+        protected void SetupView ( object source, Action< ListCollectionView > callback = null )
         {
             ListCollectionView view = ( ListCollectionView )CollectionViewSource.GetDefaultView( source );
 
             if ( view.CanFilter ) {
-                view.Filter = predicate ?? PredicateFunc;
+                if ( callback == null ) {
+                    view.Filter = PredicateFunc;
+                }
+                else {
+                    callback( view );
+                }
             }
 
             ViewList.Add( view );
-            return view;
         }
 
         protected internal virtual void Refresh ()
