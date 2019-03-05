@@ -29,7 +29,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
                 Annotation = "сканн"
             } );
 
-            Next();
+            Next( null );
         }
     }
 }

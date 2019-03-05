@@ -27,7 +27,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
                 IndicatorTip = "Время остальных операций",
             } );
 
-            Next();
+            Next( null );
         }
     }
 }

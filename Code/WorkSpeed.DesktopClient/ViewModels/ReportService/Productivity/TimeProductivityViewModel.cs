@@ -37,7 +37,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
                 Annotation = "время"
             } );
 
-            Next();
+            Next( null );
         }
     }
 }

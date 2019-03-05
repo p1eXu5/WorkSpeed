@@ -41,7 +41,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
                 Annotation = "штук"
             } );
 
-            Next ();
+            Next ( null );
         }
 
         #endregion

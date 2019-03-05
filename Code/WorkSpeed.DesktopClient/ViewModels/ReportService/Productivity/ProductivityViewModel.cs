@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Agbm.Wpf.MvvmBaseLibrary;
 using WorkSpeed.Data.Models;
 
@@ -101,10 +102,13 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
             }
         }
 
+
+        public ICommand NextCommand => new MvvmCommand( Next );
+
         /// <summary>
         ///     Sets next aspect collection.
         /// </summary>
-        protected void Next ()
+        protected void Next ( object o )
         {
             if ( _queue.Count == 0 ) return;
             var next = _queue.Dequeue();
