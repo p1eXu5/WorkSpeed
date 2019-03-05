@@ -131,6 +131,7 @@
     <Compile Include="Contexts\Productivity\ActionDetails\WithProductActionDetails.cs" />
     <Compile Include="Contexts\Productivity\ActionDetails\WithScansActionDetails.cs" />
     <Compile Include="Contexts\Past\BreakRepository.cs" />
+    <Compile Include="Contexts\Productivity\Comparers\ProductEqualityComparer.cs" />
     <Compile Include="Contexts\Productivity\IProductivityBuilder.cs" />
     <Compile Include="Contexts\Productivity\IShortBreakInspector.cs" />
     <Compile Include="Contexts\Productivity\IShortBreakInspectorFactory.cs" />

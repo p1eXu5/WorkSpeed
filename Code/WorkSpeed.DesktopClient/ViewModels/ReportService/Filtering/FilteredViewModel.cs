@@ -14,6 +14,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering
     /// </summary>
     public abstract class FilteredViewModel : ViewModel
     {
+
+
         protected internal abstract void Refresh ();
     }
 }

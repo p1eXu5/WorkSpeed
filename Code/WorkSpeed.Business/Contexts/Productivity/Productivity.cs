@@ -167,9 +167,9 @@ namespace WorkSpeed.Business.Contexts.Productivity
                                                                               IEnumerable< Category > categories, 
                                                                               Func< T, IEnumerable<WithProductActionDetail >> getter )
         {
-            var products = new HashSet< Product >( (from a in actions
-                                                    from d in getter( a )
-                                                    select d.Product
+            var productLines = new LinkedList< Product >( (from a in actions
+                                                        from d in getter( a )
+                                                        select d.Product
                                                     ) );
             var dict = new Dictionary< Category, int >();
 
@@ -177,10 +177,12 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
                 dict[ category ] = 0;
 
-                if ( products.Any() ) {
-                    foreach ( var product in products.ToArray() ) {
+                if ( productLines.Any() ) {
+
+                    foreach ( var product in productLines.ToArray() ) {
+
                         if ( category.Contains( product.ItemVolume ) ) {
-                            products.Remove( product );
+                            productLines.Remove( product );
                             dict[ category ]++;
                         }
                     }
@@ -197,7 +199,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
             var group = _actionPeriodMap.Keys.First().Operation.Group;
             if ( (int)group != ( int )OperationGroups.Reception ) { return categories.Select( c => (0, c)); }
 
-            var productScans = new HashSet< (Product product, short scans) >( (from a in _actionPeriodMap.Keys.Cast< ReceptionAction >()
+            var productScans = new LinkedList< (Product product, short scans) >( (from a in _actionPeriodMap.Keys.Cast< ReceptionAction >()
                                                                                from d in a.ReceptionActionDetails
                                                                                select (d.Product, d.ScanQuantity)
                                                                                ) );
@@ -246,7 +248,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
                                                                                  IEnumerable< Category > categories,
                                                                                  Func< T, IEnumerable< WithProductActionDetail > > getter )
         {
-            var productQuantities = new HashSet< (Product product, int quantity) >( (from a in actions
+            var productQuantities = new LinkedList< (Product product, int quantity) >( (from a in actions
                                                                                 from d in getter(a)
                                                                                 select (d.Product, d.ProductQuantity)
                                                                                 ) );
@@ -294,7 +296,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
                                                                                    IEnumerable< Category > categories,
                                                                                    Func< T, IEnumerable< WithProductActionDetail > > getter )
         {
-            var productQuantities = new HashSet< (Product product, double volume) >( from a in actions
+            var productQuantities = new LinkedList< (Product product, double volume) >( from a in actions
                                                                                      from d in getter(a)
                                                                                      select (d.Product, d.Volume()) );
             var dict = new Dictionary< Category, double >();
