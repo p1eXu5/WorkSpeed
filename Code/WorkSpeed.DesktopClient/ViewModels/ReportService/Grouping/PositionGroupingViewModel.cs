@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -12,56 +13,96 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping
     public class PositionGroupingViewModel : FilteredViewModel
     {
         private readonly ReadOnlyObservableCollection< FilterViewModel > _filterVmCollection;
+        private readonly ObservableCollection< EmployeeViewModel > _employeeVmCollection;
+        private IEnumerable< EmployeeViewModel > _filteredEmployees;
 
         public PositionGroupingViewModel ( PositionGrouping positionGrouping, ReadOnlyObservableCollection< FilterViewModel > filters )
         {
             Position = positionGrouping.Position ?? throw new ArgumentNullException(nameof(positionGrouping), @"PositionGrouping cannot be null.");
             _filterVmCollection = filters ?? throw new ArgumentNullException(nameof(filters), @"filters cannot be null.");
 
-            CreateCollection();
+ 
+            _employeeVmCollection = new ObservableCollection< EmployeeViewModel >( 
+                positionGrouping.Employees
+                                .Select( e =>
+                                        {
+                                            var evm = new EmployeeViewModel( e );
+                                            evm.PropertyChanged += OnIsModifyChanged;
+                                            return evm;
+                                        } ) 
+            );
 
-            SetupView( EmployeeVmCollection, ( vsc ) =>
-                                            {
-                                                vsc.SortDescriptions.Add( new SortDescription( "IsNotActive", ListSortDirection.Ascending ) );
-                                                vsc.SortDescriptions.Add( new SortDescription( "SecondName", ListSortDirection.Ascending ) );
-                                                vsc.Filter = PredicateFunc;
-                                            } );
+            EmployeeVmCollection = _employeeVmCollection.Where( ep => IsActivePredicate( ep )
+                                                                      && PositionPredicate( ep )
+                                                                      && AppointmentPredicate( ep )
+                                                                      && ShiftPredicate( ep )
+                                                                      && RankPredicate( ep )
+                                                                      && IsSmokerPredicate( ep )
+                                                        )
+                                                        .OrderBy( ep => ep.SecondName );
 
-
-            void CreateCollection ()
-            {
-                var employeeVmCollection = new ObservableCollection< EmployeeViewModel >( positionGrouping.Employees.Select( e =>
-                                                                                                                             {
-                                                                                                                                 var evm = new EmployeeViewModel( e );
-                                                                                                                                 evm.PropertyChanged += OnIsModifyChanged;
-                                                                                                                                 return evm;
-                                                                                                                             } ) );
-                EmployeeVmCollection = new ReadOnlyObservableCollection< EmployeeViewModel >( employeeVmCollection );
-            }
         }
 
         public Position Position { get; }
-        public ReadOnlyObservableCollection< EmployeeViewModel > EmployeeVmCollection { get; private set; }
-
-         
-
-
-        protected override void OnIsModifyChanged ( object sender, PropertyChangedEventArgs args )
+        
+        private bool _isModify;
+        public bool IsModify
         {
-            base.OnIsModifyChanged( sender, args );
+            get => _isModify;
+            set {
+                if ( _isModify != value ) {
+                    _isModify = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public IEnumerable< EmployeeViewModel > EmployeeVmCollection
+        {
+            get => _filteredEmployees;
+            private set {
+                _filteredEmployees = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        protected internal override void Refresh ()
+        {
+            EmployeeVmCollection = _employeeVmCollection.Where( ep => IsActivePredicate( ep )
+                                                                      && PositionPredicate( ep )
+                                                                      && AppointmentPredicate( ep )
+                                                                      && ShiftPredicate( ep )
+                                                                      && RankPredicate( ep )
+                                                                      && IsSmokerPredicate( ep )
+                                                        )
+                                                        .OrderBy( ep => ep.SecondName );
+        }
+
+        private void OnIsModifyChanged ( object sender, PropertyChangedEventArgs args )
+        {
+            if ( !args.PropertyName.Equals( "IsModify" ) ) return;
 
             IsModify = EmployeeVmCollection.Any( evm => evm.IsModify );
         }
 
-        protected override bool PredicateFunc ( object o )
-        {
-            if (!(o is EmployeeViewModel employee)) return false;
 
-            var res = _filterVmCollection[ ( int )FilterIndexes.IsActive ].Entities.Any( obj => ( bool )(obj).Equals( employee.IsActive ) )
-                      && _filterVmCollection[ ( int )FilterIndexes.IsSmoker ].Entities.Any( obj => ((Tuple<bool?,string>)obj).Item1.Equals( employee.IsSmoker ) )
-                      && _filterVmCollection[ ( int )FilterIndexes.Rank ].Entities.Any( obj => (obj as RankViewModel)?.Number == employee.Rank.Number );
+        protected bool IsActivePredicate ( EmployeeViewModel employee )
+            => _filterVmCollection[ (int)FilterIndexes.IsActive ].Entities.Any( obj => (obj).Equals( employee.IsActive ) );
 
-            return res;
-        }
+        protected bool PositionPredicate ( EmployeeViewModel employee )
+            => _filterVmCollection[ (int)FilterIndexes.Position ].Entities.Any( obj => (obj as Position) == employee.Position);
+
+        protected bool AppointmentPredicate ( EmployeeViewModel employee )
+            => _filterVmCollection[ (int)FilterIndexes.Appointment ].Entities.Any( obj => (obj as Appointment) == employee.Appointment);
+
+        protected bool ShiftPredicate ( EmployeeViewModel employee )
+            => _filterVmCollection[ (int)FilterIndexes.Shift ].Entities.Any( obj => (obj as Shift) == employee.Shift);
+
+        protected bool RankPredicate ( EmployeeViewModel employee )
+            => _filterVmCollection[ (int)FilterIndexes.Rank ].Entities.Any( obj => (( Rank )obj).Number == employee.Rank.Number);
+
+        protected bool IsSmokerPredicate ( EmployeeViewModel employee )
+            => _filterVmCollection[ (int)FilterIndexes.IsSmoker ].Entities.Any( obj => ((Tuple<bool?,string>)obj).Item1.Equals( employee.IsSmoker ) );
     }
 }

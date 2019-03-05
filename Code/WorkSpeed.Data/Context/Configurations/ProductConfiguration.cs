@@ -21,7 +21,7 @@ namespace WorkSpeed.Data.Context.Configurations
             builder.Property( p => p.ItemHeight ).HasColumnType( "real" );
 
             builder.Property( p => p.ItemWeight ).HasColumnType( "real" );
-            builder.Property( p => p.ItemVolume ).HasColumnType( "real" ).HasComputedColumnSql( "[ItemWidth] * [ItemLength] * [ItemHeight]" );
+            builder.Property( p => p.ItemVolume ).HasColumnType( "real" ).HasComputedColumnSql( "[ItemWidth] * [ItemLength] * [ItemHeight] / 1000" );
 
             builder.Property( p => p.CartonLength ).HasColumnType( "real" );
             builder.Property( p => p.CartonWidth ).HasColumnType( "real" );
@@ -30,7 +30,7 @@ namespace WorkSpeed.Data.Context.Configurations
             builder.Property( p => p.CartonQuantity ).HasColumnType( "int" );
             
             builder.Property( p => p.CartonWeight ).HasColumnType( "real" ).HasComputedColumnSql( "[ItemWeight] * [CartonQuantity]" );
-            builder.Property( p => p.CartonVolume ).HasColumnType( "real" ).HasComputedColumnSql( "[ItemWidth] * [ItemLength] * [ItemHeight] * [CartonQuantity]" );
+            builder.Property( p => p.CartonVolume ).HasColumnType( "real" ).HasComputedColumnSql( "[CartonWidth] * [CartonLength] * [CartonHeight] * [CartonQuantity] / 1000" );
 
             builder.Property( p => p.GatheringComplexity ).HasColumnType( "real" );
             builder.Property( p => p.InventoryComplexity ).HasColumnType( "real" );

@@ -164,7 +164,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
             if ( _employeeProductivityVmCollection.Any() ) {
                 ReportMessage = "";
-                OnPredicateChange( null, new FilterChangedEventArgs( FilterIndexes.Appointment ) );
+                OnPredicateChanged( null, new FilterChangedEventArgs( FilterIndexes.Appointment ) );
             }
             else {
                 ReportMessage = "Операции за указанный период отсутствуют.";
@@ -172,18 +172,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         }
  
 
-        protected override bool PredicateFunc ( object o )
-        {
-            if (!(o is EmployeeProductivityViewModel employeeProductivity)) return false;
-
-            var res = _filterVmCollection[ ( int )FilterIndexes.IsActive ].Entities.Any( obj => (obj).Equals( employeeProductivity.EmployeeVm.IsActive ) )
-                      && _filterVmCollection[ ( int )FilterIndexes.IsSmoker ].Entities.Any( obj => ((Tuple<bool?,string>)obj).Item1.Equals( employeeProductivity.EmployeeVm.IsSmoker ) )
-                      && _filterVmCollection[ ( int )FilterIndexes.Rank ].Entities.Any( obj => (obj as RankViewModel)?.Number == employeeProductivity.EmployeeVm.Rank.Number );
-
-            return res;
-        }
-
-        protected override void OnPredicateChange ( object sender, FilterChangedEventArgs args )
+        protected override void OnPredicateChanged ( object sender, FilterChangedEventArgs args )
         {
             if ( args.FilterIndex == FilterIndexes.Operation ) {
                 OperationVmCollection = _operationVmCollection.Where( OperationPredicate ).OrderBy( o => o.Id ).ToArray();
@@ -219,10 +208,15 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             var filter = new FilterViewModel( "Операции", FilterIndexes.Operation, _operationVmCollection.Select( o => o.Operation ), p => (( Operation )p).Name );
             _filterVmCollection.Add( filter );
 
-            _filterVmCollection[ (int)FilterIndexes.Operation ].FilterChanged += OnPredicateChange;
+            _filterVmCollection[ (int)FilterIndexes.Operation ].FilterChanged += OnPredicateChanged;
         }
 
 
         #endregion
+
+        protected internal override void Refresh ()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

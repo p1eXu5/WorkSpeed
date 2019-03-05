@@ -69,13 +69,13 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
             }
         }
 
-        private double _commonIndicator;
+        private double _indicator;
 
-        public double CommonIndicator
+        public double Indicator
         {
-            get => _commonIndicator;
+            get => _indicator;
             set {
-                _commonIndicator = value;
+                _indicator = value;
                 OnPropertyChanged();
             }
         }
@@ -110,6 +110,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
             var next = _queue.Dequeue();
             SelectedAspects = next.Aspects;
             Annotation = next.Annotation;
+            Indicator = next.Indicator;
+            IndicatorTip = next.IndicatorTip;
             _queue.Enqueue( next );
         }
     }

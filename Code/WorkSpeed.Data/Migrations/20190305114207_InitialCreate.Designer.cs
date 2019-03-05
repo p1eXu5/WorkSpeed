@@ -10,7 +10,7 @@ using WorkSpeed.Data.Context;
 namespace WorkSpeed.Data.Migrations
 {
     [DbContext(typeof(WorkSpeedDbContext))]
-    [Migration("20190301072817_InitialCreate")]
+    [Migration("20190305114207_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -947,7 +947,7 @@ namespace WorkSpeed.Data.Migrations
                     b.Property<float?>("CartonVolume")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("real")
-                        .HasComputedColumnSql("[ItemWidth] * [ItemLength] * [ItemHeight] * [CartonQuantity]");
+                        .HasComputedColumnSql("[CartonWidth] * [CartonLength] * [CartonHeight] * [CartonQuantity] / 1000");
 
                     b.Property<float?>("CartonWeight")
                         .ValueGeneratedOnAddOrUpdate()
@@ -975,7 +975,7 @@ namespace WorkSpeed.Data.Migrations
                     b.Property<float?>("ItemVolume")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("real")
-                        .HasComputedColumnSql("[ItemWidth] * [ItemLength] * [ItemHeight]");
+                        .HasComputedColumnSql("[ItemWidth] * [ItemLength] * [ItemHeight] / 1000");
 
                     b.Property<float?>("ItemWeight")
                         .HasColumnType("real");

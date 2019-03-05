@@ -45,7 +45,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Entities
 
         public Avatar Avatar => _employee.Avatar;
 
-        public string EmployeeId => "dfgdf";
+        public string EmployeeId => _employee.Id;
 
         public bool IsModify
         {

@@ -945,7 +945,7 @@ namespace WorkSpeed.Data.Migrations
                     b.Property<float?>("CartonVolume")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("real")
-                        .HasComputedColumnSql("[ItemWidth] * [ItemLength] * [ItemHeight] * [CartonQuantity]");
+                        .HasComputedColumnSql("[CartonWidth] * [CartonLength] * [CartonHeight] * [CartonQuantity] / 1000");
 
                     b.Property<float?>("CartonWeight")
                         .ValueGeneratedOnAddOrUpdate()
@@ -973,7 +973,7 @@ namespace WorkSpeed.Data.Migrations
                     b.Property<float?>("ItemVolume")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("real")
-                        .HasComputedColumnSql("[ItemWidth] * [ItemLength] * [ItemHeight]");
+                        .HasComputedColumnSql("[ItemWidth] * [ItemLength] * [ItemHeight] / 1000");
 
                     b.Property<float?>("ItemWeight")
                         .HasColumnType("real");

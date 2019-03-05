@@ -41,7 +41,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
 
             _queue.Enqueue( new AspectsViewModel {
 
-                Aspects = new ObservableCollection< (double, string) >( productivity.GetQuantity( _categories )
+                Aspects = new ObservableCollection< (double, string) >( productivity.GetQuantities( _categories )
                                                                                     .Select( t => (Convert.ToDouble( t.count ), $"{t.category.Name}: {t.count}") ) ),
                 Annotation = "штук"
             } );

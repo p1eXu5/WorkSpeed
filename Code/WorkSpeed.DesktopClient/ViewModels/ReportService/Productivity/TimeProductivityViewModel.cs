@@ -17,8 +17,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
             var wt = productivity.GetTotalWorkHours();
             Speed = wt + dt;
             SpeedTip = "Общее время работы (с простоями)";
-            CommonIndicator = wt;
-            IndicatorTip = "Время работы";
+
 
             List< (double,string) > timeList = new List< (double, string) >( 
                 productivity.GetOperationTimes( operations.Where( o => o.Id > 0 ) )
@@ -33,6 +32,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
             _queue.Enqueue( new AspectsViewModel {
 
                 Aspects = new ObservableCollection< (double, string) >( timeList ),
+                Indicator = wt,
+                IndicatorTip = "Время работы",
                 Annotation = "время"
             } );
 

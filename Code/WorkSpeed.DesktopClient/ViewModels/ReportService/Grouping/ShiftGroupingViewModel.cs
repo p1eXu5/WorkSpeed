@@ -1,79 +1,99 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using WorkSpeed.Business.Models;
 using WorkSpeed.Data.Models;
-using WorkSpeed.DesktopClient.ViewModels.ReportService;
-using WorkSpeed.DesktopClient.ViewModels.ReportService.Entities;
 using WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping
 {
     public class ShiftGroupingViewModel : FilteredViewModel
     {
+        #region Fields
+
         private readonly ReadOnlyObservableCollection< FilterViewModel > _filterVmCollection;
+        private readonly ObservableCollection< AppointmentGroupingViewModel > _appointmentGroupingVmCollection;
+        private IEnumerable< AppointmentGroupingViewModel > _filteredAppointmentGrouping;
+
+        #endregion
+
+
+        #region Ctor
 
         public ShiftGroupingViewModel ( ShiftGrouping shiftGrouping, ReadOnlyObservableCollection< FilterViewModel > filters )
         {
             ShiftGrouping = shiftGrouping ?? throw new ArgumentNullException(nameof(shiftGrouping), @"ShiftGroupingVmCollection cannot be null.");
             _filterVmCollection = filters ?? throw new ArgumentNullException(nameof(filters), @"filters cannot be null.");
             
-            CreateCollection();
+            _appointmentGroupingVmCollection = new ObservableCollection< AppointmentGroupingViewModel >( 
+                shiftGrouping.Appointments
+                                .Select( a =>
+                                        {
+                                            var agvm = new AppointmentGroupingViewModel( a, _filterVmCollection );
+                                            agvm.PropertyChanged += OnIsModifyChanged;
+                                            return agvm;
+                                        } ) 
+            );
 
-            SetupView( AppointmentGroupingVmCollection, ( vsc ) =>
-                                                        {
-                                                            vsc.SortDescriptions.Add( new SortDescription( "Appointment.Id", ListSortDirection.Ascending ) );
-                                                            vsc.Filter = PredicateFunc;
-                                                        } );
-
-
-            void CreateCollection ()
-            {
-                var appointmentGroupingVmCollection = new ObservableCollection< AppointmentGroupingViewModel >( 
-                    shiftGrouping.Appointments
-                                 .Select( a =>
-                                          {
-                                              var agvm = new AppointmentGroupingViewModel( a, _filterVmCollection );
-                                              agvm.PropertyChanged += OnIsModifyChanged;
-                                              return agvm;
-                                          } ) 
-                );
-
-                AppointmentGroupingVmCollection = new ReadOnlyObservableCollection< AppointmentGroupingViewModel >( appointmentGroupingVmCollection );
-            }
+            AppointmentGroupingVmCollection = _appointmentGroupingVmCollection.Where( AppointmentGroupingPredicate ).ToArray();
         }
+
+        #endregion
+
+
+        #region Properties
 
         public ShiftGrouping ShiftGrouping { get; }
         public Shift Shift => ShiftGrouping.Shift;
-        public ReadOnlyObservableCollection< AppointmentGroupingViewModel > AppointmentGroupingVmCollection { get; private set; }
+
+        public IEnumerable< AppointmentGroupingViewModel > AppointmentGroupingVmCollection
+        {
+            get => _filteredAppointmentGrouping;
+            private set {
+                _filteredAppointmentGrouping = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string Name => Shift.Name;
 
+        private bool _isModify;
+        public bool IsModify
+        {
+            get => _isModify;
+            set {
+                _isModify = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+
+        #region Methods
+
         protected internal override void Refresh ()
         {
-            foreach ( var appointment in AppointmentGroupingVmCollection ) {
+            foreach ( var appointment in _appointmentGroupingVmCollection ) {
                 appointment.Refresh();
             }
 
-            base.Refresh();
+            AppointmentGroupingVmCollection = _appointmentGroupingVmCollection.Where( AppointmentGroupingPredicate ).ToArray();
         }
 
-        protected override void OnIsModifyChanged ( object sender, PropertyChangedEventArgs args )
+        protected void OnIsModifyChanged ( object sender, PropertyChangedEventArgs args )
         {
-            base.OnIsModifyChanged( sender, args );
+            if ( !args.PropertyName.Equals( "IsModify" ) ) return;
 
             IsModify = AppointmentGroupingVmCollection.Any( agvm => agvm.IsModify );
         }
 
-        protected override bool PredicateFunc ( object o )
-        {
-            if ( !(o is AppointmentGroupingViewModel appointmentGrouping) ) { return  false; }
+        private bool AppointmentGroupingPredicate ( AppointmentGroupingViewModel appointmentGrouping )
+            => _filterVmCollection[ (int)FilterIndexes.Appointment ].Entities.Any( obj => (obj as Appointment) == appointmentGrouping.Appointment)
+                && appointmentGrouping.PositionGroupingVmCollection.Any();
 
-            var res = _filterVmCollection[ (int)FilterIndexes.Appointment ].Entities.Any( obj => (obj as AppointmentViewModel)?.Appointment == appointmentGrouping.Appointment )
-                      && base.PredicateFunc( o ) ;
-
-            return res;
-        }
+        #endregion
     }
 }

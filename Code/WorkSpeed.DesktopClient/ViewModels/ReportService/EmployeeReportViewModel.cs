@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -11,6 +12,7 @@ using System.Windows.Data;
 using Agbm.Wpf.MvvmBaseLibrary;
 using Microsoft.Win32;
 using WorkSpeed.Business.Contexts.Contracts;
+using WorkSpeed.Business.Models;
 using WorkSpeed.Data.Context;
 using WorkSpeed.Data.Models;
 using WorkSpeed.DesktopClient.ViewModels.ReportService.Entities;
@@ -24,6 +26,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         #region Fields
 
         private readonly ObservableCollection< ShiftGroupingViewModel > _shiftGroupingVmCollection;
+        private IEnumerable< ShiftGroupingViewModel > _filteredShiftGrouping;
 
         #endregion
 
@@ -34,11 +37,35 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             : base( reportService, dialogRepository )
         {
             _shiftGroupingVmCollection = new ObservableCollection< ShiftGroupingViewModel >();
-            ShiftGroupingVmCollection = new ReadOnlyObservableCollection< ShiftGroupingViewModel >( _shiftGroupingVmCollection );
-            Observe( _reportService.ShiftGroupingCollection, _shiftGroupingVmCollection, shgvm => shgvm.ShiftGrouping, FilterVmCollection );
+            ((INotifyCollectionChanged) _reportService.ShiftGroupingCollection).CollectionChanged += (s, e) =>
+            {
 
-            SetupView( ShiftGroupingVmCollection );
+                if ( e.NewItems?[ 0 ] != null ) {
+                    
+                    var sgvm = new ShiftGroupingViewModel( (ShiftGrouping)e.NewItems[ 0 ], FilterVmCollection );
+                    sgvm.PropertyChanged += this.OnIsModifyChanged;
+                    _shiftGroupingVmCollection.Add( sgvm );
+                }
 
+                if ( e.OldItems?[ 0 ] != null ) {
+                    
+                    var delShiftGrouping = _shiftGroupingVmCollection.First( sh => ReferenceEquals( sh.ShiftGrouping, e.OldItems[ 0 ] ) );
+                    delShiftGrouping.PropertyChanged -= OnIsModifyChanged;
+                    _shiftGroupingVmCollection.Remove( delShiftGrouping );
+                }
+
+                if ( e.NewItems?[ 0 ] == null && e.OldItems?[ 0 ] == null ) {
+                    
+                    foreach ( var shiftGroupingViewModel in _shiftGroupingVmCollection ) {
+                        shiftGroupingViewModel.PropertyChanged -= OnIsModifyChanged;
+                    }
+
+                    _shiftGroupingVmCollection.Clear();
+                }
+            };
+
+            ShiftGroupingVmCollection = _shiftGroupingVmCollection.Where( ShiftGroupingPredicate ).ToArray();
+            //IsModify = true;
         }
 
         #endregion
@@ -46,7 +73,26 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         #region Properties
 
-        public ReadOnlyObservableCollection< ShiftGroupingViewModel > ShiftGroupingVmCollection { get; }
+        public IEnumerable< ShiftGroupingViewModel > ShiftGroupingVmCollection
+        {
+            get => _filteredShiftGrouping;
+            set {
+                _filteredShiftGrouping = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isModify;
+        public bool IsModify
+        {
+            get => _isModify;
+            set {
+                if ( _isModify != value ) {
+                    _isModify = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         #endregion
 
@@ -80,40 +126,35 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
             await _reportService.LoadShiftGroupingAsync();
 
-            if ( ShiftGroupingVmCollection.Any() ) {
+            if ( _shiftGroupingVmCollection.Any() ) {
                 ReportMessage = "";
                 Refresh();
             }
             else {
                 ReportMessage = "Сотрудники отсутствуют. Чтобы добавить сотрудников, имортируйте их.";
             }
+
         }
 
         protected internal override void Refresh ()
         {
-            foreach (var shiftGroupingViewModel in ShiftGroupingVmCollection) {
+            foreach ( var shiftGroupingViewModel in _shiftGroupingVmCollection ) {
                 shiftGroupingViewModel.Refresh();
             }
 
-            base.Refresh();
+            ShiftGroupingVmCollection = _shiftGroupingVmCollection.Where( ShiftGroupingPredicate ).ToArray();
         }
 
-        protected override void OnIsModifyChanged ( object sender, PropertyChangedEventArgs args )
+        protected void OnIsModifyChanged ( object sender, PropertyChangedEventArgs args )
         {
-            base.OnIsModifyChanged( sender, args );
+            if ( !args.PropertyName.Equals( "IsModify" ) ) return;
 
             IsModify = ShiftGroupingVmCollection.Any( shgvm => shgvm.IsModify );
         }
 
-        protected override bool PredicateFunc ( object o )
-        {
-            if ( !(o is ShiftGroupingViewModel shiftGrouping) ) { return  false; }
-
-            var res = _filterVmCollection[ (int)FilterIndexes.Shift ].Entities.Any( obj => (obj as ShiftViewModel)?.Shift == shiftGrouping.Shift )
-                      && base.PredicateFunc( o );
-
-            return res;
-        }
+        private bool ShiftGroupingPredicate ( ShiftGroupingViewModel shiftGrouping )
+            => _filterVmCollection[ (int)FilterIndexes.Shift ].Entities.Any( obj => (obj as Shift) == shiftGrouping.Shift)
+                && shiftGrouping.AppointmentGroupingVmCollection.Any();
 
         #endregion
 

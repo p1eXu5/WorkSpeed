@@ -109,17 +109,17 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                                                                                     }, b => ((Tuple<bool?,string>)b).Item2 ),
             });
 
-            coll[ (int)FilterIndexes.IsActive ].FilterChanged += OnPredicateChange;
-            coll[ (int)FilterIndexes.Position ].FilterChanged += OnPredicateChange;
-            coll[ (int)FilterIndexes.Appointment ].FilterChanged += OnPredicateChange;
-            coll[ (int)FilterIndexes.Shift ].FilterChanged += OnPredicateChange;
-            coll[ (int)FilterIndexes.Rank ].FilterChanged += OnPredicateChange;
-            coll[ (int)FilterIndexes.IsSmoker ].FilterChanged += OnPredicateChange;
+            coll[ (int)FilterIndexes.IsActive ].FilterChanged += OnPredicateChanged;
+            coll[ (int)FilterIndexes.Position ].FilterChanged += OnPredicateChanged;
+            coll[ (int)FilterIndexes.Appointment ].FilterChanged += OnPredicateChanged;
+            coll[ (int)FilterIndexes.Shift ].FilterChanged += OnPredicateChanged;
+            coll[ (int)FilterIndexes.Rank ].FilterChanged += OnPredicateChanged;
+            coll[ (int)FilterIndexes.IsSmoker ].FilterChanged += OnPredicateChanged;
 
             return coll;
         }
 
-        protected virtual void OnPredicateChange( object sender, FilterChangedEventArgs args ) => Refresh();
+        protected virtual void OnPredicateChanged( object sender, FilterChangedEventArgs args ) => Refresh();
 
         protected bool IsActivePredicate ( EmployeeViewModel employee )
             => _filterVmCollection[ (int)FilterIndexes.IsActive ].Entities.Any( obj => (obj).Equals( employee.IsActive ) );

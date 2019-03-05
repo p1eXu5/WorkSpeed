@@ -22,7 +22,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
         IEnumerable< (int count,Category category) > GetLines ( IEnumerable< Category > categories );
         IEnumerable< (int scans,Category category) > GetScans ( IEnumerable< Category > categories );
-        IEnumerable< (int count,Category category) > GetQuantity ( IEnumerable< Category > categories );
+        IEnumerable< (int count,Category category) > GetQuantities ( IEnumerable< Category > categories );
         IEnumerable< (double count,Category category) > GetVolumes ( IEnumerable< Category > categories );
     }
 }

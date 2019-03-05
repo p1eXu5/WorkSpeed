@@ -14,8 +14,17 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
         public OtherProductivityViewModel ( IProductivity productivity, Operation operation )
             : base( operation )
         {
+            SpeedLabeling = SPEED_IN_TIME;
+            var dt = productivity.GetTotalHours();
+            Speed = dt;
+            SpeedTip = "Время остальных операций";
+
+
             _queue.Enqueue( new AspectsViewModel {
                 Aspects = new ObservableCollection< (double, string) >(),
+                Annotation = "время",
+                Indicator = dt,
+                IndicatorTip = "Время остальных операций",
             } );
 
             Next();

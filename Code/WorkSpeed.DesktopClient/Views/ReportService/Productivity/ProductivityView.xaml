@@ -16,7 +16,7 @@
 
     <CircleDiagramControl Grid.Row="0" ItemsSource="{Binding SelectedAspects, Mode=OneWay}"
                           Annotation="{Binding Annotation}"
-                          Indicator="{Binding CommonIndicator}"
+                          Indicator="{Binding Indicator}"
                           IndicatorTip="{Binding IndicatorTip}"
                           />
 

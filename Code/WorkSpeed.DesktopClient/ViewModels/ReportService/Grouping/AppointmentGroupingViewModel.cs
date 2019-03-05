@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -11,65 +12,90 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping
 {
     public class AppointmentGroupingViewModel : FilteredViewModel
     {
+        #region Fields
+
         private readonly ReadOnlyObservableCollection< FilterViewModel > _filterVmCollection;
+        private readonly ObservableCollection< PositionGroupingViewModel > _positionGroupingVmCollection;
+        private IEnumerable< PositionGroupingViewModel > _filteredPositionGrouping;
+
+        #endregion
+
+
+        #region Ctor
 
         public AppointmentGroupingViewModel ( AppointmentGrouping appointmentGrouping, ReadOnlyObservableCollection< FilterViewModel > filters )
         {
             Appointment = appointmentGrouping.Appointment ?? throw new ArgumentNullException( nameof( appointmentGrouping ), @"AppointmentGrouping cannot be null." );
             _filterVmCollection = filters ?? throw new ArgumentNullException(nameof(filters), @"filters cannot be null.");
 
-            CreateCollection();
 
-            SetupView( PositionGroupingVmCollection, ( vsc ) =>
-                                                    {
-                                                        vsc.SortDescriptions.Add( new SortDescription( "Position.Id", ListSortDirection.Ascending ) );
-                                                        vsc.Filter = PredicateFunc;
-                                                    } );
-
-            void CreateCollection ()
-            {
-                var positionGroupingVmCollection = new ObservableCollection< PositionGroupingViewModel >( 
-                    appointmentGrouping.PositionGrouping
-                                       .Select( p =>
-                                                {
-                                                    var pgvm = new PositionGroupingViewModel( p, _filterVmCollection );
-                                                    pgvm.PropertyChanged += OnIsModifyChanged;
-                                                    return pgvm;
-                                                } ) 
-                );
-                PositionGroupingVmCollection = new ReadOnlyObservableCollection< PositionGroupingViewModel >( positionGroupingVmCollection );
-            }
+            _positionGroupingVmCollection = new ObservableCollection< PositionGroupingViewModel >( 
+                appointmentGrouping.PositionGrouping
+                                    .Select( p =>
+                                            {
+                                                var pgvm = new PositionGroupingViewModel( p, _filterVmCollection );
+                                                pgvm.PropertyChanged += OnIsModifyChanged;
+                                                return pgvm;
+                                            } ) 
+            );
+            PositionGroupingVmCollection = _positionGroupingVmCollection.Where( PositionGroupingPredicate ).ToArray();
         }
 
+        #endregion
+
+
+        #region Properties
+
         public Appointment Appointment { get;}
-        public ReadOnlyObservableCollection< PositionGroupingViewModel > PositionGroupingVmCollection { get; private set; }
+
+        public IEnumerable< PositionGroupingViewModel > PositionGroupingVmCollection
+        {
+            get => _filteredPositionGrouping;
+            private set {
+                _filteredPositionGrouping = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string Name => Appointment.InnerName;
 
+        private bool _isModify;
+        public bool IsModify
+        {
+            get => _isModify;
+            set {
+                if ( _isModify != value ) {
+                    _isModify = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        #endregion
+
+
+        #region Methods
+
         protected internal override void Refresh ()
         {
-            foreach ( var position in PositionGroupingVmCollection ) {
+            foreach ( var position in _positionGroupingVmCollection ) {
                 position.Refresh();
             }
 
-            base.Refresh();
+            PositionGroupingVmCollection = _positionGroupingVmCollection.Where( PositionGroupingPredicate ).ToArray();
         }
 
-        protected override void OnIsModifyChanged ( object sender, PropertyChangedEventArgs args )
+        protected void OnIsModifyChanged ( object sender, PropertyChangedEventArgs args )
         {
-            base.OnIsModifyChanged( sender, args );
+            if ( !args.PropertyName.Equals( "IsModify" ) ) return;
 
             IsModify = PositionGroupingVmCollection.Any( pgvm => pgvm.IsModify );
         }
 
-        protected override bool PredicateFunc ( object o )
-        {
-            if ( !(o is PositionGroupingViewModel positionGrouping) ) { return  false; }
+        private bool PositionGroupingPredicate ( PositionGroupingViewModel positionGrouping )
+            => _filterVmCollection[ (int)FilterIndexes.Position ].Entities.Any( obj => (obj as Position) == positionGrouping.Position)
+                && positionGrouping.EmployeeVmCollection.Any();
 
-            var res = _filterVmCollection[ (int)FilterIndexes.Position ].Entities.Any( obj => (obj as PositionViewModel)?.Position == positionGrouping.Position )
-                      && base.PredicateFunc( o );
-
-            return res;
-        }
+        #endregion
     }
 }
