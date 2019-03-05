@@ -8,7 +8,8 @@
         Shift = 3,
         Rank = 4,
         IsSmoker = 5,
-        Operation = 6
+        Operation = 6,
+        All = -1
     }
     
 }

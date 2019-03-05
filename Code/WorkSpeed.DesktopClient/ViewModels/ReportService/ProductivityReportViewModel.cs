@@ -164,7 +164,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
             if ( _employeeProductivityVmCollection.Any() ) {
                 ReportMessage = "";
-                OnPredicateChanged( null, new FilterChangedEventArgs( FilterIndexes.Appointment ) );
+                Refresh( FilterIndexes.All );
             }
             else {
                 ReportMessage = "Операции за указанный период отсутствуют.";
@@ -173,29 +173,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
  
 
         protected override void OnPredicateChanged ( object sender, FilterChangedEventArgs args )
-        {
-            if ( args.FilterIndex == FilterIndexes.Operation ) {
-                OperationVmCollection = _operationVmCollection.Where( OperationPredicate ).OrderBy( o => o.Id ).ToArray();
-
-                Parallel.ForEach( EmployeeProductivityVmCollection, ( vm ) => vm.Refresh() );
-
-                return;
-            }
-
-
-            EmployeeProductivityVmCollection = _employeeProductivityVmCollection.AsParallel().Where( ep => IsActivePredicate( ep.EmployeeVm )
-                                                                                              && PositionPredicate( ep.EmployeeVm )
-                                                                                              //&& AppointmentPredicate( ep.EmployeeVm )
-                                                                                              //&& ShiftPredicate( ep.EmployeeVm )
-                                                                                              //&& RankPredicate( ep.EmployeeVm )
-                                                                                              //&& IsSmokerPredicate( ep.EmployeeVm )
-                                                                                )
-                                                                                .AsSequential()
-                                                                                .OrderBy( ep => ep.PositionId )
-                                                                                .ThenBy( ep => ep.AppointmentId )
-                                                                                .ThenBy( ep => ep.Name )
-                                                                                .ToArray();
-        }
+        { }
 
 
         private bool OperationPredicate ( OperationViewModel operation )
@@ -214,9 +192,30 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         #endregion
 
-        protected internal override void Refresh ()
+        protected internal override void Refresh ( FilterIndexes filter )
         {
-            throw new NotImplementedException();
+            if ( filter == FilterIndexes.Operation || filter == FilterIndexes.All ) {
+                OperationVmCollection = _operationVmCollection.Where( OperationPredicate ).OrderBy( o => o.Id ).ToArray();
+
+                Parallel.ForEach( EmployeeProductivityVmCollection, ( vm ) => vm.Refresh( filter ) );
+            }
+
+            if ( filter == FilterIndexes.All ) {
+
+                EmployeeProductivityVmCollection = _employeeProductivityVmCollection.AsParallel()
+                                                                                    .Where( ep => IsActivePredicate( ep.EmployeeVm )
+                                                                                            && PositionPredicate( ep.EmployeeVm )
+                                                                                            && AppointmentPredicate( ep.EmployeeVm )
+                                                                                            && ShiftPredicate( ep.EmployeeVm )
+                                                                                            && RankPredicate( ep.EmployeeVm )
+                                                                                            && IsSmokerPredicate( ep.EmployeeVm )
+                                                                                    )
+                                                                                    .AsSequential()
+                                                                                    .OrderBy( ep => ep.PositionId )
+                                                                                    .ThenBy( ep => ep.AppointmentId )
+                                                                                    .ThenBy( ep => ep.Name )
+                                                                                    .ToArray();
+            }
         }
     }
 }

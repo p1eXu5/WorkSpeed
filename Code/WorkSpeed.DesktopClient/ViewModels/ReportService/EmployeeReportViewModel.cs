@@ -128,7 +128,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
             if ( _shiftGroupingVmCollection.Any() ) {
                 ReportMessage = "";
-                Refresh();
+                Refresh( FilterIndexes.All );
             }
             else {
                 ReportMessage = "Сотрудники отсутствуют. Чтобы добавить сотрудников, имортируйте их.";
@@ -136,10 +136,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         }
 
-        protected internal override void Refresh ()
+        protected internal override void Refresh ( FilterIndexes filter )
         {
             foreach ( var shiftGroupingViewModel in _shiftGroupingVmCollection ) {
-                shiftGroupingViewModel.Refresh();
+                shiftGroupingViewModel.Refresh( filter );
             }
 
             ShiftGroupingVmCollection = _shiftGroupingVmCollection.Where( ShiftGroupingPredicate ).ToArray();

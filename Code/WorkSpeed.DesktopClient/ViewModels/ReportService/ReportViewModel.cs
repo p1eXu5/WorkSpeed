@@ -119,7 +119,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             return coll;
         }
 
-        protected virtual void OnPredicateChanged( object sender, FilterChangedEventArgs args ) => Refresh();
+        protected virtual void OnPredicateChanged( object sender, FilterChangedEventArgs args ) => Refresh( FilterIndexes.All );
 
         protected bool IsActivePredicate ( EmployeeViewModel employee )
             => _filterVmCollection[ (int)FilterIndexes.IsActive ].Entities.Any( obj => (obj).Equals( employee.IsActive ) );

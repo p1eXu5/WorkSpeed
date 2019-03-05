@@ -74,10 +74,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping
 
         #region Methods
 
-        protected internal override void Refresh ()
+        protected internal override void Refresh ( FilterIndexes filter )
         {
             foreach ( var appointment in _appointmentGroupingVmCollection ) {
-                appointment.Refresh();
+                appointment.Refresh( filter );
             }
 
             AppointmentGroupingVmCollection = _appointmentGroupingVmCollection.Where( AppointmentGroupingPredicate ).ToArray();

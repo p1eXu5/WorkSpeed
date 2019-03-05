@@ -101,7 +101,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
             return _filterVmCollection[ (int)FilterIndexes.Operation ].Entities.Any( obj => (obj as Operation) == productivity.Operation);
         }
 
-        protected internal override void Refresh ()
+        protected internal override void Refresh ( FilterIndexes filter )
         {
             // parallel processing slows down filtering
             ProductivityVmCollection = _productivityVmCollection.Where( PredicateFunc ).OrderBy( o => o.OperationId ).ToArray();

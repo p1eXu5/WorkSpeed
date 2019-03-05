@@ -16,6 +16,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering
     {
 
 
-        protected internal abstract void Refresh ();
+        protected internal abstract void Refresh ( FilterIndexes filter );
     }
 }

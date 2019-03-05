@@ -16,7 +16,7 @@ namespace WorkSpeed.Data.Context.ReportService
                 (Shift shift, ( Appointment appointment, (Position position, Employee[] employees)[] positions)[] appointments) >
         GetShiftGrouping ( this WorkSpeedDbContext dbContext )
         {
-            foreach (var entityEntry in dbContext.ChangeTracker.Entries<Employee>()) {
+            foreach (var entityEntry in dbContext.ChangeTracker.Entries< Employee >()) {
                 entityEntry.Reload();
             }
 
@@ -62,6 +62,14 @@ namespace WorkSpeed.Data.Context.ReportService
 
         public static IEnumerable< IGrouping< Employee, EmployeeActionBase >> GetEmployeeActions ( this WorkSpeedDbContext dbContext, DateTime start, DateTime end )
         {
+            foreach (var entityEntry in dbContext.ChangeTracker.Entries< Employee >()) {
+                entityEntry.Reload();
+            }
+
+            foreach (var entityEntry in dbContext.ChangeTracker.Entries< Product >()) {
+                entityEntry.Reload();
+            }
+
             var doubleAddressActions = dbContext.DoubleAddressActions
                                                 .Include( a => a.Employee )
                                                 .ThenInclude( e => e.Avatar )

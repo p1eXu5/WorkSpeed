@@ -67,7 +67,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping
         }
 
 
-        protected internal override void Refresh ()
+        protected internal override void Refresh ( FilterIndexes filter )
         {
             EmployeeVmCollection = _employeeVmCollection.Where( ep => IsActivePredicate( ep )
                                                                       && PositionPredicate( ep )

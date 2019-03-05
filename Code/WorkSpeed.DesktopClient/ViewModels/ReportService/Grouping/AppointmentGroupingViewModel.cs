@@ -76,10 +76,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Grouping
 
         #region Methods
 
-        protected internal override void Refresh ()
+        protected internal override void Refresh ( FilterIndexes filter )
         {
             foreach ( var position in _positionGroupingVmCollection ) {
-                position.Refresh();
+                position.Refresh( filter );
             }
 
             PositionGroupingVmCollection = _positionGroupingVmCollection.Where( PositionGroupingPredicate ).ToArray();
