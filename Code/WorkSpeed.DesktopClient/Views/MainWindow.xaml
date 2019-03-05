@@ -126,13 +126,14 @@
         <Grid>
             <Grid x:Name="content">
                 <Grid.ColumnDefinitions>
+                    <!-- filters -->
                     <ColumnDefinition Width="*" MinWidth="250" MaxWidth="325" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="5*" MinWidth="1000"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- filters -->
-                    <DockPanel VerticalAlignment="Stretch"
+                <DockPanel VerticalAlignment="Stretch"
                                LastChildFill="True"
                                Background="{StaticResource br_Control.Background}"
                                SnapsToDevicePixels="True"
