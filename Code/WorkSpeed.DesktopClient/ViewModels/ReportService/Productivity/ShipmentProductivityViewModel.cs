@@ -16,6 +16,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
         {
             SpeedLabeling = SPEED_IN_VOLUMES;
             Speed = productivity.GetTotalVolume();
+            SpeedTip = "Обработанный объём";
 
             (double client, double nonClient) = productivity.GetCargoQuantity();
 

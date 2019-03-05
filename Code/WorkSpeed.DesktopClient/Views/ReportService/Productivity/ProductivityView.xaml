@@ -16,9 +16,13 @@
 
     <CircleDiagramControl Grid.Row="0" ItemsSource="{Binding SelectedAspects, Mode=OneWay}"
                           Annotation="{Binding Annotation}"
+                          Indicator="{Binding CommonIndicator}"
+                          IndicatorTip="{Binding IndicatorTip}"
                           />
 
-    <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="{StaticResource br_Window.Border}">
+    <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="{StaticResource br_Window.Border}"
+            ToolTip="{Binding SpeedTip}"
+            >
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
             <Run Text="{Binding Speed, Mode=OneWay, StringFormat={}{0:N1}}" /> <Run Text="{Binding SpeedLabeling, Mode=OneWay}" />
         </TextBlock>

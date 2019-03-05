@@ -50,6 +50,13 @@ namespace WorkSpeed.Business.Contexts.Productivity
             return _actionPeriodMap.Values.Aggregate( TimeSpan.Zero, (acc, next) => acc + next.Duration );
         }
 
+        public double GetTotalHours ()
+        {
+            if ( _actionPeriodMap.Count == 0 ) { return 0.0; }
+
+            return _actionPeriodMap.Values.Sum( p => p.Duration.TotalHours );
+        }
+
         public double GetLinesPerHour ()
         {
             if ( _actionPeriodMap.Count == 0 ) { return 0.0; }
@@ -73,14 +80,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
                     break;
             }
 
-            return GetTotalHours() / lines;
-        }
-
-        public double GetTotalHours ()
-        {
-            if ( _actionPeriodMap.Count == 0 ) { return 0.0; }
-
-            return _actionPeriodMap.Values.Sum( p => p.Duration.TotalHours );
+            return lines / GetTotalHours();
         }
 
         public double GetScansPerHour ()
@@ -92,7 +92,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
             var scans =  _actionPeriodMap.Keys.Cast< ReceptionAction >().Sum( r => r.ReceptionActionDetails.Sum( d => d.ScanQuantity ) );
 
-            return GetTotalHours() / scans;
+            return scans / GetTotalHours();
         }
 
         public double GetTotalVolume ()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -19,40 +20,42 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
     {
         private Operation _timesOperation;
         private Period _period;
+        private readonly ObservableCollection< OperationViewModel > _operationVmCollection;
+        private IEnumerable< OperationViewModel > _filteredOperations;
+
+        private readonly ObservableCollection< EmployeeProductivityViewModel > _employeeProductivityVmCollection;
+        private IEnumerable< EmployeeProductivityViewModel > _filteredEmployeeProductivity;
 
         #region Ctor
 
         public ProductivityReportViewModel ( IReportService reportService, IDialogRepository dialogRepository )
             : base( reportService, dialogRepository )
         {
-            _timesOperation = new Operation { Id = -1, Name = "Время" };
 
             SetupPeriod();
 
-            var operationVmCollection = new ObservableCollection< OperationViewModel >( _reportService.OperationCollection.Select( o => new OperationViewModel( o ) ));
-            operationVmCollection.Add( new OperationViewModel( _timesOperation ) );
-            OperationVmCollection = new ReadOnlyObservableCollection< OperationViewModel >( operationVmCollection );
-            Observe( _reportService.OperationCollection, operationVmCollection, o => o.Operation );
+            _timesOperation = new Operation { Id = -1, Name = "Время" };
 
-            ExtendFilters();
+            _operationVmCollection = new ObservableCollection< OperationViewModel >( _reportService.OperationCollection.Select( o => new OperationViewModel( o ) ) ) {
+                new OperationViewModel( _timesOperation )
+            };
+            Observe( _reportService.OperationCollection, _operationVmCollection, o => o.Operation );
 
-            SetupView( OperationVmCollection, (vsc) =>
-                                                {
-                                                    vsc.SortDescriptions.Add( new SortDescription( "Id", ListSortDirection.Ascending ) );
-                                                    vsc.Filter = OperationPredicate;
-                                                } );
+            AddOperationFilter();
+            OperationVmCollection = _operationVmCollection.Where( OperationPredicate ).OrderBy( o => o.Id ).ToArray();
 
-            CreateEmployeeProductivityVmCollection();
+            _employeeProductivityVmCollection = CreateEmployeeProductivityVmCollection();
 
-            SetupView( EmployeeProductivityVmCollection, ( vsc ) =>
-                                                            {
-                                                                vsc.SortDescriptions.Add( new SortDescription( "PositionId", ListSortDirection.Ascending ) );
-                                                                vsc.SortDescriptions.Add( new SortDescription( "AppointmentId", ListSortDirection.Ascending ) );
-                                                                vsc.SortDescriptions.Add( new SortDescription( "Name", ListSortDirection.Ascending ) );
-                                                                vsc.Filter = PredicateFunc;
-                                                            } );
-
-
+            EmployeeProductivityVmCollection = _employeeProductivityVmCollection.Where( ep => IsActivePredicate( ep.EmployeeVm )
+                                                                                              && PositionPredicate( ep.EmployeeVm )
+                                                                                              && AppointmentPredicate( ep.EmployeeVm )
+                                                                                              && ShiftPredicate( ep.EmployeeVm )
+                                                                                              && RankPredicate( ep.EmployeeVm )
+                                                                                              && IsSmokerPredicate( ep.EmployeeVm )
+                                                                                )
+                                                                                .OrderBy( ep => ep.PositionId )
+                                                                                .ThenBy( ep => ep.AppointmentId )
+                                                                                .ThenBy( ep => ep.Name );
 
 
             void SetupPeriod ()
@@ -65,15 +68,14 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                 Period = new Period( start, end );
             }
 
-            void CreateEmployeeProductivityVmCollection ()
+            ObservableCollection< EmployeeProductivityViewModel > CreateEmployeeProductivityVmCollection ()
             {
-                var employeeProductivityVmCollection = new ObservableCollection< EmployeeProductivityViewModel >(
+                var empColl = new ObservableCollection< EmployeeProductivityViewModel >(
                     _reportService.EmployeeProductivityCollections.Select(
                         p => new EmployeeProductivityViewModel( p, FilterVmCollection, _reportService.CategoryCollection )
                     )
                 );
 
-                EmployeeProductivityVmCollection = new ReadOnlyObservableCollection< EmployeeProductivityViewModel >( employeeProductivityVmCollection );
 
                 (( INotifyCollectionChanged )_reportService.EmployeeProductivityCollections).CollectionChanged +=
                     ( s, e ) =>
@@ -82,19 +84,20 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                         if ( e.NewItems?[ 0 ] != null ) {
 
                             var epvm = new EmployeeProductivityViewModel( ( EmployeeProductivity )e.NewItems[ 0 ], FilterVmCollection, _reportService.CategoryCollection );
-                            employeeProductivityVmCollection.Add( epvm );
+                            empColl.Add( epvm );
                             return;
                         }
 
                         if ( e.OldItems?[ 0 ] != null ) {
-                            employeeProductivityVmCollection.Remove( employeeProductivityVmCollection.First( vm => ReferenceEquals( vm.EmployeeProductivity, e.OldItems[ 0 ] ) ) );
+                            empColl.Remove( empColl.First( vm => ReferenceEquals( vm.EmployeeProductivity, e.OldItems[ 0 ] ) ) );
                             return;
                         }
 
                         if ( e.NewItems?[ 0 ] == null && e.OldItems?[ 0 ] == null ) {
-                            employeeProductivityVmCollection.Clear();
+                            empColl.Clear();
                         }
                     };
+                return empColl;
             }
         }
 
@@ -103,8 +106,23 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         #region Properties
 
-        public ReadOnlyObservableCollection< OperationViewModel > OperationVmCollection { get; private set; }
-        public ReadOnlyObservableCollection< EmployeeProductivityViewModel > EmployeeProductivityVmCollection { get; private set; }
+        public IEnumerable< OperationViewModel > OperationVmCollection
+        {
+            get => _filteredOperations;
+            private set {
+                _filteredOperations = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public IEnumerable< EmployeeProductivityViewModel > EmployeeProductivityVmCollection
+        {
+            get => _filteredEmployeeProductivity;
+            private set {
+                _filteredEmployeeProductivity = value;
+                OnPropertyChanged();
+            }
+        }
 
         public DateTime StartTime
         {
@@ -144,25 +162,16 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
             await _reportService.LoadEmployeeProductivitiesAsync( Period );
 
-            if ( EmployeeProductivityVmCollection.Any() ) {
+            if ( _employeeProductivityVmCollection.Any() ) {
                 ReportMessage = "";
-                Refresh();
+                OnPredicateChange( null, new FilterChangedEventArgs( FilterIndexes.Appointment ) );
             }
             else {
                 ReportMessage = "Операции за указанный период отсутствуют.";
             }
         }
-
-        
-        protected internal override void Refresh ()
-        {
-            //foreach ( var employeeProductivityViewModel in EmployeeProductivityVmCollection ) {
-            //    employeeProductivityViewModel.Refresh();
-            //}
-
-            base.Refresh();
-        }
  
+
         protected override bool PredicateFunc ( object o )
         {
             if (!(o is EmployeeProductivityViewModel employeeProductivity)) return false;
@@ -174,33 +183,45 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             return res;
         }
 
-        
-        private bool OperationPredicate ( object o )
+        protected override void OnPredicateChange ( object sender, FilterChangedEventArgs args )
         {
-            if ( !(o is OperationViewModel operation) ) return false;
+            if ( args.FilterIndex == FilterIndexes.Operation ) {
+                OperationVmCollection = _operationVmCollection.Where( OperationPredicate ).OrderBy( o => o.Id ).ToArray();
 
-            var res = _filterVmCollection[ (int)FilterIndexes.Operation ].Entities.Any( obj => (obj as Operation) == operation.Operation);
+                Parallel.ForEach( EmployeeProductivityVmCollection, ( vm ) => vm.Refresh() );
 
-            return res;
+                return;
+            }
+
+
+            EmployeeProductivityVmCollection = _employeeProductivityVmCollection.AsParallel().Where( ep => IsActivePredicate( ep.EmployeeVm )
+                                                                                              && PositionPredicate( ep.EmployeeVm )
+                                                                                              //&& AppointmentPredicate( ep.EmployeeVm )
+                                                                                              //&& ShiftPredicate( ep.EmployeeVm )
+                                                                                              //&& RankPredicate( ep.EmployeeVm )
+                                                                                              //&& IsSmokerPredicate( ep.EmployeeVm )
+                                                                                )
+                                                                                .AsSequential()
+                                                                                .OrderBy( ep => ep.PositionId )
+                                                                                .ThenBy( ep => ep.AppointmentId )
+                                                                                .ThenBy( ep => ep.Name )
+                                                                                .ToArray();
         }
 
-        private void ExtendFilters ()
+
+        private bool OperationPredicate ( OperationViewModel operation )
         {
-            var filter = new FilterViewModel( "Операции", FilterIndexes.Operation, OperationVmCollection.Select( o => o.Operation ), p => (( Operation )p).Name );
+            return _filterVmCollection[ (int)FilterIndexes.Operation ].Entities.Any( obj => (obj as Operation) == operation.Operation);
+        }
+
+        private void AddOperationFilter ()
+        {
+            var filter = new FilterViewModel( "Операции", FilterIndexes.Operation, _operationVmCollection.Select( o => o.Operation ), p => (( Operation )p).Name );
             _filterVmCollection.Add( filter );
 
             _filterVmCollection[ (int)FilterIndexes.Operation ].FilterChanged += OnPredicateChange;
         }
 
-        protected override void OnPredicateChange ( object sender, FilterChangedEventArgs args )
-        {
-            if ( args.FilterIndex == FilterIndexes.Operation ) {
-                ViewList[0].Refresh();
-                foreach ( var vm in EmployeeProductivityVmCollection ) {
-                    vm.Refresh();
-                }
-            }
-        }
 
         #endregion
     }

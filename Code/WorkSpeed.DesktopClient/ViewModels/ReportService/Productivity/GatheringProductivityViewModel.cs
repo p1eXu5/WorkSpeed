@@ -18,6 +18,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
         {
             SpeedLabeling = SPEED_IN_LINES;
             Speed = productivity.GetLinesPerHour();
+            SpeedTip = "Скорость набора строк";
 
             _queue.Enqueue( new AspectsViewModel {
 

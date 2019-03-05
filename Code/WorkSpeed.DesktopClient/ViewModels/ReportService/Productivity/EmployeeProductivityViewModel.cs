@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using WorkSpeed.Business.Contexts.Productivity.Models;
 using WorkSpeed.Data.Models;
@@ -16,7 +15,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
         #region Fields
 
         private readonly ReadOnlyObservableCollection< FilterViewModel > _filterVmCollection;
-
+        private readonly ProductivityViewModel[] _productivityVmCollection;
+        private IEnumerable< ProductivityViewModel > _filteredProductivity;
 
         #endregion
 
@@ -32,45 +32,38 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
 
             EmployeeVm = new EmployeeViewModel( employeeProductivity.Employee );
 
-            CreateProductivityVmCollection();
+            _productivityVmCollection = CreateProductivityVmCollection();
+            ProductivityVmCollection = _productivityVmCollection.Where( PredicateFunc ).OrderBy( o => o.OperationId ).ToArray();
 
-            SetupView( ProductivityVmCollection, ( vsc ) =>
-                                                            {
-                                                                vsc.SortDescriptions.Add( new SortDescription( "OperationId", ListSortDirection.Ascending ) );
-                                                                vsc.Filter = PredicateFunc;
-                                                            } );
-
-
-
-
-            void CreateProductivityVmCollection ()
+            ProductivityViewModel[] CreateProductivityVmCollection ()
             {
                 var operations = _filterVmCollection[ ( int )FilterIndexes.Operation ].FilterItemVmCollection.Select( fi => ( Operation )fi.Entity ).ToArray();
 
                 // Concrete productivities plus TimeProductivityViewModel
-                ProductivityVmCollection = new List< ProductivityViewModel >( operations.Length + 1 );
+                var vmColl = new List< ProductivityViewModel >( operations.Length + 1 );
 
                 foreach ( var operation in operations ) {
 
                     switch ( operation.Group ) {
                         case OperationGroups.Reception :
-                            ProductivityVmCollection.Add( new ReceptionProductivityViewModel( employeeProductivity[ operation ], operation, categories ) );
+                            vmColl.Add( new ReceptionProductivityViewModel( employeeProductivity[ operation ], operation, categories ) );
                             break;
                         case OperationGroups.Shipment :
-                            ProductivityVmCollection.Add( new ShipmentProductivityViewModel( employeeProductivity[ operation ], operation ) );
+                            vmColl.Add( new ShipmentProductivityViewModel( employeeProductivity[ operation ], operation ) );
                             break;
                         case OperationGroups.Other :
-                            ProductivityVmCollection.Add( new OtherProductivityViewModel( employeeProductivity[ operation ], operation ) );
+                            vmColl.Add( new OtherProductivityViewModel( employeeProductivity[ operation ], operation ) );
                             break;
                         case OperationGroups.Undefined:
-                            ProductivityVmCollection.Add( new TimeProductivityViewModel( employeeProductivity, operations ) );
+                            vmColl.Add( new TimeProductivityViewModel( employeeProductivity, operations ) );
                             break;
                         default:
-                            ProductivityVmCollection.Add( new GatheringProductivityViewModel( employeeProductivity[ operation ], operation, categories ) );
+                            vmColl.Add( new GatheringProductivityViewModel( employeeProductivity[ operation ], operation, categories ) );
                             break;
                     }
                 }
 
+                return vmColl.ToArray();
             }
         }
 
@@ -86,7 +79,16 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
         public IEmployeeProductivity EmployeeProductivity { get; }
 
         public EmployeeViewModel EmployeeVm { get; }
-        public List< ProductivityViewModel > ProductivityVmCollection { get; private set; }
+
+        public IEnumerable< ProductivityViewModel > ProductivityVmCollection
+        {
+            get => _filteredProductivity;
+            private set {
+                _filteredProductivity = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string[] Foo { get; set; }
 
         #endregion
@@ -94,15 +96,17 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
 
         #region methods
 
-        protected override bool PredicateFunc ( object o )
+        protected bool PredicateFunc ( ProductivityViewModel productivity )
         {
-            if ( !(o is ProductivityViewModel productivity) ) return false;
-
-            var res = _filterVmCollection[ (int)FilterIndexes.Operation ].Entities.Any( obj => (obj as Operation) == productivity.Operation);
-
-            return res;
+            return _filterVmCollection[ (int)FilterIndexes.Operation ].Entities.Any( obj => (obj as Operation) == productivity.Operation);
         }
-        
+
+        protected internal override void Refresh ()
+        {
+            // parallel processing slows down filtering
+            ProductivityVmCollection = _productivityVmCollection.Where( PredicateFunc ).OrderBy( o => o.OperationId ).ToArray();
+        }
+
         #endregion
     }
 }

@@ -14,7 +14,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
         {
             SpeedLabeling = SPEED_IN_TIME;
             var dt = productivity.GetTotalDowntimeHours();
-            Speed = productivity.GetTotalWorkHours() + dt;
+            var wt = productivity.GetTotalWorkHours();
+            Speed = wt + dt;
+            SpeedTip = "Общее время работы (с простоями)";
+            CommonIndicator = wt;
+            IndicatorTip = "Время работы";
 
             List< (double,string) > timeList = new List< (double, string) >( 
                 productivity.GetOperationTimes( operations.Where( o => o.Id > 0 ) )

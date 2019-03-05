@@ -16,6 +16,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
         {
             SpeedLabeling = SPEED_IN_SCANS;
             Speed = productivity.GetScansPerHour();
+            SpeedTip = "Скорость сканирования";
 
             _queue.Enqueue( new AspectsViewModel {
 
