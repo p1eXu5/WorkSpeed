@@ -24,5 +24,17 @@ namespace WorkSpeed.DesktopClient.Views.UserControls
         {
             InitializeComponent();
         }
+
+        private void ScrollChanged ( object sender, ScrollChangedEventArgs e )
+        {
+            if ( sender == sv1 ) {
+                sv2.ScrollToHorizontalOffset( e.HorizontalOffset );
+                sv2.ScrollToVerticalOffset( e.VerticalOffset );
+            }
+            else {
+                sv1.ScrollToHorizontalOffset( e.HorizontalOffset );
+                sv1.ScrollToVerticalOffset( e.VerticalOffset );
+            }
+        }
     }
 }
