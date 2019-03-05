@@ -322,6 +322,7 @@
                         </Button>
                     </StackPanel>
 
+                    <!-- content -->
                     <Grid IsSharedSizeScope="True" 
                           HorizontalAlignment="Stretch" 
                       >

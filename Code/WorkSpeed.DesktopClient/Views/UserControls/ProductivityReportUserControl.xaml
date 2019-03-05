@@ -23,8 +23,6 @@
             </MultiBinding>
         </Grid.Height>
 
-        <ScrollViewer HorizontalScrollBarVisibility="Visible" 
-                      Padding="5,10,0,0">
             <Grid IsSharedSizeScope="True">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -54,7 +52,7 @@
 
                 <ListBox Grid.Row="1" ItemsSource="{Binding EmployeeProductivityVmCollection}" />
             </Grid>
-        </ScrollViewer>
+
         <TextBlock Text="{Binding ReportMessage}" 
                    VerticalAlignment="Center" HorizontalAlignment="Center"
                    Foreground="{StaticResource br_Window.Foreground}"

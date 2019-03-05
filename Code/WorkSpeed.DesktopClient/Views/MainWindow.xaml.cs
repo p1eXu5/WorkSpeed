@@ -93,5 +93,10 @@ namespace WorkSpeed.DesktopClient.Views
                 this.DragMove();
             }
         }
+
+        private void ProductivityReportUserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
