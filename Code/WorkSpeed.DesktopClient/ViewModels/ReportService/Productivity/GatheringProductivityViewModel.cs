@@ -14,31 +14,44 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
         #region Ctor
 
         public GatheringProductivityViewModel ( IProductivity productivity, Operation operation, IEnumerable< Category > categories ) 
-            : base( operation, categories )
+            : base( productivity, operation, categories )
         {
             SpeedLabeling = SPEED_IN_LINES;
             Speed = productivity.GetLinesPerHour();
             SpeedTip = "Скорость набора строк";
 
+           AddLines();
+
+
+            var volumes = productivity.GetVolumes( _categories )
+                                      .Select( t => (Convert.ToDouble( t.count ), $"{t.category.Name}: {t.count:F1} л.") ).ToArray();
+            var volumSum = volumes.Sum( t => t.Item1 );
+            var unitAnn = "л.";
+            var ann = "литров";
+            if ( volumSum > 100 ) {
+                volumSum /= 1000;
+                unitAnn = "м.";
+                ann = "кубов";
+            } 
+
             _queue.Enqueue( new AspectsViewModel {
 
-                Aspects = new ObservableCollection< (double, string) >( productivity.GetLines( _categories )
-                                                                                    .Select( t => (Convert.ToDouble( t.count ), $"{t.category.Name}: {t.count}") ) ),
-                Annotation = "строк"
+                Aspects = new ObservableCollection< (double, string) >( volumes ),
+                Annotation = ann,
+                Indicator = volumSum,
+                IndicatorTip = $"Объём всего ({unitAnn})"
             } );
 
-            _queue.Enqueue( new AspectsViewModel {
 
-                Aspects = new ObservableCollection< (double, string) >( productivity.GetVolumes( _categories )
-                                                                                    .Select( t => (t.count , $"{t.category.Name}: {t.count}") ) ),
-                Annotation = "кубов"
-            } );
+            var quantities = productivity.GetQuantities( _categories )
+                                         .Select( t => (Convert.ToDouble( t.count ), $"{t.category.Name}: {t.count:F1} шт.") ).ToArray();
 
             _queue.Enqueue( new AspectsViewModel {
 
-                Aspects = new ObservableCollection< (double, string) >( productivity.GetQuantities( _categories )
-                                                                                    .Select( t => (Convert.ToDouble( t.count ), $"{t.category.Name}: {t.count}") ) ),
-                Annotation = "штук"
+                Aspects = new ObservableCollection< (double, string) >( quantities ),
+                Annotation = "штук",
+                Indicator = quantities.Sum( t => t.Item1 ),
+                IndicatorTip = "Штук всего"
             } );
 
             Next ( null );

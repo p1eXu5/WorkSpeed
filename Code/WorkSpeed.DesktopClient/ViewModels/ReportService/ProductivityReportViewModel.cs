@@ -26,6 +26,9 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         private readonly ObservableCollection< EmployeeProductivityViewModel > _employeeProductivityVmCollection;
         private IEnumerable< EmployeeProductivityViewModel > _filteredEmployeeProductivity;
 
+        private bool _predicateChanged;
+        private bool _periodChanged;
+
         #region Ctor
 
         public ProductivityReportViewModel ( IReportService reportService, IDialogRepository dialogRepository )
@@ -146,6 +149,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         {
             get => _period;
             set {
+                if ( _period != value ) { _periodChanged = true; }
+
                 _period = value;
                 OnPropertyChanged();
             }
@@ -158,6 +163,13 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
         public override async Task UpdateAsync ()
         {
+            if ( !_periodChanged ) {
+                if ( _predicateChanged ) {
+                    Refresh( FilterIndexes.All );
+                }
+                return;
+            }
+
             ReportMessage = "Идёт загрузка выработки";
 
             await _reportService.LoadEmployeeProductivitiesAsync( Period );
@@ -170,10 +182,12 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                 ReportMessage = "Операции за указанный период отсутствуют.";
             }
         }
- 
+
 
         protected override void OnPredicateChanged ( object sender, FilterChangedEventArgs args )
-        { }
+        {
+            _predicateChanged = true;
+        }
 
 
         private bool OperationPredicate ( OperationViewModel operation )

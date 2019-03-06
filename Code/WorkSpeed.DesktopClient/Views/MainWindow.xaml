@@ -150,7 +150,7 @@
                                     />
                         </Border>
 
-                        <!-- update button -->
+                        <!-- employees update button -->
                         <Border DockPanel.Dock="Top" 
                                 Background="{StaticResource br_Window.Background}"
                                 >
@@ -189,6 +189,8 @@
                                 BorderThickness="0,0,1,1" BorderBrush="{StaticResource br_Window.Border}"
                                 >
                             <StackPanel Orientation="Vertical">
+
+                                <!-- productivity datetime picker -->
                                 <StackPanel VerticalAlignment="Center"
                                             Orientation="Horizontal"
                                             Margin="0,5"
@@ -206,23 +208,24 @@
                                     <xctk:DateTimePicker Width="200" Value="{Binding ProductivityReportVm.EndTime, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
                                 </StackPanel>
 
-                            <Button Content="Обновить" 
-                                    Width="100" 
-                                    Margin="0,5,0,10"
-                                    BorderBrush="DarkBlue"
-                                    Command="{Binding UpdateAsyncCommand}"
-                                    BorderThickness="1"
-                                    Foreground="{StaticResource br_Button.Foreground2}"
-                                    Background="#ddddee"
-                                    >
-                                <Button.Style>
-                                    <Style TargetType="Button" BasedOn="{StaticResource st_Window.Button}">
-                                        <Setter Property="Border.CornerRadius" Value="3" />
-                                    </Style>
-                                </Button.Style>
-                            </Button>
+                                <!-- productivity update button -->
+                                <Button Content="Обновить" 
+                                        Width="100" 
+                                        Margin="0,5,0,10"
+                                        BorderBrush="DarkBlue"
+                                        Command="{Binding UpdateAsyncCommand}"
+                                        BorderThickness="1"
+                                        Foreground="{StaticResource br_Button.Foreground2}"
+                                        Background="#ddddee"
+                                        >
+                                    <Button.Style>
+                                        <Style TargetType="Button" BasedOn="{StaticResource st_Window.Button}">
+                                            <Setter Property="Border.CornerRadius" Value="3" />
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
 
-                        </StackPanel>
+                            </StackPanel>
 
                             <Border.Style>
                                 <Style TargetType="Border">
@@ -411,7 +414,7 @@
                             </TabItem>
 
                             <!-- Settings #2 -->
-                            <TabItem >
+                            <TabItem IsEnabled="False" >
                                 <TabItem.Header>
                                     <StackPanel Orientation="Vertical">
                                         <Path Style="{StaticResource st_Window.Common.Path}" 
@@ -432,7 +435,7 @@
                 </Grid>
             </Grid>
 
-            <!-- import -->
+            <!-- import screen -->
             <Grid>
                 <Rectangle Fill="{StaticResource br_Window.Background}" />
                 <Rectangle Opacity="0.9" >

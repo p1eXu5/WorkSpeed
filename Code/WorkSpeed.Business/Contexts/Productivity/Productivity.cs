@@ -17,12 +17,14 @@ namespace WorkSpeed.Business.Contexts.Productivity
     public class Productivity : IProductivity
     {
         private readonly Dictionary< EmployeeActionBase, Period > _actionPeriodMap;
+        private readonly Category _unknownCategory;
 
         #region Ctor
 
         public Productivity ()
         {
             _actionPeriodMap = new Dictionary< EmployeeActionBase, Period >( new EmployeeActionBaseComparer< EmployeeActionBase >() );
+            _unknownCategory = new Category { Id = 1000, Name = "Категория товаров с неизвестным объёмом" };
         }
 
         #endregion
@@ -172,6 +174,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
                                                         select d.Product
                                                     ) );
             var dict = new Dictionary< Category, int >();
+            dict[ _unknownCategory ] = 0;
 
             foreach ( var category in categories ) {
 
@@ -181,7 +184,12 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
                     foreach ( var product in productLines.ToArray() ) {
 
-                        if ( category.Contains( product.ItemVolume ) ) {
+                        if ( product.ItemVolume == null ) {
+
+                            productLines.Remove( product );
+                            dict[ _unknownCategory ]++;
+                        }
+                        else if ( category.Contains( product.ItemVolume ) ) {
                             productLines.Remove( product );
                             dict[ category ]++;
                         }
@@ -204,6 +212,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
                                                                                select (d.Product, d.ScanQuantity)
                                                                                ) );
             var dict = new Dictionary< Category, int >();
+            dict[ _unknownCategory ] = 0;
 
             foreach ( var category in categories ) {
 
@@ -211,7 +220,12 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
                 if ( productScans.Any() ) {
                     foreach ( var prodScan in productScans.ToArray() ) {
-                        if ( category.Contains( prodScan.product.ItemVolume ) ) {
+
+                        if ( prodScan.product.ItemVolume == null ) {
+                            productScans.Remove( prodScan );
+                            dict[ _unknownCategory ]+= prodScan.scans;
+                        }
+                        else if ( category.Contains( prodScan.product.ItemVolume ) ) {
                             productScans.Remove( prodScan );
                             dict[ category ]+= prodScan.scans;
                         }
@@ -253,6 +267,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
                                                                                 select (d.Product, d.ProductQuantity)
                                                                                 ) );
             var dict = new Dictionary< Category, int >();
+            dict[ _unknownCategory ] = 0;
 
             foreach ( var category in categories ) {
 
@@ -260,7 +275,12 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
                 if ( productQuantities.Any() ) {
                     foreach ( var prodQuant in productQuantities.ToArray() ) {
-                        if ( category.Contains( prodQuant.product.ItemVolume ) ) {
+
+                        if ( prodQuant.product.ItemVolume == null ) {
+                            productQuantities.Remove( prodQuant );
+                            dict[ _unknownCategory ]+= prodQuant.quantity;
+                        }
+                        else if ( category.Contains( prodQuant.product.ItemVolume ) ) {
                             productQuantities.Remove( prodQuant );
                             dict[ category ]+= prodQuant.quantity;
                         }
@@ -296,20 +316,26 @@ namespace WorkSpeed.Business.Contexts.Productivity
                                                                                    IEnumerable< Category > categories,
                                                                                    Func< T, IEnumerable< WithProductActionDetail > > getter )
         {
-            var productQuantities = new LinkedList< (Product product, double volume) >( from a in actions
+            var productVolumes = new LinkedList< (Product product, double volume) >( from a in actions
                                                                                      from d in getter(a)
                                                                                      select (d.Product, d.Volume()) );
             var dict = new Dictionary< Category, double >();
+            dict[ _unknownCategory ] = 0;
 
             foreach ( var category in categories ) {
 
                 dict[ category ] = 0;
 
-                if ( productQuantities.Any() ) {
-                    foreach ( var prodQuant in productQuantities.ToArray() ) {
-                        if ( category.Contains( prodQuant.product.ItemVolume ) ) {
-                            productQuantities.Remove( prodQuant );
-                            dict[ category ]+= prodQuant.volume;
+                if ( productVolumes.Any() ) {
+                    foreach ( var prodVolume in productVolumes.ToArray() ) {
+
+                        if ( prodVolume.product.ItemVolume == null ) {
+                            productVolumes.Remove( prodVolume );
+                            dict[ _unknownCategory ]+= prodVolume.volume;
+                        }
+                        else if ( category.Contains( prodVolume.product.ItemVolume ) ) {
+                            productVolumes.Remove( prodVolume );
+                            dict[ category ]+= prodVolume.volume;
                         }
                     }
                 }

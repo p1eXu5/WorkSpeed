@@ -23,10 +23,12 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
             _queue.Enqueue( new AspectsViewModel {
 
                 Aspects = new ObservableCollection< (double, string) >( new [] {
-                    (client, $"Клиентские: {client}"),
-                    (nonClient, $"Не клиентские: {nonClient}"),
+                    (client, $"Клиентских мест: {client}"),
+                    (nonClient, $"Не клиентских мест: {nonClient}"),
                 }),
-                Annotation = "сканн"
+                Annotation = "сканн",
+                Indicator = client + nonClient,
+                IndicatorTip = "Всего мест"
             } );
 
             Next( null );

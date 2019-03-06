@@ -188,6 +188,7 @@ namespace WorkSpeed.Business.FileModels.Converters
                         Product = GetProduct( productivityImportModel ),
                         Address = GetAddress( productivityImportModel.ReceiverAddress ),
                         ScanQuantity = (short)(productivityImportModel.ScanQuantity ?? 0),
+                        ProductQuantity = productivityImportModel.ProductQuantity ?? 0,
                         IsClientScanning = productivityImportModel.IsClientScanning ?? false
                     }
                 }
