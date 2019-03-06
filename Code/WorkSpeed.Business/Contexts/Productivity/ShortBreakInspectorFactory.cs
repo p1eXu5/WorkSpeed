@@ -10,6 +10,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
     public class ShortBreakInspectorFactory : IShortBreakInspectorFactory
     {
         private readonly Dictionary< ShortBreakSchedule, IShortBreakInspector > _map;
+        private readonly object _locker = new object();
 
         public ShortBreakInspectorFactory ()
         {
@@ -19,7 +20,9 @@ namespace WorkSpeed.Business.Contexts.Productivity
         public IShortBreakInspector GetShortBreakInspector ( ShortBreakSchedule shortBreaks )
         {
             if ( !_map.ContainsKey( shortBreaks ) ) {
-                _map[ shortBreaks ] = new ShortBreakInspector( shortBreaks );
+                lock ( _locker ) {
+                    _map[ shortBreaks ] = new ShortBreakInspector( shortBreaks );
+                }
             }
             return _map[ shortBreaks ];
         }

@@ -10,7 +10,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
     {
         ICollection< (TimeSpan start, TimeSpan end) > Breaks { get; }
 
-        ShortBreakInspectorMomento SetBreak ( Period period );
+        void SetBreak ( Period period, ShortBreakInspectorMomento momento );
 
         /// <summary>
         ///     Checks intersaction, move break to the next period.

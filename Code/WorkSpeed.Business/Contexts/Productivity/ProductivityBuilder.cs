@@ -16,8 +16,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
         private static readonly TimeSpan _shiftMarker;
         private readonly IShortBreakInspectorFactory _shortBreakInspectorFactory;
 
-        private Dictionary< Operation, IProductivity > _productivityMap;
-        private HashSet< Period > _downtimePeriods;
+        
 
         #region Ctor
 
@@ -28,8 +27,6 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
         public ProductivityBuilder ()
         {
-            _productivityMap = new Dictionary< Operation, IProductivity >();
-            _downtimePeriods = new HashSet< Period >();
             _shortBreakInspectorFactory = new ShortBreakInspectorFactory();
         }
 
@@ -38,24 +35,14 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
         #region Properties
 
-        /// <summary>
-        ///     Returns (productivities, downtimes).
-        /// </summary>
-        /// <returns></returns>
-        public (IReadOnlyDictionary< Operation, IProductivity > productivityMap, HashSet< Period > downtimes) GetResult ()
-        {
-            return ( _productivityMap, _downtimePeriods );
-        }
-
         public OperationThresholds Thresholds { get; set; }
 
         #endregion
 
 
-        public void BuildNew ()
+        public ShortBreakInspectorMomento BuildNew ()
         {
-            _productivityMap = new Dictionary< Operation, IProductivity >();
-            _downtimePeriods = new HashSet< Period >();
+            return new ShortBreakInspectorMomento();
         }
 
         /// <summary>
@@ -64,8 +51,9 @@ namespace WorkSpeed.Business.Contexts.Productivity
         ///     packing operation (if it was fast packing).
         /// </summary>
         /// <param name="action"></param>
+        /// <param name="momento"></param>
         /// <returns></returns>
-        public (Period, EmployeeActionBase) CheckDuration ( EmployeeActionBase action )
+        public (Period, EmployeeActionBase) CheckDuration ( EmployeeActionBase action, ShortBreakInspectorMomento momento )
         {
             if (action.Operation == null) throw new ArgumentException( @"Operation cannot be null.", nameof( action.Operation ) );
 
@@ -88,10 +76,10 @@ namespace WorkSpeed.Business.Contexts.Productivity
                     break;
             }
 
-            if ( !_productivityMap.ContainsKey( action.Operation ) ) {
-                _productivityMap[ action.Operation ] = new Productivity();
+            if ( !momento.ProductivityMap.ContainsKey( action.Operation ) ) {
+                momento.ProductivityMap[ action.Operation ] = new Productivity();
             }
-            _productivityMap[ action.Operation ].Add( action, period );
+            momento.ProductivityMap[ action.Operation ].Add( action, period );
             
             return (period, action);
         }
@@ -103,7 +91,8 @@ namespace WorkSpeed.Business.Contexts.Productivity
         /// <param name="nextAction"></param>
         /// <returns>Tuple from new Perion and current action.</returns>
         public (Period, EmployeeActionBase) CheckPause ( (Period period, EmployeeActionBase action) currentAction, 
-                                                         (Period period, EmployeeActionBase action ) nextAction )
+                                                         (Period period, EmployeeActionBase action ) nextAction,
+                                                         ShortBreakInspectorMomento momento )
         {
             var pause = nextAction.Item1.Start - currentAction.Item1.End;
 
@@ -120,7 +109,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
                      || ( currentGroup == OperationGroups.Packing && nextGroup == OperationGroups.Packing && nextAction.period.Start == nextAction.action.StartTime ) ) {
 
                     newPeriod = new Period( currentAction.period.Start.Add( pause ), nextAction.period.Start ); 
-                    _productivityMap[ currentAction.Item2.Operation ][ currentAction.Item2 ] = newPeriod;
+                    momento.ProductivityMap[ currentAction.Item2.Operation ][ currentAction.Item2 ] = newPeriod;
                     return (newPeriod, currentAction.Item2);
                 }
                 else if ( nextGroup == OperationGroups.Packing
@@ -137,7 +126,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
                         if ( currentAction.period.Start < nextAction.period.Start ) {
                             
                             newCurrentPeriod = new Period( currentAction.period.Start, nextAction.period.Start );
-                            _productivityMap[ currentAction.action.Operation ][ currentAction.action ] = newCurrentPeriod;
+                            momento.ProductivityMap[ currentAction.action.Operation ][ currentAction.action ] = newCurrentPeriod;
                             return (newCurrentPeriod, currentAction.action);
                         }
 
@@ -146,21 +135,21 @@ namespace WorkSpeed.Business.Contexts.Productivity
                         newCurrentPeriod = new Period( currentAction.period.Start, currentAction.period.GetMedian() );
                         newNextPeriod = new Period( newCurrentPeriod.End, currentAction.period.End );
 
-                        _productivityMap[ nextAction.action.Operation ][ nextAction.action ] = newNextPeriod;
-                        _productivityMap[ currentAction.action.Operation ][ currentAction.action ] = newCurrentPeriod;
+                        momento.ProductivityMap[ nextAction.action.Operation ][ nextAction.action ] = newNextPeriod;
+                        momento.ProductivityMap[ currentAction.action.Operation ][ currentAction.action ] = newCurrentPeriod;
                         return (newCurrentPeriod, currentAction.action);
                     }
                     else {
 
                         newNextPeriod = new Period( currentAction.period.End, nextAction.period.End );
-                        _productivityMap[ nextAction.action.Operation ][ nextAction.action ] = newNextPeriod;
+                        momento.ProductivityMap[ nextAction.action.Operation ][ nextAction.action ] = newNextPeriod;
                         return currentAction;
                     }
                 }
                 else {
 
                     newPeriod = new Period( currentAction.Item1.Start, nextAction.Item1.Start ); 
-                    _productivityMap[ currentAction.Item2.Operation ][ currentAction.Item2 ] = newPeriod;
+                    momento.ProductivityMap[ currentAction.Item2.Operation ][ currentAction.Item2 ] = newPeriod;
                     return (newPeriod, currentAction.Item2);
                 }
             }
@@ -175,10 +164,10 @@ namespace WorkSpeed.Business.Contexts.Productivity
                     end: currentAction.Item1.End.Add( TimeSpan.FromSeconds( (Thresholds?[ currentAction.Item2.Operation ] ?? 20) ) ) 
                 );
 
-                _downtimePeriods.Add( new Period( newPeriod.End, nextAction.Item1.Start ) );
+                momento.DowntimePeriods.Add( new Period( newPeriod.End, nextAction.Item1.Start ) );
             }
 
-            _productivityMap[ currentAction.Item2.Operation ][ currentAction.Item2 ] = newPeriod;
+            momento.ProductivityMap[ currentAction.Item2.Operation ][ currentAction.Item2 ] = newPeriod;
             return (newPeriod, currentAction.Item2);
         }
 
@@ -186,20 +175,21 @@ namespace WorkSpeed.Business.Contexts.Productivity
         ///     #3. Substracts shortBreaks from downtime.
         /// </summary>
         /// <param name="shortBreaks"></param>
-        public void SubstractBreaks ( ShortBreakSchedule shortBreaks )
+        /// <param name="momento"></param>
+        public void SubstractBreaks ( ShortBreakSchedule shortBreaks, ShortBreakInspectorMomento momento )
         {
             // each employee must finish current action before leaving for a break
-            if ( !_downtimePeriods.Any() ) { return; }
+            if ( !momento.DowntimePeriods.Any() ) { return; }
 
             var maxDowntime = shortBreaks.Periodicity + shortBreaks.Periodicity - shortBreaks.Duration;
-            var dtArr = _downtimePeriods.Where( d => d.Duration < maxDowntime ).OrderBy( d => d.Start ).ToArray();
+            var dtArr = momento.DowntimePeriods.Where( d => d.Duration < maxDowntime ).OrderBy( d => d.Start ).ToArray();
             if ( dtArr.Length <= 0 ) return;
 
             var inspector = _shortBreakInspectorFactory.GetShortBreakInspector( shortBreaks );
             var firstDowntime = dtArr[ 0 ];
 
             Period brk;
-            var momento = inspector.SetBreak( firstDowntime );
+            inspector.SetBreak( firstDowntime, momento );
 
             if ( momento.Break.Start.TimeOfDay > inspector.FirstBreakTime ) {
                 momento.SetDeposit();
@@ -213,20 +203,20 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
                 if ( inspector.IsBreak( downtimePeriod, ref momento ) ) {
 
-                    RemoveBreakFromDowntime( downtimePeriod, momento.Break );
+                    RemoveBreakFromDowntime( downtimePeriod, momento.Break, momento );
                     brk = momento.Break;
                 }
                 else if ( momento.HasDeposit ) {
-                    var operation = _productivityMap.FirstOrDefault( p => p.Key.Group == OperationGroups.Shipment && p.Value.Any( a => a.IsIntersectsWith( brk ) ) ).Key;
+                    var operation = momento.ProductivityMap.FirstOrDefault( p => p.Key.Group == OperationGroups.Shipment && p.Value.Any( a => a.IsIntersectsWith( brk ) ) ).Key;
                     if ( operation != null ) {
 
-                        var downtimes = _downtimePeriods.Where( p => p > brk && p < momento.Break ).OrderBy( p => p.Duration ).ToArray();
+                        var downtimes = momento.DowntimePeriods.Where( p => p > brk && p < momento.Break ).OrderBy( p => p.Duration ).ToArray();
 
                         if ( downtimes.Length > 0 ) {
                             int i = 0;
                             while ( downtimes[ i ].Duration < brk.Duration || i < downtimes.Length ) { ++i; }
                             var momentoBreak = new Period( downtimes[ i ].Start, downtimes[ i ].Start.Add( brk.Duration ) );
-                            RemoveBreakFromDowntime( downtimes[ i ], momentoBreak );
+                            RemoveBreakFromDowntime( downtimes[ i ], momentoBreak, momento );
                         }
                     }
                     momento.RemoveDeposit();
@@ -238,20 +228,20 @@ namespace WorkSpeed.Business.Contexts.Productivity
         ///     #4.
         /// </summary>
         /// <param name="shift"></param>
-        public void SubstractLunch ( Shift shift )
+        public void SubstractLunch ( Shift shift, ShortBreakInspectorMomento momento )
         {
-            if ( !_downtimePeriods.Any() ) { return; }
+            if ( !momento.DowntimePeriods.Any() ) { return; }
 
-            foreach ( var periods in GetShiftPeriods() ) {
+            foreach ( var periods in GetShiftPeriods( momento ) ) {
 
                 var period = periods.FirstOrDefault( p => p.Duration >= shift.Lunch );
                 if ( period == default( Period ) ) { continue; }
 
-                _downtimePeriods.Remove( period );
+                momento.DowntimePeriods.Remove( period );
 
                 var newPeriod = period.CutEnd( shift.Lunch );
                 if ( newPeriod.Duration > TimeSpan.Zero ) {
-                    _downtimePeriods.Add( newPeriod );
+                    momento.DowntimePeriods.Add( newPeriod );
                 }
             }
         }
@@ -261,20 +251,20 @@ namespace WorkSpeed.Business.Contexts.Productivity
         ///     Returns each shift periods.
         /// </summary>
         /// <returns></returns>
-        private IEnumerable< IEnumerable< Period >> GetShiftPeriods ()
+        private IEnumerable< IEnumerable< Period >> GetShiftPeriods ( ShortBreakInspectorMomento momento )
         {
             Period period;
             var count = 0;
 
             do {
-                period = _downtimePeriods.Skip( count ).FirstOrDefault( p => p.Duration > _shiftMarker );
+                period = momento.DowntimePeriods.Skip( count ).FirstOrDefault( p => p.Duration > _shiftMarker );
 
                 if ( period == default( Period ) ) {
 
-                    yield return _downtimePeriods.Skip( count );
+                    yield return momento.DowntimePeriods.Skip( count );
                 }
                 else {
-                    var res = _downtimePeriods.Skip( count ).Where( p => p < period ).ToArray();
+                    var res = momento.DowntimePeriods.Skip( count ).Where( p => p < period ).ToArray();
                     if ( res.Length <= 0 ) { yield break; }
                     count = res.Length;
                     yield return res;
@@ -283,21 +273,21 @@ namespace WorkSpeed.Business.Contexts.Productivity
             } while ( period != default( Period ) );
         }
 
-        private void RemoveBreakFromDowntime ( Period downtimePeriod, Period @break )
+        private void RemoveBreakFromDowntime ( Period downtimePeriod, Period @break, ShortBreakInspectorMomento momento )
         {
-            _downtimePeriods.Remove( downtimePeriod );
+            momento.DowntimePeriods.Remove( downtimePeriod );
 
             var newDowntime = downtimePeriod - @break;
             if ( newDowntime.Duration > TimeSpan.Zero ) {
                 var removed = downtimePeriod.Duration - newDowntime.Duration;
 
                 if ( removed == @break.Duration ) {
-                    _downtimePeriods.Add( newDowntime );
+                    momento.DowntimePeriods.Add( newDowntime );
                 }
                 else if ( downtimePeriod.Duration > @break.Duration && removed < @break.Duration ) {
                     var diffPeriod = new Period( @break.End, @break.End.Add( @break.Duration - removed ) );
                     newDowntime -= diffPeriod;
-                    _downtimePeriods.Add( newDowntime );
+                    momento.DowntimePeriods.Add( newDowntime );
                 }
             }
         }

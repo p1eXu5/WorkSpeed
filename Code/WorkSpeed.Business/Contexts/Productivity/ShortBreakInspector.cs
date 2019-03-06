@@ -56,8 +56,9 @@ namespace WorkSpeed.Business.Contexts.Productivity
         /// 
         /// </summary>
         /// <param name="period"></param>
+        /// <param name="momento"></param>
         /// <returns></returns>
-        public ShortBreakInspectorMomento SetBreak ( Period period )
+        public void SetBreak ( Period period, ShortBreakInspectorMomento momento )
         {
             var periodEnd = period.End.TimeOfDay;
             var mid = (_breaks.Length ) / 2;
@@ -67,12 +68,11 @@ namespace WorkSpeed.Business.Contexts.Productivity
 
                 if ( (periodEnd >= _breaks[ mid ].end || ( periodEnd >= _breaks[ mid ].start && periodEnd < _breaks[ mid ].end ) ) 
                      && periodEnd < _breaks[ mid + 1 ].end ) {
-                    return new ShortBreakInspectorMomento( 
-                                    new Period( 
+                    momento.Break = new Period( 
                                         new DateTime( period.End.Year, period.End.Month, period.End.Day, _breaks[mid].start.Hours, _breaks[mid].start.Minutes, _breaks[mid].start.Seconds ), 
                                         new DateTime( period.End.Year, period.End.Month, period.End.Day, _breaks[mid].end.Hours, _breaks[mid].end.Minutes, _breaks[mid].end.Seconds )
-                                    )
-                                );
+                                    );
+                    return;
                 }
 
                 if ( diff > 1 ) { diff /= 2; }
@@ -89,50 +89,44 @@ namespace WorkSpeed.Business.Contexts.Productivity
             if ( mid == 0 ) {
                 if ( (periodEnd >= _breaks[ mid ].end || ( periodEnd >= _breaks[ mid ].start && periodEnd < _breaks[ mid ].end ) ) 
                     && periodEnd < _breaks[ mid + 1 ].end ) {
-                    return new ShortBreakInspectorMomento( 
-                                   new Period( 
+                    momento.Break = new Period( 
                                        new DateTime( period.End.Year, period.End.Month, period.End.Day, _breaks[mid].start.Hours, _breaks[mid].start.Minutes, _breaks[mid].start.Seconds ), 
                                        new DateTime( period.End.Year, period.End.Month, period.End.Day, _breaks[mid].end.Hours, _breaks[mid].end.Minutes, _breaks[mid].end.Seconds )
-                                   ) 
-                               );
+                                    );
+                    return;
                 }
 
                 var lastBreak = _breaks[ _breaks.Length - 1 ];
 
                 if ( lastBreak.end < lastBreak.start ) {
 
-                    return new ShortBreakInspectorMomento( 
-                                   new Period(
+                    momento.Break = new Period(
                                        new DateTime( period.End.Year, period.End.Month, period.End.Day - 1, lastBreak.start.Hours, lastBreak.start.Minutes, lastBreak.start.Seconds ),
                                        new DateTime( period.End.Year, period.End.Month, period.End.Day, lastBreak.end.Hours, lastBreak.end.Minutes, lastBreak.end.Seconds )
-                                   ) 
-                               );
+                                    );
+                    return;
                 }
 
-                return new ShortBreakInspectorMomento( 
-                               new Period(
+                momento.Break = new Period(
                                    new DateTime( period.End.Year, period.End.Month, period.End.Day - 1, lastBreak.start.Hours, lastBreak.start.Minutes, lastBreak.start.Seconds ),
                                    new DateTime( period.End.Year, period.End.Month, period.End.Day - 1, lastBreak.end.Hours, lastBreak.end.Minutes, lastBreak.end.Seconds )
-                               ) 
-                           );
+                                );
+                return;
             }
 
             if ( _breaks[ mid ].end < _breaks[ mid ].start ) {
 
-                return new ShortBreakInspectorMomento( 
-                           new Period(
-                               new DateTime( period.End.Year, period.End.Month, period.End.Day, _breaks[ mid ].start.Hours, _breaks[ mid ].start.Minutes, _breaks[ mid ].start.Seconds ),
-                               new DateTime( period.End.Year, period.End.Month, period.End.Day + 1, _breaks[ mid ].end.Hours, _breaks[ mid ].end.Minutes, _breaks[ mid ].end.Seconds )
-                           ) 
-                       );
+                momento.Break = new Period(
+                                   new DateTime( period.End.Year, period.End.Month, period.End.Day, _breaks[ mid ].start.Hours, _breaks[ mid ].start.Minutes, _breaks[ mid ].start.Seconds ),
+                                   new DateTime( period.End.Year, period.End.Month, period.End.Day + 1, _breaks[ mid ].end.Hours, _breaks[ mid ].end.Minutes, _breaks[ mid ].end.Seconds )
+                                );
+                return;
             }
 
-            return new ShortBreakInspectorMomento( 
-                           new Period(
+            momento.Break = new Period(
                                new DateTime( period.End.Year, period.End.Month, period.End.Day - 1, _breaks[ mid ].start.Hours, _breaks[ mid ].start.Minutes, _breaks[ mid ].start.Seconds ),
                                new DateTime( period.End.Year, period.End.Month, period.End.Day - 1, _breaks[ mid ].end.Hours, _breaks[ mid ].end.Minutes, _breaks[ mid ].end.Seconds )
-                           ) 
-                       );
+                            );
         }
 
         /// <summary>

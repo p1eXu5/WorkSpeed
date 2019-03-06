@@ -3,22 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WorkSpeed.Data.Models;
 
 namespace WorkSpeed.Business.Contexts.Productivity
 {
-    public struct ShortBreakInspectorMomento
+    public class ShortBreakInspectorMomento
     {
         private bool _deposit;
         private bool _depositLock;
 
-        public ShortBreakInspectorMomento ( Period @break )
+        public ShortBreakInspectorMomento ()
         {
-            Break = @break;
+            ProductivityMap = new Dictionary< Operation, IProductivity >();
+            DowntimePeriods = new HashSet< Period >();
+
+            Break = Period.Zero;
             _deposit = false;
             _depositLock = false;
         }
 
         public Period Break { get; internal set; }
+        public Dictionary< Operation, IProductivity > ProductivityMap { get; }
+        public HashSet< Period > DowntimePeriods { get; }
+
         public bool HasDeposit => _deposit;
 
         public void SetDeposit ()

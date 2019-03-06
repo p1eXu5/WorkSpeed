@@ -11,18 +11,18 @@ namespace WorkSpeed.Business.Contexts.Productivity
 {
     public interface IProductivityBuilder
     {
-        (IReadOnlyDictionary< Operation, IProductivity > productivityMap, HashSet< Period > downtimes) GetResult ();
 
         OperationThresholds Thresholds { set; }
 
-        void BuildNew ();
+        ShortBreakInspectorMomento BuildNew ();
 
-        (Period, EmployeeActionBase) CheckDuration ( EmployeeActionBase action );
+        (Period, EmployeeActionBase) CheckDuration ( EmployeeActionBase action, ShortBreakInspectorMomento momento );
 
         (Period, EmployeeActionBase) CheckPause ( (Period period, EmployeeActionBase action) currentAction, 
-                                                  (Period period, EmployeeActionBase action ) nextAction );
+                                                  (Period period, EmployeeActionBase action ) nextAction,
+                                                  ShortBreakInspectorMomento momento);
 
-        void SubstractBreaks ( ShortBreakSchedule shortBreaks );
-        void SubstractLunch ( Shift shift );
+        void SubstractBreaks ( ShortBreakSchedule shortBreaks, ShortBreakInspectorMomento momento );
+        void SubstractLunch ( Shift shift, ShortBreakInspectorMomento momento );
     }
 }

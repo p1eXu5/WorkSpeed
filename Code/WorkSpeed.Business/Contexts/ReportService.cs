@@ -224,7 +224,12 @@ namespace WorkSpeed.Business.Contexts
             var task = Task.Run( () =>
                       {
                           lock ( _lock ) {
-                              employeeProductivities = GetEmployeeProductivities( period ).ToArray();
+                              try {
+                                  employeeProductivities = GetEmployeeProductivities( period );
+                              }
+                              catch ( Exception ex ) {
+                                  ;
+                              }
                           }
                     });
             try {
@@ -273,19 +278,22 @@ namespace WorkSpeed.Business.Contexts
             }
         }
 
-        private IEnumerable< EmployeeProductivity > GetEmployeeProductivities ( Period period )
+        private EmployeeProductivity[] GetEmployeeProductivities ( Period period )
         {
             var actionGroupingArray = _dbContext.GetEmployeeActions( period.Start, period.End ).ToArray();
-            if ( actionGroupingArray.Length == 0 ) yield break;
+            if ( actionGroupingArray.Length == 0 ) return new EmployeeProductivity[0];
+            var emplProdColl = new EmployeeProductivity[ actionGroupingArray.Length ];
 
-            foreach ( IGrouping< Employee, EmployeeActionBase > actionGrouping in actionGroupingArray ) {
+            Parallel.For( 0, actionGroupingArray.Length, i =>
+                                                         {
+                                                             var breaks = actionGroupingArray[ i ].Key.ShortBreakSchedule;
+                                                             var shift = actionGroupingArray[ i ].Key.Shift;
 
-                var breaks = actionGrouping.Key.ShortBreakSchedule;
-                var shift = actionGrouping.Key.Shift;
+                                                             var ep = BuildProductivities( actionGroupingArray[ i ], breaks, shift );
+                                                             emplProdColl[ i ] = new EmployeeProductivity( actionGroupingArray[ i ].Key, ep );
+                                                         } );
 
-                var ep = BuildProductivities( actionGrouping, breaks, shift );
-                yield return new EmployeeProductivity( actionGrouping.Key, ep );
-            }
+            return emplProdColl;
         }
 
         protected virtual (IReadOnlyDictionary< Operation, IProductivity >,HashSet< Period >) BuildProductivities ( IEnumerable< EmployeeActionBase > actions, ShortBreakSchedule breaks, Shift shift )
@@ -293,21 +301,21 @@ namespace WorkSpeed.Business.Contexts
             var actionArr = actions.OrderByDescending( a => a.StartTime ).ToArray();
             if ( actionArr.Length == 0 ) { return (new Dictionary< Operation, IProductivity >(0), new HashSet< Period >()); }
 
-            _productivityBuilder.BuildNew();
             _productivityBuilder.Thresholds = Thresholds;
+            var momento = _productivityBuilder.BuildNew();
 
-            var next = _productivityBuilder.CheckDuration( actionArr[ 0 ] );
+            var next = _productivityBuilder.CheckDuration( actionArr[ 0 ], momento );
 
             for ( int i = 1; i < actionArr.Length; ++i ) {
 
-                var current = _productivityBuilder.CheckDuration( actionArr[ i ] );
-                next =  _productivityBuilder.CheckPause( current, next );
+                var current = _productivityBuilder.CheckDuration( actionArr[ i ], momento );
+                next =  _productivityBuilder.CheckPause( current, next, momento );
             }
 
-            _productivityBuilder.SubstractBreaks( breaks );
-            _productivityBuilder.SubstractLunch( shift );
+            _productivityBuilder.SubstractBreaks( breaks, momento );
+            _productivityBuilder.SubstractLunch( shift, momento );
 
-            return _productivityBuilder.GetResult();
+            return (momento.ProductivityMap, momento.DowntimePeriods);
         }
 
         private void ReadThresholds ()
