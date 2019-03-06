@@ -89,6 +89,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
         /// </summary>
         /// <param name="currentAction"></param>
         /// <param name="nextAction"></param>
+        /// <param name="momento"></param>
         /// <returns>Tuple from new Perion and current action.</returns>
         public (Period, EmployeeActionBase) CheckPause ( (Period period, EmployeeActionBase action) currentAction, 
                                                          (Period period, EmployeeActionBase action ) nextAction,
@@ -228,6 +229,7 @@ namespace WorkSpeed.Business.Contexts.Productivity
         ///     #4.
         /// </summary>
         /// <param name="shift"></param>
+        /// <param name="momento"></param>
         public void SubstractLunch ( Shift shift, ShortBreakInspectorMomento momento )
         {
             if ( !momento.DowntimePeriods.Any() ) { return; }
