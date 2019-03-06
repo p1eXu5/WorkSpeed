@@ -16,5 +16,7 @@ namespace WorkSpeed.Data.Models.Enums
         Reception,
         Shipment,
         Other,
+        Time = 100,
+        SortByDefault = 200,
     }
 }

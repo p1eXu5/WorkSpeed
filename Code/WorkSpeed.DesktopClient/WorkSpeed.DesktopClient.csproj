@@ -75,6 +75,7 @@
     <Compile Include="Converters\TabControlHeightConverter.cs" />
     <Compile Include="Converters\WrapPanelMaxWidthConverter.cs" />
     <Compile Include="TemplateSelectors\FilterTemplateSelector.cs" />
+    <Compile Include="ViewModels\ReportService\Entities\SortRequestedEventArgs.cs" />
     <Compile Include="ViewModels\ReportService\Filtering\FilterChangedEventArgs.cs" />
     <Compile Include="ViewModels\ReportService\Productivity\AspectsViewModel.cs" />
     <Compile Include="ViewModels\ReportService\Productivity\OtherProductivityViewModel.cs" />
@@ -149,6 +150,9 @@
     </Compile>
     <Compile Include="Views\ReportService\Grouping\ShiftGroupingView.xaml.cs">
       <DependentUpon>ShiftGroupingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReportService\Productivity\SortOperationHeaderView.xaml.cs">
+      <DependentUpon>SortOperationHeaderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\EmployeeReportUserControl.xaml.cs">
       <DependentUpon>EmployeeReportUserControl.xaml</DependentUpon>
@@ -301,6 +305,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ReportService\Grouping\ShiftGroupingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ReportService\Productivity\SortOperationHeaderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

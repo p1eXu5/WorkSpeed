@@ -54,7 +54,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
                         case OperationGroups.Other :
                             vmColl.Add( new OtherProductivityViewModel( employeeProductivity[ operation ], operation ) );
                             break;
-                        case OperationGroups.Undefined:
+                        case OperationGroups.Time:
                             vmColl.Add( new TimeProductivityViewModel( employeeProductivity, operations ) );
                             break;
                         default:

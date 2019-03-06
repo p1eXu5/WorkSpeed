@@ -10,6 +10,7 @@ using WorkSpeed.Business.Contexts.Contracts;
 using WorkSpeed.Business.Contexts.Productivity;
 using WorkSpeed.Business.Contexts.Productivity.Models;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Enums;
 using WorkSpeed.DesktopClient.ViewModels.ReportService.Entities;
 using WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity;
 using WorkSpeed.DesktopClient.ViewModels.ReportService.Filtering;
@@ -18,7 +19,6 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 {
     public class ProductivityReportViewModel : ReportViewModel
     {
-        private Operation _timesOperation;
         private Period _period;
         private readonly ObservableCollection< OperationViewModel > _operationVmCollection;
         private IEnumerable< OperationViewModel > _filteredOperations;
@@ -34,21 +34,23 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         public ProductivityReportViewModel ( IReportService reportService, IDialogRepository dialogRepository )
             : base( reportService, dialogRepository )
         {
-
             SetupPeriod();
 
-            _timesOperation = new Operation { Id = -1, Name = "Время" };
 
-            _operationVmCollection = new ObservableCollection< OperationViewModel >( _reportService.OperationCollection.Select( o => new OperationViewModel( o ) ) ) {
-                new OperationViewModel( _timesOperation )
+            var timesOperationVm = new OperationViewModel( new Operation { Id = -1, Name = "Время", Group = OperationGroups.Time } );
+            _operationVmCollection = new ObservableCollection< OperationViewModel >( _reportService.OperationCollection.Select( o =>
+                                                                                                                                {
+                                                                                                                                    var ovm = new OperationViewModel( o );
+                                                                                                                                    ovm.SortRequested += Sort;
+                                                                                                                                    return ovm;
+                                                                                                                                } ) ) {
+                timesOperationVm
             };
             Observe( _reportService.OperationCollection, _operationVmCollection, o => o.Operation );
-
             AddOperationFilter();
             OperationVmCollection = _operationVmCollection.Where( OperationPredicate ).OrderBy( o => o.Id ).ToArray();
 
             _employeeProductivityVmCollection = CreateEmployeeProductivityVmCollection();
-
             EmployeeProductivityVmCollection = _employeeProductivityVmCollection.Where( ep => IsActivePredicate( ep.EmployeeVm )
                                                                                               && PositionPredicate( ep.EmployeeVm )
                                                                                               && AppointmentPredicate( ep.EmployeeVm )
@@ -60,6 +62,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                                                                                 .ThenBy( ep => ep.AppointmentId )
                                                                                 .ThenBy( ep => ep.Name );
 
+            SortOperationVm = new OperationViewModel( new Operation { Id = -2, Name = "", Group = OperationGroups.SortByDefault } );
+            SortOperationVm.SortRequested += Sort;
 
             void SetupPeriod ()
             {
@@ -108,6 +112,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
 
         #region Properties
+
+        public OperationViewModel SortOperationVm { get; }
 
         public IEnumerable< OperationViewModel > OperationVmCollection
         {
@@ -184,31 +190,10 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         }
 
 
-        protected override void OnPredicateChanged ( object sender, FilterChangedEventArgs args )
-        {
-            _predicateChanged = true;
-        }
-
-
-        private bool OperationPredicate ( OperationViewModel operation )
-        {
-            return _filterVmCollection[ (int)FilterIndexes.Operation ].Entities.Any( obj => (obj as Operation) == operation.Operation);
-        }
-
-        private void AddOperationFilter ()
-        {
-            var filter = new FilterViewModel( "Операции", FilterIndexes.Operation, _operationVmCollection.Select( o => o.Operation ), p => (( Operation )p).Name );
-            _filterVmCollection.Add( filter );
-
-            _filterVmCollection[ (int)FilterIndexes.Operation ].FilterChanged += OnPredicateChanged;
-        }
-
-
-        #endregion
-
         protected internal override void Refresh ( FilterIndexes filter )
         {
             if ( filter == FilterIndexes.Operation || filter == FilterIndexes.All ) {
+
                 OperationVmCollection = _operationVmCollection.Where( OperationPredicate ).OrderBy( o => o.Id ).ToArray();
 
                 Parallel.ForEach( EmployeeProductivityVmCollection, ( vm ) => vm.Refresh( filter ) );
@@ -231,5 +216,40 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
                                                                                     .ToArray();
             }
         }
+
+        protected override void OnPredicateChanged ( object sender, FilterChangedEventArgs args )
+        {
+            _predicateChanged = true;
+        }
+
+
+        private bool OperationPredicate ( OperationViewModel operation )
+        {
+            return _filterVmCollection[ (int)FilterIndexes.Operation ].Entities.Any( obj => (obj as Operation) == operation.Operation);
+        }
+
+        private void AddOperationFilter ()
+        {
+            var filter = new FilterViewModel( "Операции", FilterIndexes.Operation, _operationVmCollection.Select( o => o.Operation ), p => (( Operation )p).Name );
+            _filterVmCollection.Add( filter );
+
+            _filterVmCollection[ (int)FilterIndexes.Operation ].FilterChanged += OnPredicateChanged;
+        }
+
+        private void Sort ( object operationVm, EventArgs e )
+        {
+            if (!(operationVm is OperationViewModel ovm)) { return; }
+
+            if ( ovm.Operation.Group == OperationGroups.SortByDefault ) {
+                EmployeeProductivityVmCollection = EmployeeProductivityVmCollection.OrderBy( ep => ep.PositionId )
+                                                                                .ThenBy( ep => ep.AppointmentId )
+                                                                                .ThenBy( ep => ep.Name );
+            }
+
+            EmployeeProductivityVmCollection = EmployeeProductivityVmCollection.OrderBy( epvm => epvm.ProductivityVmCollection.First( pvm => pvm.Operation == ovm.Operation ).Speed );
+        }
+
+        #endregion
+
     }
 }
