@@ -34,7 +34,7 @@ namespace WorkSpeed.Business.Contexts.Productivity.Models
 
         public double GetTotalDowntimeHours ()
         {
-            return DowntimePeriods.Sum( dt => dt.Duration.TotalHours );
+            return DowntimePeriods.Where( p => p.Duration < TimeSpan.FromHours( 5 ) ).Sum( dt => dt.Duration.TotalHours );
         }
 
         public IEnumerable< (double hours, Operation operation) > GetOperationTimes ( IEnumerable< Operation > operations )
