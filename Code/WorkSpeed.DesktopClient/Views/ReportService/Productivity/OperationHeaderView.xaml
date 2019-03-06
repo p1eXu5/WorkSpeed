@@ -68,7 +68,7 @@
         </Path>
     </StackPanel>
 
-    <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,3,2">
+    <!--<StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,3,2">
         <ToggleButton Style="{StaticResource st_ToggleButton.Letter}" Height="8" >
             <TextBlock>
                 <Run FontSize="6">N</Run>
@@ -91,7 +91,7 @@
                 <TranslateTransform X="0.5"></TranslateTransform>
             </ToggleButton.RenderTransform>
         </ToggleButton>
-    </StackPanel>
+    </StackPanel>-->
 
     <Grid.Style>
         <Style TargetType="Grid">
