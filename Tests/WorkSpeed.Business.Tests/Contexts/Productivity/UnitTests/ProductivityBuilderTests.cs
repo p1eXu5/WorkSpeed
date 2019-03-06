@@ -273,6 +273,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         {
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var operation = new Operation { Name = "Test Operation", Group = OperationGroups.Gathering };
             var originalCurrentDuration = 1000; // ~16 min.
 

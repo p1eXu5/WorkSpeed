@@ -56,6 +56,8 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             Assert.That( inspector.Breaks, Is.EquivalentTo( expected ) );
         }
 
+
+
         [ TestCase( "2.03.2019 13:53", "2.03.2019 14:01", "2.03.2019 14:00" ) ]
         [ TestCase( "2.03.2019 23:56", "3.03.2019 0:01", "3.03.2019 0:00" ) ]
         [ TestCase( "2.03.2019 20:12", "3.03.2019 20:21", "3.03.2019 20:00" ) ]
@@ -73,7 +75,8 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
 
             // Action:
             var inspector = new ShortBreakInspector( shortBreaks );
-            var momento = inspector.SetBreak( new Period( DateTime.Parse( start ), DateTime.Parse( end ) ) );
+            var momento = new ShortBreakInspectorMomento();
+            inspector.SetBreak( new Period( DateTime.Parse( start ), DateTime.Parse( end ) ), momento );
 
             // Assert:
             Assert.That( momento.Break.End, Is.EqualTo( DateTime.Parse( expectedEnd ) ) );
