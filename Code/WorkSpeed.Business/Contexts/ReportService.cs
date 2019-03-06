@@ -281,17 +281,23 @@ namespace WorkSpeed.Business.Contexts
         private EmployeeProductivity[] GetEmployeeProductivities ( Period period )
         {
             var actionGroupingArray = _dbContext.GetEmployeeActions( period.Start, period.End ).ToArray();
+
             if ( actionGroupingArray.Length == 0 ) return new EmployeeProductivity[0];
             var emplProdColl = new EmployeeProductivity[ actionGroupingArray.Length ];
 
-            Parallel.For( 0, actionGroupingArray.Length, i =>
-                                                         {
-                                                             var breaks = actionGroupingArray[ i ].Key.ShortBreakSchedule;
-                                                             var shift = actionGroupingArray[ i ].Key.Shift;
+            _productivityBuilder.Thresholds = Thresholds;
 
-                                                             var ep = BuildProductivities( actionGroupingArray[ i ], breaks, shift );
-                                                             emplProdColl[ i ] = new EmployeeProductivity( actionGroupingArray[ i ].Key, ep );
-                                                         } );
+
+            Parallel.For( 0, actionGroupingArray.Length, i =>
+                                                        {
+                                                            var breaks = actionGroupingArray[ i ].Key.ShortBreakSchedule;
+                                                            var shift = actionGroupingArray[ i ].Key.Shift;
+
+                                                            var ep = BuildProductivities( actionGroupingArray[ i ], breaks, shift );
+                                                            emplProdColl[ i ] = new EmployeeProductivity( actionGroupingArray[ i ].Key, ep );
+                                                        } );
+
+
 
             return emplProdColl;
         }
@@ -301,15 +307,13 @@ namespace WorkSpeed.Business.Contexts
             var actionArr = actions.OrderByDescending( a => a.StartTime ).ToArray();
             if ( actionArr.Length == 0 ) { return (new Dictionary< Operation, IProductivity >(0), new HashSet< Period >()); }
 
-            _productivityBuilder.Thresholds = Thresholds;
             var momento = _productivityBuilder.BuildNew();
-
             var next = _productivityBuilder.CheckDuration( actionArr[ 0 ], momento );
 
             for ( int i = 1; i < actionArr.Length; ++i ) {
 
                 var current = _productivityBuilder.CheckDuration( actionArr[ i ], momento );
-                next =  _productivityBuilder.CheckPause( current, next, momento );
+                next = _productivityBuilder.CheckPause( current, next, momento );
             }
 
             _productivityBuilder.SubstractBreaks( breaks, momento );

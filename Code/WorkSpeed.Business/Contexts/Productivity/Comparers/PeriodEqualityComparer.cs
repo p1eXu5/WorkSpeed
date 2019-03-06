@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace WorkSpeed.Business.Contexts.Productivity.Comparers
 {
-    class DayPeriodEqualityComparer : IEqualityComparer<DayPeriod>
+    class PeriodEqualityComparer : IEqualityComparer< Period >
     {
-        public bool Equals ( DayPeriod x, DayPeriod y )
+        public bool Equals ( Period x, Period y )
         {
             return y.Start >= x.Start && y.End <= x.End;
         }
 
-        public int GetHashCode ( DayPeriod obj )
+        public int GetHashCode ( Period obj )
         {
             throw new NotImplementedException();
         }

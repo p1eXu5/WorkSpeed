@@ -138,7 +138,7 @@
     <Compile Include="Contexts\Productivity\IShortBreakInspectorMomento.cs" />
     <Compile Include="Contexts\Productivity\ProductivityBuilder.cs" />
     <Compile Include="Contexts\Past\CategoryFilter.cs" />
-    <Compile Include="Contexts\Productivity\Comparers\DayPeriodEqualityComparer.cs" />
+    <Compile Include="Contexts\Productivity\Comparers\PeriodEqualityComparer.cs" />
     <Compile Include="Contexts\Past\DayPeriod.cs" />
     <Compile Include="Contexts\Past\FactoryEmployeeAction.cs" />
     <Compile Include="Contexts\Past\IBreakRepository.cs" />

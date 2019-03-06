@@ -70,6 +70,7 @@ namespace WorkSpeed.Data.Context.ReportService
                 entityEntry.Reload();
             }
 
+
             var doubleAddressActions = dbContext.DoubleAddressActions
                                                 .Include( a => a.Employee )
                                                 .ThenInclude( e => e.Avatar )

@@ -256,17 +256,22 @@ namespace WorkSpeed.Business.Contexts.Productivity
             Period period;
             var count = 0;
 
+            var dtArr = momento.DowntimePeriods.ToList();
+
             do {
-                period = momento.DowntimePeriods.Skip( count ).FirstOrDefault( p => p.Duration > _shiftMarker );
+                period = dtArr.Skip( count ).FirstOrDefault( p => p.Duration > _shiftMarker );
 
                 if ( period == default( Period ) ) {
 
                     yield return momento.DowntimePeriods.Skip( count );
                 }
                 else {
-                    var res = momento.DowntimePeriods.Skip( count ).Where( p => p < period ).ToArray();
+                    var take = dtArr.IndexOf( period );
+
+                    var res = dtArr.Skip( count ).Take( take ).ToArray();
                     if ( res.Length <= 0 ) { yield break; }
-                    count = res.Length;
+                    count = take + 1;
+                    
                     yield return res;
                 }
 
