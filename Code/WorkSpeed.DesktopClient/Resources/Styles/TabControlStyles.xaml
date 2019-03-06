@@ -3,51 +3,51 @@
                     >
 
     <Storyboard x:Key="an_TabItem.MouseOver">
-        <ColorAnimationUsingKeyFrames Duration="0:0:.2" Storyboard.TargetName="container"
+        <ColorAnimationUsingKeyFrames Duration="0:0:.1" Storyboard.TargetName="container"
                                       Storyboard.TargetProperty="(GeometryDrawing.Brush).(SolidColorBrush.Color)"
                                       >
-            <LinearColorKeyFrame Value="{StaticResource col_Control.BackgroundMouseOver}" KeyTime="0:0:0"/>
+            <LinearColorKeyFrame Value="{StaticResource col_Control.BackgroundMouseOver}" KeyTime="0:0:0.1"/>
         </ColorAnimationUsingKeyFrames>
     </Storyboard>
 
     <Storyboard x:Key="an_TabItem.Normal">
-        <ColorAnimationUsingKeyFrames Duration="0:0:.2" Storyboard.TargetName="container"
+        <ColorAnimationUsingKeyFrames Duration="0:0:.1" Storyboard.TargetName="container"
                                       Storyboard.TargetProperty="(GeometryDrawing.Brush).(SolidColorBrush.Color)"
                                       >
-            <LinearColorKeyFrame Value="{StaticResource col_Control.Background}" KeyTime="0:0:0"/>
+            <LinearColorKeyFrame Value="{StaticResource col_Control.Background}" KeyTime="0:0:0.1"/>
         </ColorAnimationUsingKeyFrames>
     </Storyboard>
 
     <Storyboard x:Key="an_TabItem.Choosed">
 
-        <ColorAnimationUsingKeyFrames Duration="0:0:.2" Storyboard.TargetName="outerBorder"
+        <ColorAnimationUsingKeyFrames Duration="0:0:.1" Storyboard.TargetName="outerBorder"
                                       Storyboard.TargetProperty="Color"
                                       >
-            <LinearColorKeyFrame Value="{StaticResource col_Window.BorderAlternative}" KeyTime="0:0:0"/>
+            <LinearColorKeyFrame Value="{StaticResource col_Window.BorderAlternative}" KeyTime="0:0:0.1"/>
         </ColorAnimationUsingKeyFrames>
 
-        <ColorAnimationUsingKeyFrames Duration="0:0:.2" Storyboard.TargetName="container"
+        <ColorAnimationUsingKeyFrames Duration="0:0:.1" Storyboard.TargetName="container"
                                       Storyboard.TargetProperty="(GeometryDrawing.Brush).(SolidColorBrush.Color)"
                                       >
-            <LinearColorKeyFrame Value="{StaticResource col_Window.Border}" KeyTime="0:0:0"/>
+            <LinearColorKeyFrame Value="{StaticResource col_Window.Border}" KeyTime="0:0:0.1"/>
         </ColorAnimationUsingKeyFrames>
 
-        <ColorAnimationUsingKeyFrames Duration="0:0:.2" 
+        <ColorAnimationUsingKeyFrames Duration="0:0:.1" 
                                       Storyboard.TargetProperty="(Control.Foreground).(SolidColorBrush.Color)"
                                       >
-            <LinearColorKeyFrame Value="{StaticResource col_Control.ForegroundAlternative}" KeyTime="0:0:0"/>
+            <LinearColorKeyFrame Value="{StaticResource col_Control.ForegroundAlternative}" KeyTime="0:0:0.1"/>
         </ColorAnimationUsingKeyFrames>
 
-        <ColorAnimationUsingKeyFrames Duration="0:0:.2" Storyboard.TargetName="innerGlow"
+        <ColorAnimationUsingKeyFrames Duration="0:0:.1" Storyboard.TargetName="innerGlow"
                                       Storyboard.TargetProperty="(Pen.Brush).(LinearGradientBrush.GradientStops)[0].(GradientStop.Color)"
                                       >
-            <LinearColorKeyFrame Value="{StaticResource col_Window.GlowDark.Top}" KeyTime="0:0:0"/>
+            <LinearColorKeyFrame Value="{StaticResource col_Window.GlowDark.Top}" KeyTime="0:0:0.1"/>
         </ColorAnimationUsingKeyFrames>
 
-        <ColorAnimationUsingKeyFrames Duration="0:0:.2" Storyboard.TargetName="innerGlow"
+        <ColorAnimationUsingKeyFrames Duration="0:0:.1" Storyboard.TargetName="innerGlow"
                                       Storyboard.TargetProperty="(Pen.Brush).(LinearGradientBrush.GradientStops)[1].(GradientStop.Color)"
                                       >
-            <LinearColorKeyFrame Value="{StaticResource col_Window.GlowDark.Bottom}" KeyTime="0:0:0"/>
+            <LinearColorKeyFrame Value="{StaticResource col_Window.GlowDark.Bottom}" KeyTime="0:0:0.1"/>
         </ColorAnimationUsingKeyFrames>
 
     </Storyboard>

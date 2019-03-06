@@ -31,7 +31,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
                 IndicatorTip = "Всего мест"
             } );
 
-            Next( null );
+            NextSelectedAspect( null );
         }
     }
 }

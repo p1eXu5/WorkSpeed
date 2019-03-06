@@ -16,7 +16,8 @@
     <Color x:Key="col_Window.GlowLight.Bottom">#ffffff</Color>
 
 
-    <Color x:Key="col_Control.Background">#cfcfcf</Color>
+    <Color x:Key="col_Control.Background">#d1d1d1</Color>
+    <Color x:Key="col_Control.Background2">#e5e5e5</Color>
     <Color x:Key="col_Control.BackgroundAlternative">#4d4d4d</Color>
     <Color x:Key="col_Control.BackgroundMouseOver">#c0c0c0</Color>
     <Color x:Key="col_Control.Foreground">#404040</Color>
@@ -38,6 +39,7 @@
     <SolidColorBrush x:Key="br_Window.ForegroundAlternative" Color="{DynamicResource col_Window.ForegroundAlternative }" />
 
     <SolidColorBrush x:Key="br_Control.Background" Color="{DynamicResource col_Control.Background }" />
+    <SolidColorBrush x:Key="br_Control.Background2" Color="{DynamicResource col_Control.Background2 }" />
     <SolidColorBrush x:Key="br_Control.BackgroundAlternative" Color="{DynamicResource col_Control.BackgroundAlternative }" />
     <SolidColorBrush x:Key="br_Control.Foreground" Color="{DynamicResource col_Control.Foreground }" />
     <SolidColorBrush x:Key="br_Control.ForegroundAlternative" Color="{DynamicResource col_Control.ForegroundAlternative }" />

@@ -103,12 +103,12 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
         }
 
 
-        public ICommand NextCommand => new MvvmCommand( Next );
+        public ICommand NextCommand => new MvvmCommand( NextSelectedAspect );
 
         /// <summary>
         ///     Sets next aspect collection.
         /// </summary>
-        protected void Next ( object o )
+        protected void NextSelectedAspect ( object o )
         {
             if ( _queue.Count == 0 ) return;
             var next = _queue.Dequeue();
