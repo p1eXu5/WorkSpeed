@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using Agbm.NpoiExcel;
 using Agbm.NpoiExcel.Attributes;
@@ -18,19 +19,34 @@ namespace WorkSpeed.DesktopClient
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            Window mainWindow = new MainWindow();
+            base.OnStartup( e );
 
-            var dialogRepository = new DialogRepository( mainWindow );
-            dialogRepository.Register< ErrorViewModel, ErrorWindow >();
+            try {
+                var (importService, reportService) = WorkSpeedBusinessContextCreator.Create();
+                reportService.ReloadAllCollections();              
 
+                Window mainWindow = new MainWindow();
+                var dialogRepository = new DialogRepository( mainWindow );
+                dialogRepository.Register< ErrorViewModel, ErrorWindow >();
+                var mvm = new MainViewModel( importService, reportService, dialogRepository );
+                mainWindow.DataContext = mvm;
 
-            var (importService, reportService) = WorkSpeedBusinessContextCreator.Create();
+                mainWindow.Show();
+            }
+            catch
+#if RELEASE
+                ( Exception ex ) 
+#endif
+            {
+#if DEBUG
+                throw;
+#endif
 
-            reportService.ReloadAllCollections();
-            var mvm = new MainViewModel( importService, reportService, dialogRepository );
-
-            mainWindow.DataContext = mvm;
-            mainWindow.Show();
+#if RELEASE
+                string message = $"{ex.Message}\n{ex.InnerException}\n{ex.StackTrace}";
+                File.AppendAllText( "log.log", message );
+#endif
+            }
         }
     }
 }
