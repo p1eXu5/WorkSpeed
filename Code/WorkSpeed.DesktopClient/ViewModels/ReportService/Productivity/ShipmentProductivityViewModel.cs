@@ -26,7 +26,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
                     (client, $"Клиентских мест: {client}"),
                     (nonClient, $"Не клиентских мест: {nonClient}"),
                 }),
-                Annotation = "сканн",
+                Annotation = "ГМ",
                 Indicator = client + nonClient,
                 IndicatorTip = "Всего мест"
             } );
