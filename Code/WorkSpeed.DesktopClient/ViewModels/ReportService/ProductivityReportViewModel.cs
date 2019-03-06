@@ -72,12 +72,9 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
             void SetupPeriod ()
             {
-                //var now = DateTime.Now;
-                //var start = now.Date.Subtract( TimeSpan.FromDays( now.Day - 1 ) );
-                //Period = new Period( start, now );
-                var start = new DateTime( 2018, 11, 28, 8, 0, 0);
-                var end = new DateTime( 2019, 3, 6, 8, 0, 0);
-                Period = new Period( start, end );
+                var now = DateTime.Now;
+                var start = now.Date.Subtract(TimeSpan.FromDays(now.Day - 1));
+                Period = new Period(start, now);
             }
 
             ObservableCollection< EmployeeProductivityViewModel > CreateEmployeeProductivityVmCollection ()
