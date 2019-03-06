@@ -86,6 +86,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Выработка 28.11.20
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiments.Wpf", "Experiments\Experiments.Wpf\Experiments.Wpf.csproj", "{A3A2456F-A497-435F-8C63-EBEBEA5B9AB1}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup.WorkSpeed", "Code\Setup.WorkSpeed\Setup.WorkSpeed.vdproj", "{53C4277B-AAA7-4D28-9A1D-9EBA3AE2A8AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -168,6 +170,8 @@ Global
 		{A3A2456F-A497-435F-8C63-EBEBEA5B9AB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3A2456F-A497-435F-8C63-EBEBEA5B9AB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3A2456F-A497-435F-8C63-EBEBEA5B9AB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53C4277B-AAA7-4D28-9A1D-9EBA3AE2A8AE}.Debug|Any CPU.ActiveCfg = Debug
+		{53C4277B-AAA7-4D28-9A1D-9EBA3AE2A8AE}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -196,6 +200,7 @@ Global
 		{240F5CE1-E550-4702-A577-825244A750CF} = {E860DD2B-0D29-46FF-9E9E-DBEEB8E9A498}
 		{15DFB5A8-320F-48AD-995C-68DFE155AAE9} = {12EEFD5A-880A-4FBE-AFFE-F2102BF2617A}
 		{A3A2456F-A497-435F-8C63-EBEBEA5B9AB1} = {02ADBBD2-843C-457E-B553-A71CFDBFEF80}
+		{53C4277B-AAA7-4D28-9A1D-9EBA3AE2A8AE} = {F1D4BFA4-0774-466A-B80A-3CF5497D6AED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {74CCEA37-7ECF-4A64-9DA7-75E503ED2A97}

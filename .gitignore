@@ -270,3 +270,4 @@ __pycache__/
 *.vpp~10
 *.vpp*
 *.xlsx#
+*.svg
