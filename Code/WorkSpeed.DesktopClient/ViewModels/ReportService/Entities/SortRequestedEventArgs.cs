@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,11 +10,11 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Entities
 {
     public class SortRequestedEventArgs : EventArgs
     {
-        public SortRequestedEventArgs ( Operation operation )
+        public SortRequestedEventArgs ( SortOrder sortOrder )
         {
-            Operation = operation;
+            SortOrder = sortOrder;
         }
 
-        public Operation Operation { get; }
+        public SortOrder SortOrder { get; }
     }
 }

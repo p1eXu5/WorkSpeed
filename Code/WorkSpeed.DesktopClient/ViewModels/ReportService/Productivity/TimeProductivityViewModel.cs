@@ -4,13 +4,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using WorkSpeed.Business.Contexts.Productivity.Models;
 using WorkSpeed.Data.Models;
+using WorkSpeed.Data.Models.Enums;
 
 namespace WorkSpeed.DesktopClient.ViewModels.ReportService.Productivity
 {
     public class TimeProductivityViewModel : ProductivityViewModel
     {
         public TimeProductivityViewModel ( IEmployeeProductivity productivity, IEnumerable< Operation > operations )
-            : base( operations.First( o => o.Id == -1 ) )
+            : base( operations.First( o => o.Group == OperationGroups.Time ) )
         {
             SpeedLabeling = SPEED_IN_TIME;
             var dt = productivity.GetTotalDowntimeHours();

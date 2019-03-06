@@ -28,8 +28,36 @@
     </Border>
 
     <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,6,3,0">
-        <Path Fill="Black" Data="M0,0 l 2,-3 2,3" Margin="0,0,0,2" />
-        <Path Fill="Black" Data="M0,0 l 2,3 2,-3" />
+        <Path Data="M0,0 l 2,-3 2,3 Z" Margin="0,0,0,2" >
+            <Path.Style>
+                <Style TargetType="Path">
+                    <Setter Property="Fill" Value="DimGray" />
+                    <Setter Property="Stroke" Value="Transparent" />
+                    <Setter Property="StrokeThickness" Value="1" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SortOrder}" Value="False">
+                            <Setter Property="Fill" Value="Black" />
+                            <Setter Property="Stroke" Value="#554422"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Path.Style>
+        </Path>
+        <Path Data="M0,0 l 2,3 2,-3 Z" >
+            <Path.Style>
+                <Style TargetType="Path">
+                    <Setter Property="Fill" Value="DimGray" />
+                    <Setter Property="Stroke" Value="Transparent" />
+                    <Setter Property="StrokeThickness" Value="1" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SortOrder}" Value="True">
+                            <Setter Property="Fill" Value="Black" />
+                            <Setter Property="Stroke" Value="#554422"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Path.Style>
+        </Path>
     </StackPanel>
 
     <Grid.Style>

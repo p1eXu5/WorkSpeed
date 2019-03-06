@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Agbm.Wpf.MvvmBaseLibrary;
@@ -29,6 +30,8 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
         private bool _predicateChanged;
         private bool _periodChanged;
 
+        private OperationViewModel _lastOperationVm;
+
         #region Ctor
 
         public ProductivityReportViewModel ( IReportService reportService, IDialogRepository dialogRepository )
@@ -38,6 +41,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
 
             var timesOperationVm = new OperationViewModel( new Operation { Id = -1, Name = "Время", Group = OperationGroups.Time } );
+            timesOperationVm.SortRequested += Sort;
             _operationVmCollection = new ObservableCollection< OperationViewModel >( _reportService.OperationCollection.Select( o =>
                                                                                                                                 {
                                                                                                                                     var ovm = new OperationViewModel( o );
@@ -64,6 +68,7 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
 
             SortOperationVm = new OperationViewModel( new Operation { Id = -2, Name = "", Group = OperationGroups.SortByDefault } );
             SortOperationVm.SortRequested += Sort;
+            _lastOperationVm = SortOperationVm;
 
             void SetupPeriod ()
             {
@@ -236,17 +241,38 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             _filterVmCollection[ (int)FilterIndexes.Operation ].FilterChanged += OnPredicateChanged;
         }
 
-        private void Sort ( object operationVm, EventArgs e )
+        private void Sort ( object operationVm, SortRequestedEventArgs e )
         {
             if (!(operationVm is OperationViewModel ovm)) { return; }
 
-            if ( ovm.Operation.Group == OperationGroups.SortByDefault ) {
-                EmployeeProductivityVmCollection = EmployeeProductivityVmCollection.OrderBy( ep => ep.PositionId )
-                                                                                .ThenBy( ep => ep.AppointmentId )
-                                                                                .ThenBy( ep => ep.Name );
+            if ( !ReferenceEquals( _lastOperationVm, ovm ) ) {
+
+                _lastOperationVm.SortOrder = null;
+                _lastOperationVm = ovm;
             }
 
-            EmployeeProductivityVmCollection = EmployeeProductivityVmCollection.OrderBy( epvm => epvm.ProductivityVmCollection.First( pvm => pvm.Operation == ovm.Operation ).Speed );
+            if ( e.SortOrder == SortOrder.Ascending ) {
+
+                if ( ovm.Operation.Group == OperationGroups.SortByDefault ) {
+                    EmployeeProductivityVmCollection = EmployeeProductivityVmCollection.OrderBy( ep => ep.PositionId )
+                                                                                       .ThenBy( ep => ep.AppointmentId )
+                                                                                       .ThenBy( ep => ep.Name );
+                    return;
+                }
+
+                EmployeeProductivityVmCollection = EmployeeProductivityVmCollection.OrderBy( epvm => epvm.ProductivityVmCollection.First( pvm => pvm.Operation == ovm.Operation ).Speed );
+            }
+            else {
+
+                if ( ovm.Operation.Group == OperationGroups.SortByDefault ) {
+                    EmployeeProductivityVmCollection = EmployeeProductivityVmCollection.OrderBy( ep => ep.PositionId )
+                                                                                       .ThenBy( ep => ep.AppointmentId )
+                                                                                       .ThenByDescending( ep => ep.Name );
+                    return;
+                }
+
+                EmployeeProductivityVmCollection = EmployeeProductivityVmCollection.OrderByDescending( epvm => epvm.ProductivityVmCollection.First( pvm => pvm.Operation == ovm.Operation ).Speed );
+            }
         }
 
         #endregion
