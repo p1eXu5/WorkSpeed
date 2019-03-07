@@ -21,6 +21,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         {
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var operation = new Operation { Name = "Test Operation", Group = OperationGroups.Gathering };
 
             var action = new DoubleAddressAction {
@@ -30,10 +31,10 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             };
 
             // Action:
-            builder.CheckDuration( action );
+            builder.CheckDuration( action, momento );
 
             // Assert:
-            var res = builder.GetResult().Item1[ operation ].GetTime();
+            var res = momento.ProductivityMap[ operation ].GetTime();
             Assert.That( res, Is.Not.EqualTo( Period.Zero ) );
         }
 
@@ -42,6 +43,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         {
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
 
             var action = new DoubleAddressAction {
                 StartTime = DateTime.Parse( "22.02.2019 8:00:45" ),
@@ -50,7 +52,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
 
             // Action:
             // Assert:
-            Assert.Catch<ArgumentException>( () => builder.CheckDuration( action ));
+            Assert.Catch<ArgumentException>( () => builder.CheckDuration( action, momento ));
         }
 
         [ Test, Category( "CheckDuration" ) ]
@@ -58,6 +60,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         {
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var operation = new Operation { Name = "Test Operation", Group = OperationGroups.Packing };
             int duration = 10;
 
@@ -68,10 +71,10 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             };
 
             // Action:
-            builder.CheckDuration( action );
+            builder.CheckDuration( action, momento );
 
             // Assert:
-            var res = builder.GetResult().productivityMap[ operation ].GetTime().TotalSeconds;
+            var res = momento.ProductivityMap[ operation ].GetTime().TotalSeconds;
             Assert.That( res, Is.EqualTo( duration ) );
         }
 
@@ -81,6 +84,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         {
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var operation = new Operation { Name = "Test Operation", Group = OperationGroups.Packing };
 
             var action = new DoubleAddressAction {
@@ -93,10 +97,10 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             };
 
             // Action:
-            builder.CheckDuration( action );
+            builder.CheckDuration( action, momento );
 
             // Assert:
-            var res = builder.GetResult().Item1[ operation ].GetTime().TotalSeconds;
+            var res = momento.ProductivityMap[ operation ].GetTime().TotalSeconds;
             Assert.That( res, Is.GreaterThan( duration ) );
         }
 
@@ -106,6 +110,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         {
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var operation = new Operation { Name = "Test Operation", Group = OperationGroups.Packing };
 
             var action = new DoubleAddressAction {
@@ -118,10 +123,10 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             };
 
             // Action:
-            builder.CheckDuration( action );
+            builder.CheckDuration( action, momento );
 
             // Assert:
-            var res = builder.GetResult().Item1[ operation ].GetTime().TotalSeconds;
+            var res = momento.ProductivityMap[ operation ].GetTime().TotalSeconds;
             Assert.That( res, Is.EqualTo( duration ) );
         }
 
@@ -130,6 +135,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         {
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var operation = new Operation { Name = "Test Operation", Group = OperationGroups.BuyerGathering };
             var duration = 1;
 
@@ -144,10 +150,10 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             };
 
             // Action:
-            builder.CheckDuration( action );
+            builder.CheckDuration( action, momento );
 
             // Assert:
-            var res = builder.GetResult().Item1[ operation ].GetTime().TotalSeconds;
+            var res = momento.ProductivityMap[ operation ].GetTime().TotalSeconds;
             Assert.That( res, Is.EqualTo( duration + 30 ) );
         }
 
@@ -156,6 +162,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         {
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var operation = new Operation { Name = "Test Operation", Group = OperationGroups.BuyerGathering };
             var duration = 1;
 
@@ -170,10 +177,10 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             };
 
             // Action:
-            builder.CheckDuration( action );
+            builder.CheckDuration( action, momento );
 
             // Assert:
-            var res = builder.GetResult().Item1[ operation ].GetTime().TotalSeconds;
+            var res = momento.ProductivityMap[ operation ].GetTime().TotalSeconds;
             Assert.That( res, Is.EqualTo( duration + 60 ) );
         }
 
@@ -182,6 +189,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         {
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var operation = new Operation { Name = "Test Operation", Group = OperationGroups.Reception };
             var duration = 1;
 
@@ -196,10 +204,10 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             };
 
             // Action:
-            builder.CheckDuration( action );
+            builder.CheckDuration( action, momento );
 
             // Assert:
-            var res = builder.GetResult().Item1[ operation ].GetTime().TotalSeconds;
+            var res = momento.ProductivityMap[ operation ].GetTime().TotalSeconds;
             Assert.That( res, Is.EqualTo( duration + 10 ) );
         }
 
@@ -213,6 +221,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         {
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var operation = new Operation { Name = "Test Operation", Group = OperationGroups.Gathering };
 
             var currentAction = new ReceptionAction() {
@@ -227,14 +236,14 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
                 Operation = operation,
             };
 
-            var next = builder.CheckDuration( nextAction );
-            var current = builder.CheckDuration( currentAction );
+            var next = builder.CheckDuration( nextAction, momento );
+            var current = builder.CheckDuration( currentAction, momento );
 
             // Action:
-            builder.CheckPause( current, next );
+            builder.CheckPause( current, next, momento );
 
             // Assert:
-            var res = builder.GetResult().downtimes.FirstOrDefault();
+            var res = momento.DowntimePeriods.FirstOrDefault();
             Assert.That( res, Is.EqualTo( Period.Zero ) );
         }
 
@@ -243,6 +252,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         {
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var operation = new Operation { Name = "Test Operation", Group = OperationGroups.Gathering };
 
             var currentAction = new ReceptionAction() {
@@ -257,14 +267,14 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
                 Operation = operation,
             };
 
-            var next = builder.CheckDuration( nextAction );
-            var current = builder.CheckDuration( currentAction );
+            var next = builder.CheckDuration( nextAction, momento );
+            var current = builder.CheckDuration( currentAction, momento );
 
             // Action:
-            builder.CheckPause( current, next );
+            builder.CheckPause( current, next, momento );
 
             // Assert:
-            var res = builder.GetResult().downtimes.FirstOrDefault();
+            var res = momento.DowntimePeriods.FirstOrDefault();
             Assert.That( res, Is.Not.EqualTo( Period.Zero ) );
         }
 
@@ -289,14 +299,14 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
                 Operation = operation,
             };
 
-            var next = builder.CheckDuration( nextAction );
-            var current = builder.CheckDuration( currentAction );
+            var next = builder.CheckDuration( nextAction, momento );
+            var current = builder.CheckDuration( currentAction, momento );
 
             // Action:
-            builder.CheckPause( current, next );
+            builder.CheckPause( current, next, momento );
 
             // Assert:
-            var res = builder.GetResult().productivityMap[ operation ][currentAction];
+            var res = momento.ProductivityMap[ operation ][currentAction];
             Assert.That( res.Duration.TotalSeconds, Is.LessThan( originalCurrentDuration ) );
         }
 
@@ -308,6 +318,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
 
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var gatheringOperation = new Operation { Name = "Current Operation", Group = OperationGroups.Gathering };
 
             var currentAction = new InventoryAction {
@@ -325,14 +336,14 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
                 })
             };
 
-            var next = builder.CheckDuration( nextAction );
-            var current = builder.CheckDuration( currentAction );
+            var next = builder.CheckDuration( nextAction, momento );
+            var current = builder.CheckDuration( currentAction, momento );
 
             // Action:
-            builder.CheckPause( current, next );
+            builder.CheckPause( current, next, momento );
 
             // Assert:
-             var res = builder.GetResult().productivityMap[ gatheringOperation ][currentAction];
+             var res = momento.ProductivityMap[ gatheringOperation ][currentAction];
             Assert.That( res.Duration.TotalSeconds, Is.EqualTo( 15 ) );
         }
 
@@ -344,6 +355,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
 
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var gatheringOperation = new Operation { Name = "Current Operation", Group = OperationGroups.Gathering };
 
             var currentAction = new InventoryAction {
@@ -361,14 +373,14 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
                 })
             };
 
-            var next = builder.CheckDuration( nextAction );
-            var current = builder.CheckDuration( currentAction );
+            var next = builder.CheckDuration( nextAction, momento );
+            var current = builder.CheckDuration( currentAction, momento );
 
             // Action:
-            builder.CheckPause( current, next );
+            builder.CheckPause( current, next, momento );
 
             // Assert:
-             var res = builder.GetResult().productivityMap[ gatheringOperation ][currentAction];
+             var res = momento.ProductivityMap[ gatheringOperation ][currentAction];
             Assert.That( res.Duration.TotalSeconds, Is.EqualTo( 15 ) );
         }
 
@@ -381,6 +393,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
 
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var gatheringOperation = new Operation { Name = "Current Operation", Group = OperationGroups.Gathering };
             var packingOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Packing };
 
@@ -399,14 +412,14 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
                 })
             };
 
-            var next = builder.CheckDuration( packingAction );
-            var current = builder.CheckDuration( currentAction );
+            var next = builder.CheckDuration( packingAction, momento );
+            var current = builder.CheckDuration( currentAction, momento );
 
             // Action:
-            builder.CheckPause( current, next );
+            builder.CheckPause( current, next, momento );
 
             // Assert:
-             var res = builder.GetResult().productivityMap[ gatheringOperation ][currentAction];
+             var res = momento.ProductivityMap[ gatheringOperation ][currentAction];
             Assert.That( res.Duration.TotalSeconds, Is.EqualTo( 15 ) );
         }
 
@@ -418,6 +431,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
 
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var gatheringOperation = new Operation { Name = "Current Operation", Group = OperationGroups.Gathering };
             var packingOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Packing };
 
@@ -436,14 +450,14 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
                 })
             };
 
-            var next = builder.CheckDuration( packingAction );
-            var current = builder.CheckDuration( currentAction );
+            var next = builder.CheckDuration( packingAction, momento );
+            var current = builder.CheckDuration( currentAction, momento );
 
             // Action:
-            builder.CheckPause( current, next );
+            builder.CheckPause( current, next, momento );
 
             // Assert:
-             var res = builder.GetResult().productivityMap[ gatheringOperation ][currentAction];
+             var res = momento.ProductivityMap[ gatheringOperation ][currentAction];
             Assert.That( res.Duration.TotalSeconds, Is.EqualTo( 15 ) );
         }
 
@@ -455,6 +469,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
 
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var gatheringOperation = new Operation { Name = "Current Operation", Group = OperationGroups.Gathering };
             var packingOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Packing };
 
@@ -473,14 +488,14 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
                 })
             };
 
-            var next = builder.CheckDuration( packingAction );
-            var current = builder.CheckDuration( currentAction );
+            var next = builder.CheckDuration( packingAction, momento );
+            var current = builder.CheckDuration( currentAction, momento );
 
             // Action:
-            builder.CheckPause( current, next );
+            builder.CheckPause( current, next, momento );
 
             // Assert:
-             var res = builder.GetResult().productivityMap[ gatheringOperation ][currentAction];
+             var res = momento.ProductivityMap[ gatheringOperation ][currentAction];
             Assert.That( res.Duration.TotalSeconds, Is.EqualTo( 15 ) );
         }
 
@@ -500,6 +515,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
 
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var packingOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Packing };
 
             var action1 = new DoubleAddressAction() {
@@ -521,17 +537,16 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             };
 
             // Action:
-            var next = builder.CheckDuration( action3 );
-            var current = builder.CheckDuration( action2 );
-            next = builder.CheckPause( current, next );
-            current = builder.CheckDuration( action1 );
-            next = builder.CheckPause( current, next );
+            var next = builder.CheckDuration( action3, momento );
+            var current = builder.CheckDuration( action2, momento );
+            next = builder.CheckPause( current, next, momento );
+            current = builder.CheckDuration( action1, momento );
+            next = builder.CheckPause( current, next, momento );
             
             // Assert:
-            var res = builder.GetResult();
-            var total = res.productivityMap[ packingOperation ].GetTime().TotalSeconds;
+            var total = momento.ProductivityMap[ packingOperation ].GetTime().TotalSeconds;
             Assert.That( total, Is.EqualTo( 11 ) );
-            Assert.That( res.downtimes, Is.Empty );
+            Assert.That( momento.DowntimePeriods, Is.Empty );
         }
 
         [ Test, Category( "CheckPause" ) ]
@@ -549,6 +564,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
 
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var operation = new Operation { Name = "Packing Operation", Group = OperationGroups.Gathering };
 
             var action1 = new DoubleAddressAction() {
@@ -570,18 +586,18 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             };
 
             // Action:
-            var next = builder.CheckDuration( action3 );
-            var current = builder.CheckDuration( action2 );
-            next = builder.CheckPause( current, next );
-            current = builder.CheckDuration( action1 );
-            next = builder.CheckPause( current, next );
+            var next = builder.CheckDuration( action3, momento );
+            var current = builder.CheckDuration( action2, momento );
+            next = builder.CheckPause( current, next, momento );
+            current = builder.CheckDuration( action1, momento );
+            next = builder.CheckPause( current, next, momento );
             
             // Assert:
-            var res = builder.GetResult();
-            var total = (int)res.productivityMap[ operation ].GetTime().TotalMinutes;
+            var res = momento;
+            var total = momento.ProductivityMap[ operation ].GetTime().TotalMinutes;
             Assert.That( total, Is.EqualTo( 10 ) );
-            Assert.That( res.downtimes, Is.Not.Empty );
-            Assert.That( res.downtimes.Sum( d => d.Duration.TotalSeconds ), Is.EqualTo( 40 ) );
+            Assert.That( momento.DowntimePeriods, Is.Not.Empty );
+            Assert.That( momento.DowntimePeriods.Sum( d => d.Duration.TotalSeconds ), Is.EqualTo( 40 ) );
         }
 
         #endregion
@@ -602,6 +618,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         {
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var operation = new Operation { Name = "Packing Operation", Group = OperationGroups.Gathering };
 
             var shortBreaks = new ShortBreakSchedule {
@@ -626,14 +643,13 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             };
 
             // Action:
-            var next = builder.CheckDuration( actions[1] );
-            var current = builder.CheckDuration( actions[0] );
-            builder.CheckPause( current, next );
-            builder.SubstractBreaks( shortBreaks );
+            var next = builder.CheckDuration( actions[1], momento );
+            var current = builder.CheckDuration( actions[0], momento );
+            builder.CheckPause( current, next, momento );
+            builder.SubstractBreaks( shortBreaks, momento );
 
             // Assert:
-            var res = builder.GetResult();
-            Assert.That( res.downtimes, Is.Empty );
+            Assert.That( momento.DowntimePeriods, Is.Empty );
         }
 
 
@@ -647,6 +663,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         {
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var operation = new Operation { Name = "Packing Operation", Group = OperationGroups.Gathering };
 
             var shortBreaks = new ShortBreakSchedule {
@@ -671,14 +688,13 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             };
 
             // Action:
-            var next = builder.CheckDuration( actions[1] );
-            var current = builder.CheckDuration( actions[0] );
-            builder.CheckPause( current, next );
-            builder.SubstractBreaks( shortBreaks );
+            var next = builder.CheckDuration( actions[1], momento );
+            var current = builder.CheckDuration( actions[0], momento );
+            builder.CheckPause( current, next, momento );
+            builder.SubstractBreaks( shortBreaks, momento );
 
             // Assert:
-            var res = builder.GetResult();
-            Assert.That( res.downtimes, Is.Not.Empty );
+            Assert.That( momento.DowntimePeriods, Is.Not.Empty );
         }
 
 
@@ -687,6 +703,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         {
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var shipmentOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Shipment };
             var gatheringOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Gathering };
 
@@ -712,14 +729,13 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             };
 
             // Action:
-            var next = builder.CheckDuration( actions[1] );
-            var current = builder.CheckDuration( actions[0] );
-            builder.CheckPause( current, next );
-            builder.SubstractBreaks( shortBreaks );
+            var next = builder.CheckDuration( actions[1], momento );
+            var current = builder.CheckDuration( actions[0], momento );
+            builder.CheckPause( current, next, momento );
+            builder.SubstractBreaks( shortBreaks, momento );
 
             // Assert:
-            var res = builder.GetResult();
-            Assert.That( res.downtimes, Is.Empty );
+            Assert.That( momento.DowntimePeriods, Is.Empty );
         }
 
 
@@ -728,6 +744,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         {
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var shipmentOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Shipment };
             var gatheringOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Gathering };
 
@@ -753,14 +770,13 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             };
 
             // Action:
-            var next = builder.CheckDuration( actions[1] );
-            var current = builder.CheckDuration( actions[0] );
-            builder.CheckPause( current, next );
-            builder.SubstractBreaks( shortBreaks );
+            var next = builder.CheckDuration( actions[1], momento );
+            var current = builder.CheckDuration( actions[0], momento );
+            builder.CheckPause( current, next, momento );
+            builder.SubstractBreaks( shortBreaks, momento );
 
             // Assert:
-            var res = builder.GetResult();
-            Assert.That( res.downtimes, Is.Not.Empty );
+            Assert.That( momento.DowntimePeriods, Is.Not.Empty );
         }
 
         #endregion
@@ -773,6 +789,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         {
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var shipmentOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Shipment };
             var gatheringOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Gathering };
 
@@ -796,14 +813,13 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             };
 
             // Action:
-            var next = builder.CheckDuration( actions[1] );
-            var current = builder.CheckDuration( actions[0] );
-            builder.CheckPause( current, next );
-            builder.SubstractLunch( shift );
+            var next = builder.CheckDuration( actions[1], momento );
+            var current = builder.CheckDuration( actions[0], momento );
+            builder.CheckPause( current, next, momento );
+            builder.SubstractLunch( shift, momento );
 
             // Assert:
-            var res = builder.GetResult();
-            Assert.That( res.downtimes, Is.Empty );
+            Assert.That( momento.DowntimePeriods, Is.Empty );
         }
 
 
@@ -812,6 +828,7 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
         {
             // Arrange:
             var builder = GetBuilder();
+            var momento = builder.BuildNew();
             var shipmentOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Shipment };
             var gatheringOperation = new Operation { Name = "Packing Operation", Group = OperationGroups.Gathering };
 
@@ -841,16 +858,15 @@ namespace WorkSpeed.Business.Tests.Contexts.Productivity.UnitTests
             };
 
             // Action:
-            var next = builder.CheckDuration( actions[2] );
-            var current = builder.CheckDuration( actions[1] );
-            next = builder.CheckPause( current, next );
-            current = builder.CheckDuration( actions[ 0 ] );
-            builder.CheckPause( current, next );
-            builder.SubstractLunch( shift );
+            var next = builder.CheckDuration( actions[2], momento );
+            var current = builder.CheckDuration( actions[1], momento );
+            next = builder.CheckPause( current, next, momento );
+            current = builder.CheckDuration( actions[ 0 ], momento );
+            builder.CheckPause( current, next, momento );
+            builder.SubstractLunch( shift, momento );
 
             // Assert:
-            var res = builder.GetResult();
-            Assert.That( res.downtimes, Is.Not.Empty );
+            Assert.That( momento.DowntimePeriods, Is.Not.Empty );
         }
 
         #endregion

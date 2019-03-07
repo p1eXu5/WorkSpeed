@@ -135,20 +135,39 @@ namespace WorkSpeed.DesktopClient.ViewModels.ReportService
             }
         }
 
-        public DateTime StartTime
+
+        public DateTime StartDate
         {
             get => Period.Start;
             set {
-                Period = new Period( value, Period.End );
+                Period = new Period( value.Add( Period.Start.TimeOfDay ), Period.End );
                 OnPropertyChanged();
             }
         }
 
-        public DateTime EndTime
+        public TimeSpan StartTime
+        {
+            get => Period.Start.TimeOfDay;
+            set {
+                Period = new Period( Period.Start.Date.Add( value ), Period.End );
+                OnPropertyChanged();
+            }
+        }
+
+        public DateTime EndDate
         {
             get => Period.End;
             set {
-                Period = new Period( Period.Start, value );
+                Period = new Period( Period.Start, value.Add( Period.End.TimeOfDay ) );
+                OnPropertyChanged();
+            }
+        }
+
+        public TimeSpan EndTime
+        {
+            get => Period.End.TimeOfDay;
+            set {
+                Period = new Period( Period.Start, Period.End.Date.Add( value ) );
                 OnPropertyChanged();
             }
         }

@@ -74,6 +74,7 @@
     <Compile Include="Converters\AbbreviationsConverter.cs" />
     <Compile Include="Converters\BorderThicknessToStrokeThicknessConverter.cs" />
     <Compile Include="Converters\EvenOddToZeroOneConverter.cs" />
+    <Compile Include="Converters\FromTimeSpanToStringConverter.cs" />
     <Compile Include="Converters\ImageConverter.cs" />
     <Compile Include="Converters\TabControlHeightConverter.cs" />
     <Compile Include="Converters\WrapPanelMaxWidthConverter.cs" />
