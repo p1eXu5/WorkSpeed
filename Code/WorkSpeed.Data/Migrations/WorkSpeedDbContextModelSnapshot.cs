@@ -427,7 +427,7 @@ namespace WorkSpeed.Data.Migrations
                         new
                         {
                             Id = 7,
-                            Abbreviations = "зам.пр.;зампоприёмке;зампр;",
+                            Abbreviations = "зам.отгр.;зампоотгрузке;замотгр;",
                             InnerName = "Заместитель управляющего склада по отгрузке",
                             OfficialName = "Менеджер по отправке груза",
                             SalaryPerOneHour = 95.70m
@@ -435,7 +435,7 @@ namespace WorkSpeed.Data.Migrations
                         new
                         {
                             Id = 8,
-                            Abbreviations = "зам.отгр.;зампоотгрузке;замотгр;",
+                            Abbreviations = "зам.пр.;зампоприёмке;зампр;",
                             InnerName = "Заместитель управляющего склада по приемке",
                             OfficialName = "Менеджер по приему груза",
                             SalaryPerOneHour = 92.22m

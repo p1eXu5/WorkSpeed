@@ -26,8 +26,8 @@ namespace WorkSpeed.Data.Context.Configurations
                 new Appointment { Id = 4, InnerName = "Кладовщик приемщик", OfficialName = "Кладовщик-приемщик", SalaryPerOneHour = 57.42m, Abbreviations = "пр.;приёмщик;приемщик;пр;" },
                 new Appointment { Id = 5, InnerName = "Водитель погрузчика", OfficialName = "Водитель погрузчика", SalaryPerOneHour = 52.64m, Abbreviations = "вод.;водитель;вод;карщик;" },
                 new Appointment { Id = 6, InnerName = "Старший кладовщик на РРЦ", OfficialName = "Старший кладовщик склада", SalaryPerOneHour = 62.21m, Abbreviations = "ст.кл.;старший;ст;ст.;старшийкладовщик;ст.клад.;" },
-                new Appointment { Id = 7, InnerName = "Заместитель управляющего склада по отгрузке", OfficialName = "Менеджер по отправке груза", SalaryPerOneHour = 95.70m, Abbreviations = "зам.пр.;зампоприёмке;зампр;" },
-                new Appointment { Id = 8, InnerName = "Заместитель управляющего склада по приемке", OfficialName = "Менеджер по приему груза", SalaryPerOneHour = 92.22m, Abbreviations = "зам.отгр.;зампоотгрузке;замотгр;" },
+                new Appointment { Id = 7, InnerName = "Заместитель управляющего склада по отгрузке", OfficialName = "Менеджер по отправке груза", SalaryPerOneHour = 95.70m, Abbreviations = "зам.отгр.;зампоотгрузке;замотгр;" },
+                new Appointment { Id = 8, InnerName = "Заместитель управляющего склада по приемке", OfficialName = "Менеджер по приему груза", SalaryPerOneHour = 92.22m, Abbreviations = "зам.пр.;зампоприёмке;зампр;" },
                 new Appointment { Id = 9, InnerName = "Управляющий РРЦ", OfficialName = "Управляющий складом", SalaryPerOneHour = 119.63m, Abbreviations = "упр.скл.;управляющий;упр.;упр;упр.складом;" },
             } );
         }
