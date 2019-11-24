@@ -268,8 +268,8 @@ __pycache__/
 *.xls#
 *.vpp~9
 *.vpp~10
-*.vpp*
 *.xlsx#
 *.svg
 /Documents/Private
 /Documents/Experiments
+/Experiments
